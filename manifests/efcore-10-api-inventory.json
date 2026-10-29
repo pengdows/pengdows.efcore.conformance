@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12253,
+    "AwaitingClassification": 12250,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 312,
-    "UncoveredMemberFamilies": 8954
+    "MemberEntriesInCoveredFamilies": 315,
+    "UncoveredMemberFamilies": 8951
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -50557,9 +50557,11 @@
       "MemberKind": "Property",
       "ApiMemberName": "AutoTransactionBehavior",
       "Signature": "Microsoft.EntityFrameworkCore.AutoTransactionBehavior AutoTransactionBehavior get; set;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DATABASE-FACADE-AUTO-TRANSACTION-BEHAVIOR"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.AutoTransactionBehavior"
     },
     {
@@ -50568,9 +50570,11 @@
       "MemberKind": "Property",
       "ApiMemberName": "AutoSavepointsEnabled",
       "Signature": "System.Boolean AutoSavepointsEnabled get; set;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DATABASE-FACADE-AUTO-SAVEPOINTS"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.AutoSavepointsEnabled"
     },
     {
@@ -50579,9 +50583,11 @@
       "MemberKind": "Property",
       "ApiMemberName": "ProviderName",
       "Signature": "System.String ProviderName get;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DATABASE-FACADE-PROVIDER-NAME"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.ProviderName"
     },
     {

@@ -76,4 +76,48 @@ public sealed class DatabaseFacadeTests
 
         Assert.Equal(expected, actual);
     }
+
+    [Fact]
+    [BehavioralCoverage("EF10-DATABASE-FACADE-PROVIDER-NAME", "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.ProviderName")]
+    public async Task ProviderName_IdentifiesConfiguredProvider()
+    {
+        ProviderTestRuntime.RequireCapability("relational");
+        await using var context = ProviderTestRuntime.CreateContext();
+
+        Assert.False(string.IsNullOrWhiteSpace(context.Database.ProviderName));
+    }
+
+    [Fact]
+    [CapabilityRequirement("savepoints")]
+    [BehavioralCoverage("EF10-DATABASE-FACADE-AUTO-SAVEPOINTS", "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.AutoSavepointsEnabled")]
+    public async Task AutoSavepointsEnabled_CanBeChangedAndRestored()
+    {
+        ProviderTestRuntime.RequireCapability("savepoints");
+        await using var context = ProviderTestRuntime.CreateContext();
+        var original = context.Database.AutoSavepointsEnabled;
+
+        context.Database.AutoSavepointsEnabled = !original;
+        Assert.Equal(!original, context.Database.AutoSavepointsEnabled);
+
+        context.Database.AutoSavepointsEnabled = original;
+        Assert.Equal(original, context.Database.AutoSavepointsEnabled);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-DATABASE-FACADE-AUTO-TRANSACTION-BEHAVIOR", "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.AutoTransactionBehavior")]
+    public async Task AutoTransactionBehavior_CanBeChangedAndRestored()
+    {
+        ProviderTestRuntime.RequireCapability("relational");
+        await using var context = ProviderTestRuntime.CreateContext();
+        var original = context.Database.AutoTransactionBehavior;
+
+        context.Database.AutoTransactionBehavior = AutoTransactionBehavior.Never;
+        Assert.Equal(AutoTransactionBehavior.Never, context.Database.AutoTransactionBehavior);
+
+        context.Database.AutoTransactionBehavior = AutoTransactionBehavior.Always;
+        Assert.Equal(AutoTransactionBehavior.Always, context.Database.AutoTransactionBehavior);
+
+        context.Database.AutoTransactionBehavior = original;
+        Assert.Equal(original, context.Database.AutoTransactionBehavior);
+    }
 }
