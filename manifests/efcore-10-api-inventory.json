@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 262,
+    "AwaitingClassification": 255,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 536,
-    "UncoveredMemberFamilies": 173
+    "MemberEntriesInCoveredFamilies": 543,
+    "UncoveredMemberFamilies": 169
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -16016,6 +16016,7 @@
         "EF10-CONCURRENCY-SAVE-SYNC",
         "EF10-DB-FUNCTION-ATTRIBUTE-SYNC",
         "EF10-DELETE-BEHAVIOR-RESTRICT-SYNC",
+        "EF10-ENTITY-TYPE-CONFIGURATION-SYNC",
         "EF10-GENERATED-KEYS-SYNC",
         "EF10-INDEX-ATTRIBUTE-UNIQUE-SYNC",
         "EF10-INHERITANCE-TPC-SYNC",
@@ -16075,6 +16076,7 @@
         "EF10-CONCURRENCY-SAVE-SYNC",
         "EF10-DB-FUNCTION-ATTRIBUTE-SYNC",
         "EF10-DELETE-BEHAVIOR-RESTRICT-SYNC",
+        "EF10-ENTITY-TYPE-CONFIGURATION-SYNC",
         "EF10-GENERATED-KEYS-SYNC",
         "EF10-INDEX-ATTRIBUTE-UNIQUE-SYNC",
         "EF10-INHERITANCE-TPC-SYNC",
@@ -16135,6 +16137,7 @@
         "EF10-DB-FUNCTION-ATTRIBUTE-ASYNC",
         "EF10-DBSET-ATTACH-RANGE",
         "EF10-DELETE-BEHAVIOR-RESTRICT-ASYNC",
+        "EF10-ENTITY-TYPE-CONFIGURATION-ASYNC",
         "EF10-GENERATED-KEYS-ASYNC",
         "EF10-INDEX-ATTRIBUTE-UNIQUE-ASYNC",
         "EF10-INHERITANCE-TPC-ASYNC",
@@ -16197,6 +16200,7 @@
         "EF10-DB-FUNCTION-ATTRIBUTE-ASYNC",
         "EF10-DBSET-ATTACH-RANGE",
         "EF10-DELETE-BEHAVIOR-RESTRICT-ASYNC",
+        "EF10-ENTITY-TYPE-CONFIGURATION-ASYNC",
         "EF10-GENERATED-KEYS-ASYNC",
         "EF10-INDEX-ATTRIBUTE-UNIQUE-ASYNC",
         "EF10-INHERITANCE-TPC-ASYNC",
@@ -52229,6 +52233,7 @@
         "EF10-RAW-SQL-FROM-ASYNC",
         "EF10-RAW-SQL-FROM-RAW-ASYNC",
         "EF10-RAW-SQL-FROM-SQL-ASYNC",
+        "EF10-RAW-SQL-KEYLESS-ASYNC",
         "EF10-RAW-SQL-SCALAR-RAW-ASYNC",
         "EF10-RELATIONSHIPS-FOREIGN-KEY",
         "EF10-RELATIONSHIPS-INCLUDE-ASYNC",
@@ -52263,6 +52268,7 @@
         "EF10-RAW-SQL-FROM-ASYNC",
         "EF10-RAW-SQL-FROM-RAW-ASYNC",
         "EF10-RAW-SQL-FROM-SQL-ASYNC",
+        "EF10-RAW-SQL-KEYLESS-ASYNC",
         "EF10-RAW-SQL-SCALAR-RAW-ASYNC",
         "EF10-RELATIONSHIPS-FOREIGN-KEY",
         "EF10-RELATIONSHIPS-INCLUDE-ASYNC",
@@ -53483,10 +53489,13 @@
       "MemberKind": "Type",
       "ApiMemberName": null,
       "Signature": "class Microsoft.EntityFrameworkCore.EntityTypeConfigurationAttribute",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-ENTITY-TYPE-CONFIGURATION-ASYNC",
+        "EF10-ENTITY-TYPE-CONFIGURATION-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityTypeConfigurationAttribute"
     },
     {
@@ -53495,10 +53504,13 @@
       "MemberKind": "Constructor",
       "ApiMemberName": ".ctor",
       "Signature": ".ctor(System.Type entityConfigurationType)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-ENTITY-TYPE-CONFIGURATION-ASYNC",
+        "EF10-ENTITY-TYPE-CONFIGURATION-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityTypeConfigurationAttribute..ctor"
     },
     {
@@ -53507,10 +53519,13 @@
       "MemberKind": "Property",
       "ApiMemberName": "EntityTypeConfigurationType",
       "Signature": "System.Type EntityTypeConfigurationType get;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-ENTITY-TYPE-CONFIGURATION-ASYNC",
+        "EF10-ENTITY-TYPE-CONFIGURATION-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityTypeConfigurationAttribute.EntityTypeConfigurationType"
     },
     {
@@ -53895,10 +53910,13 @@
       "MemberKind": "Type",
       "ApiMemberName": null,
       "Signature": "interface Microsoft.EntityFrameworkCore.IEntityTypeConfiguration\u003CTEntity\u003E",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-ENTITY-TYPE-CONFIGURATION-ASYNC",
+        "EF10-ENTITY-TYPE-CONFIGURATION-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.IEntityTypeConfiguration\u00601"
     },
     {
@@ -53907,10 +53925,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "Configure",
       "Signature": "System.Void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder\u003CTEntity\u003E builder)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-ENTITY-TYPE-CONFIGURATION-ASYNC",
+        "EF10-ENTITY-TYPE-CONFIGURATION-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.IEntityTypeConfiguration\u00601.Configure"
     },
     {
@@ -65144,10 +65165,13 @@
       "MemberKind": "Type",
       "ApiMemberName": null,
       "Signature": "class Microsoft.EntityFrameworkCore.KeylessAttribute",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-RAW-SQL-KEYLESS-ASYNC",
+        "EF10-RAW-SQL-KEYLESS-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.KeylessAttribute"
     },
     {
@@ -65156,10 +65180,13 @@
       "MemberKind": "Constructor",
       "ApiMemberName": ".ctor",
       "Signature": ".ctor()",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-RAW-SQL-KEYLESS-ASYNC",
+        "EF10-RAW-SQL-KEYLESS-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.KeylessAttribute..ctor"
     },
     {
@@ -191309,7 +191336,9 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-RAW-SQL-FROM-ASYNC",
-        "EF10-RAW-SQL-FROM-SYNC"
+        "EF10-RAW-SQL-FROM-SYNC",
+        "EF10-RAW-SQL-KEYLESS-ASYNC",
+        "EF10-RAW-SQL-KEYLESS-SYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",

@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.Data.Common;
 using pengdows.efcore.conformance;
 using Xunit;
@@ -87,6 +88,10 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
 {
     public DbSet<Person> People => Set<Person>();
 
+    public DbSet<KeylessPersonRow> KeylessPeople => Set<KeylessPersonRow>();
+
+    public DbSet<AttributedConfigurationRecord> AttributedConfigurationRecords => Set<AttributedConfigurationRecord>();
+
     public DbSet<Blog> Blogs => Set<Blog>();
 
     public DbSet<ScalarRecord> ScalarRecords => Set<ScalarRecord>();
@@ -134,6 +139,14 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
             entity.Property(record => record.Id).HasColumnName("id");
             entity.Property(record => record.Value).HasColumnName("value").IsRequired().HasMaxLength(160);
         });
+        modelBuilder.Entity<KeylessPersonRow>(entity =>
+        {
+            entity.ToTable("ef10conformancekeylesspeople");
+            entity.Property(row => row.Id).HasColumnName("id");
+            entity.Property(row => row.Name).HasColumnName("name");
+            entity.Property(row => row.Age).HasColumnName("age");
+        });
+        modelBuilder.Entity<AttributedConfigurationRecord>();
         modelBuilder.Entity<PrecisionAttributeRecord>(entity =>
         {
             entity.ToTable("ef10conformanceprecisionattribute");
@@ -281,6 +294,35 @@ internal sealed class Person
     public bool IsDeleted { get; set; }
 
     public bool IsArchived { get; set; }
+}
+
+[Keyless]
+internal sealed class KeylessPersonRow
+{
+    public Guid Id { get; set; }
+
+    public string Name { get; set; } = string.Empty;
+
+    public int Age { get; set; }
+}
+
+[EntityTypeConfiguration(typeof(AttributedConfigurationRecordConfiguration))]
+internal sealed class AttributedConfigurationRecord
+{
+    public Guid Id { get; set; }
+
+    public string Value { get; set; } = string.Empty;
+}
+
+internal sealed class AttributedConfigurationRecordConfiguration : IEntityTypeConfiguration<AttributedConfigurationRecord>
+{
+    public void Configure(EntityTypeBuilder<AttributedConfigurationRecord> builder)
+    {
+        builder.ToTable("ef10conformance_entityconfiguration");
+        builder.HasKey(record => record.Id);
+        builder.Property(record => record.Id).HasColumnName("id");
+        builder.Property(record => record.Value).HasColumnName("value");
+    }
 }
 
 internal sealed class Blog

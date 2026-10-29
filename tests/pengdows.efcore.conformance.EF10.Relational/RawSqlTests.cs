@@ -9,6 +9,40 @@ namespace pengdows.efcore.conformance.EF10.Relational;
 public sealed class RawSqlTests
 {
     [Fact]
+    [BehavioralCoverage("EF10-RAW-SQL-KEYLESS-ASYNC", "Microsoft.EntityFrameworkCore.KeylessAttribute", "Microsoft.EntityFrameworkCore.KeylessAttribute..ctor", "Microsoft.EntityFrameworkCore.RelationalQueryableExtensions.FromSqlInterpolated", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    public async Task KeylessAttribute_MapsParameterizedSqlResultsAsynchronously()
+    {
+        var id = Guid.NewGuid();
+        const string name = "Keyless projection";
+        await SeedKeylessRowAsync(id, name);
+
+        await using var context = ProviderTestRuntime.CreateContext();
+        var row = await context.KeylessPeople
+            .FromSqlInterpolated($"SELECT id, name, age FROM ef10conformancekeylesspeople WHERE id = {id}")
+            .SingleAsync(TestContext.Current.CancellationToken);
+
+        Assert.Equal(id, row.Id);
+        Assert.Equal(name, row.Name);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-RAW-SQL-KEYLESS-SYNC", "Microsoft.EntityFrameworkCore.KeylessAttribute", "Microsoft.EntityFrameworkCore.KeylessAttribute..ctor", "Microsoft.EntityFrameworkCore.RelationalQueryableExtensions.FromSqlInterpolated", "System.Linq.Queryable.Single")]
+    public async Task KeylessAttribute_MapsParameterizedSqlResultsSynchronously()
+    {
+        var id = Guid.NewGuid();
+        const string name = "Keyless sync projection";
+        await SeedKeylessRowAsync(id, name);
+
+        await using var context = ProviderTestRuntime.CreateContext();
+        var row = context.KeylessPeople
+            .FromSqlInterpolated($"SELECT id, name, age FROM ef10conformancekeylesspeople WHERE id = {id}")
+            .Single();
+
+        Assert.Equal(id, row.Id);
+        Assert.Equal(name, row.Name);
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-RAW-SQL-FROM-ASYNC", "Microsoft.EntityFrameworkCore.RelationalQueryableExtensions.FromSqlInterpolated", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
     public async Task FromSqlInterpolated_ReturnsParameterizedResult()
     {
@@ -274,5 +308,14 @@ public sealed class RawSqlTests
         await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
         context.People.Add(new Person { Id = id, Name = name, Age = 29 });
         await context.SaveChangesAsync(TestContext.Current.CancellationToken);
+    }
+
+    private static async Task SeedKeylessRowAsync(Guid id, string name)
+    {
+        await using var context = ProviderTestRuntime.CreateContext();
+        await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
+        Assert.Equal(1, await context.Database.ExecuteSqlInterpolatedAsync(
+            $"INSERT INTO ef10conformancekeylesspeople (id, name, age) VALUES ({id}, {name}, {42})",
+            TestContext.Current.CancellationToken));
     }
 }
