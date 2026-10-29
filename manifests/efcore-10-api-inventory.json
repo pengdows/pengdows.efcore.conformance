@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12275,
+    "AwaitingClassification": 12272,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 290,
-    "UncoveredMemberFamilies": 8970
+    "MemberEntriesInCoveredFamilies": 293,
+    "UncoveredMemberFamilies": 8967
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -14652,6 +14652,8 @@
         "EF10-PERSIST-SAVE-NO-CHANGES-SYNC",
         "EF10-PERSIST-UPDATE-SYNC",
         "EF10-PRIMITIVE-COLLECTION-SYNC",
+        "EF10-SAVE-EVENTS-FAILURE-SYNC",
+        "EF10-SAVE-EVENTS-SUCCESS-SYNC",
         "EF10-TRACKING-CLEAR",
         "EF10-TRACKING-DETECT-CHANGES-SYNC",
         "EF10-TRACKING-HAS-CHANGES",
@@ -14695,6 +14697,8 @@
         "EF10-PERSIST-SAVE-NO-CHANGES-SYNC",
         "EF10-PERSIST-UPDATE-SYNC",
         "EF10-PRIMITIVE-COLLECTION-SYNC",
+        "EF10-SAVE-EVENTS-FAILURE-SYNC",
+        "EF10-SAVE-EVENTS-SUCCESS-SYNC",
         "EF10-TRACKING-CLEAR",
         "EF10-TRACKING-DETECT-CHANGES-SYNC",
         "EF10-TRACKING-HAS-CHANGES",
@@ -14741,6 +14745,8 @@
         "EF10-PERSIST-UPDATE-RANGE",
         "EF10-PRIMITIVE-COLLECTION-ASYNC",
         "EF10-RELATIONSHIPS-FOREIGN-KEY",
+        "EF10-SAVE-EVENTS-FAILURE-ASYNC",
+        "EF10-SAVE-EVENTS-SUCCESS-ASYNC",
         "EF10-TRACKING-ATTACH",
         "EF10-TRACKING-DETECT-CHANGES-ASYNC",
         "EF10-TRACKING-PROPERTY-ENTRY-ASYNC",
@@ -14786,6 +14792,8 @@
         "EF10-PERSIST-UPDATE-RANGE",
         "EF10-PRIMITIVE-COLLECTION-ASYNC",
         "EF10-RELATIONSHIPS-FOREIGN-KEY",
+        "EF10-SAVE-EVENTS-FAILURE-ASYNC",
+        "EF10-SAVE-EVENTS-SUCCESS-ASYNC",
         "EF10-TRACKING-ATTACH",
         "EF10-TRACKING-DETECT-CHANGES-ASYNC",
         "EF10-TRACKING-PROPERTY-ENTRY-ASYNC",
@@ -15329,9 +15337,12 @@
       "MemberKind": "Event",
       "ApiMemberName": "SavingChanges",
       "Signature": "event System.EventHandler\u003CMicrosoft.EntityFrameworkCore.SavingChangesEventArgs\u003E SavingChanges",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-SAVE-EVENTS-SUCCESS-ASYNC",
+        "EF10-SAVE-EVENTS-SUCCESS-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbContext.SavingChanges"
     },
     {
@@ -15340,9 +15351,12 @@
       "MemberKind": "Event",
       "ApiMemberName": "SavedChanges",
       "Signature": "event System.EventHandler\u003CMicrosoft.EntityFrameworkCore.SavedChangesEventArgs\u003E SavedChanges",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-SAVE-EVENTS-SUCCESS-ASYNC",
+        "EF10-SAVE-EVENTS-SUCCESS-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbContext.SavedChanges"
     },
     {
@@ -15351,9 +15365,12 @@
       "MemberKind": "Event",
       "ApiMemberName": "SaveChangesFailed",
       "Signature": "event System.EventHandler\u003CMicrosoft.EntityFrameworkCore.SaveChangesFailedEventArgs\u003E SaveChangesFailed",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-SAVE-EVENTS-FAILURE-ASYNC",
+        "EF10-SAVE-EVENTS-FAILURE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbContext.SaveChangesFailed"
     },
     {
@@ -17385,7 +17402,9 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-PERSIST-INSERT-FAILURE-ASYNC",
-        "EF10-PERSIST-INSERT-FAILURE-SYNC"
+        "EF10-PERSIST-INSERT-FAILURE-SYNC",
+        "EF10-SAVE-EVENTS-FAILURE-ASYNC",
+        "EF10-SAVE-EVENTS-FAILURE-SYNC"
       ],
       "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbUpdateException"
