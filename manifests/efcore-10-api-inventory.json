@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 252,
+    "AwaitingClassification": 248,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 546,
-    "UncoveredMemberFamilies": 168
+    "MemberEntriesInCoveredFamilies": 556,
+    "UncoveredMemberFamilies": 167
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -16024,6 +16024,7 @@
         "EF10-INHERITANCE-TPH-SYNC",
         "EF10-INHERITANCE-TPT-SYNC",
         "EF10-INTERCEPTION-SAVE-SYNC",
+        "EF10-JSON-MAPPING-SYNC",
         "EF10-MODEL-ATTRIBUTES-SYNC",
         "EF10-PERSIST-ACCEPT-CHANGES-SYNC",
         "EF10-PERSIST-ADD-RANGE-SYNC",
@@ -16085,6 +16086,7 @@
         "EF10-INHERITANCE-TPH-SYNC",
         "EF10-INHERITANCE-TPT-SYNC",
         "EF10-INTERCEPTION-SAVE-SYNC",
+        "EF10-JSON-MAPPING-SYNC",
         "EF10-MODEL-ATTRIBUTES-SYNC",
         "EF10-PERSIST-ACCEPT-CHANGES-SYNC",
         "EF10-PERSIST-ADD-RANGE-SYNC",
@@ -16147,6 +16149,7 @@
         "EF10-INHERITANCE-TPH-ASYNC",
         "EF10-INHERITANCE-TPT-ASYNC",
         "EF10-INTERCEPTION-SAVE-ASYNC",
+        "EF10-JSON-MAPPING-ASYNC",
         "EF10-MODEL-ATTRIBUTES-ASYNC",
         "EF10-PERSIST-ACCEPT-CHANGES-ASYNC",
         "EF10-PERSIST-ADD-ASYNC",
@@ -16211,6 +16214,7 @@
         "EF10-INHERITANCE-TPH-ASYNC",
         "EF10-INHERITANCE-TPT-ASYNC",
         "EF10-INTERCEPTION-SAVE-ASYNC",
+        "EF10-JSON-MAPPING-ASYNC",
         "EF10-MODEL-ATTRIBUTES-ASYNC",
         "EF10-PERSIST-ACCEPT-CHANGES-ASYNC",
         "EF10-PERSIST-ADD-ASYNC",
@@ -52227,6 +52231,7 @@
       "BehavioralContracts": [
         "EF10-COMPLEX-TYPE-ASYNC",
         "EF10-DB-FUNCTION-ATTRIBUTE-ASYNC",
+        "EF10-JSON-MAPPING-ASYNC",
         "EF10-PERSIST-ADD-ASYNC",
         "EF10-PERSIST-CONTEXT-ADD-ASYNC",
         "EF10-PERSIST-CONTEXT-ADD-SYNC",
@@ -52262,6 +52267,7 @@
       "BehavioralContracts": [
         "EF10-COMPLEX-TYPE-ASYNC",
         "EF10-DB-FUNCTION-ATTRIBUTE-ASYNC",
+        "EF10-JSON-MAPPING-ASYNC",
         "EF10-PERSIST-ADD-ASYNC",
         "EF10-PERSIST-CONTEXT-ADD-ASYNC",
         "EF10-PERSIST-CONTEXT-ADD-SYNC",
@@ -79849,10 +79855,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "OwnsOne",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.OwnedNavigationBuilder OwnsOne(System.String ownedTypeName, System.String navigationName)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "These are EF Core fluent model-configuration APIs. Provider obligations concern the observable effect of the configured model, which is tested through schema, query, migration, and persistence behavior rather than each builder overload in isolation.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-JSON-MAPPING-ASYNC",
+        "EF10-JSON-MAPPING-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.Builders.OwnedNavigationBuilder.OwnsOne"
     },
     {
@@ -79861,10 +79870,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "OwnsOne",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.OwnedNavigationBuilder OwnsOne(System.String ownedTypeName, System.Type ownedType, System.String navigationName)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "These are EF Core fluent model-configuration APIs. Provider obligations concern the observable effect of the configured model, which is tested through schema, query, migration, and persistence behavior rather than each builder overload in isolation.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-JSON-MAPPING-ASYNC",
+        "EF10-JSON-MAPPING-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.Builders.OwnedNavigationBuilder.OwnsOne"
     },
     {
@@ -79873,10 +79885,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "OwnsOne",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.OwnedNavigationBuilder OwnsOne(System.Type ownedType, System.String navigationName)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "These are EF Core fluent model-configuration APIs. Provider obligations concern the observable effect of the configured model, which is tested through schema, query, migration, and persistence behavior rather than each builder overload in isolation.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-JSON-MAPPING-ASYNC",
+        "EF10-JSON-MAPPING-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.Builders.OwnedNavigationBuilder.OwnsOne"
     },
     {
@@ -79885,10 +79900,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "OwnsOne",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.OwnedNavigationBuilder OwnsOne(System.String ownedTypeName, System.String navigationName, System.Action\u003CMicrosoft.EntityFrameworkCore.Metadata.Builders.OwnedNavigationBuilder\u003E buildAction)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "These are EF Core fluent model-configuration APIs. Provider obligations concern the observable effect of the configured model, which is tested through schema, query, migration, and persistence behavior rather than each builder overload in isolation.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-JSON-MAPPING-ASYNC",
+        "EF10-JSON-MAPPING-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.Builders.OwnedNavigationBuilder.OwnsOne"
     },
     {
@@ -79897,10 +79915,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "OwnsOne",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.OwnedNavigationBuilder OwnsOne(System.String ownedTypeName, System.Type ownedType, System.String navigationName, System.Action\u003CMicrosoft.EntityFrameworkCore.Metadata.Builders.OwnedNavigationBuilder\u003E buildAction)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "These are EF Core fluent model-configuration APIs. Provider obligations concern the observable effect of the configured model, which is tested through schema, query, migration, and persistence behavior rather than each builder overload in isolation.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-JSON-MAPPING-ASYNC",
+        "EF10-JSON-MAPPING-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.Builders.OwnedNavigationBuilder.OwnsOne"
     },
     {
@@ -79909,10 +79930,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "OwnsOne",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.OwnedNavigationBuilder OwnsOne(System.Type ownedType, System.String navigationName, System.Action\u003CMicrosoft.EntityFrameworkCore.Metadata.Builders.OwnedNavigationBuilder\u003E buildAction)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "These are EF Core fluent model-configuration APIs. Provider obligations concern the observable effect of the configured model, which is tested through schema, query, migration, and persistence behavior rather than each builder overload in isolation.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-JSON-MAPPING-ASYNC",
+        "EF10-JSON-MAPPING-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.Builders.OwnedNavigationBuilder.OwnsOne"
     },
     {
@@ -188825,10 +188849,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "ToJson",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.OwnedNavigationBuilder ToJson(Microsoft.EntityFrameworkCore.Metadata.Builders.OwnedNavigationBuilder builder)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-JSON-MAPPING-ASYNC",
+        "EF10-JSON-MAPPING-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalOwnedNavigationBuilderExtensions.ToJson"
     },
     {
@@ -188837,10 +188864,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "ToJson",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.OwnedNavigationBuilder\u003CTOwnerEntity, TDependentEntity\u003E ToJson\u003CTOwnerEntity, TDependentEntity\u003E(Microsoft.EntityFrameworkCore.Metadata.Builders.OwnedNavigationBuilder\u003CTOwnerEntity, TDependentEntity\u003E builder) where TOwnerEntity : class where TDependentEntity : class",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-JSON-MAPPING-ASYNC",
+        "EF10-JSON-MAPPING-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalOwnedNavigationBuilderExtensions.ToJson"
     },
     {
@@ -188849,10 +188879,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "ToJson",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.OwnedNavigationBuilder\u003CTOwnerEntity, TDependentEntity\u003E ToJson\u003CTOwnerEntity, TDependentEntity\u003E(Microsoft.EntityFrameworkCore.Metadata.Builders.OwnedNavigationBuilder\u003CTOwnerEntity, TDependentEntity\u003E builder, System.String jsonColumnName) where TOwnerEntity : class where TDependentEntity : class",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-JSON-MAPPING-ASYNC",
+        "EF10-JSON-MAPPING-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalOwnedNavigationBuilderExtensions.ToJson"
     },
     {
@@ -188861,10 +188894,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "ToJson",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.OwnedNavigationBuilder ToJson(Microsoft.EntityFrameworkCore.Metadata.Builders.OwnedNavigationBuilder builder, System.String jsonColumnName)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-JSON-MAPPING-ASYNC",
+        "EF10-JSON-MAPPING-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalOwnedNavigationBuilderExtensions.ToJson"
     },
     {

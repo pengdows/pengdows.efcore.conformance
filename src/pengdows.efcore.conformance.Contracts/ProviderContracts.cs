@@ -43,6 +43,7 @@ public sealed record ProviderCapabilities(
         "savepoints",
         "migrations",
         "filtered-indexes",
+        "json-mapping",
         "raw-sql",
         "execute-update",
         "execute-delete",

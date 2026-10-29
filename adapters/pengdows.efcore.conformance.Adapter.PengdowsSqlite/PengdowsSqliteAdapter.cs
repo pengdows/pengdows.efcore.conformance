@@ -17,6 +17,7 @@ public sealed class PengdowsSqliteAdapter : IAdoNetProviderAdapter, ISupplementa
             "savepoints",
             "migrations",
             "filtered-indexes",
+            "json-mapping",
             "raw-sql",
             "execute-update",
             "execute-delete",

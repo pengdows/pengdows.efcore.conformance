@@ -106,6 +106,8 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
 
     public DbSet<ComplexRecord> ComplexRecords => Set<ComplexRecord>();
 
+    public DbSet<JsonProfileRecord> JsonProfileRecords => Set<JsonProfileRecord>();
+
     public DbSet<PrimitiveCollectionRecord> PrimitiveCollectionRecords => Set<PrimitiveCollectionRecord>();
 
     public DbSet<GeneratedKeyRecord> GeneratedKeyRecords => Set<GeneratedKeyRecord>();
@@ -268,6 +270,17 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
             {
                 address.Property(value => value.Street).HasColumnName("address_street").IsRequired();
                 address.Property(value => value.City).HasColumnName("address_city").IsRequired();
+            });
+        });
+        modelBuilder.Entity<JsonProfileRecord>(entity =>
+        {
+            entity.ToTable("ef10conformance_jsonprofiles");
+            entity.HasKey(record => record.Id);
+            entity.Property(record => record.Id).HasColumnName("id");
+            entity.OwnsOne(record => record.Profile, profile =>
+            {
+                profile.ToJson("profile");
+                profile.OwnsOne(value => value.Preferences);
             });
         });
         modelBuilder.Entity<PrimitiveCollectionRecord>(entity =>
@@ -519,6 +532,25 @@ internal sealed class ComplexRecord
     public Guid Id { get; set; }
 
     public AddressInfo Address { get; set; } = new();
+}
+
+internal sealed class JsonProfileRecord
+{
+    public Guid Id { get; set; }
+
+    public JsonProfile Profile { get; set; } = new();
+}
+
+internal sealed class JsonProfile
+{
+    public string Biography { get; set; } = string.Empty;
+
+    public JsonPreferences Preferences { get; set; } = new();
+}
+
+internal sealed class JsonPreferences
+{
+    public bool EmailNotifications { get; set; }
 }
 
 internal sealed class AddressInfo
