@@ -112,6 +112,7 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
             entity.Property(person => person.Id).HasColumnName("id");
             entity.Property(person => person.Name).HasColumnName("name").IsRequired().HasMaxLength(160);
             entity.Property(person => person.Age).HasColumnName("age");
+            entity.Property<string>("ShadowLabel").HasColumnName("shadowlabel");
             entity.Property(person => person.OptionalRank).HasColumnName("optionalrank");
             entity.Property(person => person.Version).HasColumnName("version").IsConcurrencyToken();
             entity.Property(person => person.IsDeleted).HasColumnName("isdeleted");

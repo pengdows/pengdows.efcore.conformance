@@ -479,6 +479,54 @@ public sealed class QueryTests
             await context.People.ToListAsync(cancellation.Token));
     }
 
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-SHADOW-PROPERTY-ASYNC", "Microsoft.EntityFrameworkCore.EF.Property", "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry.Property", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync")]
+    public async Task EfProperty_FiltersOnShadowPropertyAsynchronously()
+    {
+        var id = Guid.NewGuid();
+        var label = $"label-{Guid.NewGuid():N}";
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            var person = new Person { Id = id, Name = "Shadow property query", Age = 34 };
+            write.People.Add(person);
+            write.Entry(person).Property<string>("ShadowLabel").CurrentValue = label;
+            await write.SaveChangesAsync(TestContext.Current.CancellationToken);
+        }
+
+        await using var query = ProviderTestRuntime.CreateContext();
+        var names = await query.People
+            .Where(person => EF.Property<string>(person, "ShadowLabel") == label)
+            .Select(person => person.Name)
+            .ToListAsync(TestContext.Current.CancellationToken);
+
+        Assert.Equal(new[] { "Shadow property query" }, names);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-SHADOW-PROPERTY-SYNC", "Microsoft.EntityFrameworkCore.EF.Property", "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry.Property", "System.Linq.Queryable.ToList")]
+    public async Task EfProperty_FiltersOnShadowPropertySynchronously()
+    {
+        var id = Guid.NewGuid();
+        var label = $"label-{Guid.NewGuid():N}";
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            var person = new Person { Id = id, Name = "Shadow property query sync", Age = 35 };
+            write.People.Add(person);
+            write.Entry(person).Property<string>("ShadowLabel").CurrentValue = label;
+            await write.SaveChangesAsync(TestContext.Current.CancellationToken);
+        }
+
+        await using var query = ProviderTestRuntime.CreateContext();
+        var names = query.People
+            .Where(person => EF.Property<string>(person, "ShadowLabel") == label)
+            .Select(person => person.Name)
+            .ToList();
+
+        Assert.Equal(new[] { "Shadow property query sync" }, names);
+    }
+
     private static async Task SeedAsync(IEnumerable<Person> people)
     {
         await using var context = ProviderTestRuntime.CreateContext();

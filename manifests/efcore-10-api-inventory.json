@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12240,
+    "AwaitingClassification": 12239,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 325,
-    "UncoveredMemberFamilies": 8942
+    "MemberEntriesInCoveredFamilies": 326,
+    "UncoveredMemberFamilies": 8941
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -1852,6 +1852,8 @@
       "Signature": "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyEntry Property(Microsoft.EntityFrameworkCore.Metadata.IProperty property)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-QUERY-SHADOW-PROPERTY-ASYNC",
+        "EF10-QUERY-SHADOW-PROPERTY-SYNC",
         "EF10-TRACKING-PROPERTY-VALUES-SET"
       ],
       "Disposition": "behavior-tested-family",
@@ -1865,6 +1867,8 @@
       "Signature": "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyEntry Property(System.String propertyName)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-QUERY-SHADOW-PROPERTY-ASYNC",
+        "EF10-QUERY-SHADOW-PROPERTY-SYNC",
         "EF10-TRACKING-PROPERTY-VALUES-SET"
       ],
       "Disposition": "behavior-tested-family",
@@ -47200,9 +47204,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "Property",
       "Signature": "TProperty Property\u003CTProperty\u003E(System.Object instance, System.String propertyName)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-QUERY-SHADOW-PROPERTY-ASYNC",
+        "EF10-QUERY-SHADOW-PROPERTY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.Property"
     },
     {
@@ -48283,6 +48290,7 @@
         "EF10-QUERY-FILTERS-NAMED-ASYNC",
         "EF10-QUERY-GROUPBY-ASYNC",
         "EF10-QUERY-NULL-PREDICATE-ASYNC",
+        "EF10-QUERY-SHADOW-PROPERTY-ASYNC",
         "EF10-RELATIONSHIPS-SELECTMANY-ASYNC",
         "EF10-TRACKING-NO-TRACKING-IDENTITY-ASYNC"
       ],
