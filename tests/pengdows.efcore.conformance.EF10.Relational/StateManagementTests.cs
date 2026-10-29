@@ -130,6 +130,83 @@ public sealed class StateManagementTests
         Assert.Equal(EntityState.Detached, context.Entry(person).State);
     }
 
+    [Fact]
+    [BehavioralCoverage("EF10-TRACKING-DETECT-CHANGES-ASYNC", "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.AutoDetectChangesEnabled", "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.DetectChanges", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync")]
+    public async Task DetectChanges_ExplicitlyFindsAndPersistsChangesAsynchronously()
+    {
+        var id = Guid.NewGuid();
+        await SeedAsync(id);
+
+        await using (var update = ProviderTestRuntime.CreateContext())
+        {
+            update.ChangeTracker.AutoDetectChangesEnabled = false;
+            var person = await update.People.SingleAsync(item => item.Id == id, TestContext.Current.CancellationToken);
+            person.Name = "Explicit async detection";
+
+            Assert.Equal(EntityState.Unchanged, update.Entry(person).State);
+            update.ChangeTracker.DetectChanges();
+            Assert.Equal(EntityState.Modified, update.Entry(person).State);
+            Assert.Equal(1, await update.SaveChangesAsync(TestContext.Current.CancellationToken));
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.Equal("Explicit async detection", await verify.People.AsNoTracking()
+            .Where(item => item.Id == id)
+            .Select(item => item.Name)
+            .SingleAsync(TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-TRACKING-DETECT-CHANGES-SYNC", "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.AutoDetectChangesEnabled", "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.DetectChanges", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges")]
+    public async Task DetectChanges_ExplicitlyFindsAndPersistsChangesSynchronously()
+    {
+        var id = Guid.NewGuid();
+        await SeedAsync(id);
+
+        await using (var update = ProviderTestRuntime.CreateContext())
+        {
+            update.ChangeTracker.AutoDetectChangesEnabled = false;
+            var person = update.People.Single(item => item.Id == id);
+            person.Name = "Explicit sync detection";
+
+            Assert.Equal(EntityState.Unchanged, update.Entry(person).State);
+            update.ChangeTracker.DetectChanges();
+            Assert.Equal(EntityState.Modified, update.Entry(person).State);
+            Assert.Equal(1, update.SaveChanges());
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.Equal("Explicit sync detection", verify.People.AsNoTracking()
+            .Where(item => item.Id == id)
+            .Select(item => item.Name)
+            .Single());
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-TRACKING-CLEAR", "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.Clear", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges")]
+    public async Task ChangeTrackerClear_DetachesEntitiesAndDiscardsUnsavedChanges()
+    {
+        var id = Guid.NewGuid();
+        await SeedAsync(id);
+
+        await using (var context = ProviderTestRuntime.CreateContext())
+        {
+            var person = await context.People.SingleAsync(item => item.Id == id, TestContext.Current.CancellationToken);
+            person.Name = "Unpersisted value";
+
+            context.ChangeTracker.Clear();
+
+            Assert.Equal(EntityState.Detached, context.Entry(person).State);
+            Assert.Equal(0, await context.SaveChangesAsync(TestContext.Current.CancellationToken));
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.Equal($"Tracked {id:N}", await verify.People.AsNoTracking()
+            .Where(item => item.Id == id)
+            .Select(item => item.Name)
+            .SingleAsync(TestContext.Current.CancellationToken));
+    }
+
     private static async Task SeedAsync(Guid id)
     {
         await using var context = ProviderTestRuntime.CreateContext();

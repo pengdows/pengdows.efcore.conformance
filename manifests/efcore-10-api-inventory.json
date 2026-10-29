@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12424,
+    "AwaitingClassification": 12421,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 141,
-    "UncoveredMemberFamilies": 9068
+    "MemberEntriesInCoveredFamilies": 144,
+    "UncoveredMemberFamilies": 9065
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -315,9 +315,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "DetectChanges",
       "Signature": "System.Void DetectChanges()",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-DETECT-CHANGES-ASYNC",
+        "EF10-TRACKING-DETECT-CHANGES-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.DetectChanges"
     },
     {
@@ -373,9 +376,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "Clear",
       "Signature": "System.Void Clear()",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-CLEAR"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.Clear"
     },
     {
@@ -428,9 +433,12 @@
       "MemberKind": "Property",
       "ApiMemberName": "AutoDetectChangesEnabled",
       "Signature": "System.Boolean AutoDetectChangesEnabled get; set;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-DETECT-CHANGES-ASYNC",
+        "EF10-TRACKING-DETECT-CHANGES-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.AutoDetectChangesEnabled"
     },
     {
@@ -14565,6 +14573,8 @@
         "EF10-PERSIST-INSERT-SYNC",
         "EF10-PERSIST-REMOVE-RANGE",
         "EF10-PERSIST-UPDATE-SYNC",
+        "EF10-TRACKING-CLEAR",
+        "EF10-TRACKING-DETECT-CHANGES-SYNC",
         "EF10-TRANSACTION-COMMIT-SYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-SYNC",
         "EF10-TYPES-ROUNDTRIP-SYNC"
@@ -14588,6 +14598,8 @@
         "EF10-PERSIST-INSERT-SYNC",
         "EF10-PERSIST-REMOVE-RANGE",
         "EF10-PERSIST-UPDATE-SYNC",
+        "EF10-TRACKING-CLEAR",
+        "EF10-TRACKING-DETECT-CHANGES-SYNC",
         "EF10-TRANSACTION-COMMIT-SYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-SYNC",
         "EF10-TYPES-ROUNDTRIP-SYNC"
@@ -14613,6 +14625,7 @@
         "EF10-PERSIST-UPDATE-RANGE",
         "EF10-RELATIONSHIPS-FOREIGN-KEY",
         "EF10-TRACKING-ATTACH",
+        "EF10-TRACKING-DETECT-CHANGES-ASYNC",
         "EF10-TRANSACTION-ROLLBACK-ASYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC",
         "EF10-TYPES-ROUNDTRIP-ASYNC"
@@ -14638,6 +14651,7 @@
         "EF10-PERSIST-UPDATE-RANGE",
         "EF10-RELATIONSHIPS-FOREIGN-KEY",
         "EF10-TRACKING-ATTACH",
+        "EF10-TRACKING-DETECT-CHANGES-ASYNC",
         "EF10-TRANSACTION-ROLLBACK-ASYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC",
         "EF10-TYPES-ROUNDTRIP-ASYNC"
