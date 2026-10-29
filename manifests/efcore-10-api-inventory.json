@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12119,
+    "AwaitingClassification": 12113,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 446,
-    "UncoveredMemberFamilies": 8933
+    "MemberEntriesInCoveredFamilies": 452,
+    "UncoveredMemberFamilies": 8930
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -49403,9 +49403,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CreateDbContext",
       "Signature": "TContext CreateDbContext()",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DBCONTEXT-FACTORY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.IDbContextFactory\u00601.CreateDbContext"
     },
     {
@@ -49414,9 +49416,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CreateDbContextAsync",
       "Signature": "System.Threading.Tasks.Task\u003CTContext\u003E CreateDbContextAsync(System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DBCONTEXT-FACTORY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.IDbContextFactory\u00601.CreateDbContextAsync"
     },
     {
@@ -199132,9 +199136,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "AddDbContextFactory",
       "Signature": "Microsoft.Extensions.DependencyInjection.IServiceCollection AddDbContextFactory\u003CTContext\u003E(Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection, System.Action\u003CMicrosoft.EntityFrameworkCore.DbContextOptionsBuilder\u003E optionsAction = null, Microsoft.Extensions.DependencyInjection.ServiceLifetime lifetime = Singleton) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DBCONTEXT-FACTORY-ASYNC",
+        "EF10-DBCONTEXT-FACTORY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.Extensions.DependencyInjection.EntityFrameworkServiceCollectionExtensions.AddDbContextFactory"
     },
     {
@@ -199143,9 +199150,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "AddDbContextFactory",
       "Signature": "Microsoft.Extensions.DependencyInjection.IServiceCollection AddDbContextFactory\u003CTContext, TFactory\u003E(Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection, System.Action\u003CMicrosoft.EntityFrameworkCore.DbContextOptionsBuilder\u003E optionsAction = null, Microsoft.Extensions.DependencyInjection.ServiceLifetime lifetime = Singleton) where TContext : Microsoft.EntityFrameworkCore.DbContext where TFactory : Microsoft.EntityFrameworkCore.IDbContextFactory\u003CTContext\u003E",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DBCONTEXT-FACTORY-ASYNC",
+        "EF10-DBCONTEXT-FACTORY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.Extensions.DependencyInjection.EntityFrameworkServiceCollectionExtensions.AddDbContextFactory"
     },
     {
@@ -199154,9 +199164,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "AddDbContextFactory",
       "Signature": "Microsoft.Extensions.DependencyInjection.IServiceCollection AddDbContextFactory\u003CTContext\u003E(Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection, System.Action\u003CSystem.IServiceProvider, Microsoft.EntityFrameworkCore.DbContextOptionsBuilder\u003E optionsAction, Microsoft.Extensions.DependencyInjection.ServiceLifetime lifetime = Singleton) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DBCONTEXT-FACTORY-ASYNC",
+        "EF10-DBCONTEXT-FACTORY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.Extensions.DependencyInjection.EntityFrameworkServiceCollectionExtensions.AddDbContextFactory"
     },
     {
@@ -199165,9 +199178,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "AddDbContextFactory",
       "Signature": "Microsoft.Extensions.DependencyInjection.IServiceCollection AddDbContextFactory\u003CTContext, TFactory\u003E(Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection, System.Action\u003CSystem.IServiceProvider, Microsoft.EntityFrameworkCore.DbContextOptionsBuilder\u003E optionsAction, Microsoft.Extensions.DependencyInjection.ServiceLifetime lifetime = Singleton) where TContext : Microsoft.EntityFrameworkCore.DbContext where TFactory : Microsoft.EntityFrameworkCore.IDbContextFactory\u003CTContext\u003E",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DBCONTEXT-FACTORY-ASYNC",
+        "EF10-DBCONTEXT-FACTORY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.Extensions.DependencyInjection.EntityFrameworkServiceCollectionExtensions.AddDbContextFactory"
     },
     {
