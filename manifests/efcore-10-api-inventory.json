@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12290,
+    "AwaitingClassification": 12288,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 275,
-    "UncoveredMemberFamilies": 8982
+    "MemberEntriesInCoveredFamilies": 277,
+    "UncoveredMemberFamilies": 8980
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -14796,9 +14796,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "Dispose",
       "Signature": "System.Void Dispose()",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-CONTEXT-DISPOSE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbContext.Dispose"
     },
     {
@@ -14807,9 +14809,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "DisposeAsync",
       "Signature": "System.Threading.Tasks.ValueTask DisposeAsync()",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-CONTEXT-DISPOSE-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbContext.DisposeAsync"
     },
     {
@@ -167371,6 +167375,8 @@
       "Signature": "System.Data.Common.DbConnection GetDbConnection(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-CONTEXT-DISPOSE-ASYNC",
+        "EF10-CONTEXT-DISPOSE-SYNC",
         "EF10-DATABASE-CONNECTION-LIFECYCLE-ASYNC",
         "EF10-DATABASE-CONNECTION-LIFECYCLE-SYNC",
         "EF10-DATABASE-FACADE-SET-CONNECTION",
@@ -167427,6 +167433,7 @@
       "Signature": "System.Void OpenConnection(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-CONTEXT-DISPOSE-SYNC",
         "EF10-DATABASE-CONNECTION-LIFECYCLE-SYNC"
       ],
       "Disposition": "behavior-tested-family",
@@ -167440,6 +167447,7 @@
       "Signature": "System.Threading.Tasks.Task OpenConnectionAsync(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade, System.Threading.CancellationToken cancellationToken = null)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-CONTEXT-DISPOSE-ASYNC",
         "EF10-DATABASE-CONNECTION-LIFECYCLE-ASYNC"
       ],
       "Disposition": "behavior-tested-family",

@@ -77,4 +77,36 @@ public sealed class DatabaseLifecycleTests
         await context.Database.CloseConnectionAsync();
         Assert.Equal(ConnectionState.Closed, connection.State);
     }
+
+    [Fact]
+    [BehavioralCoverage("EF10-CONTEXT-DISPOSE-SYNC", "Microsoft.EntityFrameworkCore.DbContext.Dispose", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.OpenConnection", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetDbConnection")]
+    public async Task Dispose_ClosesConnectionOpenedByContext()
+    {
+        var context = ProviderTestRuntime.CreateContext();
+        await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
+        var connection = context.Database.GetDbConnection();
+        context.Database.OpenConnection();
+
+        Assert.Equal(ConnectionState.Open, connection.State);
+
+        context.Dispose();
+
+        Assert.Equal(ConnectionState.Closed, connection.State);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-CONTEXT-DISPOSE-ASYNC", "Microsoft.EntityFrameworkCore.DbContext.DisposeAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.OpenConnectionAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetDbConnection")]
+    public async Task DisposeAsync_ClosesConnectionOpenedByContext()
+    {
+        var context = ProviderTestRuntime.CreateContext();
+        await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
+        var connection = context.Database.GetDbConnection();
+        await context.Database.OpenConnectionAsync(TestContext.Current.CancellationToken);
+
+        Assert.Equal(ConnectionState.Open, connection.State);
+
+        await context.DisposeAsync();
+
+        Assert.Equal(ConnectionState.Closed, connection.State);
+    }
 }
