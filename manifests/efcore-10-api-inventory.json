@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12361,
+    "AwaitingClassification": 12360,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 204,
-    "UncoveredMemberFamilies": 9027
+    "MemberEntriesInCoveredFamilies": 205,
+    "UncoveredMemberFamilies": 9026
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -310,9 +310,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasChanges",
       "Signature": "System.Boolean HasChanges()",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-HAS-CHANGES"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.HasChanges"
     },
     {
@@ -14610,6 +14612,7 @@
         "EF10-PRIMITIVE-COLLECTION-SYNC",
         "EF10-TRACKING-CLEAR",
         "EF10-TRACKING-DETECT-CHANGES-SYNC",
+        "EF10-TRACKING-HAS-CHANGES",
         "EF10-TRACKING-PROPERTY-ENTRY-SYNC",
         "EF10-TRACKING-UPDATE-DETACHED-SYNC",
         "EF10-TRANSACTION-COMMIT-SYNC",
@@ -14646,6 +14649,7 @@
         "EF10-PRIMITIVE-COLLECTION-SYNC",
         "EF10-TRACKING-CLEAR",
         "EF10-TRACKING-DETECT-CHANGES-SYNC",
+        "EF10-TRACKING-HAS-CHANGES",
         "EF10-TRACKING-PROPERTY-ENTRY-SYNC",
         "EF10-TRACKING-UPDATE-DETACHED-SYNC",
         "EF10-TRANSACTION-COMMIT-SYNC",

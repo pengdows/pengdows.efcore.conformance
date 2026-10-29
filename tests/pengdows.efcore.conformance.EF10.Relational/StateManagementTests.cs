@@ -194,6 +194,20 @@ public sealed class StateManagementTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-TRACKING-HAS-CHANGES", "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.HasChanges", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges")]
+    public async Task HasChanges_TracksPendingPersistenceWork()
+    {
+        await using var context = ProviderTestRuntime.CreateContext();
+        await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
+
+        Assert.False(context.ChangeTracker.HasChanges());
+        context.People.Add(new Person { Id = Guid.NewGuid(), Name = "Pending change", Age = 33 });
+        Assert.True(context.ChangeTracker.HasChanges());
+        Assert.Equal(1, context.SaveChanges());
+        Assert.False(context.ChangeTracker.HasChanges());
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-TRACKING-DETECT-CHANGES-ASYNC", "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.AutoDetectChangesEnabled", "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.DetectChanges", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync")]
     public async Task DetectChanges_ExplicitlyFindsAndPersistsChangesAsynchronously()
     {
