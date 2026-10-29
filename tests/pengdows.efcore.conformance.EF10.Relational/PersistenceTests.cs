@@ -8,6 +8,52 @@ namespace pengdows.efcore.conformance.EF10.Relational;
 public sealed class PersistenceTests
 {
     [Fact]
+    [BehavioralCoverage("EF10-PERSIST-ADD-ASYNC", "Microsoft.EntityFrameworkCore.DbSet`1.AddAsync", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    public async Task AddAsync_TracksAndPersistsEntity()
+    {
+        var id = Guid.NewGuid();
+        const string expectedName = "Async DbSet Add";
+        var cancellationToken = TestContext.Current.CancellationToken;
+
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, cancellationToken);
+            var entry = await write.People.AddAsync(new Person { Id = id, Name = expectedName, Age = 38 }, cancellationToken);
+            Assert.Equal(EntityState.Added, entry.State);
+            Assert.Equal(1, await write.SaveChangesAsync(cancellationToken));
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        var actual = await verify.People.AsNoTracking()
+            .SingleAsync(person => person.Id == id, cancellationToken);
+        Assert.Equal(expectedName, actual.Name);
+        Assert.Equal(38, actual.Age);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-PERSIST-CONTEXT-ADD-ASYNC", "Microsoft.EntityFrameworkCore.DbContext.AddAsync", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    public async Task DbContextAddAsync_TracksAndPersistsEntity()
+    {
+        var id = Guid.NewGuid();
+        const string expectedName = "Async DbContext Add";
+        var cancellationToken = TestContext.Current.CancellationToken;
+
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, cancellationToken);
+            var entry = await write.AddAsync(new Person { Id = id, Name = expectedName, Age = 39 }, cancellationToken);
+            Assert.Equal(EntityState.Added, entry.State);
+            Assert.Equal(1, await write.SaveChangesAsync(cancellationToken));
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        var actual = await verify.People.AsNoTracking()
+            .SingleAsync(person => person.Id == id, cancellationToken);
+        Assert.Equal(expectedName, actual.Name);
+        Assert.Equal(39, actual.Age);
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-PERSIST-INSERT-ASYNC", "Microsoft.EntityFrameworkCore.DbSet`1.Add", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync", "System.Linq.Queryable.Where", "System.Linq.Queryable.Select")]
     [NativeTypeCoverage("VARCHAR(160)", typeof(string), "EF10-PERSIST-INSERT-ASYNC")]
     [NativeTypeCoverage("INTEGER", typeof(int), "EF10-PERSIST-INSERT-ASYNC")]

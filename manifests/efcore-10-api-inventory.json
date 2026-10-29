@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12320,
+    "AwaitingClassification": 12317,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 245,
-    "UncoveredMemberFamilies": 8998
+    "MemberEntriesInCoveredFamilies": 248,
+    "UncoveredMemberFamilies": 8996
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [
@@ -14708,7 +14708,9 @@
         "EF10-INHERITANCE-TPT-ASYNC",
         "EF10-INTERCEPTION-SAVE-ASYNC",
         "EF10-PERSIST-ACCEPT-CHANGES-ASYNC",
+        "EF10-PERSIST-ADD-ASYNC",
         "EF10-PERSIST-ADD-RANGE-ASYNC",
+        "EF10-PERSIST-CONTEXT-ADD-ASYNC",
         "EF10-PERSIST-DELETE-ASYNC",
         "EF10-PERSIST-INSERT-ASYNC",
         "EF10-PERSIST-INSERT-FAILURE-ASYNC",
@@ -14746,7 +14748,9 @@
         "EF10-INHERITANCE-TPT-ASYNC",
         "EF10-INTERCEPTION-SAVE-ASYNC",
         "EF10-PERSIST-ACCEPT-CHANGES-ASYNC",
+        "EF10-PERSIST-ADD-ASYNC",
         "EF10-PERSIST-ADD-RANGE-ASYNC",
+        "EF10-PERSIST-CONTEXT-ADD-ASYNC",
         "EF10-PERSIST-DELETE-ASYNC",
         "EF10-PERSIST-INSERT-ASYNC",
         "EF10-PERSIST-INSERT-FAILURE-ASYNC",
@@ -14854,9 +14858,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "AddAsync",
       "Signature": "System.Threading.Tasks.ValueTask\u003CMicrosoft.EntityFrameworkCore.ChangeTracking.EntityEntry\u003CTEntity\u003E\u003E AddAsync\u003CTEntity\u003E(TEntity entity, System.Threading.CancellationToken cancellationToken = null) where TEntity : class",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-PERSIST-CONTEXT-ADD-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbContext.AddAsync"
     },
     {
@@ -14909,9 +14915,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "AddAsync",
       "Signature": "System.Threading.Tasks.ValueTask\u003CMicrosoft.EntityFrameworkCore.ChangeTracking.EntityEntry\u003E AddAsync(System.Object entity, System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-PERSIST-CONTEXT-ADD-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbContext.AddAsync"
     },
     {
@@ -16942,9 +16950,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "AddAsync",
       "Signature": "System.Threading.Tasks.ValueTask\u003CMicrosoft.EntityFrameworkCore.ChangeTracking.EntityEntry\u003CTEntity\u003E\u003E AddAsync(TEntity entity, System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-PERSIST-ADD-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbSet\u00601.AddAsync"
     },
     {
@@ -47406,6 +47416,8 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-COMPLEX-TYPE-ASYNC",
+        "EF10-PERSIST-ADD-ASYNC",
+        "EF10-PERSIST-CONTEXT-ADD-ASYNC",
         "EF10-PERSIST-INSERT-ASYNC",
         "EF10-PERSIST-UPDATE-ASYNC",
         "EF10-PERSIST-UPDATE-RANGE",
@@ -47433,6 +47445,8 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-COMPLEX-TYPE-ASYNC",
+        "EF10-PERSIST-ADD-ASYNC",
+        "EF10-PERSIST-CONTEXT-ADD-ASYNC",
         "EF10-PERSIST-INSERT-ASYNC",
         "EF10-PERSIST-UPDATE-ASYNC",
         "EF10-PERSIST-UPDATE-RANGE",
