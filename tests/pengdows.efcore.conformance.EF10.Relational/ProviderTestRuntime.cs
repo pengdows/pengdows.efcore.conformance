@@ -22,13 +22,29 @@ internal static class ProviderTestRuntime
 
     public static ConformanceDbContext CreateContext()
     {
-        var options = new DbContextOptionsBuilder<ConformanceDbContext>();
-        Adapter.Configure(options, ConnectionString);
-        return new ConformanceDbContext(options.Options);
+        try
+        {
+            var options = new DbContextOptionsBuilder<ConformanceDbContext>();
+            Adapter.Configure(options, ConnectionString);
+            return new ConformanceDbContext(options.Options);
+        }
+        catch (Exception exception) when (exception is not ConformanceInfrastructureException)
+        {
+            throw new ConformanceInfrastructureException("Provider adapter configuration failed.", exception);
+        }
     }
 
-    public static Task InitializeAsync(ConformanceDbContext context, CancellationToken cancellationToken) =>
-        Adapter.InitializeDatabaseAsync(context, cancellationToken);
+    public static async Task InitializeAsync(ConformanceDbContext context, CancellationToken cancellationToken)
+    {
+        try
+        {
+            await Adapter.InitializeDatabaseAsync(context, cancellationToken);
+        }
+        catch (Exception exception) when (exception is not ConformanceInfrastructureException)
+        {
+            throw new ConformanceInfrastructureException("Provider database initialization failed.", exception);
+        }
+    }
 
     public static void RequireCapability(string feature)
     {

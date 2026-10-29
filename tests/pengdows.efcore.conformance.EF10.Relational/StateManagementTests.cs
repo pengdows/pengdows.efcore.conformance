@@ -54,6 +54,44 @@ public sealed class StateManagementTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-TRACKING-NO-TRACKING-IDENTITY-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.AsNoTrackingWithIdentityResolution", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync", "System.Linq.Queryable.Join")]
+    public async Task AsNoTrackingWithIdentityResolution_ReusesRepeatedEntityInstancesAsynchronously()
+    {
+        var postId = await SeedPostWithTwoCommentsAsync();
+
+        await using var context = ProviderTestRuntime.CreateContext();
+        var posts = await context.Set<Post>()
+            .Where(post => post.Id == postId)
+            .Join(context.Set<Comment>(), post => post.Id, comment => comment.PostId, (post, _) => post)
+            .OrderBy(post => post.Id)
+            .AsNoTrackingWithIdentityResolution()
+            .ToListAsync(TestContext.Current.CancellationToken);
+
+        Assert.Equal(2, posts.Count);
+        Assert.Same(posts[0], posts[1]);
+        Assert.Empty(context.ChangeTracker.Entries<Post>());
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-TRACKING-NO-TRACKING-IDENTITY-SYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.AsNoTrackingWithIdentityResolution", "System.Linq.Queryable.ToList", "System.Linq.Queryable.Join")]
+    public async Task AsNoTrackingWithIdentityResolution_ReusesRepeatedEntityInstancesSynchronously()
+    {
+        var postId = await SeedPostWithTwoCommentsAsync();
+
+        await using var context = ProviderTestRuntime.CreateContext();
+        var posts = context.Set<Post>()
+            .Where(post => post.Id == postId)
+            .Join(context.Set<Comment>(), post => post.Id, comment => comment.PostId, (post, _) => post)
+            .OrderBy(post => post.Id)
+            .AsNoTrackingWithIdentityResolution()
+            .ToList();
+
+        Assert.Equal(2, posts.Count);
+        Assert.Same(posts[0], posts[1]);
+        Assert.Empty(context.ChangeTracker.Entries<Post>());
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-TRACKING-ATTACH", "Microsoft.EntityFrameworkCore.DbSet`1.Attach", "Microsoft.EntityFrameworkCore.DbContext.Entry", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync")]
     public async Task Attach_TracksEntityAndPersistsSubsequentChanges()
     {
@@ -98,5 +136,26 @@ public sealed class StateManagementTests
         await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
         context.People.Add(new Person { Id = id, Name = $"Tracked {id:N}", Age = 50 });
         await context.SaveChangesAsync(TestContext.Current.CancellationToken);
+    }
+
+    private static async Task<Guid> SeedPostWithTwoCommentsAsync()
+    {
+        var post = new Post
+        {
+            Id = Guid.NewGuid(),
+            Title = "Identity resolution",
+            Comments =
+            [
+                new Comment { Id = Guid.NewGuid(), Text = "First" },
+                new Comment { Id = Guid.NewGuid(), Text = "Second" }
+            ]
+        };
+        var blog = new Blog { Id = Guid.NewGuid(), Name = $"Identity {Guid.NewGuid():N}", Posts = [post] };
+
+        await using var context = ProviderTestRuntime.CreateContext();
+        await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
+        context.Blogs.Add(blog);
+        await context.SaveChangesAsync(TestContext.Current.CancellationToken);
+        return post.Id;
     }
 }

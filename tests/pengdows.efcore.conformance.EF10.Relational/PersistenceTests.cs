@@ -9,6 +9,9 @@ public sealed class PersistenceTests
 {
     [Fact]
     [BehavioralCoverage("EF10-PERSIST-INSERT-ASYNC", "Microsoft.EntityFrameworkCore.DbSet`1.Add", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync", "System.Linq.Queryable.Where", "System.Linq.Queryable.Select")]
+    [NativeTypeCoverage("VARCHAR(160)", typeof(string), "EF10-PERSIST-INSERT-ASYNC")]
+    [NativeTypeCoverage("INTEGER", typeof(int), "EF10-PERSIST-INSERT-ASYNC")]
+    [NativeTypeCoverage("TEXT", typeof(Guid), "EF10-PERSIST-INSERT-ASYNC")]
     public async Task SaveChanges_PersistsEntityForFreshContext()
     {
         var id = Guid.NewGuid();
@@ -33,6 +36,9 @@ public sealed class PersistenceTests
 
     [Fact]
     [BehavioralCoverage("EF10-PERSIST-INSERT-SYNC", "Microsoft.EntityFrameworkCore.DbSet`1.Add", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "System.Linq.Queryable.Single", "System.Linq.Queryable.Where", "System.Linq.Queryable.Select")]
+    [NativeTypeCoverage("VARCHAR(160)", typeof(string), "EF10-PERSIST-INSERT-SYNC")]
+    [NativeTypeCoverage("INTEGER", typeof(int), "EF10-PERSIST-INSERT-SYNC")]
+    [NativeTypeCoverage("TEXT", typeof(Guid), "EF10-PERSIST-INSERT-SYNC")]
     public async Task SaveChanges_PersistsEntityForFreshContextSynchronously()
     {
         var id = Guid.NewGuid();

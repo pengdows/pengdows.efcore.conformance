@@ -25,18 +25,35 @@ public sealed record TypeDiscoveryReport(
     string AdoNetAssemblyName,
     IReadOnlyList<string> MetadataCollections,
     IReadOnlyList<DatabaseTypeDefinition> Types,
+    IReadOnlyList<DatabaseTypeDefinition> SupplementalTypes,
     IReadOnlyList<string> Diagnostics)
 {
+    public IReadOnlyList<NativeTypeCoverageResult> NativeTypeCoverage { get; init; } = Array.Empty<NativeTypeCoverageResult>();
+
     public bool DataTypesCollectionAdvertised => MetadataCollections.Contains("DataTypes", StringComparer.OrdinalIgnoreCase);
+
+    public int TypesWithBehavioralCoverage => NativeTypeCoverage.Count(item => item.Outcome == "COVERED");
+
+    public int TypesWithPartialBehavioralCoverage => NativeTypeCoverage.Count(item => item.Outcome == "PARTIAL");
+
+    public int TypesWithoutBehavioralCoverage => NativeTypeCoverage.Count(item => item.Outcome == "UNCOVERED");
+
+    public int DeclaredTestTypesNotObserved => NativeTypeCoverage.Count(item => item.Outcome == "NOT_OBSERVED");
 
     public int DuplicateTypeNameCount => Types
         .GroupBy(type => type.DatabaseTypeName, StringComparer.OrdinalIgnoreCase)
         .Where(group => group.Count() > 1)
         .Sum(group => group.Count() - 1);
 
-    public int TypesWithoutClrMapping => Types.Count(type => string.IsNullOrWhiteSpace(type.ClrTypeName));
+    public int TypesWithoutClrMapping => Types.Concat(SupplementalTypes)
+        .Count(type => string.IsNullOrWhiteSpace(type.ClrTypeName));
 
-    public int UnresolvedClrTypeCount => Types.Count(type =>
+    public int SupplementalTypesNotAdvertisedByAdoNet => SupplementalTypes
+        .Select(type => type.DatabaseTypeName)
+        .Distinct(StringComparer.OrdinalIgnoreCase)
+        .Count(typeName => !Types.Any(type => string.Equals(type.DatabaseTypeName, typeName, StringComparison.OrdinalIgnoreCase)));
+
+    public int UnresolvedClrTypeCount => Types.Concat(SupplementalTypes).Count(type =>
         !string.IsNullOrWhiteSpace(type.ClrTypeName) && !CanResolveClrType(type));
 
     private static bool CanResolveClrType(DatabaseTypeDefinition definition)
@@ -63,13 +80,14 @@ public sealed record TypeDiscoveryReport(
 /// <summary>Reads ADO.NET's public schema metadata without assuming a fixed metadata column set.</summary>
 public static class AdoNetTypeDiscovery
 {
-    public static TypeDiscoveryReport Discover(DbConnection connection)
+    public static TypeDiscoveryReport Discover(DbConnection connection, ISupplementalTypeDiscovery? supplementalDiscovery = null)
     {
         ArgumentNullException.ThrowIfNull(connection);
 
         var diagnostics = new List<string>();
         var collections = new List<string>();
         var definitions = new List<DatabaseTypeDefinition>();
+        IReadOnlyList<DatabaseTypeDefinition> supplementalTypes = Array.Empty<DatabaseTypeDefinition>();
 
         if (connection.State != ConnectionState.Open)
         {
@@ -143,10 +161,23 @@ public static class AdoNetTypeDiscovery
             }
         }
 
+        if (supplementalDiscovery is not null)
+        {
+            try
+            {
+                supplementalTypes = supplementalDiscovery.DiscoverSupplementalTypes(connection);
+            }
+            catch (Exception exception)
+            {
+                diagnostics.Add($"Supplemental database type discovery unavailable: {exception.GetType().FullName}: {exception.Message}");
+            }
+        }
+
         return new TypeDiscoveryReport(
             connection.GetType().Assembly.GetName().Name ?? connection.GetType().FullName ?? "unknown",
             collections,
             definitions,
+            supplementalTypes,
             diagnostics);
     }
 

@@ -19,7 +19,7 @@ if (args[0] == "--run")
 
 var discoverTypes = args[0] == "--discover-types";
 var offset = discoverTypes ? 1 : 0;
-if (discoverTypes ? args.Length is < 3 or > 4 : args.Length != 2)
+if (discoverTypes ? args.Length is < 3 or > 5 : args.Length != 2)
 {
     Console.Error.WriteLine("Invalid arguments. Use --help for usage.");
     return 2;
@@ -37,9 +37,17 @@ if (discoverTypes)
     }
 
     await using var connection = adoNetAdapter.CreateConnection(connectionString);
-    var typeReport = AdoNetTypeDiscovery.Discover(connection);
+    var typeReport = AdoNetTypeDiscovery.Discover(connection, adapter as ISupplementalTypeDiscovery);
+    if (args.Length == 5)
+    {
+        typeReport = typeReport with
+        {
+            NativeTypeCoverage = BuildNativeTypeCoverage(typeReport, Path.GetFullPath(args[4]))
+        };
+    }
+
     var typeJson = JsonSerializer.Serialize(typeReport, new JsonSerializerOptions { WriteIndented = true });
-    if (args.Length == 4)
+    if (args.Length >= 4)
     {
         var outputPath = Path.GetFullPath(args[3]);
         Directory.CreateDirectory(Path.GetDirectoryName(outputPath)!);
@@ -64,6 +72,69 @@ Console.WriteLine(JsonSerializer.Serialize(new AdapterLoadReport(
     adapter.Capabilities.UnsupportedFeatures.Order(StringComparer.Ordinal).ToArray(),
     "Adapter configuration completed; no conformance scenarios were executed."), new JsonSerializerOptions { WriteIndented = true }));
 return 0;
+
+static IReadOnlyList<NativeTypeCoverageResult> BuildNativeTypeCoverage(TypeDiscoveryReport report, string testAssemblyPath)
+{
+    var assembly = Assembly.LoadFrom(testAssemblyPath);
+    var cases = new List<(string DatabaseTypeName, string ClrTypeName, string ContractId)>();
+    foreach (var type in assembly.GetTypes())
+    {
+        foreach (var method in type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly))
+        {
+            foreach (var attribute in CustomAttributeData.GetCustomAttributes(method)
+                         .Where(attribute => attribute.AttributeType.FullName == typeof(NativeTypeCoverageAttribute).FullName))
+            {
+                var args = attribute.ConstructorArguments;
+                if (args.Count == 3 && args[0].Value is string databaseTypeName &&
+                    args[1].Value is Type clrType && args[2].Value is string contractId)
+                {
+                    cases.Add((databaseTypeName, clrType.FullName ?? clrType.Name, contractId));
+                }
+            }
+        }
+    }
+
+    var observedTypes = report.Types.Concat(report.SupplementalTypes)
+        .Select(type => type.DatabaseTypeName.Trim())
+        .Distinct(StringComparer.OrdinalIgnoreCase)
+        .ToArray();
+    var results = new List<NativeTypeCoverageResult>();
+    foreach (var observedType in observedTypes)
+    {
+        var matches = cases.Where(testCase => string.Equals(
+                testCase.DatabaseTypeName.Trim(), observedType, StringComparison.OrdinalIgnoreCase))
+            .ToArray();
+        var familyMatches = matches.Length > 0
+            ? matches
+            : cases.Where(testCase => string.Equals(
+                    GetNativeTypeFamily(testCase.DatabaseTypeName),
+                    GetNativeTypeFamily(observedType),
+                    StringComparison.OrdinalIgnoreCase))
+                .ToArray();
+        results.Add(new NativeTypeCoverageResult(
+            observedType,
+            matches.Length > 0 ? "COVERED" : familyMatches.Length > 0 ? "PARTIAL" : "UNCOVERED",
+            familyMatches.Select(item => item.ClrTypeName).Distinct(StringComparer.Ordinal).Order(StringComparer.Ordinal).ToArray(),
+            familyMatches.Select(item => item.ContractId).Distinct(StringComparer.Ordinal).Order(StringComparer.Ordinal).ToArray()));
+    }
+
+    var unmatchedCases = cases.Where(testCase => !observedTypes.Contains(testCase.DatabaseTypeName.Trim(), StringComparer.OrdinalIgnoreCase));
+    results.AddRange(unmatchedCases
+        .GroupBy(testCase => testCase.DatabaseTypeName.Trim(), StringComparer.OrdinalIgnoreCase)
+        .Select(group => new NativeTypeCoverageResult(
+            group.Key,
+            "NOT_OBSERVED",
+            group.Select(item => item.ClrTypeName).Distinct(StringComparer.Ordinal).Order(StringComparer.Ordinal).ToArray(),
+            group.Select(item => item.ContractId).Distinct(StringComparer.Ordinal).Order(StringComparer.Ordinal).ToArray())));
+    return results.OrderBy(item => item.DatabaseTypeName, StringComparer.OrdinalIgnoreCase).ToArray();
+}
+
+static string GetNativeTypeFamily(string databaseTypeName)
+{
+    var trimmed = databaseTypeName.Trim();
+    var facetsStart = trimmed.IndexOf('(');
+    return facetsStart < 0 ? trimmed : trimmed[..facetsStart].TrimEnd();
+}
 
 async Task<int> RunTestsAsync(string[] arguments)
 {
@@ -176,6 +247,7 @@ static List<ConformanceResult> ReadResults(string trxPath, string connectionStri
             "PASSED" => ConformanceOutcome.Pass,
             "NOTEXECUTED" when message?.StartsWith("UNSUPPORTED:", StringComparison.OrdinalIgnoreCase) == true => ConformanceOutcome.Unsupported,
             "NOTEXECUTED" or "INCONCLUSIVE" => ConformanceOutcome.Skip,
+            _ when exceptionType?.EndsWith(nameof(ConformanceInfrastructureException), StringComparison.Ordinal) == true => ConformanceOutcome.Error,
             _ => ConformanceOutcome.Fail
         };
         var methodKey = ExtractMethodKey(name);
@@ -288,7 +360,7 @@ static string Sanitize(string text, string connectionString) => text.Replace(con
 static void PrintUsage()
 {
     Console.WriteLine("Usage: <adapter-assembly> <adapter-type>");
-    Console.WriteLine("       --discover-types <adapter-assembly> <adapter-type> [output-json]");
+    Console.WriteLine("       --discover-types <adapter-assembly> <adapter-type> [output-json [test-assembly]]");
     Console.WriteLine("       --run <test-project> <adapter-assembly> <adapter-type> <report-directory>");
     Console.WriteLine("Set PENGDOWS_EFCORE_CONFORMANCE_CONNECTION_STRING in the environment.");
 }

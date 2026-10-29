@@ -25,6 +25,12 @@ public interface IAdoNetProviderAdapter : IProviderAdapter
     DbConnection CreateConnection(string connectionString);
 }
 
+/// <summary>Optional database-catalog discovery for types omitted from ADO.NET schema metadata.</summary>
+public interface ISupplementalTypeDiscovery
+{
+    IReadOnlyList<DatabaseTypeDefinition> DiscoverSupplementalTypes(DbConnection openConnection);
+}
+
 /// <summary>Declares applicability only; it cannot alter test expectations or assertions.</summary>
 public sealed record ProviderCapabilities(
     IReadOnlySet<string> SupportedFeatures,
@@ -50,6 +56,25 @@ public enum ConformanceOutcome
     Error,
     Skip
 }
+
+public sealed class ConformanceInfrastructureException(string message, Exception innerException)
+    : Exception(message, innerException);
+
+[AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
+public sealed class NativeTypeCoverageAttribute(string databaseTypeName, Type clrType, string behavioralContractId) : Attribute
+{
+    public string DatabaseTypeName { get; } = databaseTypeName;
+
+    public Type ClrType { get; } = clrType;
+
+    public string BehavioralContractId { get; } = behavioralContractId;
+}
+
+public sealed record NativeTypeCoverageResult(
+    string DatabaseTypeName,
+    string Outcome,
+    IReadOnlyList<string> ClrTypes,
+    IReadOnlyList<string> BehavioralContractIds);
 
 public sealed record ConformanceResult(
     string ContractId,

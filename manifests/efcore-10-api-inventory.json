@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12445,
+    "AwaitingClassification": 12444,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 120,
-    "UncoveredMemberFamilies": 9080
+    "MemberEntriesInCoveredFamilies": 121,
+    "UncoveredMemberFamilies": 9079
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -33,6 +33,7 @@
       "System.Linq.Queryable.Average",
       "System.Linq.Queryable.Count",
       "System.Linq.Queryable.GroupBy",
+      "System.Linq.Queryable.Join",
       "System.Linq.Queryable.LeftJoin",
       "System.Linq.Queryable.Max",
       "System.Linq.Queryable.Min",
@@ -14556,6 +14557,7 @@
         "EF10-PERSIST-INSERT-SYNC",
         "EF10-PERSIST-UPDATE-SYNC",
         "EF10-TRANSACTION-COMMIT-SYNC",
+        "EF10-TYPES-DECIMAL-BOUNDARIES-SYNC",
         "EF10-TYPES-ROUNDTRIP-SYNC"
       ],
       "Disposition": "behavior-tested-family",
@@ -14576,6 +14578,7 @@
         "EF10-PERSIST-INSERT-SYNC",
         "EF10-PERSIST-UPDATE-SYNC",
         "EF10-TRANSACTION-COMMIT-SYNC",
+        "EF10-TYPES-DECIMAL-BOUNDARIES-SYNC",
         "EF10-TYPES-ROUNDTRIP-SYNC"
       ],
       "Disposition": "behavior-tested-family",
@@ -14598,6 +14601,7 @@
         "EF10-RELATIONSHIPS-FOREIGN-KEY",
         "EF10-TRACKING-ATTACH",
         "EF10-TRANSACTION-ROLLBACK-ASYNC",
+        "EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC",
         "EF10-TYPES-ROUNDTRIP-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
@@ -14620,6 +14624,7 @@
         "EF10-RELATIONSHIPS-FOREIGN-KEY",
         "EF10-TRACKING-ATTACH",
         "EF10-TRANSACTION-ROLLBACK-ASYNC",
+        "EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC",
         "EF10-TYPES-ROUNDTRIP-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
@@ -47172,7 +47177,8 @@
         "EF10-PERSIST-UPDATE-ASYNC",
         "EF10-RAW-SQL-FROM-ASYNC",
         "EF10-RELATIONSHIPS-FOREIGN-KEY",
-        "EF10-RELATIONSHIPS-INCLUDE-ASYNC"
+        "EF10-RELATIONSHIPS-INCLUDE-ASYNC",
+        "EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync"
@@ -47189,7 +47195,8 @@
         "EF10-PERSIST-UPDATE-ASYNC",
         "EF10-RAW-SQL-FROM-ASYNC",
         "EF10-RELATIONSHIPS-FOREIGN-KEY",
-        "EF10-RELATIONSHIPS-INCLUDE-ASYNC"
+        "EF10-RELATIONSHIPS-INCLUDE-ASYNC",
+        "EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync"
@@ -47810,7 +47817,8 @@
         "EF10-LINQ-LEFTJOIN-ASYNC",
         "EF10-QUERY-COMPOSITION-ASYNC",
         "EF10-QUERY-FILTERS-NAMED-ASYNC",
-        "EF10-QUERY-GROUPBY-ASYNC"
+        "EF10-QUERY-GROUPBY-ASYNC",
+        "EF10-TRACKING-NO-TRACKING-IDENTITY-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync"
@@ -47965,9 +47973,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "AsNoTrackingWithIdentityResolution",
       "Signature": "System.Linq.IQueryable\u003CTEntity\u003E AsNoTrackingWithIdentityResolution\u003CTEntity\u003E(System.Linq.IQueryable\u003CTEntity\u003E source) where TEntity : class",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-NO-TRACKING-IDENTITY-ASYNC",
+        "EF10-TRACKING-NO-TRACKING-IDENTITY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.AsNoTrackingWithIdentityResolution"
     },
     {
@@ -172556,6 +172567,8 @@
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder HasColumnType(Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder propertyBuilder, System.String typeName)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC",
+        "EF10-TYPES-DECIMAL-BOUNDARIES-SYNC",
         "EF10-TYPES-ROUNDTRIP-ASYNC",
         "EF10-TYPES-ROUNDTRIP-SYNC"
       ],
@@ -172570,6 +172583,8 @@
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder\u003CTProperty\u003E HasColumnType\u003CTProperty\u003E(Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder\u003CTProperty\u003E propertyBuilder, System.String typeName)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC",
+        "EF10-TYPES-DECIMAL-BOUNDARIES-SYNC",
         "EF10-TYPES-ROUNDTRIP-ASYNC",
         "EF10-TYPES-ROUNDTRIP-SYNC"
       ],
@@ -172584,6 +172599,8 @@
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionPropertyBuilder HasColumnType(Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionPropertyBuilder propertyBuilder, System.String typeName, System.Boolean fromDataAnnotation = false)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC",
+        "EF10-TYPES-DECIMAL-BOUNDARIES-SYNC",
         "EF10-TYPES-ROUNDTRIP-ASYNC",
         "EF10-TYPES-ROUNDTRIP-SYNC"
       ],
