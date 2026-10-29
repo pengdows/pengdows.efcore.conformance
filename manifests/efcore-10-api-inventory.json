@@ -19,13 +19,15 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12332,
+    "AwaitingClassification": 12324,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 233,
-    "UncoveredMemberFamilies": 9005
+    "MemberEntriesInCoveredFamilies": 241,
+    "UncoveredMemberFamilies": 9001
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [
+      "Microsoft.EntityFrameworkCore.ChangeTracking.CollectionEntry.IsLoaded",
+      "Microsoft.EntityFrameworkCore.ChangeTracking.ReferenceEntry.IsLoaded",
       "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.GetDbConnection"
     ],
     "ExternalApiSelectors": [
@@ -688,9 +690,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "Load",
       "Signature": "System.Void Load()",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-RELATIONSHIPS-EXPLICIT-LOAD-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.CollectionEntry.Load"
     },
     {
@@ -699,9 +703,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "Load",
       "Signature": "System.Void Load(Microsoft.EntityFrameworkCore.ChangeTracking.LoadOptions options)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-RELATIONSHIPS-EXPLICIT-LOAD-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.CollectionEntry.Load"
     },
     {
@@ -710,9 +716,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "LoadAsync",
       "Signature": "System.Threading.Tasks.Task LoadAsync(System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-RELATIONSHIPS-EXPLICIT-LOAD-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.CollectionEntry.LoadAsync"
     },
     {
@@ -721,9 +729,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "LoadAsync",
       "Signature": "System.Threading.Tasks.Task LoadAsync(Microsoft.EntityFrameworkCore.ChangeTracking.LoadOptions options, System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-RELATIONSHIPS-EXPLICIT-LOAD-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.CollectionEntry.LoadAsync"
     },
     {
@@ -13924,9 +13934,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "Load",
       "Signature": "System.Void Load()",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-RELATIONSHIPS-EXPLICIT-LOAD-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.ReferenceEntry.Load"
     },
     {
@@ -13935,9 +13947,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "Load",
       "Signature": "System.Void Load(Microsoft.EntityFrameworkCore.ChangeTracking.LoadOptions options)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-RELATIONSHIPS-EXPLICIT-LOAD-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.ReferenceEntry.Load"
     },
     {
@@ -13946,9 +13960,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "LoadAsync",
       "Signature": "System.Threading.Tasks.Task LoadAsync(System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-RELATIONSHIPS-EXPLICIT-LOAD-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.ReferenceEntry.LoadAsync"
     },
     {
@@ -13957,9 +13973,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "LoadAsync",
       "Signature": "System.Threading.Tasks.Task LoadAsync(Microsoft.EntityFrameworkCore.ChangeTracking.LoadOptions options, System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-RELATIONSHIPS-EXPLICIT-LOAD-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.ReferenceEntry.LoadAsync"
     },
     {

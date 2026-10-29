@@ -125,6 +125,62 @@ public sealed class RelationshipTests
         Assert.All(loaded.Posts, post => Assert.Single(post.Comments));
     }
 
+    [Fact]
+    [BehavioralCoverage("EF10-RELATIONSHIPS-EXPLICIT-LOAD-ASYNC", "Microsoft.EntityFrameworkCore.ChangeTracking.CollectionEntry.LoadAsync", "Microsoft.EntityFrameworkCore.ChangeTracking.CollectionEntry.IsLoaded", "Microsoft.EntityFrameworkCore.ChangeTracking.ReferenceEntry.LoadAsync", "Microsoft.EntityFrameworkCore.ChangeTracking.ReferenceEntry.IsLoaded")]
+    public async Task NavigationEntryLoadAsync_LoadsCollectionAndReference()
+    {
+        var blog = await CreateBlogAsync();
+
+        await using (var collectionContext = ProviderTestRuntime.CreateContext())
+        {
+            var trackedBlog = await collectionContext.Blogs
+                .SingleAsync(item => item.Id == blog.Id, TestContext.Current.CancellationToken);
+            var posts = collectionContext.Entry(trackedBlog).Collection(item => item.Posts);
+
+            Assert.False(posts.IsLoaded);
+            await posts.LoadAsync(TestContext.Current.CancellationToken);
+            Assert.True(posts.IsLoaded);
+            Assert.Equal(new[] { "First", "Second" }, trackedBlog.Posts.Select(post => post.Title).Order().ToArray());
+        }
+
+        await using var referenceContext = ProviderTestRuntime.CreateContext();
+        var trackedPost = await referenceContext.Set<Post>()
+            .SingleAsync(item => item.Id == blog.Posts.First().Id, TestContext.Current.CancellationToken);
+        var reference = referenceContext.Entry(trackedPost).Reference(item => item.Blog);
+
+        Assert.False(reference.IsLoaded);
+        await reference.LoadAsync(TestContext.Current.CancellationToken);
+        Assert.True(reference.IsLoaded);
+        Assert.Equal(blog.Id, trackedPost.Blog!.Id);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-RELATIONSHIPS-EXPLICIT-LOAD-SYNC", "Microsoft.EntityFrameworkCore.ChangeTracking.CollectionEntry.Load", "Microsoft.EntityFrameworkCore.ChangeTracking.CollectionEntry.IsLoaded", "Microsoft.EntityFrameworkCore.ChangeTracking.ReferenceEntry.Load", "Microsoft.EntityFrameworkCore.ChangeTracking.ReferenceEntry.IsLoaded")]
+    public async Task NavigationEntryLoad_LoadsCollectionAndReferenceSynchronously()
+    {
+        var blog = await CreateBlogAsync();
+
+        await using (var collectionContext = ProviderTestRuntime.CreateContext())
+        {
+            var trackedBlog = collectionContext.Blogs.Single(item => item.Id == blog.Id);
+            var posts = collectionContext.Entry(trackedBlog).Collection(item => item.Posts);
+
+            Assert.False(posts.IsLoaded);
+            posts.Load();
+            Assert.True(posts.IsLoaded);
+            Assert.Equal(new[] { "First", "Second" }, trackedBlog.Posts.Select(post => post.Title).Order().ToArray());
+        }
+
+        await using var referenceContext = ProviderTestRuntime.CreateContext();
+        var trackedPost = referenceContext.Set<Post>().Single(item => item.Id == blog.Posts.First().Id);
+        var reference = referenceContext.Entry(trackedPost).Reference(item => item.Blog);
+
+        Assert.False(reference.IsLoaded);
+        reference.Load();
+        Assert.True(reference.IsLoaded);
+        Assert.Equal(blog.Id, trackedPost.Blog!.Id);
+    }
+
     private static async Task<Blog> CreateBlogAsync()
     {
         var blog = new Blog
