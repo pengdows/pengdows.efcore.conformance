@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 248,
+    "AwaitingClassification": 246,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 556,
-    "UncoveredMemberFamilies": 167
+    "MemberEntriesInCoveredFamilies": 558,
+    "UncoveredMemberFamilies": 165
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -16015,6 +16015,7 @@
         "EF10-CONCURRENCY-RESOLVE-SYNC",
         "EF10-CONCURRENCY-SAVE-SYNC",
         "EF10-DB-FUNCTION-ATTRIBUTE-SYNC",
+        "EF10-DB-FUNCTION-NULLABLE-SYNC",
         "EF10-DELETE-BEHAVIOR-RESTRICT-SYNC",
         "EF10-ENTITY-TYPE-CONFIGURATION-SYNC",
         "EF10-FILTERED-INDEX-SYNC",
@@ -16077,6 +16078,7 @@
         "EF10-CONCURRENCY-RESOLVE-SYNC",
         "EF10-CONCURRENCY-SAVE-SYNC",
         "EF10-DB-FUNCTION-ATTRIBUTE-SYNC",
+        "EF10-DB-FUNCTION-NULLABLE-SYNC",
         "EF10-DELETE-BEHAVIOR-RESTRICT-SYNC",
         "EF10-ENTITY-TYPE-CONFIGURATION-SYNC",
         "EF10-FILTERED-INDEX-SYNC",
@@ -16139,6 +16141,7 @@
         "EF10-CONCURRENCY-RESOLVE-ASYNC",
         "EF10-CONCURRENCY-SAVE-ASYNC",
         "EF10-DB-FUNCTION-ATTRIBUTE-ASYNC",
+        "EF10-DB-FUNCTION-NULLABLE-ASYNC",
         "EF10-DBSET-ATTACH-RANGE",
         "EF10-DELETE-BEHAVIOR-RESTRICT-ASYNC",
         "EF10-ENTITY-TYPE-CONFIGURATION-ASYNC",
@@ -16204,6 +16207,7 @@
         "EF10-CONCURRENCY-RESOLVE-ASYNC",
         "EF10-CONCURRENCY-SAVE-ASYNC",
         "EF10-DB-FUNCTION-ATTRIBUTE-ASYNC",
+        "EF10-DB-FUNCTION-NULLABLE-ASYNC",
         "EF10-DBSET-ATTACH-RANGE",
         "EF10-DELETE-BEHAVIOR-RESTRICT-ASYNC",
         "EF10-ENTITY-TYPE-CONFIGURATION-ASYNC",
@@ -18043,10 +18047,13 @@
       "MemberKind": "Property",
       "ApiMemberName": "IsNullable",
       "Signature": "System.Boolean IsNullable get; set;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DB-FUNCTION-NULLABLE-ASYNC",
+        "EF10-DB-FUNCTION-NULLABLE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbFunctionAttribute.IsNullable"
     },
     {
@@ -18055,10 +18062,13 @@
       "MemberKind": "Property",
       "ApiMemberName": "IsNullableHasValue",
       "Signature": "System.Boolean IsNullableHasValue get;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DB-FUNCTION-NULLABLE-ASYNC",
+        "EF10-DB-FUNCTION-NULLABLE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbFunctionAttribute.IsNullableHasValue"
     },
     {
@@ -52231,6 +52241,7 @@
       "BehavioralContracts": [
         "EF10-COMPLEX-TYPE-ASYNC",
         "EF10-DB-FUNCTION-ATTRIBUTE-ASYNC",
+        "EF10-DB-FUNCTION-NULLABLE-ASYNC",
         "EF10-JSON-MAPPING-ASYNC",
         "EF10-PERSIST-ADD-ASYNC",
         "EF10-PERSIST-CONTEXT-ADD-ASYNC",
@@ -52267,6 +52278,7 @@
       "BehavioralContracts": [
         "EF10-COMPLEX-TYPE-ASYNC",
         "EF10-DB-FUNCTION-ATTRIBUTE-ASYNC",
+        "EF10-DB-FUNCTION-NULLABLE-ASYNC",
         "EF10-JSON-MAPPING-ASYNC",
         "EF10-PERSIST-ADD-ASYNC",
         "EF10-PERSIST-CONTEXT-ADD-ASYNC",

@@ -114,8 +114,8 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
 
     public DbSet<AttributeConfiguredRecord> AttributeConfiguredRecords => Set<AttributeConfiguredRecord>();
 
-    [DbFunction("lower", IsBuiltIn = true)]
-    public static string Lower(string value) => throw new NotSupportedException("This method is intended for use in EF Core queries.");
+    [DbFunction("lower", IsBuiltIn = true, IsNullable = true)]
+    public static string? Lower(string? value) => throw new NotSupportedException("This method is intended for use in EF Core queries.");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -125,6 +125,7 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
             entity.HasKey(person => person.Id);
             entity.Property(person => person.Id).HasColumnName("id");
             entity.Property(person => person.Name).HasColumnName("name").IsRequired().HasMaxLength(160);
+            entity.Property(person => person.OptionalLabel).HasColumnName("optionallabel");
             entity.Property(person => person.Age).HasColumnName("age");
             entity.Property<string>("ShadowLabel").HasColumnName("shadowlabel");
             entity.Property(person => person.OptionalRank).HasColumnName("optionalrank");
@@ -306,6 +307,8 @@ internal sealed class Person
     public Guid Id { get; set; }
 
     public string Name { get; set; } = string.Empty;
+
+    public string? OptionalLabel { get; set; }
 
     public int Age { get; set; }
 
