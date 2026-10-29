@@ -133,7 +133,7 @@ public sealed class TransactionTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-TRANSACTION-EXTERNAL-SYNC", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.UseTransaction", "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.GetDbConnection", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges")]
+    [BehavioralCoverage("EF10-TRANSACTION-EXTERNAL-SYNC", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.UseTransaction", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetDbConnection", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges")]
     public async Task UseTransaction_EnlistsContextInExternalTransactionSynchronously()
     {
         ProviderTestRuntime.RequireCapability("transactions");
@@ -160,7 +160,7 @@ public sealed class TransactionTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-TRANSACTION-EXTERNAL-ASYNC", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.UseTransactionAsync", "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.GetDbConnection", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync")]
+    [BehavioralCoverage("EF10-TRANSACTION-EXTERNAL-ASYNC", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.UseTransactionAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetDbConnection", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync")]
     public async Task UseTransactionAsync_EnlistsContextInExternalTransactionAsynchronously()
     {
         ProviderTestRuntime.RequireCapability("transactions");

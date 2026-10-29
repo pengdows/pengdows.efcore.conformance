@@ -126,7 +126,7 @@ public sealed class RelationshipTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-RELATIONSHIPS-EXPLICIT-LOAD-ASYNC", "Microsoft.EntityFrameworkCore.ChangeTracking.CollectionEntry.LoadAsync", "Microsoft.EntityFrameworkCore.ChangeTracking.CollectionEntry.IsLoaded", "Microsoft.EntityFrameworkCore.ChangeTracking.ReferenceEntry.LoadAsync", "Microsoft.EntityFrameworkCore.ChangeTracking.ReferenceEntry.IsLoaded")]
+    [BehavioralCoverage("EF10-RELATIONSHIPS-EXPLICIT-LOAD-ASYNC", "Microsoft.EntityFrameworkCore.ChangeTracking.CollectionEntry.LoadAsync", "Microsoft.EntityFrameworkCore.ChangeTracking.NavigationEntry.IsLoaded", "Microsoft.EntityFrameworkCore.ChangeTracking.ReferenceEntry.LoadAsync")]
     public async Task NavigationEntryLoadAsync_LoadsCollectionAndReference()
     {
         var blog = await CreateBlogAsync();
@@ -155,7 +155,7 @@ public sealed class RelationshipTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-RELATIONSHIPS-EXPLICIT-LOAD-SYNC", "Microsoft.EntityFrameworkCore.ChangeTracking.CollectionEntry.Load", "Microsoft.EntityFrameworkCore.ChangeTracking.CollectionEntry.IsLoaded", "Microsoft.EntityFrameworkCore.ChangeTracking.ReferenceEntry.Load", "Microsoft.EntityFrameworkCore.ChangeTracking.ReferenceEntry.IsLoaded")]
+    [BehavioralCoverage("EF10-RELATIONSHIPS-EXPLICIT-LOAD-SYNC", "Microsoft.EntityFrameworkCore.ChangeTracking.CollectionEntry.Load", "Microsoft.EntityFrameworkCore.ChangeTracking.NavigationEntry.IsLoaded", "Microsoft.EntityFrameworkCore.ChangeTracking.ReferenceEntry.Load")]
     public async Task NavigationEntryLoad_LoadsCollectionAndReferenceSynchronously()
     {
         var blog = await CreateBlogAsync();

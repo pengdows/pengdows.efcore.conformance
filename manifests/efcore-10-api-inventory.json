@@ -19,17 +19,13 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12317,
+    "AwaitingClassification": 12316,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 248,
-    "UncoveredMemberFamilies": 8996
+    "MemberEntriesInCoveredFamilies": 249,
+    "UncoveredMemberFamilies": 8995
   },
   "CoverageSelectors": {
-    "UnmatchedEfCoreSelectors": [
-      "Microsoft.EntityFrameworkCore.ChangeTracking.CollectionEntry.IsLoaded",
-      "Microsoft.EntityFrameworkCore.ChangeTracking.ReferenceEntry.IsLoaded",
-      "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.GetDbConnection"
-    ],
+    "UnmatchedEfCoreSelectors": [],
     "ExternalApiSelectors": [
       "System.Linq.Enumerable.ToList",
       "System.Linq.IQueryable.GetEnumerator",
@@ -13181,9 +13177,12 @@
       "MemberKind": "Property",
       "ApiMemberName": "IsLoaded",
       "Signature": "System.Boolean IsLoaded get; set;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-RELATIONSHIPS-EXPLICIT-LOAD-ASYNC",
+        "EF10-RELATIONSHIPS-EXPLICIT-LOAD-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.NavigationEntry.IsLoaded"
     },
     {
@@ -167288,7 +167287,9 @@
       "BehavioralContracts": [
         "EF10-DATABASE-CONNECTION-LIFECYCLE-ASYNC",
         "EF10-DATABASE-CONNECTION-LIFECYCLE-SYNC",
-        "EF10-DATABASE-FACADE-SET-CONNECTION"
+        "EF10-DATABASE-FACADE-SET-CONNECTION",
+        "EF10-TRANSACTION-EXTERNAL-ASYNC",
+        "EF10-TRANSACTION-EXTERNAL-SYNC"
       ],
       "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetDbConnection"
