@@ -19,15 +19,13 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12370,
+    "AwaitingClassification": 12369,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 195,
-    "UncoveredMemberFamilies": 9035
+    "MemberEntriesInCoveredFamilies": 196,
+    "UncoveredMemberFamilies": 9034
   },
   "CoverageSelectors": {
-    "UnmatchedEfCoreSelectors": [
-      "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyEntry\u00602.IsModified"
-    ],
+    "UnmatchedEfCoreSelectors": [],
     "ExternalApiSelectors": [
       "System.Linq.Enumerable.ToList",
       "System.Linq.IQueryable.GetEnumerator",
@@ -13590,9 +13588,12 @@
       "MemberKind": "Property",
       "ApiMemberName": "IsModified",
       "Signature": "System.Boolean IsModified get; set;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-PROPERTY-ENTRY-ASYNC",
+        "EF10-TRACKING-PROPERTY-ENTRY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyEntry.IsModified"
     },
     {
@@ -13623,9 +13624,12 @@
       "MemberKind": "Property",
       "ApiMemberName": "OriginalValue",
       "Signature": "System.Object OriginalValue get; set;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-PROPERTY-ENTRY-ASYNC",
+        "EF10-TRACKING-PROPERTY-ENTRY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyEntry.OriginalValue"
     },
     {
@@ -13681,12 +13685,9 @@
       "MemberKind": "Property",
       "ApiMemberName": "OriginalValue",
       "Signature": "TProperty OriginalValue get; set;",
-      "ProviderApplicable": true,
-      "BehavioralContracts": [
-        "EF10-TRACKING-PROPERTY-ENTRY-ASYNC",
-        "EF10-TRACKING-PROPERTY-ENTRY-SYNC"
-      ],
-      "Disposition": "behavior-tested-family",
+      "ProviderApplicable": null,
+      "BehavioralContracts": [],
+      "Disposition": "unclassified",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyEntry\u00602.OriginalValue"
     },
     {

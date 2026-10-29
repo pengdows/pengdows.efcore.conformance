@@ -254,7 +254,7 @@ public sealed class StateManagementTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-TRACKING-PROPERTY-ENTRY-ASYNC", "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry`1.Property", "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyEntry`2.OriginalValue", "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyEntry`2.CurrentValue", "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyEntry`2.IsModified", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync")]
+    [BehavioralCoverage("EF10-TRACKING-PROPERTY-ENTRY-ASYNC", "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry`1.Property", "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyEntry.OriginalValue", "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyEntry`2.CurrentValue", "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyEntry.IsModified", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync")]
     public async Task PropertyEntry_ExposesOriginalAndModifiedValuesAsynchronously()
     {
         var id = Guid.NewGuid();
@@ -280,7 +280,7 @@ public sealed class StateManagementTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-TRACKING-PROPERTY-ENTRY-SYNC", "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry`1.Property", "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyEntry`2.OriginalValue", "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyEntry`2.CurrentValue", "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyEntry`2.IsModified", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges")]
+    [BehavioralCoverage("EF10-TRACKING-PROPERTY-ENTRY-SYNC", "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry`1.Property", "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyEntry.OriginalValue", "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyEntry`2.CurrentValue", "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyEntry.IsModified", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges")]
     public async Task PropertyEntry_ExposesOriginalAndModifiedValuesSynchronously()
     {
         var id = Guid.NewGuid();
