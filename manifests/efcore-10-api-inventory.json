@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 276,
+    "AwaitingClassification": 262,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 522,
-    "UncoveredMemberFamilies": 182
+    "MemberEntriesInCoveredFamilies": 536,
+    "UncoveredMemberFamilies": 173
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -16015,12 +16015,14 @@
         "EF10-CONCURRENCY-RESOLVE-SYNC",
         "EF10-CONCURRENCY-SAVE-SYNC",
         "EF10-DB-FUNCTION-ATTRIBUTE-SYNC",
+        "EF10-DELETE-BEHAVIOR-RESTRICT-SYNC",
         "EF10-GENERATED-KEYS-SYNC",
         "EF10-INDEX-ATTRIBUTE-UNIQUE-SYNC",
         "EF10-INHERITANCE-TPC-SYNC",
         "EF10-INHERITANCE-TPH-SYNC",
         "EF10-INHERITANCE-TPT-SYNC",
         "EF10-INTERCEPTION-SAVE-SYNC",
+        "EF10-MODEL-ATTRIBUTES-SYNC",
         "EF10-PERSIST-ACCEPT-CHANGES-SYNC",
         "EF10-PERSIST-ADD-RANGE-SYNC",
         "EF10-PERSIST-CONTEXT-ADD-RANGE-SYNC",
@@ -16072,12 +16074,14 @@
         "EF10-CONCURRENCY-RESOLVE-SYNC",
         "EF10-CONCURRENCY-SAVE-SYNC",
         "EF10-DB-FUNCTION-ATTRIBUTE-SYNC",
+        "EF10-DELETE-BEHAVIOR-RESTRICT-SYNC",
         "EF10-GENERATED-KEYS-SYNC",
         "EF10-INDEX-ATTRIBUTE-UNIQUE-SYNC",
         "EF10-INHERITANCE-TPC-SYNC",
         "EF10-INHERITANCE-TPH-SYNC",
         "EF10-INHERITANCE-TPT-SYNC",
         "EF10-INTERCEPTION-SAVE-SYNC",
+        "EF10-MODEL-ATTRIBUTES-SYNC",
         "EF10-PERSIST-ACCEPT-CHANGES-SYNC",
         "EF10-PERSIST-ADD-RANGE-SYNC",
         "EF10-PERSIST-CONTEXT-ADD-RANGE-SYNC",
@@ -16130,12 +16134,14 @@
         "EF10-CONCURRENCY-SAVE-ASYNC",
         "EF10-DB-FUNCTION-ATTRIBUTE-ASYNC",
         "EF10-DBSET-ATTACH-RANGE",
+        "EF10-DELETE-BEHAVIOR-RESTRICT-ASYNC",
         "EF10-GENERATED-KEYS-ASYNC",
         "EF10-INDEX-ATTRIBUTE-UNIQUE-ASYNC",
         "EF10-INHERITANCE-TPC-ASYNC",
         "EF10-INHERITANCE-TPH-ASYNC",
         "EF10-INHERITANCE-TPT-ASYNC",
         "EF10-INTERCEPTION-SAVE-ASYNC",
+        "EF10-MODEL-ATTRIBUTES-ASYNC",
         "EF10-PERSIST-ACCEPT-CHANGES-ASYNC",
         "EF10-PERSIST-ADD-ASYNC",
         "EF10-PERSIST-ADD-RANGE-ASYNC",
@@ -16190,12 +16196,14 @@
         "EF10-CONCURRENCY-SAVE-ASYNC",
         "EF10-DB-FUNCTION-ATTRIBUTE-ASYNC",
         "EF10-DBSET-ATTACH-RANGE",
+        "EF10-DELETE-BEHAVIOR-RESTRICT-ASYNC",
         "EF10-GENERATED-KEYS-ASYNC",
         "EF10-INDEX-ATTRIBUTE-UNIQUE-ASYNC",
         "EF10-INHERITANCE-TPC-ASYNC",
         "EF10-INHERITANCE-TPH-ASYNC",
         "EF10-INHERITANCE-TPT-ASYNC",
         "EF10-INTERCEPTION-SAVE-ASYNC",
+        "EF10-MODEL-ATTRIBUTES-ASYNC",
         "EF10-PERSIST-ACCEPT-CHANGES-ASYNC",
         "EF10-PERSIST-ADD-ASYNC",
         "EF10-PERSIST-ADD-RANGE-ASYNC",
@@ -19251,10 +19259,13 @@
       "MemberKind": "Field",
       "ApiMemberName": "Restrict",
       "Signature": "Microsoft.EntityFrameworkCore.DeleteBehavior Restrict = 1",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DELETE-BEHAVIOR-RESTRICT-ASYNC",
+        "EF10-DELETE-BEHAVIOR-RESTRICT-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DeleteBehavior.Restrict"
     },
     {
@@ -19323,10 +19334,13 @@
       "MemberKind": "Type",
       "ApiMemberName": null,
       "Signature": "class Microsoft.EntityFrameworkCore.DeleteBehaviorAttribute",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DELETE-BEHAVIOR-RESTRICT-ASYNC",
+        "EF10-DELETE-BEHAVIOR-RESTRICT-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DeleteBehaviorAttribute"
     },
     {
@@ -19335,10 +19349,13 @@
       "MemberKind": "Constructor",
       "ApiMemberName": ".ctor",
       "Signature": ".ctor(Microsoft.EntityFrameworkCore.DeleteBehavior behavior)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DELETE-BEHAVIOR-RESTRICT-ASYNC",
+        "EF10-DELETE-BEHAVIOR-RESTRICT-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DeleteBehaviorAttribute..ctor"
     },
     {
@@ -19347,10 +19364,13 @@
       "MemberKind": "Property",
       "ApiMemberName": "Behavior",
       "Signature": "Microsoft.EntityFrameworkCore.DeleteBehavior Behavior get;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DELETE-BEHAVIOR-RESTRICT-ASYNC",
+        "EF10-DELETE-BEHAVIOR-RESTRICT-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DeleteBehaviorAttribute.Behavior"
     },
     {
@@ -151179,10 +151199,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "AddForeignKey",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.OperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.AddForeignKeyOperation\u003E AddForeignKey(System.String name, System.String table, System.String column, System.String principalTable, System.String schema = null, System.String principalSchema = null, System.String principalColumn = null, Microsoft.EntityFrameworkCore.Migrations.ReferentialAction onUpdate = NoAction, Microsoft.EntityFrameworkCore.Migrations.ReferentialAction onDelete = NoAction)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-APPLY-ASYNC",
+        "EF10-MIGRATIONS-APPLY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AddForeignKey"
     },
     {
@@ -151191,10 +151214,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "AddForeignKey",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.OperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.AddForeignKeyOperation\u003E AddForeignKey(System.String name, System.String table, System.String[] columns, System.String principalTable, System.String schema = null, System.String principalSchema = null, System.String[] principalColumns = null, Microsoft.EntityFrameworkCore.Migrations.ReferentialAction onUpdate = NoAction, Microsoft.EntityFrameworkCore.Migrations.ReferentialAction onDelete = NoAction)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-APPLY-ASYNC",
+        "EF10-MIGRATIONS-APPLY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AddForeignKey"
     },
     {
@@ -151227,10 +151253,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "AddUniqueConstraint",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.OperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.AddUniqueConstraintOperation\u003E AddUniqueConstraint(System.String name, System.String table, System.String column, System.String schema = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-APPLY-ASYNC",
+        "EF10-MIGRATIONS-APPLY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AddUniqueConstraint"
     },
     {
@@ -151239,10 +151268,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "AddUniqueConstraint",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.OperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.AddUniqueConstraintOperation\u003E AddUniqueConstraint(System.String name, System.String table, System.String[] columns, System.String schema = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-APPLY-ASYNC",
+        "EF10-MIGRATIONS-APPLY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AddUniqueConstraint"
     },
     {
@@ -156876,10 +156908,13 @@
       "MemberKind": "Type",
       "ApiMemberName": null,
       "Signature": "class Microsoft.EntityFrameworkCore.PrimaryKeyAttribute",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MODEL-ATTRIBUTES-ASYNC",
+        "EF10-MODEL-ATTRIBUTES-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.PrimaryKeyAttribute"
     },
     {
@@ -156888,10 +156923,13 @@
       "MemberKind": "Constructor",
       "ApiMemberName": ".ctor",
       "Signature": ".ctor(System.String propertyName, System.String[] additionalPropertyNames)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MODEL-ATTRIBUTES-ASYNC",
+        "EF10-MODEL-ATTRIBUTES-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.PrimaryKeyAttribute..ctor"
     },
     {
@@ -156900,10 +156938,13 @@
       "MemberKind": "Property",
       "ApiMemberName": "PropertyNames",
       "Signature": "System.Collections.Generic.IReadOnlyList\u003CSystem.String\u003E PropertyNames get;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MODEL-ATTRIBUTES-ASYNC",
+        "EF10-MODEL-ATTRIBUTES-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.PrimaryKeyAttribute.PropertyNames"
     },
     {
@@ -183011,6 +183052,7 @@
       "Signature": "System.Int32 ExecuteSqlInterpolated(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade, System.FormattableString sql)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-DELETE-BEHAVIOR-RESTRICT-SYNC",
         "EF10-MIGRATIONS-APPLY-SYNC",
         "EF10-RAW-SQL-COMMAND-SYNC"
       ],
@@ -183084,6 +183126,7 @@
       "Signature": "System.Threading.Tasks.Task\u003CSystem.Int32\u003E ExecuteSqlInterpolatedAsync(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade, System.FormattableString sql, System.Threading.CancellationToken cancellationToken = null)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-DELETE-BEHAVIOR-RESTRICT-ASYNC",
         "EF10-MIGRATIONS-APPLY-ASYNC",
         "EF10-RAW-SQL-COMMAND-ASYNC"
       ],
@@ -209364,10 +209407,13 @@
       "MemberKind": "Type",
       "ApiMemberName": null,
       "Signature": "class Microsoft.EntityFrameworkCore.UnicodeAttribute",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MODEL-ATTRIBUTES-ASYNC",
+        "EF10-MODEL-ATTRIBUTES-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.UnicodeAttribute"
     },
     {
@@ -209376,10 +209422,13 @@
       "MemberKind": "Constructor",
       "ApiMemberName": ".ctor",
       "Signature": ".ctor(System.Boolean unicode = true)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MODEL-ATTRIBUTES-ASYNC",
+        "EF10-MODEL-ATTRIBUTES-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.UnicodeAttribute..ctor"
     },
     {
@@ -209388,10 +209437,13 @@
       "MemberKind": "Property",
       "ApiMemberName": "IsUnicode",
       "Signature": "System.Boolean IsUnicode get;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MODEL-ATTRIBUTES-ASYNC",
+        "EF10-MODEL-ATTRIBUTES-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.UnicodeAttribute.IsUnicode"
     },
     {

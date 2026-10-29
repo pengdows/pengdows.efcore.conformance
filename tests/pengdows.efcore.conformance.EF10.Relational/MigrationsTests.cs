@@ -1,3 +1,4 @@
+using System.Data.Common;
 using Microsoft.EntityFrameworkCore;
 using pengdows.efcore.conformance;
 using Xunit;
@@ -9,7 +10,7 @@ namespace pengdows.efcore.conformance.EF10.Relational;
 public sealed class MigrationsTests
 {
     [Fact]
-    [BehavioralCoverage("EF10-MIGRATIONS-APPLY-ASYNC", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetMigrations", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.MigrateAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetAppliedMigrationsAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetPendingMigrationsAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.HasPendingModelChanges", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlInterpolatedAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.SqlQuery", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AddColumn", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.CreateIndex", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.InsertData", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.RenameColumn", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropIndex", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.UpdateData", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DeleteData", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropColumn", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.CreateTable", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropTable", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.RenameTable", "Microsoft.EntityFrameworkCore.Migrations.MigrationAttribute", "Microsoft.EntityFrameworkCore.Migrations.MigrationAttribute..ctor", "Microsoft.EntityFrameworkCore.Migrations.MigrationAttribute.Id", "Microsoft.EntityFrameworkCore.Migrations.Migration.TargetModel", "Microsoft.EntityFrameworkCore.Migrations.Migration.UpOperations", "Microsoft.EntityFrameworkCore.Migrations.Migration.DownOperations")]
+    [BehavioralCoverage("EF10-MIGRATIONS-APPLY-ASYNC", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetMigrations", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.MigrateAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetAppliedMigrationsAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetPendingMigrationsAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.HasPendingModelChanges", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlInterpolatedAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.SqlQuery", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AddColumn", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.CreateIndex", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.InsertData", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.RenameColumn", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropIndex", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.UpdateData", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DeleteData", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropColumn", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.CreateTable", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropTable", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.RenameTable", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AddForeignKey", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AddUniqueConstraint", "Microsoft.EntityFrameworkCore.Migrations.MigrationAttribute", "Microsoft.EntityFrameworkCore.Migrations.MigrationAttribute..ctor", "Microsoft.EntityFrameworkCore.Migrations.MigrationAttribute.Id", "Microsoft.EntityFrameworkCore.Migrations.Migration.TargetModel", "Microsoft.EntityFrameworkCore.Migrations.Migration.UpOperations", "Microsoft.EntityFrameworkCore.Migrations.Migration.DownOperations")]
     public async Task MigrateAsync_AppliesMigrationAndPersistsValues()
     {
         ProviderTestRuntime.RequireCapability("migrations");
@@ -31,6 +32,14 @@ public sealed class MigrationsTests
                 Assert.Equal(1, await migrate.Database.ExecuteSqlInterpolatedAsync(
                     $"INSERT INTO ef10conformance_migrationprobe_renamed (id, value, description) VALUES ({id}, {expected}, {"async row"})",
                     cancellationToken));
+                Assert.Equal(1, await migrate.Database.ExecuteSqlInterpolatedAsync(
+                    $"INSERT INTO ef10conformance_migrationchild (id, probeid, code) VALUES ({Guid.NewGuid()}, {id}, {"child-async"})",
+                    cancellationToken));
+                Assert.Equal(1, await migrate.Database.SqlQuery<int>(
+                    $"SELECT COUNT(*) AS Value FROM ef10conformance_migrationchild child INNER JOIN ef10conformance_migrationprobe_renamed probe ON child.probeid = probe.id WHERE probe.id = {id}")
+                    .SingleAsync(cancellationToken));
+                await Assert.ThrowsAnyAsync<DbException>(() => migrate.Database.ExecuteSqlInterpolatedAsync(
+                    $"DELETE FROM ef10conformance_migrationprobe_renamed WHERE id = {id}", cancellationToken));
             }
 
             await using (var verify = ProviderTestRuntime.CreateContext())
@@ -47,6 +56,9 @@ public sealed class MigrationsTests
                 Assert.Equal(expected, actual);
                 Assert.Equal("async row", description);
                 Assert.Equal(314159, seeded);
+                Assert.Equal(1, await verify.Database.SqlQuery<int>(
+                    $"SELECT COUNT(*) AS Value FROM ef10conformance_migrationchild WHERE probeid = {id}")
+                    .SingleAsync(cancellationToken));
             }
 
             await using (var rollback = ProviderTestRuntime.CreateContext())
@@ -83,7 +95,7 @@ public sealed class MigrationsTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-MIGRATIONS-APPLY-SYNC", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetMigrations", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.Migrate", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetAppliedMigrations", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetPendingMigrations", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.HasPendingModelChanges", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlInterpolated", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.SqlQuery", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AddColumn", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.CreateIndex", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.InsertData", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.RenameColumn", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropIndex", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.UpdateData", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DeleteData", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropColumn", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.CreateTable", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropTable", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.RenameTable", "Microsoft.EntityFrameworkCore.Migrations.MigrationAttribute", "Microsoft.EntityFrameworkCore.Migrations.MigrationAttribute..ctor", "Microsoft.EntityFrameworkCore.Migrations.MigrationAttribute.Id", "Microsoft.EntityFrameworkCore.Migrations.Migration.TargetModel", "Microsoft.EntityFrameworkCore.Migrations.Migration.UpOperations", "Microsoft.EntityFrameworkCore.Migrations.Migration.DownOperations")]
+    [BehavioralCoverage("EF10-MIGRATIONS-APPLY-SYNC", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetMigrations", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.Migrate", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetAppliedMigrations", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetPendingMigrations", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.HasPendingModelChanges", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlInterpolated", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.SqlQuery", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AddColumn", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.CreateIndex", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.InsertData", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.RenameColumn", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropIndex", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.UpdateData", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DeleteData", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropColumn", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.CreateTable", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropTable", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.RenameTable", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AddForeignKey", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AddUniqueConstraint", "Microsoft.EntityFrameworkCore.Migrations.MigrationAttribute", "Microsoft.EntityFrameworkCore.Migrations.MigrationAttribute..ctor", "Microsoft.EntityFrameworkCore.Migrations.MigrationAttribute.Id", "Microsoft.EntityFrameworkCore.Migrations.Migration.TargetModel", "Microsoft.EntityFrameworkCore.Migrations.Migration.UpOperations", "Microsoft.EntityFrameworkCore.Migrations.Migration.DownOperations")]
     public async Task Migrate_AppliesMigrationAndPersistsValuesSynchronously()
     {
         ProviderTestRuntime.RequireCapability("migrations");
@@ -103,6 +115,13 @@ public sealed class MigrationsTests
                 Assert.Empty(migrate.Database.GetPendingMigrations());
                 Assert.Equal(1, migrate.Database.ExecuteSqlInterpolated(
                     $"INSERT INTO ef10conformance_migrationprobe_renamed (id, value, description) VALUES ({id}, {expected}, {"sync row"})"));
+                Assert.Equal(1, migrate.Database.ExecuteSqlInterpolated(
+                    $"INSERT INTO ef10conformance_migrationchild (id, probeid, code) VALUES ({Guid.NewGuid()}, {id}, {"child-sync"})"));
+                Assert.Equal(1, migrate.Database.SqlQuery<int>(
+                    $"SELECT COUNT(*) AS Value FROM ef10conformance_migrationchild child INNER JOIN ef10conformance_migrationprobe_renamed probe ON child.probeid = probe.id WHERE probe.id = {id}")
+                    .Single());
+                Assert.ThrowsAny<DbException>(() => migrate.Database.ExecuteSqlInterpolated(
+                    $"DELETE FROM ef10conformance_migrationprobe_renamed WHERE id = {id}"));
             }
 
             await using (var verify = ProviderTestRuntime.CreateContext())
@@ -115,6 +134,9 @@ public sealed class MigrationsTests
                     .Single());
                 Assert.Equal(314159, verify.Database.SqlQuery<int>(
                         $"SELECT value AS Value FROM ef10conformance_migrationprobe_renamed WHERE id = {Guid.Parse("3a34d6d8-aef0-42af-a248-28a2d82a6520")}")
+                    .Single());
+                Assert.Equal(1, verify.Database.SqlQuery<int>(
+                    $"SELECT COUNT(*) AS Value FROM ef10conformance_migrationchild WHERE probeid = {id}")
                     .Single());
             }
 

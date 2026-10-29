@@ -105,6 +105,8 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
 
     public DbSet<GeneratedKeyRecord> GeneratedKeyRecords => Set<GeneratedKeyRecord>();
 
+    public DbSet<AttributeConfiguredRecord> AttributeConfiguredRecords => Set<AttributeConfiguredRecord>();
+
     [DbFunction("lower", IsBuiltIn = true)]
     public static string Lower(string value) => throw new NotSupportedException("This method is intended for use in EF Core queries.");
 
@@ -138,6 +140,23 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
             entity.HasKey(record => record.Id);
             entity.Property(record => record.Id).HasColumnName("id");
             entity.Property(record => record.Amount).HasColumnName("amount");
+        });
+        modelBuilder.Entity<RestrictPrincipal>(entity =>
+        {
+            entity.ToTable("ef10conformance_restrictprincipals");
+            entity.HasKey(principal => principal.Id);
+            entity.Property(principal => principal.Id).HasColumnName("id");
+            entity.HasMany(principal => principal.Dependents)
+                .WithOne(dependent => dependent.Principal)
+                .HasForeignKey(dependent => dependent.PrincipalId)
+                .IsRequired();
+        });
+        modelBuilder.Entity<RestrictDependent>(entity =>
+        {
+            entity.ToTable("ef10conformance_restrictdependents");
+            entity.HasKey(dependent => dependent.Id);
+            entity.Property(dependent => dependent.Id).HasColumnName("id");
+            entity.Property(dependent => dependent.PrincipalId).HasColumnName("principalid");
         });
         modelBuilder.Entity<Blog>(entity =>
         {
@@ -243,6 +262,7 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
             entity.Property(record => record.Id).HasColumnName("id").ValueGeneratedOnAdd();
             entity.Property(record => record.Name).HasColumnName("name").IsRequired().HasMaxLength(160);
         });
+        modelBuilder.Entity<AttributeConfiguredRecord>();
     }
 }
 
@@ -310,6 +330,35 @@ internal sealed class PrecisionAttributeRecord
 
     [Precision(18, 4)]
     public decimal Amount { get; set; }
+}
+
+internal sealed class RestrictPrincipal
+{
+    public Guid Id { get; set; }
+
+    public ICollection<RestrictDependent> Dependents { get; set; } = new List<RestrictDependent>();
+}
+
+internal sealed class RestrictDependent
+{
+    public Guid Id { get; set; }
+
+    public Guid PrincipalId { get; set; }
+
+    [DeleteBehavior(DeleteBehavior.Restrict)]
+    public RestrictPrincipal? Principal { get; set; }
+}
+
+[System.ComponentModel.DataAnnotations.Schema.Table("ef10conformance_attributeconfigured")]
+[PrimaryKey(nameof(Key))]
+internal sealed class AttributeConfiguredRecord
+{
+    [System.ComponentModel.DataAnnotations.Schema.Column("recordkey")]
+    public Guid Key { get; set; }
+
+    [System.ComponentModel.DataAnnotations.Schema.Column("displayname")]
+    [Unicode(false)]
+    public string DisplayName { get; set; } = string.Empty;
 }
 
 internal sealed class ScalarRecord

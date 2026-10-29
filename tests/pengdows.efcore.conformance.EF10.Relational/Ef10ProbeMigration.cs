@@ -63,6 +63,29 @@ public sealed class Ef10MigrationOperationsMigration : Migration
             table: "ef10conformance_migrationprobe",
             columns: ["id", "value"],
             values: [SeedRowId, 123]);
+        migrationBuilder.CreateTable(
+            name: "ef10conformance_migrationchild",
+            columns: table => new
+            {
+                id = table.Column<Guid>(type: null, nullable: false),
+                probeid = table.Column<Guid>(type: null, nullable: false),
+                code = table.Column<string>(type: null, nullable: false)
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_ef10conformance_migrationchild", row => row.id);
+                table.ForeignKey(
+                    name: "FK_ef10conformance_migrationchild_probe",
+                    column: row => row.probeid,
+                    principalTable: "ef10conformance_migrationprobe",
+                    principalColumn: "id",
+                    onDelete: ReferentialAction.Restrict);
+                table.UniqueConstraint("AK_ef10conformance_migrationchild_code", row => row.code);
+            });
+        migrationBuilder.CreateIndex(
+            name: "IX_ef10conformance_migrationchild_probeid",
+            table: "ef10conformance_migrationchild",
+            column: "probeid");
     }
 
     protected override void Down(MigrationBuilder migrationBuilder)
@@ -71,6 +94,7 @@ public sealed class Ef10MigrationOperationsMigration : Migration
             table: "ef10conformance_migrationprobe",
             keyColumn: "id",
             keyValue: SeedRowId);
+        migrationBuilder.DropTable(name: "ef10conformance_migrationchild");
         migrationBuilder.DropIndex(
             name: "IX_ef10conformance_migrationprobe_value",
             table: "ef10conformance_migrationprobe");
@@ -81,6 +105,17 @@ public sealed class Ef10MigrationOperationsMigration : Migration
 
     protected override void BuildTargetModel(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<MigrationChildRow>(entity =>
+        {
+            entity.ToTable("ef10conformance_migrationchild");
+            entity.HasKey(row => row.Id);
+            entity.Property(row => row.Id).HasColumnName("id");
+            entity.Property(row => row.ProbeId).HasColumnName("probeid");
+            entity.Property(row => row.Code).HasColumnName("code");
+            entity.HasOne<MigrationProbeRow>().WithMany().HasForeignKey(row => row.ProbeId)
+                .OnDelete(DeleteBehavior.Restrict);
+            entity.HasAlternateKey(row => row.Code);
+        });
         modelBuilder.Entity<MigrationProbeRow>(entity =>
         {
             entity.ToTable("ef10conformance_migrationprobe");
@@ -91,6 +126,15 @@ public sealed class Ef10MigrationOperationsMigration : Migration
         });
         modelBuilder.HasAnnotation("ProductVersion", "10.0.14");
     }
+}
+
+public sealed class MigrationChildRow
+{
+    public Guid Id { get; set; }
+
+    public Guid ProbeId { get; set; }
+
+    public string Code { get; set; } = string.Empty;
 }
 
 [DbContext(typeof(ConformanceDbContext))]
