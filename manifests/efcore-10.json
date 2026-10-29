@@ -40,6 +40,106 @@
       "selectorPrefix": "Microsoft.EntityFrameworkCore.Diagnostics.",
       "disposition": "ef-owned-no-provider-contract",
       "reason": "Diagnostic identifiers, event payloads, and logging helpers are owned by EF Core. Provider-observable interception behavior is covered through public SaveChanges tests where applicable."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Metadata.Builders.",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "These are EF Core fluent model-configuration APIs. Provider obligations concern the observable effect of the configured model, which is tested through schema, query, migration, and persistence behavior rather than each builder overload in isolation."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Metadata.Conventions.",
+      "disposition": "ef-owned-no-provider-contract",
+      "reason": "Model convention execution and convention set construction are owned by EF Core. Provider behavior is checked through the finalized model's observable schema and query behavior."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Metadata.IConvention",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "These are convention-time model metadata interfaces and extension points. This black-box suite does not invoke provider convention services directly."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Metadata.IMutable",
+      "disposition": "ef-owned-no-provider-contract",
+      "reason": "Mutable model metadata APIs define EF Core model construction behavior. Providers are assessed by honoring the resulting model through public database operations."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Metadata.IReadOnly",
+      "disposition": "ef-owned-no-provider-contract",
+      "reason": "Read-only model metadata APIs are owned by EF Core and are independent of relational provider execution behavior."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Metadata.Runtime",
+      "disposition": "ef-owned-no-provider-contract",
+      "reason": "Runtime metadata implementation types are EF Core model infrastructure, not provider-specific public behavior."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.RelationalEntityTypeBuilderExtensions",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "These EF Core relational fluent APIs configure model metadata. Provider conformance is evaluated through observable behavior of models configured with those APIs."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.RelationalEntityTypeExtensions",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "These APIs inspect relational model metadata owned by EF Core. This suite does not test provider implementation details by inspecting metadata extensions."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.RelationalPropertyExtensions",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "These APIs inspect relational property metadata owned by EF Core. Provider mapping behavior is assessed through persistence and value-fidelity results."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.RelationalPropertyBuilderExtensions",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "These EF Core relational fluent APIs configure property metadata. Provider effects are evaluated through public queries, schema creation, migrations, and persistence."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.RelationalModelBuilderExtensions",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "These EF Core relational fluent APIs configure model metadata. Provider effects are evaluated through public database behavior."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.RelationalModelExtensions",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "These APIs inspect EF Core relational model metadata. The black-box contract checks resulting database behavior rather than metadata internals."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.RelationalTypeBaseExtensions",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "These APIs inspect EF Core relational type metadata. Provider behavior is checked through schema, query, and persistence results."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.RelationalPrimitiveCollectionBuilderExtensions",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "These EF Core model-building overloads configure primitive collection metadata; collection persistence and query results are the provider contract tested here."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.RelationalComplexTypePropertyBuilderExtensions",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "These EF Core model-building overloads configure complex property metadata; provider obligations are assessed through complex value persistence and query behavior."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.RelationalComplexTypePrimitiveCollectionBuilderExtensions",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "These EF Core model-building overloads configure complex primitive collection metadata; provider obligations are assessed through observable persistence and query behavior."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.RelationalAnnotationNames",
+      "disposition": "ef-owned-no-provider-contract",
+      "reason": "Relational annotation name constants are EF Core metadata identifiers and do not define provider runtime behavior."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Infrastructure.CoreOptionsExtension",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "This is an EF Core options service-extension implementation surface. The suite configures providers through public DbContextOptionsBuilder APIs and verifies resulting behavior."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Infrastructure.RelationalOptionsExtension",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "This is an EF Core relational service-extension implementation surface. The suite configures providers through public options APIs and verifies resulting behavior."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Infrastructure.ServiceCollectionMap",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "This type maps EF Core internal service registrations and is outside the black-box provider boundary."
     }
   ]
 }
