@@ -40,6 +40,38 @@ public sealed class StateManagementTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-TRACKING-DBCONTEXT-FIND", "Microsoft.EntityFrameworkCore.DbContext.Find", "Microsoft.EntityFrameworkCore.DbContext.Entry")]
+    public async Task DbContextFind_LoadsEntityByKeySynchronously()
+    {
+        var id = Guid.NewGuid();
+        await SeedAsync(id);
+
+        await using var context = ProviderTestRuntime.CreateContext();
+        var person = context.Find<Person>(id);
+
+        Assert.NotNull(person);
+        Assert.Equal(id, person.Id);
+        Assert.Equal($"Tracked {id:N}", person.Name);
+        Assert.Equal(EntityState.Unchanged, context.Entry(person).State);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-TRACKING-DBCONTEXT-FIND-ASYNC", "Microsoft.EntityFrameworkCore.DbContext.FindAsync", "Microsoft.EntityFrameworkCore.DbContext.Entry")]
+    public async Task DbContextFindAsync_LoadsEntityByKeyAsynchronously()
+    {
+        var id = Guid.NewGuid();
+        await SeedAsync(id);
+
+        await using var context = ProviderTestRuntime.CreateContext();
+        var person = await context.FindAsync<Person>([id], TestContext.Current.CancellationToken);
+
+        Assert.NotNull(person);
+        Assert.Equal(id, person.Id);
+        Assert.Equal($"Tracked {id:N}", person.Name);
+        Assert.Equal(EntityState.Unchanged, context.Entry(person).State);
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-TRACKING-FIND-MISSING-SYNC", "Microsoft.EntityFrameworkCore.DbSet`1.Find")]
     public async Task Find_ReturnsNullForMissingKeySynchronously()
     {

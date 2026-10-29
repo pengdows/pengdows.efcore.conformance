@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12348,
+    "AwaitingClassification": 12342,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 217,
-    "UncoveredMemberFamilies": 9016
+    "MemberEntriesInCoveredFamilies": 223,
+    "UncoveredMemberFamilies": 9014
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [
@@ -14772,6 +14772,8 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-TRACKING-ATTACH",
+        "EF10-TRACKING-DBCONTEXT-FIND",
+        "EF10-TRACKING-DBCONTEXT-FIND-ASYNC",
         "EF10-TRACKING-DETACH",
         "EF10-TRACKING-FIND",
         "EF10-TRACKING-FIND-ASYNC",
@@ -14793,6 +14795,8 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-TRACKING-ATTACH",
+        "EF10-TRACKING-DBCONTEXT-FIND",
+        "EF10-TRACKING-DBCONTEXT-FIND-ASYNC",
         "EF10-TRACKING-DETACH",
         "EF10-TRACKING-FIND",
         "EF10-TRACKING-FIND-ASYNC",
@@ -15031,9 +15035,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "Find",
       "Signature": "System.Object Find(System.Type entityType, System.Object[] keyValues)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-DBCONTEXT-FIND"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbContext.Find"
     },
     {
@@ -15042,9 +15048,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "FindAsync",
       "Signature": "System.Threading.Tasks.ValueTask\u003CSystem.Object\u003E FindAsync(System.Type entityType, System.Object[] keyValues)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-DBCONTEXT-FIND-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbContext.FindAsync"
     },
     {
@@ -15053,9 +15061,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "FindAsync",
       "Signature": "System.Threading.Tasks.ValueTask\u003CSystem.Object\u003E FindAsync(System.Type entityType, System.Object[] keyValues, System.Threading.CancellationToken cancellationToken)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-DBCONTEXT-FIND-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbContext.FindAsync"
     },
     {
@@ -15064,9 +15074,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "Find",
       "Signature": "TEntity Find\u003CTEntity\u003E(System.Object[] keyValues) where TEntity : class",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-DBCONTEXT-FIND"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbContext.Find"
     },
     {
@@ -15075,9 +15087,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "FindAsync",
       "Signature": "System.Threading.Tasks.ValueTask\u003CTEntity\u003E FindAsync\u003CTEntity\u003E(System.Object[] keyValues) where TEntity : class",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-DBCONTEXT-FIND-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbContext.FindAsync"
     },
     {
@@ -15086,9 +15100,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "FindAsync",
       "Signature": "System.Threading.Tasks.ValueTask\u003CTEntity\u003E FindAsync\u003CTEntity\u003E(System.Object[] keyValues, System.Threading.CancellationToken cancellationToken) where TEntity : class",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-DBCONTEXT-FIND-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbContext.FindAsync"
     },
     {
