@@ -15,6 +15,7 @@ public sealed class MicrosoftSqliteAdapter : IAdoNetProviderAdapter
             "transactions",
             "savepoints",
             "migrations",
+            "filtered-indexes",
             "raw-sql",
             "execute-update",
             "execute-delete",

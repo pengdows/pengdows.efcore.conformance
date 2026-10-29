@@ -139,6 +139,15 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
             entity.Property(record => record.Id).HasColumnName("id");
             entity.Property(record => record.Value).HasColumnName("value").IsRequired().HasMaxLength(160);
         });
+        modelBuilder.Entity<FilteredUniqueValueRecord>(entity =>
+        {
+            entity.ToTable("ef10conformance_filtereduniquevalues");
+            entity.HasKey(record => record.Id);
+            entity.Property(record => record.Id).HasColumnName("id");
+            entity.Property(record => record.Value).HasColumnName("value").IsRequired().HasMaxLength(160);
+            entity.Property(record => record.IsActive).HasColumnName("isactive");
+            entity.HasIndex(record => record.Value).IsUnique().HasFilter("isactive = 1");
+        });
         modelBuilder.Entity<KeylessPersonRow>(entity =>
         {
             entity.ToTable("ef10conformancekeylesspeople");
@@ -364,6 +373,15 @@ internal sealed class UniqueValueRecord
     public Guid Id { get; set; }
 
     public string Value { get; set; } = string.Empty;
+}
+
+internal sealed class FilteredUniqueValueRecord
+{
+    public Guid Id { get; set; }
+
+    public string Value { get; set; } = string.Empty;
+
+    public int IsActive { get; set; }
 }
 
 internal sealed class PrecisionAttributeRecord

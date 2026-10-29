@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 255,
+    "AwaitingClassification": 252,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 543,
-    "UncoveredMemberFamilies": 169
+    "MemberEntriesInCoveredFamilies": 546,
+    "UncoveredMemberFamilies": 168
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -16017,6 +16017,7 @@
         "EF10-DB-FUNCTION-ATTRIBUTE-SYNC",
         "EF10-DELETE-BEHAVIOR-RESTRICT-SYNC",
         "EF10-ENTITY-TYPE-CONFIGURATION-SYNC",
+        "EF10-FILTERED-INDEX-SYNC",
         "EF10-GENERATED-KEYS-SYNC",
         "EF10-INDEX-ATTRIBUTE-UNIQUE-SYNC",
         "EF10-INHERITANCE-TPC-SYNC",
@@ -16077,6 +16078,7 @@
         "EF10-DB-FUNCTION-ATTRIBUTE-SYNC",
         "EF10-DELETE-BEHAVIOR-RESTRICT-SYNC",
         "EF10-ENTITY-TYPE-CONFIGURATION-SYNC",
+        "EF10-FILTERED-INDEX-SYNC",
         "EF10-GENERATED-KEYS-SYNC",
         "EF10-INDEX-ATTRIBUTE-UNIQUE-SYNC",
         "EF10-INHERITANCE-TPC-SYNC",
@@ -16138,6 +16140,7 @@
         "EF10-DBSET-ATTACH-RANGE",
         "EF10-DELETE-BEHAVIOR-RESTRICT-ASYNC",
         "EF10-ENTITY-TYPE-CONFIGURATION-ASYNC",
+        "EF10-FILTERED-INDEX-ASYNC",
         "EF10-GENERATED-KEYS-ASYNC",
         "EF10-INDEX-ATTRIBUTE-UNIQUE-ASYNC",
         "EF10-INHERITANCE-TPC-ASYNC",
@@ -16201,6 +16204,7 @@
         "EF10-DBSET-ATTACH-RANGE",
         "EF10-DELETE-BEHAVIOR-RESTRICT-ASYNC",
         "EF10-ENTITY-TYPE-CONFIGURATION-ASYNC",
+        "EF10-FILTERED-INDEX-ASYNC",
         "EF10-GENERATED-KEYS-ASYNC",
         "EF10-INDEX-ATTRIBUTE-UNIQUE-ASYNC",
         "EF10-INHERITANCE-TPC-ASYNC",
@@ -19095,6 +19099,8 @@
       "Signature": "class Microsoft.EntityFrameworkCore.DbUpdateException",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-FILTERED-INDEX-ASYNC",
+        "EF10-FILTERED-INDEX-SYNC",
         "EF10-INDEX-ATTRIBUTE-UNIQUE-ASYNC",
         "EF10-INDEX-ATTRIBUTE-UNIQUE-SYNC",
         "EF10-PERSIST-INSERT-FAILURE-ASYNC",
@@ -187430,10 +187436,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasFilter",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.IndexBuilder HasFilter(Microsoft.EntityFrameworkCore.Metadata.Builders.IndexBuilder indexBuilder, System.String sql)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-FILTERED-INDEX-ASYNC",
+        "EF10-FILTERED-INDEX-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalIndexBuilderExtensions.HasFilter"
     },
     {
@@ -187442,10 +187451,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasFilter",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.IndexBuilder\u003CTEntity\u003E HasFilter\u003CTEntity\u003E(Microsoft.EntityFrameworkCore.Metadata.Builders.IndexBuilder\u003CTEntity\u003E indexBuilder, System.String sql)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-FILTERED-INDEX-ASYNC",
+        "EF10-FILTERED-INDEX-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalIndexBuilderExtensions.HasFilter"
     },
     {
@@ -187454,10 +187466,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasFilter",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionIndexBuilder HasFilter(Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionIndexBuilder indexBuilder, System.String sql, System.Boolean fromDataAnnotation = false)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-FILTERED-INDEX-ASYNC",
+        "EF10-FILTERED-INDEX-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalIndexBuilderExtensions.HasFilter"
     },
     {

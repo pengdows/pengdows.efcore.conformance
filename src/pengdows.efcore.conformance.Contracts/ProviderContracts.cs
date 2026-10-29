@@ -42,6 +42,7 @@ public sealed record ProviderCapabilities(
         "transactions",
         "savepoints",
         "migrations",
+        "filtered-indexes",
         "raw-sql",
         "execute-update",
         "execute-delete",
