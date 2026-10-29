@@ -9,7 +9,7 @@ namespace pengdows.efcore.conformance.EF10.Relational;
 public sealed class MigrationsTests
 {
     [Fact]
-    [BehavioralCoverage("EF10-MIGRATIONS-APPLY-ASYNC", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.MigrateAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetAppliedMigrationsAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetPendingMigrationsAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlInterpolatedAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.SqlQuery")]
+    [BehavioralCoverage("EF10-MIGRATIONS-APPLY-ASYNC", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetMigrations", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.MigrateAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetAppliedMigrationsAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetPendingMigrationsAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlInterpolatedAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.SqlQuery")]
     public async Task MigrateAsync_AppliesMigrationAndPersistsValues()
     {
         ProviderTestRuntime.RequireCapability("migrations");
@@ -22,6 +22,7 @@ public sealed class MigrationsTests
             await using (var migrate = ProviderTestRuntime.CreateContext())
             {
                 await migrate.Database.EnsureDeletedAsync(cancellationToken);
+                Assert.Equal(new[] { "202610290001_EF10Probe" }, migrate.Database.GetMigrations());
                 await migrate.Database.MigrateAsync(cancellationToken);
                 Assert.Equal(new[] { "202610290001_EF10Probe" }, await migrate.Database.GetAppliedMigrationsAsync(cancellationToken));
                 Assert.Empty(await migrate.Database.GetPendingMigrationsAsync(cancellationToken));
@@ -44,7 +45,7 @@ public sealed class MigrationsTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-MIGRATIONS-APPLY-SYNC", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.Migrate", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetAppliedMigrations", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetPendingMigrations", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlInterpolated", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.SqlQuery")]
+    [BehavioralCoverage("EF10-MIGRATIONS-APPLY-SYNC", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetMigrations", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.Migrate", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetAppliedMigrations", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetPendingMigrations", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlInterpolated", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.SqlQuery")]
     public async Task Migrate_AppliesMigrationAndPersistsValuesSynchronously()
     {
         ProviderTestRuntime.RequireCapability("migrations");
@@ -56,6 +57,7 @@ public sealed class MigrationsTests
             await using (var migrate = ProviderTestRuntime.CreateContext())
             {
                 await migrate.Database.EnsureDeletedAsync(TestContext.Current.CancellationToken);
+                Assert.Equal(new[] { "202610290001_EF10Probe" }, migrate.Database.GetMigrations());
                 migrate.Database.Migrate();
                 Assert.Equal(new[] { "202610290001_EF10Probe" }, migrate.Database.GetAppliedMigrations());
                 Assert.Empty(migrate.Database.GetPendingMigrations());

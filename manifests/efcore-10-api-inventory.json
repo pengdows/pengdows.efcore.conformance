@@ -19,13 +19,15 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12354,
+    "AwaitingClassification": 12349,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 211,
-    "UncoveredMemberFamilies": 9020
+    "MemberEntriesInCoveredFamilies": 216,
+    "UncoveredMemberFamilies": 9017
   },
   "CoverageSelectors": {
-    "UnmatchedEfCoreSelectors": [],
+    "UnmatchedEfCoreSelectors": [
+      "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.GetDbConnection"
+    ],
     "ExternalApiSelectors": [
       "System.Linq.Enumerable.ToList",
       "System.Linq.IQueryable.GetEnumerator",
@@ -14616,6 +14618,7 @@
         "EF10-TRACKING-PROPERTY-ENTRY-SYNC",
         "EF10-TRACKING-UPDATE-DETACHED-SYNC",
         "EF10-TRANSACTION-COMMIT-SYNC",
+        "EF10-TRANSACTION-EXTERNAL-SYNC",
         "EF10-TRANSACTION-ROLLBACK-SYNC",
         "EF10-TYPES-ADDITIONAL-SCALARS-SYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-SYNC",
@@ -14653,6 +14656,7 @@
         "EF10-TRACKING-PROPERTY-ENTRY-SYNC",
         "EF10-TRACKING-UPDATE-DETACHED-SYNC",
         "EF10-TRANSACTION-COMMIT-SYNC",
+        "EF10-TRANSACTION-EXTERNAL-SYNC",
         "EF10-TRANSACTION-ROLLBACK-SYNC",
         "EF10-TYPES-ADDITIONAL-SCALARS-SYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-SYNC",
@@ -14690,6 +14694,7 @@
         "EF10-TRACKING-PROPERTY-ENTRY-ASYNC",
         "EF10-TRACKING-UPDATE-DETACHED-ASYNC",
         "EF10-TRANSACTION-COMMIT-ASYNC",
+        "EF10-TRANSACTION-EXTERNAL-ASYNC",
         "EF10-TRANSACTION-ROLLBACK-ASYNC",
         "EF10-TYPES-ADDITIONAL-SCALARS-ASYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC",
@@ -14727,6 +14732,7 @@
         "EF10-TRACKING-PROPERTY-ENTRY-ASYNC",
         "EF10-TRACKING-UPDATE-DETACHED-ASYNC",
         "EF10-TRANSACTION-COMMIT-ASYNC",
+        "EF10-TRANSACTION-EXTERNAL-ASYNC",
         "EF10-TRANSACTION-ROLLBACK-ASYNC",
         "EF10-TYPES-ADDITIONAL-SCALARS-ASYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC",
@@ -166953,9 +166959,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "GetMigrations",
       "Signature": "System.Collections.Generic.IEnumerable\u003CSystem.String\u003E GetMigrations(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-APPLY-ASYNC",
+        "EF10-MIGRATIONS-APPLY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetMigrations"
     },
     {
@@ -167333,9 +167342,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "UseTransaction",
       "Signature": "Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction UseTransaction(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade, System.Data.Common.DbTransaction transaction)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRANSACTION-EXTERNAL-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.UseTransaction"
     },
     {
@@ -167344,9 +167355,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "UseTransaction",
       "Signature": "Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction UseTransaction(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade, System.Data.Common.DbTransaction transaction, System.Guid transactionId)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRANSACTION-EXTERNAL-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.UseTransaction"
     },
     {
@@ -167355,9 +167368,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "UseTransactionAsync",
       "Signature": "System.Threading.Tasks.Task\u003CMicrosoft.EntityFrameworkCore.Storage.IDbContextTransaction\u003E UseTransactionAsync(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade, System.Data.Common.DbTransaction transaction, System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRANSACTION-EXTERNAL-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.UseTransactionAsync"
     },
     {
@@ -167366,9 +167381,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "UseTransactionAsync",
       "Signature": "System.Threading.Tasks.Task\u003CMicrosoft.EntityFrameworkCore.Storage.IDbContextTransaction\u003E UseTransactionAsync(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade, System.Data.Common.DbTransaction transaction, System.Guid transactionId, System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRANSACTION-EXTERNAL-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.UseTransactionAsync"
     },
     {
