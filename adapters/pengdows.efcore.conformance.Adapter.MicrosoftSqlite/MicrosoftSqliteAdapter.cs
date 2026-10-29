@@ -18,7 +18,8 @@ public sealed class MicrosoftSqliteAdapter : IAdoNetProviderAdapter
             "raw-sql",
             "execute-update",
             "execute-delete",
-            "primitive-collections"
+            "primitive-collections",
+            "external-connection"
         },
         new HashSet<string>(StringComparer.Ordinal));
 

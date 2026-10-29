@@ -45,4 +45,35 @@ public sealed class DatabaseFacadeTests
         context.Database.SetConnectionString(configured);
         Assert.Equal(configured, context.Database.GetConnectionString());
     }
+
+    [Fact]
+    [CapabilityRequirement("external-connection")]
+    [BehavioralCoverage("EF10-DATABASE-FACADE-SET-CONNECTION", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.SetDbConnection", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetDbConnection")]
+    public async Task SetDbConnection_UsesAnExternalConnectionToReadPersistedData()
+    {
+        ProviderTestRuntime.RequireCapability("external-connection");
+        var id = Guid.NewGuid();
+        const string expected = "External connection lookup";
+
+        await using (var seed = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(seed, TestContext.Current.CancellationToken);
+            seed.People.Add(new Person { Id = id, Name = expected, Age = 42 });
+            await seed.SaveChangesAsync(TestContext.Current.CancellationToken);
+        }
+
+        await using var externalConnection = ProviderTestRuntime.CreateConnection();
+        await using var context = ProviderTestRuntime.CreateContext();
+        context.Database.SetDbConnection(externalConnection, contextOwnsConnection: false);
+        Assert.Same(externalConnection, context.Database.GetDbConnection());
+
+        await context.Database.OpenConnectionAsync(TestContext.Current.CancellationToken);
+        var actual = await context.People.AsNoTracking()
+            .Where(person => person.Id == id)
+            .Select(person => person.Name)
+            .SingleAsync(TestContext.Current.CancellationToken);
+        await context.Database.CloseConnectionAsync();
+
+        Assert.Equal(expected, actual);
+    }
 }

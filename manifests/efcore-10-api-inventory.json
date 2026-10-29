@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12333,
+    "AwaitingClassification": 12332,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 232,
-    "UncoveredMemberFamilies": 9006
+    "MemberEntriesInCoveredFamilies": 233,
+    "UncoveredMemberFamilies": 9005
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [
@@ -167245,7 +167245,8 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-DATABASE-CONNECTION-LIFECYCLE-ASYNC",
-        "EF10-DATABASE-CONNECTION-LIFECYCLE-SYNC"
+        "EF10-DATABASE-CONNECTION-LIFECYCLE-SYNC",
+        "EF10-DATABASE-FACADE-SET-CONNECTION"
       ],
       "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetDbConnection"
@@ -167256,9 +167257,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "SetDbConnection",
       "Signature": "System.Void SetDbConnection(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade, System.Data.Common.DbConnection connection, System.Boolean contextOwnsConnection = false)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DATABASE-FACADE-SET-CONNECTION"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.SetDbConnection"
     },
     {

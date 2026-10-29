@@ -45,7 +45,8 @@ public sealed record ProviderCapabilities(
         "raw-sql",
         "execute-update",
         "execute-delete",
-        "primitive-collections"
+        "primitive-collections",
+        "external-connection"
     };
 
     public IReadOnlyList<string> UndeclaredFeatures => KnownFeatures

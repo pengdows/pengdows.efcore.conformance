@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using System.Data.Common;
 using pengdows.efcore.conformance;
 using Xunit;
 
@@ -19,6 +20,12 @@ internal static class ProviderTestRuntime
     }
 
     public static string ConnectionString => RequiredEnvironmentVariable("PENGDOWS_EFCORE_CONFORMANCE_CONNECTION_STRING");
+
+    public static DbConnection CreateConnection() => Adapter is IAdoNetProviderAdapter adoNetAdapter
+        ? adoNetAdapter.CreateConnection(ConnectionString)
+        : throw new ConformanceInfrastructureException(
+            $"Provider '{Adapter.Name}' declared external-connection support but does not expose an ADO.NET connection factory.",
+            new InvalidOperationException("The adapter does not implement IAdoNetProviderAdapter."));
 
     public static ConformanceDbContext CreateContext(Action<DbContextOptionsBuilder<ConformanceDbContext>>? configureOptions = null)
     {
