@@ -223,3 +223,36 @@ public sealed class Ef10MigrationRenameTableMigration : Migration
         modelBuilder.HasAnnotation("ProductVersion", "10.0.14");
     }
 }
+
+[DbContext(typeof(ConformanceDbContext))]
+[Migration("20261029000105_EF10MigrationSqlOperation")]
+public sealed class Ef10MigrationSqlOperationMigration : Migration
+{
+    protected override void Up(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.Sql("CREATE TABLE ef10conformance_migrationsql (id INTEGER NOT NULL PRIMARY KEY, value INTEGER NOT NULL)");
+        migrationBuilder.Sql("INSERT INTO ef10conformance_migrationsql (id, value) VALUES (1, 4242)");
+    }
+
+    protected override void Down(MigrationBuilder migrationBuilder) =>
+        migrationBuilder.Sql("DROP TABLE ef10conformance_migrationsql");
+
+    protected override void BuildTargetModel(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<MigrationSqlOperationRow>(entity =>
+        {
+            entity.ToTable("ef10conformance_migrationsql");
+            entity.HasKey(row => row.Id);
+            entity.Property(row => row.Id).HasColumnName("id");
+            entity.Property(row => row.Value).HasColumnName("value");
+        });
+        modelBuilder.HasAnnotation("ProductVersion", "10.0.14");
+    }
+}
+
+public sealed class MigrationSqlOperationRow
+{
+    public int Id { get; set; }
+
+    public int Value { get; set; }
+}

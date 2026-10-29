@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 211,
+    "AwaitingClassification": 210,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 593,
-    "UncoveredMemberFamilies": 136
+    "MemberEntriesInCoveredFamilies": 594,
+    "UncoveredMemberFamilies": 135
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -151785,10 +151785,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "Sql",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.OperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.SqlOperation\u003E Sql(System.String sql, System.Boolean suppressTransaction = false)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-APPLY-ASYNC",
+        "EF10-MIGRATIONS-APPLY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.Sql"
     },
     {

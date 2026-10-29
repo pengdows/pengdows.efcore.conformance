@@ -10,7 +10,7 @@ namespace pengdows.efcore.conformance.EF10.Relational;
 public sealed class MigrationsTests
 {
     [Fact]
-    [BehavioralCoverage("EF10-MIGRATIONS-APPLY-ASYNC", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetMigrations", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.MigrateAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetAppliedMigrationsAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetPendingMigrationsAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.HasPendingModelChanges", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlInterpolatedAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.SqlQuery", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AddColumn", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.CreateIndex", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.InsertData", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.RenameColumn", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropIndex", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.UpdateData", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DeleteData", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropColumn", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.CreateTable", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropTable", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.RenameTable", "Microsoft.EntityFrameworkCore.Migrations.MigrationAttribute", "Microsoft.EntityFrameworkCore.Migrations.MigrationAttribute..ctor", "Microsoft.EntityFrameworkCore.Migrations.MigrationAttribute.Id", "Microsoft.EntityFrameworkCore.Migrations.Migration.TargetModel", "Microsoft.EntityFrameworkCore.Migrations.Migration.UpOperations", "Microsoft.EntityFrameworkCore.Migrations.Migration.DownOperations")]
+    [BehavioralCoverage("EF10-MIGRATIONS-APPLY-ASYNC", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetMigrations", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.MigrateAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetAppliedMigrationsAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetPendingMigrationsAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.HasPendingModelChanges", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlInterpolatedAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.SqlQuery", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AddColumn", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.CreateIndex", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.InsertData", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.RenameColumn", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropIndex", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.UpdateData", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DeleteData", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropColumn", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.CreateTable", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropTable", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.RenameTable", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.Sql", "Microsoft.EntityFrameworkCore.Migrations.MigrationAttribute", "Microsoft.EntityFrameworkCore.Migrations.MigrationAttribute..ctor", "Microsoft.EntityFrameworkCore.Migrations.MigrationAttribute.Id", "Microsoft.EntityFrameworkCore.Migrations.Migration.TargetModel", "Microsoft.EntityFrameworkCore.Migrations.Migration.UpOperations", "Microsoft.EntityFrameworkCore.Migrations.Migration.DownOperations")]
     public async Task MigrateAsync_AppliesMigrationAndPersistsValues()
     {
         ProviderTestRuntime.RequireCapability("migrations");
@@ -23,7 +23,7 @@ public sealed class MigrationsTests
             await using (var migrate = ProviderTestRuntime.CreateContext())
             {
                 await migrate.Database.EnsureDeletedAsync(cancellationToken);
-                var migrationIds = new[] { "20261029000101_EF10Probe", "20261029000102_EF10MigrationOperations", "20261029000103_EF10MigrationChanges", "20261029000104_EF10MigrationRenameTable" };
+                var migrationIds = new[] { "20261029000101_EF10Probe", "20261029000102_EF10MigrationOperations", "20261029000103_EF10MigrationChanges", "20261029000104_EF10MigrationRenameTable", "20261029000105_EF10MigrationSqlOperation" };
                 Assert.Equal(migrationIds, migrate.Database.GetMigrations());
                 await migrate.Database.MigrateAsync(cancellationToken);
                 Assert.True(migrate.Database.HasPendingModelChanges());
@@ -35,6 +35,9 @@ public sealed class MigrationsTests
                 Assert.Equal(1, await migrate.Database.ExecuteSqlInterpolatedAsync(
                     $"INSERT INTO ef10conformance_migrationchild (id, probeid, code) VALUES ({Guid.NewGuid()}, {id}, {"child-async"})",
                     cancellationToken));
+                Assert.Equal(4242, await migrate.Database.SqlQuery<int>(
+                    $"SELECT value AS Value FROM ef10conformance_migrationsql WHERE id = {1}")
+                    .SingleAsync(cancellationToken));
                 await Assert.ThrowsAnyAsync<DbException>(() => migrate.Database.ExecuteSqlInterpolatedAsync(
                     $"INSERT INTO ef10conformance_migrationchild (id, probeid, code) VALUES ({Guid.NewGuid()}, {id}, {"child-async"})",
                     cancellationToken));
@@ -92,6 +95,9 @@ public sealed class MigrationsTests
             Assert.Equal(314159, await verifyReapply.Database.SqlQuery<int>(
                     $"SELECT value AS Value FROM ef10conformance_migrationprobe_renamed WHERE id = {Guid.Parse("3a34d6d8-aef0-42af-a248-28a2d82a6520")}")
                 .SingleAsync(cancellationToken));
+            Assert.Equal(4242, await verifyReapply.Database.SqlQuery<int>(
+                    $"SELECT value AS Value FROM ef10conformance_migrationsql WHERE id = {1}")
+                .SingleAsync(cancellationToken));
         }
         finally
         {
@@ -101,7 +107,7 @@ public sealed class MigrationsTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-MIGRATIONS-APPLY-SYNC", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetMigrations", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.Migrate", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetAppliedMigrations", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetPendingMigrations", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.HasPendingModelChanges", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlInterpolated", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.SqlQuery", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AddColumn", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.CreateIndex", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.InsertData", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.RenameColumn", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropIndex", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.UpdateData", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DeleteData", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropColumn", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.CreateTable", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropTable", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.RenameTable", "Microsoft.EntityFrameworkCore.Migrations.MigrationAttribute", "Microsoft.EntityFrameworkCore.Migrations.MigrationAttribute..ctor", "Microsoft.EntityFrameworkCore.Migrations.MigrationAttribute.Id", "Microsoft.EntityFrameworkCore.Migrations.Migration.TargetModel", "Microsoft.EntityFrameworkCore.Migrations.Migration.UpOperations", "Microsoft.EntityFrameworkCore.Migrations.Migration.DownOperations")]
+    [BehavioralCoverage("EF10-MIGRATIONS-APPLY-SYNC", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetMigrations", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.Migrate", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetAppliedMigrations", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetPendingMigrations", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.HasPendingModelChanges", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlInterpolated", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.SqlQuery", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AddColumn", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.CreateIndex", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.InsertData", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.RenameColumn", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropIndex", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.UpdateData", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DeleteData", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropColumn", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.CreateTable", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropTable", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.RenameTable", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.Sql", "Microsoft.EntityFrameworkCore.Migrations.MigrationAttribute", "Microsoft.EntityFrameworkCore.Migrations.MigrationAttribute..ctor", "Microsoft.EntityFrameworkCore.Migrations.MigrationAttribute.Id", "Microsoft.EntityFrameworkCore.Migrations.Migration.TargetModel", "Microsoft.EntityFrameworkCore.Migrations.Migration.UpOperations", "Microsoft.EntityFrameworkCore.Migrations.Migration.DownOperations")]
     public async Task Migrate_AppliesMigrationAndPersistsValuesSynchronously()
     {
         ProviderTestRuntime.RequireCapability("migrations");
@@ -113,7 +119,7 @@ public sealed class MigrationsTests
             await using (var migrate = ProviderTestRuntime.CreateContext())
             {
                 await migrate.Database.EnsureDeletedAsync(TestContext.Current.CancellationToken);
-                var migrationIds = new[] { "20261029000101_EF10Probe", "20261029000102_EF10MigrationOperations", "20261029000103_EF10MigrationChanges", "20261029000104_EF10MigrationRenameTable" };
+                var migrationIds = new[] { "20261029000101_EF10Probe", "20261029000102_EF10MigrationOperations", "20261029000103_EF10MigrationChanges", "20261029000104_EF10MigrationRenameTable", "20261029000105_EF10MigrationSqlOperation" };
                 Assert.Equal(migrationIds, migrate.Database.GetMigrations());
                 migrate.Database.Migrate();
                 Assert.True(migrate.Database.HasPendingModelChanges());
@@ -123,6 +129,9 @@ public sealed class MigrationsTests
                     $"INSERT INTO ef10conformance_migrationprobe_renamed (id, value, description) VALUES ({id}, {expected}, {"sync row"})"));
                 Assert.Equal(1, migrate.Database.ExecuteSqlInterpolated(
                     $"INSERT INTO ef10conformance_migrationchild (id, probeid, code) VALUES ({Guid.NewGuid()}, {id}, {"child-sync"})"));
+                Assert.Equal(4242, migrate.Database.SqlQuery<int>(
+                    $"SELECT value AS Value FROM ef10conformance_migrationsql WHERE id = {1}")
+                    .Single());
                 Assert.ThrowsAny<DbException>(() => migrate.Database.ExecuteSqlInterpolated(
                     $"INSERT INTO ef10conformance_migrationchild (id, probeid, code) VALUES ({Guid.NewGuid()}, {id}, {"child-sync"})"));
                 Assert.ThrowsAny<DbException>(() => migrate.Database.ExecuteSqlInterpolated(
@@ -174,6 +183,9 @@ public sealed class MigrationsTests
             await using var verifyReapply = ProviderTestRuntime.CreateContext();
             Assert.Equal(314159, verifyReapply.Database.SqlQuery<int>(
                     $"SELECT value AS Value FROM ef10conformance_migrationprobe_renamed WHERE id = {Guid.Parse("3a34d6d8-aef0-42af-a248-28a2d82a6520")}")
+                .Single());
+            Assert.Equal(4242, verifyReapply.Database.SqlQuery<int>(
+                    $"SELECT value AS Value FROM ef10conformance_migrationsql WHERE id = {1}")
                 .Single());
         }
         finally
