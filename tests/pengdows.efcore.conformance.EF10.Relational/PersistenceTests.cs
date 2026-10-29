@@ -54,6 +54,91 @@ public sealed class PersistenceTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-PERSIST-CONTEXT-ADD-SYNC", "Microsoft.EntityFrameworkCore.DbContext.Add", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    public async Task DbContextAdd_TracksAndPersistsEntitySynchronously()
+    {
+        var person = new Person { Id = Guid.NewGuid(), Name = "Synchronous DbContext Add", Age = 40 };
+
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            var entry = write.Add(person);
+            Assert.Equal(EntityState.Added, entry.State);
+            Assert.Equal(1, write.SaveChanges());
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        var actual = await verify.People.AsNoTracking()
+            .SingleAsync(item => item.Id == person.Id, TestContext.Current.CancellationToken);
+        Assert.Equal(person.Name, actual.Name);
+        Assert.Equal(person.Age, actual.Age);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-PERSIST-CONTEXT-ATTACH", "Microsoft.EntityFrameworkCore.DbContext.Attach", "Microsoft.EntityFrameworkCore.DbContext.Entry", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync")]
+    public async Task DbContextAttach_TracksDetachedEntityAndPersistsChanges()
+    {
+        var id = Guid.NewGuid();
+        await SeedAsync(id, "Attached through DbContext", 46);
+
+        await using (var update = ProviderTestRuntime.CreateContext())
+        {
+            var detached = new Person { Id = id, Name = "Attached through DbContext", Age = 46 };
+            update.Attach(detached);
+            Assert.Equal(EntityState.Unchanged, update.Entry(detached).State);
+            detached.Age = 47;
+            Assert.Equal(1, await update.SaveChangesAsync(TestContext.Current.CancellationToken));
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.Equal(47, await verify.People.AsNoTracking()
+            .Where(item => item.Id == id)
+            .Select(item => item.Age)
+            .SingleAsync(TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-PERSIST-CONTEXT-UPDATE", "Microsoft.EntityFrameworkCore.DbContext.Update", "Microsoft.EntityFrameworkCore.DbContext.Entry", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges")]
+    public async Task DbContextUpdate_TracksDetachedEntityAndPersistsChanges()
+    {
+        var id = Guid.NewGuid();
+        await SeedAsync(id, "Before DbContext.Update", 48);
+
+        await using (var update = ProviderTestRuntime.CreateContext())
+        {
+            var detached = new Person { Id = id, Name = "After DbContext.Update", Age = 49 };
+            update.Update(detached);
+            Assert.Equal(EntityState.Modified, update.Entry(detached).State);
+            Assert.Equal(1, update.SaveChanges());
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        var actual = await verify.People.AsNoTracking()
+            .SingleAsync(item => item.Id == id, TestContext.Current.CancellationToken);
+        Assert.Equal("After DbContext.Update", actual.Name);
+        Assert.Equal(49, actual.Age);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-PERSIST-CONTEXT-REMOVE", "Microsoft.EntityFrameworkCore.DbContext.Remove", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.AnyAsync")]
+    public async Task DbContextRemove_DeletesEntity()
+    {
+        var id = Guid.NewGuid();
+        await SeedAsync(id, "Remove through DbContext", 50);
+
+        await using (var delete = ProviderTestRuntime.CreateContext())
+        {
+            var person = await delete.People.SingleAsync(item => item.Id == id, TestContext.Current.CancellationToken);
+            var entry = delete.Remove(person);
+            Assert.Equal(EntityState.Deleted, entry.State);
+            Assert.Equal(1, delete.SaveChanges());
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.False(await verify.People.AnyAsync(item => item.Id == id, TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-PERSIST-INSERT-ASYNC", "Microsoft.EntityFrameworkCore.DbSet`1.Add", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync", "System.Linq.Queryable.Where", "System.Linq.Queryable.Select")]
     [NativeTypeCoverage("VARCHAR(160)", typeof(string), "EF10-PERSIST-INSERT-ASYNC")]
     [NativeTypeCoverage("INTEGER", typeof(int), "EF10-PERSIST-INSERT-ASYNC")]

@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12306,
+    "AwaitingClassification": 12298,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 259,
-    "UncoveredMemberFamilies": 8990
+    "MemberEntriesInCoveredFamilies": 267,
+    "UncoveredMemberFamilies": 8986
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -14633,6 +14633,9 @@
         "EF10-PERSIST-ACCEPT-CHANGES-SYNC",
         "EF10-PERSIST-ADD-RANGE-SYNC",
         "EF10-PERSIST-CONTEXT-ADD-RANGE-SYNC",
+        "EF10-PERSIST-CONTEXT-ADD-SYNC",
+        "EF10-PERSIST-CONTEXT-REMOVE",
+        "EF10-PERSIST-CONTEXT-UPDATE",
         "EF10-PERSIST-CONTEXT-UPDATE-RANGE",
         "EF10-PERSIST-DELETE-SYNC",
         "EF10-PERSIST-INSERT-FAILURE-SYNC",
@@ -14673,6 +14676,9 @@
         "EF10-PERSIST-ACCEPT-CHANGES-SYNC",
         "EF10-PERSIST-ADD-RANGE-SYNC",
         "EF10-PERSIST-CONTEXT-ADD-RANGE-SYNC",
+        "EF10-PERSIST-CONTEXT-ADD-SYNC",
+        "EF10-PERSIST-CONTEXT-REMOVE",
+        "EF10-PERSIST-CONTEXT-UPDATE",
         "EF10-PERSIST-CONTEXT-UPDATE-RANGE",
         "EF10-PERSIST-DELETE-SYNC",
         "EF10-PERSIST-INSERT-FAILURE-SYNC",
@@ -14715,6 +14721,7 @@
         "EF10-PERSIST-ADD-RANGE-ASYNC",
         "EF10-PERSIST-CONTEXT-ADD-ASYNC",
         "EF10-PERSIST-CONTEXT-ADD-RANGE-ASYNC",
+        "EF10-PERSIST-CONTEXT-ATTACH",
         "EF10-PERSIST-CONTEXT-ATTACH-RANGE",
         "EF10-PERSIST-CONTEXT-REMOVE-RANGE",
         "EF10-PERSIST-DELETE-ASYNC",
@@ -14758,6 +14765,7 @@
         "EF10-PERSIST-ADD-RANGE-ASYNC",
         "EF10-PERSIST-CONTEXT-ADD-ASYNC",
         "EF10-PERSIST-CONTEXT-ADD-RANGE-ASYNC",
+        "EF10-PERSIST-CONTEXT-ATTACH",
         "EF10-PERSIST-CONTEXT-ATTACH-RANGE",
         "EF10-PERSIST-CONTEXT-REMOVE-RANGE",
         "EF10-PERSIST-DELETE-ASYNC",
@@ -14812,7 +14820,9 @@
       "Signature": "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry\u003CTEntity\u003E Entry\u003CTEntity\u003E(TEntity entity) where TEntity : class",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-PERSIST-CONTEXT-ATTACH",
         "EF10-PERSIST-CONTEXT-ATTACH-RANGE",
+        "EF10-PERSIST-CONTEXT-UPDATE",
         "EF10-PERSIST-CONTEXT-UPDATE-RANGE",
         "EF10-TRACKING-ATTACH",
         "EF10-TRACKING-DBCONTEXT-FIND",
@@ -14837,7 +14847,9 @@
       "Signature": "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry Entry(System.Object entity)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-PERSIST-CONTEXT-ATTACH",
         "EF10-PERSIST-CONTEXT-ATTACH-RANGE",
+        "EF10-PERSIST-CONTEXT-UPDATE",
         "EF10-PERSIST-CONTEXT-UPDATE-RANGE",
         "EF10-TRACKING-ATTACH",
         "EF10-TRACKING-DBCONTEXT-FIND",
@@ -14860,9 +14872,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "Add",
       "Signature": "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry\u003CTEntity\u003E Add\u003CTEntity\u003E(TEntity entity) where TEntity : class",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-PERSIST-CONTEXT-ADD-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbContext.Add"
     },
     {
@@ -14884,9 +14898,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "Attach",
       "Signature": "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry\u003CTEntity\u003E Attach\u003CTEntity\u003E(TEntity entity) where TEntity : class",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-PERSIST-CONTEXT-ATTACH"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbContext.Attach"
     },
     {
@@ -14895,9 +14911,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "Update",
       "Signature": "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry\u003CTEntity\u003E Update\u003CTEntity\u003E(TEntity entity) where TEntity : class",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-PERSIST-CONTEXT-UPDATE"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbContext.Update"
     },
     {
@@ -14906,9 +14924,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "Remove",
       "Signature": "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry\u003CTEntity\u003E Remove\u003CTEntity\u003E(TEntity entity) where TEntity : class",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-PERSIST-CONTEXT-REMOVE"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbContext.Remove"
     },
     {
@@ -14917,9 +14937,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "Add",
       "Signature": "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry Add(System.Object entity)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-PERSIST-CONTEXT-ADD-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbContext.Add"
     },
     {
@@ -14941,9 +14963,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "Attach",
       "Signature": "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry Attach(System.Object entity)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-PERSIST-CONTEXT-ATTACH"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbContext.Attach"
     },
     {
@@ -14952,9 +14976,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "Update",
       "Signature": "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry Update(System.Object entity)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-PERSIST-CONTEXT-UPDATE"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbContext.Update"
     },
     {
@@ -14963,9 +14989,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "Remove",
       "Signature": "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry Remove(System.Object entity)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-PERSIST-CONTEXT-REMOVE"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbContext.Remove"
     },
     {
@@ -47222,6 +47250,7 @@
       "BehavioralContracts": [
         "EF10-PERSIST-ADD-RANGE-ASYNC",
         "EF10-PERSIST-CONTEXT-ADD-RANGE-ASYNC",
+        "EF10-PERSIST-CONTEXT-REMOVE",
         "EF10-PERSIST-CONTEXT-REMOVE-RANGE",
         "EF10-PERSIST-DELETE-ASYNC",
         "EF10-PERSIST-REMOVE-RANGE"
@@ -47239,6 +47268,7 @@
       "BehavioralContracts": [
         "EF10-PERSIST-ADD-RANGE-ASYNC",
         "EF10-PERSIST-CONTEXT-ADD-RANGE-ASYNC",
+        "EF10-PERSIST-CONTEXT-REMOVE",
         "EF10-PERSIST-CONTEXT-REMOVE-RANGE",
         "EF10-PERSIST-DELETE-ASYNC",
         "EF10-PERSIST-REMOVE-RANGE"
@@ -47455,6 +47485,7 @@
         "EF10-COMPLEX-TYPE-ASYNC",
         "EF10-PERSIST-ADD-ASYNC",
         "EF10-PERSIST-CONTEXT-ADD-ASYNC",
+        "EF10-PERSIST-CONTEXT-ADD-SYNC",
         "EF10-PERSIST-INSERT-ASYNC",
         "EF10-PERSIST-UPDATE-ASYNC",
         "EF10-PERSIST-UPDATE-RANGE",
@@ -47484,6 +47515,7 @@
         "EF10-COMPLEX-TYPE-ASYNC",
         "EF10-PERSIST-ADD-ASYNC",
         "EF10-PERSIST-CONTEXT-ADD-ASYNC",
+        "EF10-PERSIST-CONTEXT-ADD-SYNC",
         "EF10-PERSIST-INSERT-ASYNC",
         "EF10-PERSIST-UPDATE-ASYNC",
         "EF10-PERSIST-UPDATE-RANGE",
