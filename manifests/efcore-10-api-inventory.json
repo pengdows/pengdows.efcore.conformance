@@ -48295,7 +48295,8 @@
       "Signature": "System.Threading.Tasks.Task\u003CSystem.Int32\u003E ExecuteDeleteAsync\u003CTSource\u003E(System.Linq.IQueryable\u003CTSource\u003E source, System.Threading.CancellationToken cancellationToken = null)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
-        "EF10-BULK-DELETE-ASYNC"
+        "EF10-BULK-DELETE-ASYNC",
+        "EF10-BULK-DELETE-NO-MATCH-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteDeleteAsync"
@@ -48321,7 +48322,9 @@
       "Signature": "System.Threading.Tasks.Task\u003CSystem.Int32\u003E ExecuteUpdateAsync\u003CTSource\u003E(System.Linq.IQueryable\u003CTSource\u003E source, System.Action\u003CMicrosoft.EntityFrameworkCore.Query.UpdateSettersBuilder\u003CTSource\u003E\u003E setPropertyCalls, System.Threading.CancellationToken cancellationToken = null)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
-        "EF10-BULK-UPDATE-ASYNC"
+        "EF10-BULK-UPDATE-ASYNC",
+        "EF10-BULK-UPDATE-MULTIPLE-PROPERTIES-ASYNC",
+        "EF10-BULK-UPDATE-NO-MATCH-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteUpdateAsync"

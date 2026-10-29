@@ -47,6 +47,46 @@ public sealed class BulkOperationTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-BULK-UPDATE-MULTIPLE-PROPERTIES-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteUpdateAsync")]
+    public async Task ExecuteUpdateAsync_ChangesMultipleProperties()
+    {
+        var id = await SeedAsync();
+
+        await using (var update = ProviderTestRuntime.CreateContext())
+        {
+            var affected = await update.People.Where(person => person.Id == id)
+                .ExecuteUpdateAsync(
+                    setters => setters
+                        .SetProperty(person => person.Name, person => person.Name + " updated")
+                        .SetProperty(person => person.Age, person => person.Age + 2),
+                    TestContext.Current.CancellationToken);
+            Assert.Equal(1, affected);
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        var actual = await verify.People.AsNoTracking()
+            .SingleAsync(person => person.Id == id, TestContext.Current.CancellationToken);
+        Assert.Equal($"Bulk {id:N} updated", actual.Name);
+        Assert.Equal(42, actual.Age);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-BULK-UPDATE-NO-MATCH-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteUpdateAsync")]
+    public async Task ExecuteUpdateAsync_ReturnsZeroWhenNoRowsMatch()
+    {
+        var missingId = Guid.NewGuid();
+        await using var context = ProviderTestRuntime.CreateContext();
+
+        var affected = await context.People
+            .Where(person => person.Id == missingId)
+            .ExecuteUpdateAsync(
+                setters => setters.SetProperty(person => person.Age, 50),
+                TestContext.Current.CancellationToken);
+
+        Assert.Equal(0, affected);
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-BULK-DELETE-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteDeleteAsync")]
     public async Task ExecuteDeleteAsync_RemovesMatchingRows()
     {
@@ -71,6 +111,20 @@ public sealed class BulkOperationTests
 
         await using var verify = ProviderTestRuntime.CreateContext();
         Assert.False(verify.People.Any(person => person.Id == id));
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-BULK-DELETE-NO-MATCH-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteDeleteAsync")]
+    public async Task ExecuteDeleteAsync_ReturnsZeroWhenNoRowsMatch()
+    {
+        var missingId = Guid.NewGuid();
+        await using var context = ProviderTestRuntime.CreateContext();
+
+        var affected = await context.People
+            .Where(person => person.Id == missingId)
+            .ExecuteDeleteAsync(TestContext.Current.CancellationToken);
+
+        Assert.Equal(0, affected);
     }
 
     private static async Task<Guid> SeedAsync()
