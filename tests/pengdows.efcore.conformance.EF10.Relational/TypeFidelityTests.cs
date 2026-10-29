@@ -70,6 +70,71 @@ public sealed class TypeFidelityTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-TYPES-BOUNDARIES-ASYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    [NativeTypeCoverage("DATE", typeof(DateOnly), "EF10-TYPES-BOUNDARIES-ASYNC")]
+    [NativeTypeCoverage("TIME", typeof(TimeOnly), "EF10-TYPES-BOUNDARIES-ASYNC")]
+    [NativeTypeCoverage("BOOLEAN", typeof(bool), "EF10-TYPES-BOUNDARIES-ASYNC")]
+    [NativeTypeCoverage("BLOB", typeof(byte[]), "EF10-TYPES-BOUNDARIES-ASYNC")]
+    [NativeTypeCoverage("TEXT", typeof(TestMood), "EF10-TYPES-BOUNDARIES-ASYNC")]
+    public async Task CommonClrBoundaryValues_RoundTripThroughFreshContextAsynchronously()
+    {
+        var expected = new ScalarRecord
+        {
+            Id = Guid.NewGuid(),
+            Amount = 1m,
+            Day = DateOnly.MaxValue,
+            Start = TimeOnly.MaxValue,
+            Enabled = false,
+            Payload = [],
+            Mood = TestMood.Calm
+        };
+
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.ScalarRecords.Add(expected);
+            Assert.Equal(1, await write.SaveChangesAsync(TestContext.Current.CancellationToken));
+        }
+
+        await using var read = ProviderTestRuntime.CreateContext();
+        var actual = await read.ScalarRecords.AsNoTracking()
+            .SingleAsync(record => record.Id == expected.Id, TestContext.Current.CancellationToken);
+        AssertValue(expected, actual);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-TYPES-BOUNDARIES-SYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "System.Linq.Queryable.Single")]
+    [NativeTypeCoverage("DATE", typeof(DateOnly), "EF10-TYPES-BOUNDARIES-SYNC")]
+    [NativeTypeCoverage("TIME", typeof(TimeOnly), "EF10-TYPES-BOUNDARIES-SYNC")]
+    [NativeTypeCoverage("BOOLEAN", typeof(bool), "EF10-TYPES-BOUNDARIES-SYNC")]
+    [NativeTypeCoverage("BLOB", typeof(byte[]), "EF10-TYPES-BOUNDARIES-SYNC")]
+    [NativeTypeCoverage("TEXT", typeof(TestMood), "EF10-TYPES-BOUNDARIES-SYNC")]
+    public async Task CommonClrBoundaryValues_RoundTripThroughFreshContextSynchronously()
+    {
+        var expected = new ScalarRecord
+        {
+            Id = Guid.NewGuid(),
+            Amount = -1m,
+            Day = DateOnly.MinValue,
+            Start = TimeOnly.MinValue,
+            Enabled = false,
+            Payload = [],
+            Mood = TestMood.Calm
+        };
+
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.ScalarRecords.Add(expected);
+            Assert.Equal(1, write.SaveChanges());
+        }
+
+        await using var read = ProviderTestRuntime.CreateContext();
+        var actual = read.ScalarRecords.AsNoTracking().Single(record => record.Id == expected.Id);
+        AssertValue(expected, actual);
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-TYPES-ADDITIONAL-SCALARS-ASYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
     [NativeTypeCoverage("INTEGER", typeof(byte), "EF10-TYPES-ADDITIONAL-SCALARS-ASYNC")]
     [NativeTypeCoverage("INTEGER", typeof(short), "EF10-TYPES-ADDITIONAL-SCALARS-ASYNC")]
