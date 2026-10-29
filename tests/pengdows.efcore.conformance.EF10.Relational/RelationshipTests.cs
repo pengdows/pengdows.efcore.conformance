@@ -92,7 +92,7 @@ public sealed class RelationshipTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-RELATIONSHIPS-SPLIT-QUERY-ASYNC", "Microsoft.EntityFrameworkCore.RelationalQueryableExtensions.AsSplitQuery", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.Include", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ThenInclude", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    [BehavioralCoverage("EF10-RELATIONSHIPS-SPLIT-QUERY-ASYNC", "Microsoft.EntityFrameworkCore.RelationalQueryableExtensions.AsSplitQuery", "Microsoft.EntityFrameworkCore.QuerySplittingBehavior", "Microsoft.EntityFrameworkCore.QuerySplittingBehavior.SplitQuery", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.Include", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ThenInclude", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
     public async Task AsSplitQuery_MaterializesCompleteNavigationGraphAsynchronously()
     {
         var blog = await CreateBlogAsync();
@@ -109,7 +109,7 @@ public sealed class RelationshipTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-RELATIONSHIPS-SINGLE-QUERY-SYNC", "Microsoft.EntityFrameworkCore.RelationalQueryableExtensions.AsSingleQuery", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.Include", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ThenInclude", "System.Linq.Queryable.Single")]
+    [BehavioralCoverage("EF10-RELATIONSHIPS-SINGLE-QUERY-SYNC", "Microsoft.EntityFrameworkCore.RelationalQueryableExtensions.AsSingleQuery", "Microsoft.EntityFrameworkCore.QuerySplittingBehavior", "Microsoft.EntityFrameworkCore.QuerySplittingBehavior.SingleQuery", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.Include", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ThenInclude", "System.Linq.Queryable.Single")]
     public async Task AsSingleQuery_MaterializesCompleteNavigationGraphSynchronously()
     {
         var blog = await CreateBlogAsync();

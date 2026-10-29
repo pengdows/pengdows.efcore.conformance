@@ -92,7 +92,7 @@ public sealed class StateManagementTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-TRACKING-NO-TRACKING", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.AsNoTracking", "Microsoft.EntityFrameworkCore.DbContext.Entry")]
+    [BehavioralCoverage("EF10-TRACKING-NO-TRACKING", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.AsNoTracking", "Microsoft.EntityFrameworkCore.DbContext.Entry", "Microsoft.EntityFrameworkCore.EntityState", "Microsoft.EntityFrameworkCore.EntityState.Detached")]
     public async Task AsNoTracking_MaterializesDetachedEntity()
     {
         var id = Guid.NewGuid();
@@ -135,7 +135,7 @@ public sealed class StateManagementTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-TRACKING-CONTEXT-BEHAVIOR-ASYNC", "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.QueryTrackingBehavior", "Microsoft.EntityFrameworkCore.DbContext.Entry")]
+    [BehavioralCoverage("EF10-TRACKING-CONTEXT-BEHAVIOR-ASYNC", "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.QueryTrackingBehavior", "Microsoft.EntityFrameworkCore.QueryTrackingBehavior", "Microsoft.EntityFrameworkCore.QueryTrackingBehavior.NoTracking", "Microsoft.EntityFrameworkCore.QueryTrackingBehavior.TrackAll", "Microsoft.EntityFrameworkCore.DbContext.Entry")]
     public async Task ChangeTrackerQueryTrackingBehavior_ControlsAsyncMaterialization()
     {
         var id = Guid.NewGuid();
@@ -153,7 +153,7 @@ public sealed class StateManagementTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-TRACKING-CONTEXT-BEHAVIOR-SYNC", "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.QueryTrackingBehavior", "Microsoft.EntityFrameworkCore.DbContext.Entry")]
+    [BehavioralCoverage("EF10-TRACKING-CONTEXT-BEHAVIOR-SYNC", "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.QueryTrackingBehavior", "Microsoft.EntityFrameworkCore.QueryTrackingBehavior", "Microsoft.EntityFrameworkCore.QueryTrackingBehavior.NoTracking", "Microsoft.EntityFrameworkCore.QueryTrackingBehavior.TrackAll", "Microsoft.EntityFrameworkCore.DbContext.Entry")]
     public async Task ChangeTrackerQueryTrackingBehavior_ControlsSynchronousMaterialization()
     {
         var id = Guid.NewGuid();
@@ -171,7 +171,7 @@ public sealed class StateManagementTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-TRACKING-NO-TRACKING-IDENTITY-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.AsNoTrackingWithIdentityResolution", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync", "System.Linq.Queryable.Join")]
+    [BehavioralCoverage("EF10-TRACKING-NO-TRACKING-IDENTITY-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.AsNoTrackingWithIdentityResolution", "Microsoft.EntityFrameworkCore.QueryTrackingBehavior", "Microsoft.EntityFrameworkCore.QueryTrackingBehavior.NoTrackingWithIdentityResolution", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync", "System.Linq.Queryable.Join")]
     public async Task AsNoTrackingWithIdentityResolution_ReusesRepeatedEntityInstancesAsynchronously()
     {
         var postId = await SeedPostWithTwoCommentsAsync();
@@ -190,7 +190,7 @@ public sealed class StateManagementTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-TRACKING-NO-TRACKING-IDENTITY-SYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.AsNoTrackingWithIdentityResolution", "System.Linq.Queryable.ToList", "System.Linq.Queryable.Join")]
+    [BehavioralCoverage("EF10-TRACKING-NO-TRACKING-IDENTITY-SYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.AsNoTrackingWithIdentityResolution", "Microsoft.EntityFrameworkCore.QueryTrackingBehavior", "Microsoft.EntityFrameworkCore.QueryTrackingBehavior.NoTrackingWithIdentityResolution", "System.Linq.Queryable.ToList", "System.Linq.Queryable.Join")]
     public async Task AsNoTrackingWithIdentityResolution_ReusesRepeatedEntityInstancesSynchronously()
     {
         var postId = await SeedPostWithTwoCommentsAsync();

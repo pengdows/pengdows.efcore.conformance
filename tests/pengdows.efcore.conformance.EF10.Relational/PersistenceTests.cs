@@ -8,7 +8,7 @@ namespace pengdows.efcore.conformance.EF10.Relational;
 public sealed class PersistenceTests
 {
     [Fact]
-    [BehavioralCoverage("EF10-PERSIST-ADD-ASYNC", "Microsoft.EntityFrameworkCore.DbSet`1.AddAsync", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    [BehavioralCoverage("EF10-PERSIST-ADD-ASYNC", "Microsoft.EntityFrameworkCore.DbSet`1.AddAsync", "Microsoft.EntityFrameworkCore.EntityState", "Microsoft.EntityFrameworkCore.EntityState.Added", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
     public async Task AddAsync_TracksAndPersistsEntity()
     {
         var id = Guid.NewGuid();
@@ -98,7 +98,7 @@ public sealed class PersistenceTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-PERSIST-CONTEXT-UPDATE", "Microsoft.EntityFrameworkCore.DbContext.Update", "Microsoft.EntityFrameworkCore.DbContext.Entry", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges")]
+    [BehavioralCoverage("EF10-PERSIST-CONTEXT-UPDATE", "Microsoft.EntityFrameworkCore.DbContext.Update", "Microsoft.EntityFrameworkCore.DbContext.Entry", "Microsoft.EntityFrameworkCore.EntityState", "Microsoft.EntityFrameworkCore.EntityState.Modified", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges")]
     public async Task DbContextUpdate_TracksDetachedEntityAndPersistsChanges()
     {
         var id = Guid.NewGuid();
@@ -120,7 +120,7 @@ public sealed class PersistenceTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-PERSIST-CONTEXT-REMOVE", "Microsoft.EntityFrameworkCore.DbContext.Remove", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.AnyAsync")]
+    [BehavioralCoverage("EF10-PERSIST-CONTEXT-REMOVE", "Microsoft.EntityFrameworkCore.DbContext.Remove", "Microsoft.EntityFrameworkCore.EntityState", "Microsoft.EntityFrameworkCore.EntityState.Deleted", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.AnyAsync")]
     public async Task DbContextRemove_DeletesEntity()
     {
         var id = Guid.NewGuid();

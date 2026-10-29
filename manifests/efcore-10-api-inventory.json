@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 236,
+    "AwaitingClassification": 224,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 568,
-    "UncoveredMemberFamilies": 157
+    "MemberEntriesInCoveredFamilies": 580,
+    "UncoveredMemberFamilies": 148
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -53473,10 +53473,15 @@
       "MemberKind": "Type",
       "ApiMemberName": null,
       "Signature": "enum Microsoft.EntityFrameworkCore.EntityState",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-PERSIST-ADD-ASYNC",
+        "EF10-PERSIST-CONTEXT-REMOVE",
+        "EF10-PERSIST-CONTEXT-UPDATE",
+        "EF10-TRACKING-NO-TRACKING"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityState"
     },
     {
@@ -53497,10 +53502,12 @@
       "MemberKind": "Field",
       "ApiMemberName": "Detached",
       "Signature": "Microsoft.EntityFrameworkCore.EntityState Detached = 0",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-NO-TRACKING"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityState.Detached"
     },
     {
@@ -53521,10 +53528,12 @@
       "MemberKind": "Field",
       "ApiMemberName": "Deleted",
       "Signature": "Microsoft.EntityFrameworkCore.EntityState Deleted = 2",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-PERSIST-CONTEXT-REMOVE"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityState.Deleted"
     },
     {
@@ -53533,10 +53542,12 @@
       "MemberKind": "Field",
       "ApiMemberName": "Modified",
       "Signature": "Microsoft.EntityFrameworkCore.EntityState Modified = 3",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-PERSIST-CONTEXT-UPDATE"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityState.Modified"
     },
     {
@@ -53545,10 +53556,12 @@
       "MemberKind": "Field",
       "ApiMemberName": "Added",
       "Signature": "Microsoft.EntityFrameworkCore.EntityState Added = 4",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-PERSIST-ADD-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityState.Added"
     },
     {
@@ -181948,10 +181961,13 @@
       "MemberKind": "Type",
       "ApiMemberName": null,
       "Signature": "enum Microsoft.EntityFrameworkCore.QuerySplittingBehavior",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-RELATIONSHIPS-SINGLE-QUERY-SYNC",
+        "EF10-RELATIONSHIPS-SPLIT-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.QuerySplittingBehavior"
     },
     {
@@ -181972,10 +181988,12 @@
       "MemberKind": "Field",
       "ApiMemberName": "SingleQuery",
       "Signature": "Microsoft.EntityFrameworkCore.QuerySplittingBehavior SingleQuery = 0",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-RELATIONSHIPS-SINGLE-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.QuerySplittingBehavior.SingleQuery"
     },
     {
@@ -181984,10 +182002,12 @@
       "MemberKind": "Field",
       "ApiMemberName": "SplitQuery",
       "Signature": "Microsoft.EntityFrameworkCore.QuerySplittingBehavior SplitQuery = 1",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-RELATIONSHIPS-SPLIT-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.QuerySplittingBehavior.SplitQuery"
     },
     {
@@ -181996,10 +182016,15 @@
       "MemberKind": "Type",
       "ApiMemberName": null,
       "Signature": "enum Microsoft.EntityFrameworkCore.QueryTrackingBehavior",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-CONTEXT-BEHAVIOR-ASYNC",
+        "EF10-TRACKING-CONTEXT-BEHAVIOR-SYNC",
+        "EF10-TRACKING-NO-TRACKING-IDENTITY-ASYNC",
+        "EF10-TRACKING-NO-TRACKING-IDENTITY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.QueryTrackingBehavior"
     },
     {
@@ -182020,10 +182045,13 @@
       "MemberKind": "Field",
       "ApiMemberName": "TrackAll",
       "Signature": "Microsoft.EntityFrameworkCore.QueryTrackingBehavior TrackAll = 0",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-CONTEXT-BEHAVIOR-ASYNC",
+        "EF10-TRACKING-CONTEXT-BEHAVIOR-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.QueryTrackingBehavior.TrackAll"
     },
     {
@@ -182032,10 +182060,13 @@
       "MemberKind": "Field",
       "ApiMemberName": "NoTracking",
       "Signature": "Microsoft.EntityFrameworkCore.QueryTrackingBehavior NoTracking = 1",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-CONTEXT-BEHAVIOR-ASYNC",
+        "EF10-TRACKING-CONTEXT-BEHAVIOR-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.QueryTrackingBehavior.NoTracking"
     },
     {
@@ -182044,10 +182075,13 @@
       "MemberKind": "Field",
       "ApiMemberName": "NoTrackingWithIdentityResolution",
       "Signature": "Microsoft.EntityFrameworkCore.QueryTrackingBehavior NoTrackingWithIdentityResolution = 2",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-NO-TRACKING-IDENTITY-ASYNC",
+        "EF10-TRACKING-NO-TRACKING-IDENTITY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.QueryTrackingBehavior.NoTrackingWithIdentityResolution"
     },
     {
