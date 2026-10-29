@@ -583,6 +583,48 @@ public sealed class QueryTests
         Assert.Equal(expected, parameterNames.Order(StringComparer.Ordinal));
     }
 
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-LIKE-ASYNC", "Microsoft.EntityFrameworkCore.RelationalDbFunctionsExtensions.Like", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync")]
+    public async Task Like_EscapesPatternWildcardsWhenRequestedAsynchronously()
+    {
+        var batch = Guid.NewGuid().ToString("N");
+        var matchingName = $"{batch}_literal";
+        await SeedAsync(new[]
+        {
+            new Person { Id = Guid.NewGuid(), Name = matchingName, Age = 30 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}Xliteral", Age = 31 }
+        });
+
+        await using var query = ProviderTestRuntime.CreateContext();
+        var names = await query.People
+            .Where(person => EF.Functions.Like(person.Name, $"{batch}!_%", "!"))
+            .Select(person => person.Name)
+            .ToListAsync(TestContext.Current.CancellationToken);
+
+        Assert.Equal(new[] { matchingName }, names);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-LIKE-SYNC", "Microsoft.EntityFrameworkCore.RelationalDbFunctionsExtensions.Like", "System.Linq.Queryable.ToList")]
+    public async Task Like_EscapesPatternWildcardsWhenRequestedSynchronously()
+    {
+        var batch = Guid.NewGuid().ToString("N");
+        var matchingName = $"{batch}_literal";
+        await SeedAsync(new[]
+        {
+            new Person { Id = Guid.NewGuid(), Name = matchingName, Age = 30 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}Xliteral", Age = 31 }
+        });
+
+        await using var query = ProviderTestRuntime.CreateContext();
+        var names = query.People
+            .Where(person => EF.Functions.Like(person.Name, $"{batch}!_%", "!"))
+            .Select(person => person.Name)
+            .ToList();
+
+        Assert.Equal(new[] { matchingName }, names);
+    }
+
     private static async Task SeedAsync(IEnumerable<Person> people)
     {
         await using var context = ProviderTestRuntime.CreateContext();
