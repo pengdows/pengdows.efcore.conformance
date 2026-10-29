@@ -81,6 +81,7 @@ public sealed class Ef10MigrationOperationsMigration : Migration
                     principalColumn: "id",
                     onDelete: ReferentialAction.Restrict);
                 table.UniqueConstraint("AK_ef10conformance_migrationchild_code", row => row.code);
+                table.CheckConstraint("CK_ef10conformance_migrationchild_code_nonempty", "code <> ''");
             });
         migrationBuilder.CreateIndex(
             name: "IX_ef10conformance_migrationchild_probeid",

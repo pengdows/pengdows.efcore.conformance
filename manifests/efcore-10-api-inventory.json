@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 206,
+    "AwaitingClassification": 204,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 605,
-    "UncoveredMemberFamilies": 132
+    "MemberEntriesInCoveredFamilies": 613,
+    "UncoveredMemberFamilies": 131
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -153951,10 +153951,13 @@
       "MemberKind": "Type",
       "ApiMemberName": null,
       "Signature": "class Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.CreateTableBuilder\u003CTColumns\u003E",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "Migration operation objects are inputs to EF Core\u0027s provider migration services, not app-facing operations. Observable support is evaluated through applying migrations.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-APPLY-ASYNC",
+        "EF10-MIGRATIONS-APPLY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.CreateTableBuilder\u00601"
     },
     {
@@ -153963,10 +153966,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "ForeignKey",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.OperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.AddForeignKeyOperation\u003E ForeignKey(System.String name, System.Linq.Expressions.Expression\u003CSystem.Func\u003CTColumns, System.Object\u003E\u003E column, System.String principalTable, System.String principalColumn = null, System.String principalSchema = null, Microsoft.EntityFrameworkCore.Migrations.ReferentialAction onUpdate = NoAction, Microsoft.EntityFrameworkCore.Migrations.ReferentialAction onDelete = NoAction)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "Migration operation objects are inputs to EF Core\u0027s provider migration services, not app-facing operations. Observable support is evaluated through applying migrations.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-APPLY-ASYNC",
+        "EF10-MIGRATIONS-APPLY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.CreateTableBuilder\u00601.ForeignKey"
     },
     {
@@ -153975,10 +153981,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "ForeignKey",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.OperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.AddForeignKeyOperation\u003E ForeignKey(System.String name, System.Linq.Expressions.Expression\u003CSystem.Func\u003CTColumns, System.Object\u003E\u003E columns, System.String principalTable, System.String[] principalColumns, System.String principalSchema = null, Microsoft.EntityFrameworkCore.Migrations.ReferentialAction onUpdate = NoAction, Microsoft.EntityFrameworkCore.Migrations.ReferentialAction onDelete = NoAction)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "Migration operation objects are inputs to EF Core\u0027s provider migration services, not app-facing operations. Observable support is evaluated through applying migrations.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-APPLY-ASYNC",
+        "EF10-MIGRATIONS-APPLY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.CreateTableBuilder\u00601.ForeignKey"
     },
     {
@@ -153987,10 +153996,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "PrimaryKey",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.OperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.AddPrimaryKeyOperation\u003E PrimaryKey(System.String name, System.Linq.Expressions.Expression\u003CSystem.Func\u003CTColumns, System.Object\u003E\u003E columns)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "Migration operation objects are inputs to EF Core\u0027s provider migration services, not app-facing operations. Observable support is evaluated through applying migrations.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-APPLY-ASYNC",
+        "EF10-MIGRATIONS-APPLY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.CreateTableBuilder\u00601.PrimaryKey"
     },
     {
@@ -153999,10 +154011,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "UniqueConstraint",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.OperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.AddUniqueConstraintOperation\u003E UniqueConstraint(System.String name, System.Linq.Expressions.Expression\u003CSystem.Func\u003CTColumns, System.Object\u003E\u003E columns)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "Migration operation objects are inputs to EF Core\u0027s provider migration services, not app-facing operations. Observable support is evaluated through applying migrations.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-APPLY-ASYNC",
+        "EF10-MIGRATIONS-APPLY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.CreateTableBuilder\u00601.UniqueConstraint"
     },
     {
@@ -154011,10 +154026,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "CheckConstraint",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.OperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.AddCheckConstraintOperation\u003E CheckConstraint(System.String name, System.String sql)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "Migration operation objects are inputs to EF Core\u0027s provider migration services, not app-facing operations. Observable support is evaluated through applying migrations.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-APPLY-ASYNC",
+        "EF10-MIGRATIONS-APPLY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.CreateTableBuilder\u00601.CheckConstraint"
     },
     {
@@ -156051,10 +156069,13 @@
       "MemberKind": "Type",
       "ApiMemberName": null,
       "Signature": "enum Microsoft.EntityFrameworkCore.Migrations.ReferentialAction",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-APPLY-ASYNC",
+        "EF10-MIGRATIONS-APPLY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.ReferentialAction"
     },
     {
@@ -156087,10 +156108,13 @@
       "MemberKind": "Field",
       "ApiMemberName": "Restrict",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.ReferentialAction Restrict = 1",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-APPLY-ASYNC",
+        "EF10-MIGRATIONS-APPLY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.ReferentialAction.Restrict"
     },
     {
