@@ -24,6 +24,40 @@ public sealed class RawSqlTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-RAW-SQL-FROM-SQL-ASYNC", "Microsoft.EntityFrameworkCore.RelationalQueryableExtensions.FromSql", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    public async Task FromSql_ReturnsParameterizedResultAsynchronously()
+    {
+        var id = Guid.NewGuid();
+        const string value = "FromSql async parameter";
+        await SeedAsync(id, value);
+
+        await using var context = ProviderTestRuntime.CreateContext();
+        var actual = await context.People
+            .FromSql($"SELECT * FROM ef10conformancepeople WHERE id = {id}")
+            .SingleAsync(TestContext.Current.CancellationToken);
+
+        Assert.Equal(id, actual.Id);
+        Assert.Equal(value, actual.Name);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-RAW-SQL-FROM-SQL-SYNC", "Microsoft.EntityFrameworkCore.RelationalQueryableExtensions.FromSql", "System.Linq.Queryable.Single")]
+    public async Task FromSql_ReturnsParameterizedResultSynchronously()
+    {
+        var id = Guid.NewGuid();
+        const string value = "FromSql sync parameter";
+        await SeedAsync(id, value);
+
+        await using var context = ProviderTestRuntime.CreateContext();
+        var actual = context.People
+            .FromSql($"SELECT * FROM ef10conformancepeople WHERE id = {id}")
+            .Single();
+
+        Assert.Equal(id, actual.Id);
+        Assert.Equal(value, actual.Name);
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-RAW-SQL-FROM-SYNC", "Microsoft.EntityFrameworkCore.RelationalQueryableExtensions.FromSqlInterpolated", "System.Linq.Queryable.Single")]
     public async Task FromSqlInterpolated_ReturnsResultSynchronously()
     {

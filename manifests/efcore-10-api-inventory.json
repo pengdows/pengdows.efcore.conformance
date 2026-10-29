@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12368,
+    "AwaitingClassification": 12367,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 197,
-    "UncoveredMemberFamilies": 9033
+    "MemberEntriesInCoveredFamilies": 198,
+    "UncoveredMemberFamilies": 9032
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -47345,6 +47345,7 @@
         "EF10-QUERY-SINGLE-MULTIPLE-ASYNC",
         "EF10-RAW-SQL-FROM-ASYNC",
         "EF10-RAW-SQL-FROM-RAW-ASYNC",
+        "EF10-RAW-SQL-FROM-SQL-ASYNC",
         "EF10-RELATIONSHIPS-FOREIGN-KEY",
         "EF10-RELATIONSHIPS-INCLUDE-ASYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC"
@@ -47368,6 +47369,7 @@
         "EF10-QUERY-SINGLE-MULTIPLE-ASYNC",
         "EF10-RAW-SQL-FROM-ASYNC",
         "EF10-RAW-SQL-FROM-RAW-ASYNC",
+        "EF10-RAW-SQL-FROM-SQL-ASYNC",
         "EF10-RELATIONSHIPS-FOREIGN-KEY",
         "EF10-RELATIONSHIPS-INCLUDE-ASYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC"
@@ -174583,9 +174585,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "FromSql",
       "Signature": "System.Linq.IQueryable\u003CTEntity\u003E FromSql\u003CTEntity\u003E(Microsoft.EntityFrameworkCore.DbSet\u003CTEntity\u003E source, System.FormattableString sql) where TEntity : class",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-RAW-SQL-FROM-SQL-ASYNC",
+        "EF10-RAW-SQL-FROM-SQL-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalQueryableExtensions.FromSql"
     },
     {
