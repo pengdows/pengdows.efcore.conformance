@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12245,
+    "AwaitingClassification": 12241,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 320,
-    "UncoveredMemberFamilies": 8946
+    "MemberEntriesInCoveredFamilies": 324,
+    "UncoveredMemberFamilies": 8943
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -359,9 +359,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "TrackGraph",
       "Signature": "System.Void TrackGraph(System.Object rootEntity, System.Action\u003CMicrosoft.EntityFrameworkCore.ChangeTracking.EntityEntryGraphNode\u003E callback)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-TRACK-GRAPH"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.TrackGraph"
     },
     {
@@ -370,9 +372,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "TrackGraph",
       "Signature": "System.Void TrackGraph\u003CTState\u003E(System.Object rootEntity, TState state, System.Func\u003CMicrosoft.EntityFrameworkCore.ChangeTracking.EntityEntryGraphNode\u003CTState\u003E, System.Boolean\u003E callback)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-TRACK-GRAPH"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.TrackGraph"
     },
     {
@@ -381,9 +385,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CascadeChanges",
       "Signature": "System.Void CascadeChanges()",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-CASCADE-CHANGES"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.CascadeChanges"
     },
     {
@@ -451,6 +457,8 @@
       "Signature": "System.Boolean AutoDetectChangesEnabled get; set;",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-TRACKING-AUTO-DETECT-SAVE-ASYNC",
+        "EF10-TRACKING-AUTO-DETECT-SAVE-SYNC",
         "EF10-TRACKING-DETECT-CHANGES-ASYNC",
         "EF10-TRACKING-DETECT-CHANGES-SYNC"
       ],
@@ -496,9 +504,11 @@
       "MemberKind": "Property",
       "ApiMemberName": "CascadeDeleteTiming",
       "Signature": "Microsoft.EntityFrameworkCore.ChangeTracking.CascadeTiming CascadeDeleteTiming get; set;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-CASCADE-CHANGES"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.CascadeDeleteTiming"
     },
     {
@@ -14685,6 +14695,7 @@
         "EF10-PRIMITIVE-COLLECTION-SYNC",
         "EF10-SAVE-EVENTS-FAILURE-SYNC",
         "EF10-SAVE-EVENTS-SUCCESS-SYNC",
+        "EF10-TRACKING-AUTO-DETECT-SAVE-SYNC",
         "EF10-TRACKING-CLEAR",
         "EF10-TRACKING-DETECT-CHANGES-SYNC",
         "EF10-TRACKING-ENTRY-DETECT-CHANGES",
@@ -14733,6 +14744,7 @@
         "EF10-PRIMITIVE-COLLECTION-SYNC",
         "EF10-SAVE-EVENTS-FAILURE-SYNC",
         "EF10-SAVE-EVENTS-SUCCESS-SYNC",
+        "EF10-TRACKING-AUTO-DETECT-SAVE-SYNC",
         "EF10-TRACKING-CLEAR",
         "EF10-TRACKING-DETECT-CHANGES-SYNC",
         "EF10-TRACKING-ENTRY-DETECT-CHANGES",
@@ -14785,8 +14797,11 @@
         "EF10-SAVE-EVENTS-FAILURE-ASYNC",
         "EF10-SAVE-EVENTS-SUCCESS-ASYNC",
         "EF10-TRACKING-ATTACH",
+        "EF10-TRACKING-AUTO-DETECT-SAVE-ASYNC",
+        "EF10-TRACKING-CASCADE-CHANGES",
         "EF10-TRACKING-DETECT-CHANGES-ASYNC",
         "EF10-TRACKING-PROPERTY-ENTRY-ASYNC",
+        "EF10-TRACKING-TRACK-GRAPH",
         "EF10-TRACKING-UPDATE-DETACHED-ASYNC",
         "EF10-TRANSACTION-COMMIT-ASYNC",
         "EF10-TRANSACTION-EXTERNAL-ASYNC",
@@ -14833,8 +14848,11 @@
         "EF10-SAVE-EVENTS-FAILURE-ASYNC",
         "EF10-SAVE-EVENTS-SUCCESS-ASYNC",
         "EF10-TRACKING-ATTACH",
+        "EF10-TRACKING-AUTO-DETECT-SAVE-ASYNC",
+        "EF10-TRACKING-CASCADE-CHANGES",
         "EF10-TRACKING-DETECT-CHANGES-ASYNC",
         "EF10-TRACKING-PROPERTY-ENTRY-ASYNC",
+        "EF10-TRACKING-TRACK-GRAPH",
         "EF10-TRACKING-UPDATE-DETACHED-ASYNC",
         "EF10-TRANSACTION-COMMIT-ASYNC",
         "EF10-TRANSACTION-EXTERNAL-ASYNC",
@@ -48311,7 +48329,8 @@
         "EF10-RELATIONSHIPS-INCLUDE-ASYNC",
         "EF10-RELATIONSHIPS-INCLUDE-SYNC",
         "EF10-RELATIONSHIPS-SINGLE-QUERY-SYNC",
-        "EF10-RELATIONSHIPS-SPLIT-QUERY-ASYNC"
+        "EF10-RELATIONSHIPS-SPLIT-QUERY-ASYNC",
+        "EF10-TRACKING-TRACK-GRAPH"
       ],
       "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.Include"
@@ -48327,7 +48346,8 @@
         "EF10-RELATIONSHIPS-INCLUDE-ASYNC",
         "EF10-RELATIONSHIPS-INCLUDE-SYNC",
         "EF10-RELATIONSHIPS-SINGLE-QUERY-SYNC",
-        "EF10-RELATIONSHIPS-SPLIT-QUERY-ASYNC"
+        "EF10-RELATIONSHIPS-SPLIT-QUERY-ASYNC",
+        "EF10-TRACKING-TRACK-GRAPH"
       ],
       "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ThenInclude"
@@ -48343,7 +48363,8 @@
         "EF10-RELATIONSHIPS-INCLUDE-ASYNC",
         "EF10-RELATIONSHIPS-INCLUDE-SYNC",
         "EF10-RELATIONSHIPS-SINGLE-QUERY-SYNC",
-        "EF10-RELATIONSHIPS-SPLIT-QUERY-ASYNC"
+        "EF10-RELATIONSHIPS-SPLIT-QUERY-ASYNC",
+        "EF10-TRACKING-TRACK-GRAPH"
       ],
       "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ThenInclude"
@@ -48359,7 +48380,8 @@
         "EF10-RELATIONSHIPS-INCLUDE-ASYNC",
         "EF10-RELATIONSHIPS-INCLUDE-SYNC",
         "EF10-RELATIONSHIPS-SINGLE-QUERY-SYNC",
-        "EF10-RELATIONSHIPS-SPLIT-QUERY-ASYNC"
+        "EF10-RELATIONSHIPS-SPLIT-QUERY-ASYNC",
+        "EF10-TRACKING-TRACK-GRAPH"
       ],
       "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.Include"

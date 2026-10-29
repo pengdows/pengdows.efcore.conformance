@@ -357,6 +357,56 @@ public sealed class StateManagementTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-TRACKING-AUTO-DETECT-SAVE-ASYNC", "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.AutoDetectChangesEnabled", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync")]
+    public async Task SaveChangesAsync_DoesNotPersistUnmarkedChangesWhenAutomaticDetectionIsDisabled()
+    {
+        var id = Guid.NewGuid();
+        await SeedAsync(id);
+
+        await using (var update = ProviderTestRuntime.CreateContext())
+        {
+            var person = await update.People.SingleAsync(item => item.Id == id, TestContext.Current.CancellationToken);
+            update.ChangeTracker.AutoDetectChangesEnabled = false;
+            person.Name = "Not detected asynchronously";
+
+            Assert.Equal(EntityState.Unchanged, update.Entry(person).State);
+            Assert.Equal(0, await update.SaveChangesAsync(TestContext.Current.CancellationToken));
+            Assert.Equal(EntityState.Unchanged, update.Entry(person).State);
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.Equal($"Tracked {id:N}", await verify.People.AsNoTracking()
+            .Where(item => item.Id == id)
+            .Select(item => item.Name)
+            .SingleAsync(TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-TRACKING-AUTO-DETECT-SAVE-SYNC", "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.AutoDetectChangesEnabled", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges")]
+    public async Task SaveChanges_DoesNotPersistUnmarkedChangesWhenAutomaticDetectionIsDisabled()
+    {
+        var id = Guid.NewGuid();
+        await SeedAsync(id);
+
+        await using (var update = ProviderTestRuntime.CreateContext())
+        {
+            var person = update.People.Single(item => item.Id == id);
+            update.ChangeTracker.AutoDetectChangesEnabled = false;
+            person.Name = "Not detected synchronously";
+
+            Assert.Equal(EntityState.Unchanged, update.Entry(person).State);
+            Assert.Equal(0, update.SaveChanges());
+            Assert.Equal(EntityState.Unchanged, update.Entry(person).State);
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.Equal($"Tracked {id:N}", verify.People.AsNoTracking()
+            .Where(item => item.Id == id)
+            .Select(item => item.Name)
+            .Single());
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-TRACKING-ENTRY-DETECT-CHANGES", "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry.DetectChanges", "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry.State", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges")]
     public async Task EntityEntryDetectChanges_FindsAndPersistsChangedProperty()
     {
