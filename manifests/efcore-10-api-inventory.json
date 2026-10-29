@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12324,
+    "AwaitingClassification": 12320,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 241,
-    "UncoveredMemberFamilies": 9001
+    "MemberEntriesInCoveredFamilies": 245,
+    "UncoveredMemberFamilies": 8998
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [
@@ -1941,9 +1941,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "GetDatabaseValues",
       "Signature": "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyValues GetDatabaseValues()",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-DATABASE-VALUES-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry.GetDatabaseValues"
     },
     {
@@ -1952,9 +1954,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "GetDatabaseValuesAsync",
       "Signature": "System.Threading.Tasks.Task\u003CMicrosoft.EntityFrameworkCore.ChangeTracking.PropertyValues\u003E GetDatabaseValuesAsync(System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-DATABASE-VALUES-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry.GetDatabaseValuesAsync"
     },
     {
@@ -13791,9 +13795,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "GetValue",
       "Signature": "TValue GetValue\u003CTValue\u003E(System.String propertyName)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-DATABASE-VALUES-ASYNC",
+        "EF10-TRACKING-DATABASE-VALUES-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyValues.GetValue"
     },
     {
@@ -13813,9 +13820,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "GetValue",
       "Signature": "TValue GetValue\u003CTValue\u003E(Microsoft.EntityFrameworkCore.Metadata.IProperty property)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-DATABASE-VALUES-ASYNC",
+        "EF10-TRACKING-DATABASE-VALUES-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyValues.GetValue"
     },
     {

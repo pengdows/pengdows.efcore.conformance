@@ -226,6 +226,42 @@ public sealed class StateManagementTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-TRACKING-DATABASE-VALUES-SYNC", "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry.GetDatabaseValues", "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyValues.GetValue")]
+    public async Task GetDatabaseValues_ReadsCurrentDatabaseStateWithoutReplacingTrackedValues()
+    {
+        var id = Guid.NewGuid();
+        await SeedAsync(id);
+
+        await using var trackedContext = ProviderTestRuntime.CreateContext();
+        var person = await trackedContext.People.SingleAsync(item => item.Id == id, TestContext.Current.CancellationToken);
+        await UpdateNameAsync(id, "Updated by another context");
+
+        var databaseValues = trackedContext.Entry(person).GetDatabaseValues();
+
+        Assert.NotNull(databaseValues);
+        Assert.Equal("Updated by another context", databaseValues.GetValue<string>(nameof(Person.Name)));
+        Assert.Equal($"Tracked {id:N}", person.Name);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-TRACKING-DATABASE-VALUES-ASYNC", "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry.GetDatabaseValuesAsync", "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyValues.GetValue")]
+    public async Task GetDatabaseValuesAsync_ReadsCurrentDatabaseStateWithoutReplacingTrackedValues()
+    {
+        var id = Guid.NewGuid();
+        await SeedAsync(id);
+
+        await using var trackedContext = ProviderTestRuntime.CreateContext();
+        var person = await trackedContext.People.SingleAsync(item => item.Id == id, TestContext.Current.CancellationToken);
+        await UpdateNameAsync(id, "Updated by another async context");
+
+        var databaseValues = await trackedContext.Entry(person).GetDatabaseValuesAsync(TestContext.Current.CancellationToken);
+
+        Assert.NotNull(databaseValues);
+        Assert.Equal("Updated by another async context", databaseValues.GetValue<string>(nameof(Person.Name)));
+        Assert.Equal($"Tracked {id:N}", person.Name);
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-TRACKING-HAS-CHANGES", "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.HasChanges", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges")]
     public async Task HasChanges_TracksPendingPersistenceWork()
     {
@@ -419,6 +455,14 @@ public sealed class StateManagementTests
         await using var context = ProviderTestRuntime.CreateContext();
         await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
         context.People.Add(new Person { Id = id, Name = $"Tracked {id:N}", Age = 50 });
+        await context.SaveChangesAsync(TestContext.Current.CancellationToken);
+    }
+
+    private static async Task UpdateNameAsync(Guid id, string name)
+    {
+        await using var context = ProviderTestRuntime.CreateContext();
+        var person = await context.People.SingleAsync(item => item.Id == id, TestContext.Current.CancellationToken);
+        person.Name = name;
         await context.SaveChangesAsync(TestContext.Current.CancellationToken);
     }
 
