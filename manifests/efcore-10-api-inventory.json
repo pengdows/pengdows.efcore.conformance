@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12444,
+    "AwaitingClassification": 12438,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 121,
-    "UncoveredMemberFamilies": 9079
+    "MemberEntriesInCoveredFamilies": 127,
+    "UncoveredMemberFamilies": 9076
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -32,6 +32,8 @@
       "System.Linq.Queryable.Any",
       "System.Linq.Queryable.Average",
       "System.Linq.Queryable.Count",
+      "System.Linq.Queryable.First",
+      "System.Linq.Queryable.FirstOrDefault",
       "System.Linq.Queryable.GroupBy",
       "System.Linq.Queryable.Join",
       "System.Linq.Queryable.LeftJoin",
@@ -40,6 +42,7 @@
       "System.Linq.Queryable.OrderBy",
       "System.Linq.Queryable.Select",
       "System.Linq.Queryable.Single",
+      "System.Linq.Queryable.SingleOrDefault",
       "System.Linq.Queryable.Skip",
       "System.Linq.Queryable.Sum",
       "System.Linq.Queryable.Take",
@@ -47083,9 +47086,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "FirstAsync",
       "Signature": "System.Threading.Tasks.Task\u003CTSource\u003E FirstAsync\u003CTSource\u003E(System.Linq.IQueryable\u003CTSource\u003E source, System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-QUERY-FIRST-ASYNC",
+        "EF10-QUERY-FIRST-EMPTY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.FirstAsync"
     },
     {
@@ -47094,9 +47100,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "FirstAsync",
       "Signature": "System.Threading.Tasks.Task\u003CTSource\u003E FirstAsync\u003CTSource\u003E(System.Linq.IQueryable\u003CTSource\u003E source, System.Linq.Expressions.Expression\u003CSystem.Func\u003CTSource, System.Boolean\u003E\u003E predicate, System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-QUERY-FIRST-ASYNC",
+        "EF10-QUERY-FIRST-EMPTY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.FirstAsync"
     },
     {
@@ -47105,9 +47114,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "FirstOrDefaultAsync",
       "Signature": "System.Threading.Tasks.Task\u003CTSource\u003E FirstOrDefaultAsync\u003CTSource\u003E(System.Linq.IQueryable\u003CTSource\u003E source, System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-QUERY-FIRST-OR-DEFAULT-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.FirstOrDefaultAsync"
     },
     {
@@ -47116,9 +47127,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "FirstOrDefaultAsync",
       "Signature": "System.Threading.Tasks.Task\u003CTSource\u003E FirstOrDefaultAsync\u003CTSource\u003E(System.Linq.IQueryable\u003CTSource\u003E source, System.Linq.Expressions.Expression\u003CSystem.Func\u003CTSource, System.Boolean\u003E\u003E predicate, System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-QUERY-FIRST-OR-DEFAULT-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.FirstOrDefaultAsync"
     },
     {
@@ -47175,6 +47188,8 @@
       "BehavioralContracts": [
         "EF10-PERSIST-INSERT-ASYNC",
         "EF10-PERSIST-UPDATE-ASYNC",
+        "EF10-QUERY-SINGLE-ASYNC",
+        "EF10-QUERY-SINGLE-MULTIPLE-ASYNC",
         "EF10-RAW-SQL-FROM-ASYNC",
         "EF10-RELATIONSHIPS-FOREIGN-KEY",
         "EF10-RELATIONSHIPS-INCLUDE-ASYNC",
@@ -47193,6 +47208,8 @@
       "BehavioralContracts": [
         "EF10-PERSIST-INSERT-ASYNC",
         "EF10-PERSIST-UPDATE-ASYNC",
+        "EF10-QUERY-SINGLE-ASYNC",
+        "EF10-QUERY-SINGLE-MULTIPLE-ASYNC",
         "EF10-RAW-SQL-FROM-ASYNC",
         "EF10-RELATIONSHIPS-FOREIGN-KEY",
         "EF10-RELATIONSHIPS-INCLUDE-ASYNC",
@@ -47207,9 +47224,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "SingleOrDefaultAsync",
       "Signature": "System.Threading.Tasks.Task\u003CTSource\u003E SingleOrDefaultAsync\u003CTSource\u003E(System.Linq.IQueryable\u003CTSource\u003E source, System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-QUERY-SINGLE-OR-DEFAULT-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleOrDefaultAsync"
     },
     {
@@ -47218,9 +47237,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "SingleOrDefaultAsync",
       "Signature": "System.Threading.Tasks.Task\u003CTSource\u003E SingleOrDefaultAsync\u003CTSource\u003E(System.Linq.IQueryable\u003CTSource\u003E source, System.Linq.Expressions.Expression\u003CSystem.Func\u003CTSource, System.Boolean\u003E\u003E predicate, System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-QUERY-SINGLE-OR-DEFAULT-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleOrDefaultAsync"
     },
     {
