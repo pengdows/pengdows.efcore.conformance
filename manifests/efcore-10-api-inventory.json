@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12237,
+    "AwaitingClassification": 12235,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 328,
-    "UncoveredMemberFamilies": 8939
+    "MemberEntriesInCoveredFamilies": 330,
+    "UncoveredMemberFamilies": 8938
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -16577,9 +16577,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "Like",
       "Signature": "System.Boolean Like(Microsoft.EntityFrameworkCore.DbFunctions _, System.String matchExpression, System.String pattern)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-QUERY-LIKE-ASYNC",
+        "EF10-QUERY-LIKE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbFunctionsExtensions.Like"
     },
     {
@@ -16588,9 +16591,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "Like",
       "Signature": "System.Boolean Like(Microsoft.EntityFrameworkCore.DbFunctions _, System.String matchExpression, System.String pattern, System.String escapeCharacter)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-QUERY-LIKE-ASYNC",
+        "EF10-QUERY-LIKE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbFunctionsExtensions.Like"
     },
     {
@@ -48296,6 +48302,7 @@
         "EF10-QUERY-EF-CONSTANT-PARAMETER-ASYNC",
         "EF10-QUERY-FILTERS-NAMED-ASYNC",
         "EF10-QUERY-GROUPBY-ASYNC",
+        "EF10-QUERY-LIKE-ASYNC",
         "EF10-QUERY-NULL-PREDICATE-ASYNC",
         "EF10-QUERY-SHADOW-PROPERTY-ASYNC",
         "EF10-RELATIONSHIPS-SELECTMANY-ASYNC",

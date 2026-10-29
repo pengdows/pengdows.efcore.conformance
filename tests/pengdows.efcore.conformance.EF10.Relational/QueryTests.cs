@@ -584,7 +584,7 @@ public sealed class QueryTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-QUERY-LIKE-ASYNC", "Microsoft.EntityFrameworkCore.RelationalDbFunctionsExtensions.Like", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync")]
+    [BehavioralCoverage("EF10-QUERY-LIKE-ASYNC", "Microsoft.EntityFrameworkCore.DbFunctionsExtensions.Like", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync")]
     public async Task Like_EscapesPatternWildcardsWhenRequestedAsynchronously()
     {
         var batch = Guid.NewGuid().ToString("N");
@@ -605,7 +605,7 @@ public sealed class QueryTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-QUERY-LIKE-SYNC", "Microsoft.EntityFrameworkCore.RelationalDbFunctionsExtensions.Like", "System.Linq.Queryable.ToList")]
+    [BehavioralCoverage("EF10-QUERY-LIKE-SYNC", "Microsoft.EntityFrameworkCore.DbFunctionsExtensions.Like", "System.Linq.Queryable.ToList")]
     public async Task Like_EscapesPatternWildcardsWhenRequestedSynchronously()
     {
         var batch = Guid.NewGuid().ToString("N");
