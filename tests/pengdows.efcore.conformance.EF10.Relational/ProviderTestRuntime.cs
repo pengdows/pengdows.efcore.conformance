@@ -84,6 +84,8 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
 
     public DbSet<ScalarRecord> ScalarRecords => Set<ScalarRecord>();
 
+    public DbSet<AdditionalClrTypesRecord> AdditionalClrTypesRecords => Set<AdditionalClrTypesRecord>();
+
     public DbSet<TphItem> TphItems => Set<TphItem>();
 
     public DbSet<TptItem> TptItems => Set<TptItem>();
@@ -146,6 +148,19 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
             entity.Property(record => record.Enabled).HasColumnName("enabled");
             entity.Property(record => record.Payload).HasColumnName("payload");
             entity.Property(record => record.Mood).HasColumnName("mood").HasConversion<string>();
+        });
+        modelBuilder.Entity<AdditionalClrTypesRecord>(entity =>
+        {
+            entity.ToTable("ef10conformanceadditionaltypes");
+            entity.HasKey(record => record.Id);
+            entity.Property(record => record.Id).HasColumnName("id");
+            entity.Property(record => record.ByteValue).HasColumnName("bytevalue");
+            entity.Property(record => record.Int16Value).HasColumnName("int16value");
+            entity.Property(record => record.Int64Value).HasColumnName("int64value");
+            entity.Property(record => record.SingleValue).HasColumnName("singlevalue");
+            entity.Property(record => record.DoubleValue).HasColumnName("doublevalue");
+            entity.Property(record => record.CharacterValue).HasColumnName("charactervalue");
+            entity.Property(record => record.DurationValue).HasColumnName("durationvalue");
         });
         modelBuilder.Entity<TphItem>(entity =>
         {
@@ -262,6 +277,25 @@ internal sealed class ScalarRecord
     public byte[] Payload { get; set; } = [];
 
     public TestMood Mood { get; set; }
+}
+
+internal sealed class AdditionalClrTypesRecord
+{
+    public Guid Id { get; set; }
+
+    public byte ByteValue { get; set; }
+
+    public short Int16Value { get; set; }
+
+    public long Int64Value { get; set; }
+
+    public float SingleValue { get; set; }
+
+    public double DoubleValue { get; set; }
+
+    public char CharacterValue { get; set; }
+
+    public TimeSpan DurationValue { get; set; }
 }
 
 internal enum TestMood

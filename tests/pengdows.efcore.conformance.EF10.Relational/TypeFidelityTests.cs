@@ -28,6 +28,7 @@ public sealed class TypeFidelityTests
     [NativeTypeCoverage("BOOLEAN", typeof(bool), "EF10-TYPES-ROUNDTRIP-ASYNC")]
     [NativeTypeCoverage("BLOB", typeof(byte[]), "EF10-TYPES-ROUNDTRIP-ASYNC")]
     [NativeTypeCoverage("TEXT", typeof(TestMood), "EF10-TYPES-ROUNDTRIP-ASYNC")]
+    [NativeTypeCoverage("VARCHAR(8)", typeof(TestMood), "EF10-TYPES-ROUNDTRIP-ASYNC")]
     public async Task CommonClrValues_RoundTripThroughFreshContext()
     {
         var expected = CreateValue(123456789.1234m);
@@ -53,6 +54,7 @@ public sealed class TypeFidelityTests
     [NativeTypeCoverage("BOOLEAN", typeof(bool), "EF10-TYPES-ROUNDTRIP-SYNC")]
     [NativeTypeCoverage("BLOB", typeof(byte[]), "EF10-TYPES-ROUNDTRIP-SYNC")]
     [NativeTypeCoverage("TEXT", typeof(TestMood), "EF10-TYPES-ROUNDTRIP-SYNC")]
+    [NativeTypeCoverage("VARCHAR(8)", typeof(TestMood), "EF10-TYPES-ROUNDTRIP-SYNC")]
     public async Task CommonClrValues_RoundTripThroughFreshContextSynchronously()
     {
         var expected = CreateValue(123456789.1234m);
@@ -67,6 +69,55 @@ public sealed class TypeFidelityTests
         await using var read = ProviderTestRuntime.CreateContext();
         var actual = read.ScalarRecords.AsNoTracking().Single(record => record.Id == expected.Id);
         AssertValue(expected, actual);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-TYPES-ADDITIONAL-SCALARS-ASYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    [NativeTypeCoverage("INTEGER", typeof(byte), "EF10-TYPES-ADDITIONAL-SCALARS-ASYNC")]
+    [NativeTypeCoverage("INTEGER", typeof(short), "EF10-TYPES-ADDITIONAL-SCALARS-ASYNC")]
+    [NativeTypeCoverage("INTEGER", typeof(long), "EF10-TYPES-ADDITIONAL-SCALARS-ASYNC")]
+    [NativeTypeCoverage("REAL", typeof(float), "EF10-TYPES-ADDITIONAL-SCALARS-ASYNC")]
+    [NativeTypeCoverage("DOUBLE PRECISION", typeof(double), "EF10-TYPES-ADDITIONAL-SCALARS-ASYNC")]
+    [NativeTypeCoverage("VARCHAR(1)", typeof(char), "EF10-TYPES-ADDITIONAL-SCALARS-ASYNC")]
+    [NativeTypeCoverage("INTERVAL", typeof(TimeSpan), "EF10-TYPES-ADDITIONAL-SCALARS-ASYNC")]
+    public async Task AdditionalClrScalars_RoundTripThroughFreshContextAsynchronously()
+    {
+        var expected = CreateAdditionalValues();
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.AdditionalClrTypesRecords.Add(expected);
+            Assert.Equal(1, await write.SaveChangesAsync(TestContext.Current.CancellationToken));
+        }
+
+        await using var read = ProviderTestRuntime.CreateContext();
+        var actual = await read.AdditionalClrTypesRecords.AsNoTracking()
+            .SingleAsync(record => record.Id == expected.Id, TestContext.Current.CancellationToken);
+        AssertAdditionalValues(expected, actual);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-TYPES-ADDITIONAL-SCALARS-SYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "System.Linq.Queryable.Single")]
+    [NativeTypeCoverage("INTEGER", typeof(byte), "EF10-TYPES-ADDITIONAL-SCALARS-SYNC")]
+    [NativeTypeCoverage("INTEGER", typeof(short), "EF10-TYPES-ADDITIONAL-SCALARS-SYNC")]
+    [NativeTypeCoverage("INTEGER", typeof(long), "EF10-TYPES-ADDITIONAL-SCALARS-SYNC")]
+    [NativeTypeCoverage("REAL", typeof(float), "EF10-TYPES-ADDITIONAL-SCALARS-SYNC")]
+    [NativeTypeCoverage("DOUBLE PRECISION", typeof(double), "EF10-TYPES-ADDITIONAL-SCALARS-SYNC")]
+    [NativeTypeCoverage("VARCHAR(1)", typeof(char), "EF10-TYPES-ADDITIONAL-SCALARS-SYNC")]
+    [NativeTypeCoverage("INTERVAL", typeof(TimeSpan), "EF10-TYPES-ADDITIONAL-SCALARS-SYNC")]
+    public async Task AdditionalClrScalars_RoundTripThroughFreshContextSynchronously()
+    {
+        var expected = CreateAdditionalValues();
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.AdditionalClrTypesRecords.Add(expected);
+            Assert.Equal(1, write.SaveChanges());
+        }
+
+        await using var read = ProviderTestRuntime.CreateContext();
+        var actual = read.AdditionalClrTypesRecords.AsNoTracking().Single(record => record.Id == expected.Id);
+        AssertAdditionalValues(expected, actual);
     }
 
     [Theory]
@@ -117,6 +168,30 @@ public sealed class TypeFidelityTests
         Payload = [0, 1, 127, 255],
         Mood = TestMood.Curious
     };
+
+    private static AdditionalClrTypesRecord CreateAdditionalValues() => new()
+    {
+        Id = Guid.NewGuid(),
+        ByteValue = byte.MaxValue,
+        Int16Value = short.MinValue,
+        Int64Value = long.MinValue,
+        SingleValue = 1234.5f,
+        DoubleValue = 9876.125d,
+        CharacterValue = 'Ω',
+        DurationValue = TimeSpan.FromTicks(9876543210)
+    };
+
+    private static void AssertAdditionalValues(AdditionalClrTypesRecord expected, AdditionalClrTypesRecord actual)
+    {
+        Assert.Equal(expected.Id, actual.Id);
+        Assert.Equal(expected.ByteValue, actual.ByteValue);
+        Assert.Equal(expected.Int16Value, actual.Int16Value);
+        Assert.Equal(expected.Int64Value, actual.Int64Value);
+        Assert.Equal(expected.SingleValue, actual.SingleValue);
+        Assert.Equal(expected.DoubleValue, actual.DoubleValue);
+        Assert.Equal(expected.CharacterValue, actual.CharacterValue);
+        Assert.Equal(expected.DurationValue, actual.DurationValue);
+    }
 
     private static void AssertValue(ScalarRecord expected, ScalarRecord actual)
     {
