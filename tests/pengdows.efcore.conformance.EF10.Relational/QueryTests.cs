@@ -132,6 +132,60 @@ public sealed class QueryTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-LINQ-RIGHTJOIN-ASYNC", "System.Linq.Queryable.RightJoin", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync")]
+    public async Task RightJoin_ReturnsMatchingAndMissingRightRows()
+    {
+        var batch = Guid.NewGuid().ToString("N");
+        await SeedAsync(new[]
+        {
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-One", Age = 1 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-Two", Age = 2 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-Three", Age = 3 }
+        });
+
+        await using var query = ProviderTestRuntime.CreateContext();
+        var actual = await query.People
+            .Where(person => person.Name.StartsWith(batch) && person.Age <= 2)
+            .RightJoin(
+                query.People.Where(person => person.Name.StartsWith(batch) && person.Age >= 2),
+                outer => outer.Age,
+                inner => inner.Age,
+                (outer, inner) => new RightJoinResult(outer == null ? null : outer.Age, inner.Age))
+            .ToListAsync(TestContext.Current.CancellationToken);
+
+        Assert.Equal(
+            new[] { new RightJoinResult(2, 2), new RightJoinResult(null, 3) },
+            actual.OrderBy(result => result.RightAge).ToArray());
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-LINQ-RIGHTJOIN-SYNC", "System.Linq.Queryable.RightJoin", "System.Linq.Enumerable.ToList")]
+    public async Task RightJoin_ReturnsMatchingAndMissingRightRowsSynchronously()
+    {
+        var batch = Guid.NewGuid().ToString("N");
+        await SeedAsync(new[]
+        {
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-One", Age = 1 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-Two", Age = 2 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-Three", Age = 3 }
+        });
+
+        await using var query = ProviderTestRuntime.CreateContext();
+        var actual = query.People
+            .Where(person => person.Name.StartsWith(batch) && person.Age <= 2)
+            .RightJoin(
+                query.People.Where(person => person.Name.StartsWith(batch) && person.Age >= 2),
+                outer => outer.Age,
+                inner => inner.Age,
+                (outer, inner) => new RightJoinResult(outer == null ? null : outer.Age, inner.Age))
+            .ToList();
+
+        Assert.Equal(
+            new[] { new RightJoinResult(2, 2), new RightJoinResult(null, 3) },
+            actual.OrderBy(result => result.RightAge).ToArray());
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-QUERY-GROUPBY-ASYNC", "System.Linq.Queryable.GroupBy", "System.Linq.Queryable.Count", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync")]
     public async Task GroupByAndAggregate_ReturnsExpectedGroupsAsynchronously()
     {
@@ -273,5 +327,7 @@ public sealed class QueryTests
     private sealed record PersonResult(string Name, int Age);
 
     private sealed record LeftJoinResult(int Age, string? MatchName);
+
+    private sealed record RightJoinResult(int? LeftAge, int RightAge);
 
 }
