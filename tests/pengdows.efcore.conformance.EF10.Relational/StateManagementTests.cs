@@ -135,6 +135,42 @@ public sealed class StateManagementTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-TRACKING-CONTEXT-BEHAVIOR-ASYNC", "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.QueryTrackingBehavior", "Microsoft.EntityFrameworkCore.DbContext.Entry")]
+    public async Task ChangeTrackerQueryTrackingBehavior_ControlsAsyncMaterialization()
+    {
+        var id = Guid.NewGuid();
+        await SeedAsync(id);
+
+        await using var context = ProviderTestRuntime.CreateContext();
+        context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+        var detached = await context.People.SingleAsync(item => item.Id == id, TestContext.Current.CancellationToken);
+        Assert.Equal(EntityState.Detached, context.Entry(detached).State);
+
+        context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
+        var tracked = await context.People.SingleAsync(item => item.Id == id, TestContext.Current.CancellationToken);
+        Assert.Equal(EntityState.Unchanged, context.Entry(tracked).State);
+        Assert.NotSame(detached, tracked);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-TRACKING-CONTEXT-BEHAVIOR-SYNC", "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.QueryTrackingBehavior", "Microsoft.EntityFrameworkCore.DbContext.Entry")]
+    public async Task ChangeTrackerQueryTrackingBehavior_ControlsSynchronousMaterialization()
+    {
+        var id = Guid.NewGuid();
+        await SeedAsync(id);
+
+        await using var context = ProviderTestRuntime.CreateContext();
+        context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+        var detached = context.People.Single(item => item.Id == id);
+        Assert.Equal(EntityState.Detached, context.Entry(detached).State);
+
+        context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
+        var tracked = context.People.Single(item => item.Id == id);
+        Assert.Equal(EntityState.Unchanged, context.Entry(tracked).State);
+        Assert.NotSame(detached, tracked);
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-TRACKING-NO-TRACKING-IDENTITY-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.AsNoTrackingWithIdentityResolution", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync", "System.Linq.Queryable.Join")]
     public async Task AsNoTrackingWithIdentityResolution_ReusesRepeatedEntityInstancesAsynchronously()
     {

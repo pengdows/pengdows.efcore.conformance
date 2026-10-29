@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12241,
+    "AwaitingClassification": 12240,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 324,
-    "UncoveredMemberFamilies": 8943
+    "MemberEntriesInCoveredFamilies": 325,
+    "UncoveredMemberFamilies": 8942
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -482,9 +482,12 @@
       "MemberKind": "Property",
       "ApiMemberName": "QueryTrackingBehavior",
       "Signature": "Microsoft.EntityFrameworkCore.QueryTrackingBehavior QueryTrackingBehavior get; set;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-CONTEXT-BEHAVIOR-ASYNC",
+        "EF10-TRACKING-CONTEXT-BEHAVIOR-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.QueryTrackingBehavior"
     },
     {
@@ -14907,6 +14910,8 @@
         "EF10-TRACKING-AS-TRACKING-ASYNC",
         "EF10-TRACKING-AS-TRACKING-OVERRIDE-SYNC",
         "EF10-TRACKING-ATTACH",
+        "EF10-TRACKING-CONTEXT-BEHAVIOR-ASYNC",
+        "EF10-TRACKING-CONTEXT-BEHAVIOR-SYNC",
         "EF10-TRACKING-DBCONTEXT-FIND",
         "EF10-TRACKING-DBCONTEXT-FIND-ASYNC",
         "EF10-TRACKING-DETACH",
@@ -14937,6 +14942,8 @@
         "EF10-TRACKING-AS-TRACKING-ASYNC",
         "EF10-TRACKING-AS-TRACKING-OVERRIDE-SYNC",
         "EF10-TRACKING-ATTACH",
+        "EF10-TRACKING-CONTEXT-BEHAVIOR-ASYNC",
+        "EF10-TRACKING-CONTEXT-BEHAVIOR-SYNC",
         "EF10-TRACKING-DBCONTEXT-FIND",
         "EF10-TRACKING-DBCONTEXT-FIND-ASYNC",
         "EF10-TRACKING-DETACH",
