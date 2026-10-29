@@ -357,6 +357,33 @@ public sealed class StateManagementTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-TRACKING-ENTRY-DETECT-CHANGES", "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry.DetectChanges", "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry.State", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges")]
+    public async Task EntityEntryDetectChanges_FindsAndPersistsChangedProperty()
+    {
+        var id = Guid.NewGuid();
+        await SeedAsync(id);
+
+        await using (var update = ProviderTestRuntime.CreateContext())
+        {
+            update.ChangeTracker.AutoDetectChangesEnabled = false;
+            var person = update.People.Single(item => item.Id == id);
+            person.Age++;
+            var entry = update.Entry(person);
+
+            Assert.Equal(EntityState.Unchanged, entry.State);
+            entry.DetectChanges();
+            Assert.Equal(EntityState.Modified, entry.State);
+            Assert.Equal(1, update.SaveChanges());
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.Equal(51, verify.People.AsNoTracking()
+            .Where(item => item.Id == id)
+            .Select(item => item.Age)
+            .Single());
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-TRACKING-CLEAR", "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.Clear", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges")]
     public async Task ChangeTrackerClear_DetachesEntitiesAndDiscardsUnsavedChanges()
     {

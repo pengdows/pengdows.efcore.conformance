@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12270,
+    "AwaitingClassification": 12269,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 295,
-    "UncoveredMemberFamilies": 8966
+    "MemberEntriesInCoveredFamilies": 296,
+    "UncoveredMemberFamilies": 8965
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -1780,9 +1780,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "DetectChanges",
       "Signature": "System.Void DetectChanges()",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-ENTRY-DETECT-CHANGES"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry.DetectChanges"
     },
     {
@@ -2055,7 +2057,8 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-PERSIST-INSERT-FAILURE-ASYNC",
-        "EF10-PERSIST-INSERT-FAILURE-SYNC"
+        "EF10-PERSIST-INSERT-FAILURE-SYNC",
+        "EF10-TRACKING-ENTRY-DETECT-CHANGES"
       ],
       "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry.State"
@@ -14660,6 +14663,7 @@
         "EF10-SAVE-EVENTS-SUCCESS-SYNC",
         "EF10-TRACKING-CLEAR",
         "EF10-TRACKING-DETECT-CHANGES-SYNC",
+        "EF10-TRACKING-ENTRY-DETECT-CHANGES",
         "EF10-TRACKING-HAS-CHANGES",
         "EF10-TRACKING-PROPERTY-ENTRY-SYNC",
         "EF10-TRACKING-UPDATE-DETACHED-SYNC",
@@ -14705,6 +14709,7 @@
         "EF10-SAVE-EVENTS-SUCCESS-SYNC",
         "EF10-TRACKING-CLEAR",
         "EF10-TRACKING-DETECT-CHANGES-SYNC",
+        "EF10-TRACKING-ENTRY-DETECT-CHANGES",
         "EF10-TRACKING-HAS-CHANGES",
         "EF10-TRACKING-PROPERTY-ENTRY-SYNC",
         "EF10-TRACKING-UPDATE-DETACHED-SYNC",
