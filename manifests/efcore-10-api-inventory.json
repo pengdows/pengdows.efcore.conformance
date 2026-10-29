@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12363,
+    "AwaitingClassification": 12361,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 202,
-    "UncoveredMemberFamilies": 9029
+    "MemberEntriesInCoveredFamilies": 204,
+    "UncoveredMemberFamilies": 9027
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -47362,6 +47362,7 @@
         "EF10-RAW-SQL-FROM-SQL-ASYNC",
         "EF10-RELATIONSHIPS-FOREIGN-KEY",
         "EF10-RELATIONSHIPS-INCLUDE-ASYNC",
+        "EF10-RELATIONSHIPS-SPLIT-QUERY-ASYNC",
         "EF10-TYPES-ADDITIONAL-SCALARS-ASYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC"
       ],
@@ -47387,6 +47388,7 @@
         "EF10-RAW-SQL-FROM-SQL-ASYNC",
         "EF10-RELATIONSHIPS-FOREIGN-KEY",
         "EF10-RELATIONSHIPS-INCLUDE-ASYNC",
+        "EF10-RELATIONSHIPS-SPLIT-QUERY-ASYNC",
         "EF10-TYPES-ADDITIONAL-SCALARS-ASYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC"
       ],
@@ -48070,7 +48072,9 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-RELATIONSHIPS-INCLUDE-ASYNC",
-        "EF10-RELATIONSHIPS-INCLUDE-SYNC"
+        "EF10-RELATIONSHIPS-INCLUDE-SYNC",
+        "EF10-RELATIONSHIPS-SINGLE-QUERY-SYNC",
+        "EF10-RELATIONSHIPS-SPLIT-QUERY-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.Include"
@@ -48084,7 +48088,9 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-RELATIONSHIPS-INCLUDE-ASYNC",
-        "EF10-RELATIONSHIPS-INCLUDE-SYNC"
+        "EF10-RELATIONSHIPS-INCLUDE-SYNC",
+        "EF10-RELATIONSHIPS-SINGLE-QUERY-SYNC",
+        "EF10-RELATIONSHIPS-SPLIT-QUERY-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ThenInclude"
@@ -48098,7 +48104,9 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-RELATIONSHIPS-INCLUDE-ASYNC",
-        "EF10-RELATIONSHIPS-INCLUDE-SYNC"
+        "EF10-RELATIONSHIPS-INCLUDE-SYNC",
+        "EF10-RELATIONSHIPS-SINGLE-QUERY-SYNC",
+        "EF10-RELATIONSHIPS-SPLIT-QUERY-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ThenInclude"
@@ -48112,7 +48120,9 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-RELATIONSHIPS-INCLUDE-ASYNC",
-        "EF10-RELATIONSHIPS-INCLUDE-SYNC"
+        "EF10-RELATIONSHIPS-INCLUDE-SYNC",
+        "EF10-RELATIONSHIPS-SINGLE-QUERY-SYNC",
+        "EF10-RELATIONSHIPS-SPLIT-QUERY-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.Include"
@@ -174618,9 +174628,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "AsSingleQuery",
       "Signature": "System.Linq.IQueryable\u003CTEntity\u003E AsSingleQuery\u003CTEntity\u003E(System.Linq.IQueryable\u003CTEntity\u003E source) where TEntity : class",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-RELATIONSHIPS-SINGLE-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalQueryableExtensions.AsSingleQuery"
     },
     {
@@ -174629,9 +174641,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "AsSplitQuery",
       "Signature": "System.Linq.IQueryable\u003CTEntity\u003E AsSplitQuery\u003CTEntity\u003E(System.Linq.IQueryable\u003CTEntity\u003E source) where TEntity : class",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-RELATIONSHIPS-SPLIT-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalQueryableExtensions.AsSplitQuery"
     },
     {

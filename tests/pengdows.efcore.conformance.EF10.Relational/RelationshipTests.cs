@@ -91,6 +91,40 @@ public sealed class RelationshipTests
         Assert.Equal(new[] { "First", "Second" }, titles);
     }
 
+    [Fact]
+    [BehavioralCoverage("EF10-RELATIONSHIPS-SPLIT-QUERY-ASYNC", "Microsoft.EntityFrameworkCore.RelationalQueryableExtensions.AsSplitQuery", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.Include", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ThenInclude", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    public async Task AsSplitQuery_MaterializesCompleteNavigationGraphAsynchronously()
+    {
+        var blog = await CreateBlogAsync();
+
+        await using var context = ProviderTestRuntime.CreateContext();
+        var loaded = await context.Blogs
+            .AsSplitQuery()
+            .Include(item => item.Posts)
+            .ThenInclude(post => post.Comments)
+            .SingleAsync(item => item.Id == blog.Id, TestContext.Current.CancellationToken);
+
+        Assert.Equal(new[] { "First", "Second" }, loaded.Posts.Select(post => post.Title).Order().ToArray());
+        Assert.All(loaded.Posts, post => Assert.Single(post.Comments));
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-RELATIONSHIPS-SINGLE-QUERY-SYNC", "Microsoft.EntityFrameworkCore.RelationalQueryableExtensions.AsSingleQuery", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.Include", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ThenInclude", "System.Linq.Queryable.Single")]
+    public async Task AsSingleQuery_MaterializesCompleteNavigationGraphSynchronously()
+    {
+        var blog = await CreateBlogAsync();
+
+        await using var context = ProviderTestRuntime.CreateContext();
+        var loaded = context.Blogs
+            .AsSingleQuery()
+            .Include(item => item.Posts)
+            .ThenInclude(post => post.Comments)
+            .Single(item => item.Id == blog.Id);
+
+        Assert.Equal(new[] { "First", "Second" }, loaded.Posts.Select(post => post.Title).Order().ToArray());
+        Assert.All(loaded.Posts, post => Assert.Single(post.Comments));
+    }
+
     private static async Task<Blog> CreateBlogAsync()
     {
         var blog = new Blog
