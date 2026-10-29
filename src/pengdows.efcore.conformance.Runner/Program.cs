@@ -22,6 +22,11 @@ if (args[0] == "--run")
     return await RunTestsAsync(args);
 }
 
+if (args[0] == "--run-profile")
+{
+    return await RunProfileTestsAsync(args);
+}
+
 var discoverTypes = args[0] == "--discover-types";
 var offset = discoverTypes ? 1 : 0;
 if (discoverTypes ? args.Length is < 3 or > 5 : args.Length != 2)
@@ -146,7 +151,41 @@ static string GetNativeTypeFamily(string databaseTypeName)
     return facetsStart < 0 ? trimmed : trimmed[..facetsStart].TrimEnd();
 }
 
-async Task<int> RunTestsAsync(string[] arguments)
+async Task<int> RunProfileTestsAsync(string[] arguments)
+{
+    if (arguments.Length is < 4 or > 5 || (arguments.Length == 5 && arguments[4] != "--cleanup-database"))
+    {
+        Console.Error.WriteLine("Usage: --run-profile <provider-profile.json> <test-project> <report-directory> [--cleanup-database]");
+        return 2;
+    }
+
+    try
+    {
+        var profile = ProviderRunConfiguration.Load(arguments[1]);
+        var runArguments = new List<string>
+        {
+            "--run",
+            arguments[2],
+            profile.AdapterAssembly,
+            profile.AdapterType,
+            arguments[3]
+        };
+        if (arguments.Length == 5)
+        {
+            runArguments.Add(arguments[4]);
+        }
+
+        Console.WriteLine($"Provider profile: {profile.Name}");
+        return await RunTestsAsync(runArguments.ToArray(), profile.ResolveConnectionString());
+    }
+    catch (Exception exception)
+    {
+        Console.Error.WriteLine($"Provider profile error: {exception.Message}");
+        return 2;
+    }
+}
+
+async Task<int> RunTestsAsync(string[] arguments, string? configuredConnectionString = null)
 {
     if (arguments.Length is < 5 or > 6 || (arguments.Length == 6 && arguments[5] != "--cleanup-database"))
     {
@@ -154,7 +193,7 @@ async Task<int> RunTestsAsync(string[] arguments)
         return 2;
     }
 
-    var cs = GetConnectionString();
+    var cs = configuredConnectionString ?? GetConnectionString();
     var project = Path.GetFullPath(arguments[1]);
     var adapterPath = Path.GetFullPath(arguments[2]);
     var adapterType = arguments[3];
@@ -562,8 +601,9 @@ static void PrintUsage()
     Console.WriteLine("       --discover-types <adapter-assembly> <adapter-type> [output-json [test-assembly]]");
     Console.WriteLine("       --run <test-project> <adapter-assembly> <adapter-type> <report-directory>");
     Console.WriteLine("            append --cleanup-database to delete a dedicated disposable database after the run");
+    Console.WriteLine("       --run-profile <provider-profile.json> <test-project> <report-directory> [--cleanup-database]");
     Console.WriteLine("       --compare <candidate-results.json> <reference-results.json> <comparison.json>");
-    Console.WriteLine("Set PENGDOWS_EFCORE_CONFORMANCE_CONNECTION_STRING in the environment.");
+    Console.WriteLine("Direct adapter runs use PENGDOWS_EFCORE_CONFORMANCE_CONNECTION_STRING; profiles expand ${ENVIRONMENT_VARIABLE} placeholders.");
 }
 
 internal sealed record AdapterLoadReport(string Provider, string ProviderVersion, string AdapterType, string[] DeclaredSupportedFeatures, string[] DeclaredUnsupportedFeatures, string Status);

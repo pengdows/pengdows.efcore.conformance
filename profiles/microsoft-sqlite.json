@@ -1,0 +1,6 @@
+{
+  "name": "Microsoft EF Core SQLite reference",
+  "adapterAssembly": "../adapters/pengdows.efcore.conformance.Adapter.MicrosoftSqlite/bin/Debug/net10.0/pengdows.efcore.conformance.Adapter.MicrosoftSqlite.dll",
+  "adapterType": "pengdows.efcore.conformance.Adapter.MicrosoftSqlite.MicrosoftSqliteAdapter",
+  "connectionString": "Data Source=${EFCORE_CONFORMANCE_DB_PATH}"
+}

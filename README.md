@@ -28,6 +28,23 @@ Connection strings are read from the environment, not command-line arguments. Th
 dotnet build pengdows.efcore.conformance.slnx
 ```
 
+## Provider run profiles
+
+The ADO.NET conformance project’s `providers/*.json` pattern is a good fit for keeping per-database run settings out of shared tests. This EF harness uses smaller JSON profiles because provider setup still belongs in a compiled EF adapter: `adapterAssembly` and `adapterType` select that adapter, and `connectionString` can expand `${ENVIRONMENT_VARIABLE}` placeholders. The adapter remains authoritative for EF provider configuration, database initialization, cleanup, and capability declarations. A profile cannot override capabilities or expected results.
+
+Profiles do not start containers or provision remote databases. Point the profile at a database that is already available, using an environment variable for secrets and machine-specific paths. Adapter assembly paths are relative to the profile file unless absolute.
+
+```sh
+dotnet build pengdows.efcore.conformance.slnx
+export EFCORE_CONFORMANCE_DB_PATH=/tmp/efcore-reference.db
+dotnet run --project src/pengdows.efcore.conformance.Runner -- --run-profile \
+  profiles/microsoft-sqlite.json \
+  tests/pengdows.efcore.conformance.EF10.Relational/pengdows.efcore.conformance.EF10.Relational.csproj \
+  /tmp/efcore-reference-report --cleanup-database
+```
+
+`profiles/pengdows-sqlite.json` uses the same shape for the candidate adapter. Build that adapter separately when its sibling ADO.NET repository is available. Direct `--run` commands and `PENGDOWS_EFCORE_CONFORMANCE_CONNECTION_STRING` remain supported.
+
 Run the conformance tests through the runner to produce comparable reports:
 
 ```sh

@@ -1,0 +1,6 @@
+{
+  "name": "pengdows ADO.NET SQLite candidate",
+  "adapterAssembly": "../adapters/pengdows.efcore.conformance.Adapter.PengdowsSqlite/bin/Debug/net10.0/pengdows.efcore.conformance.Adapter.PengdowsSqlite.dll",
+  "adapterType": "pengdows.efcore.conformance.Adapter.PengdowsSqlite.PengdowsSqliteAdapter",
+  "connectionString": "Data Source=${EFCORE_CONFORMANCE_DB_PATH}"
+}

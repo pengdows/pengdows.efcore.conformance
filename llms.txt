@@ -47,6 +47,12 @@ dotnet run --project src/pengdows.efcore.conformance.Runner -- --compare \
 
 Append `--cleanup-database` to `--run` only when the configured database is dedicated and disposable. The runner then calls the adapter cleanup hook after writing test results.
 
+## Provider configuration
+
+The sibling ADO.NET conformance project uses `providers/*.json` profiles to describe driver, target, connection string, environment, dialect, and type inventory. The EF Core harness borrows declarative per-provider profiles for adapter selection and connection strings: `profiles/*.json` names a compiled adapter assembly/type and a connection string template with `${ENVIRONMENT_VARIABLE}` placeholders. Run one with `--run-profile <profile.json> <test-project> <report-directory> [--cleanup-database]`. Adapter assembly paths are relative to the profile file unless absolute.
+
+EF profiles deliberately leave EF provider configuration, capabilities, database initialization, and cleanup in `IProviderAdapter`. A profile cannot change expectations or assertions. Profiles do not provision containers or remote databases; infrastructure setup remains external. The old direct `--run` form and `PENGDOWS_EFCORE_CONFORMANCE_CONNECTION_STRING` are still supported.
+
 ## Current status
 
 - EF Core baseline: 10.0.14 on `net10.0`.
