@@ -253,6 +253,58 @@ public sealed class StateManagementTests
         Assert.Equal(EntityState.Unchanged, trackedContext.Entry(tracked).State);
     }
 
+    [Fact]
+    [BehavioralCoverage("EF10-TRACKING-PROPERTY-ENTRY-ASYNC", "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry`1.Property", "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyEntry`2.OriginalValue", "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyEntry`2.CurrentValue", "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyEntry`2.IsModified", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync")]
+    public async Task PropertyEntry_ExposesOriginalAndModifiedValuesAsynchronously()
+    {
+        var id = Guid.NewGuid();
+        await SeedAsync(id);
+
+        await using (var context = ProviderTestRuntime.CreateContext())
+        {
+            var person = await context.People.SingleAsync(item => item.Id == id, TestContext.Current.CancellationToken);
+            var age = context.Entry(person).Property(item => item.Age);
+
+            Assert.Equal(50, age.OriginalValue);
+            age.CurrentValue = 37;
+            Assert.True(age.IsModified);
+            Assert.Equal(37, age.CurrentValue);
+            Assert.Equal(1, await context.SaveChangesAsync(TestContext.Current.CancellationToken));
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.Equal(37, await verify.People.AsNoTracking()
+            .Where(item => item.Id == id)
+            .Select(item => item.Age)
+            .SingleAsync(TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-TRACKING-PROPERTY-ENTRY-SYNC", "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry`1.Property", "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyEntry`2.OriginalValue", "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyEntry`2.CurrentValue", "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyEntry`2.IsModified", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges")]
+    public async Task PropertyEntry_ExposesOriginalAndModifiedValuesSynchronously()
+    {
+        var id = Guid.NewGuid();
+        await SeedAsync(id);
+
+        await using (var context = ProviderTestRuntime.CreateContext())
+        {
+            var person = context.People.Single(item => item.Id == id);
+            var age = context.Entry(person).Property(item => item.Age);
+
+            Assert.Equal(50, age.OriginalValue);
+            age.CurrentValue = 38;
+            Assert.True(age.IsModified);
+            Assert.Equal(38, age.CurrentValue);
+            Assert.Equal(1, context.SaveChanges());
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.Equal(38, verify.People.AsNoTracking()
+            .Where(item => item.Id == id)
+            .Select(item => item.Age)
+            .Single());
+    }
+
     private static async Task SeedAsync(Guid id)
     {
         await using var context = ProviderTestRuntime.CreateContext();

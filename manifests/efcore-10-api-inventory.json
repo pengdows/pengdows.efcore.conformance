@@ -19,13 +19,15 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12419,
+    "AwaitingClassification": 12414,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 146,
-    "UncoveredMemberFamilies": 9063
+    "MemberEntriesInCoveredFamilies": 151,
+    "UncoveredMemberFamilies": 9060
   },
   "CoverageSelectors": {
-    "UnmatchedEfCoreSelectors": [],
+    "UnmatchedEfCoreSelectors": [
+      "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyEntry\u00602.IsModified"
+    ],
     "ExternalApiSelectors": [
       "System.Linq.Enumerable.ToList",
       "System.Linq.IQueryable.GetEnumerator",
@@ -2346,9 +2348,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "Property",
       "Signature": "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyEntry\u003CTEntity, TProperty\u003E Property\u003CTProperty\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTEntity, TProperty\u003E\u003E propertyExpression)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-PROPERTY-ENTRY-ASYNC",
+        "EF10-TRACKING-PROPERTY-ENTRY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry\u00601.Property"
     },
     {
@@ -2401,9 +2406,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "Property",
       "Signature": "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyEntry\u003CTEntity, TProperty\u003E Property\u003CTProperty\u003E(Microsoft.EntityFrameworkCore.Metadata.IProperty property)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-PROPERTY-ENTRY-ASYNC",
+        "EF10-TRACKING-PROPERTY-ENTRY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry\u00601.Property"
     },
     {
@@ -2478,9 +2486,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "Property",
       "Signature": "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyEntry\u003CTEntity, TProperty\u003E Property\u003CTProperty\u003E(System.String propertyName)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-PROPERTY-ENTRY-ASYNC",
+        "EF10-TRACKING-PROPERTY-ENTRY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry\u00601.Property"
     },
     {
@@ -13654,9 +13665,12 @@
       "MemberKind": "Property",
       "ApiMemberName": "CurrentValue",
       "Signature": "TProperty CurrentValue get; set;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-PROPERTY-ENTRY-ASYNC",
+        "EF10-TRACKING-PROPERTY-ENTRY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyEntry\u00602.CurrentValue"
     },
     {
@@ -13665,9 +13679,12 @@
       "MemberKind": "Property",
       "ApiMemberName": "OriginalValue",
       "Signature": "TProperty OriginalValue get; set;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-PROPERTY-ENTRY-ASYNC",
+        "EF10-TRACKING-PROPERTY-ENTRY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyEntry\u00602.OriginalValue"
     },
     {
@@ -14579,6 +14596,7 @@
         "EF10-PERSIST-UPDATE-SYNC",
         "EF10-TRACKING-CLEAR",
         "EF10-TRACKING-DETECT-CHANGES-SYNC",
+        "EF10-TRACKING-PROPERTY-ENTRY-SYNC",
         "EF10-TRANSACTION-COMMIT-SYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-SYNC",
         "EF10-TYPES-ROUNDTRIP-SYNC"
@@ -14604,6 +14622,7 @@
         "EF10-PERSIST-UPDATE-SYNC",
         "EF10-TRACKING-CLEAR",
         "EF10-TRACKING-DETECT-CHANGES-SYNC",
+        "EF10-TRACKING-PROPERTY-ENTRY-SYNC",
         "EF10-TRANSACTION-COMMIT-SYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-SYNC",
         "EF10-TYPES-ROUNDTRIP-SYNC"
@@ -14630,6 +14649,7 @@
         "EF10-RELATIONSHIPS-FOREIGN-KEY",
         "EF10-TRACKING-ATTACH",
         "EF10-TRACKING-DETECT-CHANGES-ASYNC",
+        "EF10-TRACKING-PROPERTY-ENTRY-ASYNC",
         "EF10-TRANSACTION-ROLLBACK-ASYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC",
         "EF10-TYPES-ROUNDTRIP-ASYNC"
@@ -14656,6 +14676,7 @@
         "EF10-RELATIONSHIPS-FOREIGN-KEY",
         "EF10-TRACKING-ATTACH",
         "EF10-TRACKING-DETECT-CHANGES-ASYNC",
+        "EF10-TRACKING-PROPERTY-ENTRY-ASYNC",
         "EF10-TRANSACTION-ROLLBACK-ASYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC",
         "EF10-TYPES-ROUNDTRIP-ASYNC"
