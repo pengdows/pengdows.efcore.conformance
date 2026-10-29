@@ -19,14 +19,16 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12276,
+    "AwaitingClassification": 12275,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 289,
-    "UncoveredMemberFamilies": 8971
+    "MemberEntriesInCoveredFamilies": 290,
+    "UncoveredMemberFamilies": 8970
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
     "ExternalApiSelectors": [
+      "System.Collections.Generic.IAsyncDisposable.DisposeAsync",
+      "System.Collections.Generic.IAsyncEnumerator\u00601.MoveNextAsync",
       "System.Linq.Enumerable.ToList",
       "System.Linq.IQueryable.GetEnumerator",
       "System.Linq.Queryable.All",
@@ -17230,9 +17232,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "GetAsyncEnumerator",
       "Signature": "System.Collections.Generic.IAsyncEnumerator\u003CTEntity\u003E GetAsyncEnumerator(System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DBSET-ASYNC-ENUMERATOR"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbSet\u00601.GetAsyncEnumerator"
     },
     {

@@ -50,6 +50,32 @@ public sealed class DbSetApiTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-DBSET-ASYNC-ENUMERATOR", "Microsoft.EntityFrameworkCore.DbSet`1.GetAsyncEnumerator", "System.Collections.Generic.IAsyncEnumerator`1.MoveNextAsync", "System.Collections.Generic.IAsyncDisposable.DisposeAsync")]
+    public async Task GetAsyncEnumerator_MovesThroughAndDisposesQueryResults()
+    {
+        var batch = Guid.NewGuid().ToString("N");
+        await SeedAsync(new[]
+        {
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-one", Age = 1 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-two", Age = 2 }
+        });
+
+        await using var context = ProviderTestRuntime.CreateContext();
+        await using var enumerator = context.People.GetAsyncEnumerator(TestContext.Current.CancellationToken);
+        var names = new List<string>();
+        while (await enumerator.MoveNextAsync())
+        {
+            var name = enumerator.Current.Name;
+            if (name.StartsWith(batch, StringComparison.Ordinal))
+            {
+                names.Add(name);
+            }
+        }
+
+        Assert.Equal(new[] { $"{batch}-one", $"{batch}-two" }, names.Order(StringComparer.Ordinal));
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-DBSET-LOCAL", "Microsoft.EntityFrameworkCore.DbSet`1.Local")]
     public async Task Local_ReflectsAddedAndDeletedTrackedEntities()
     {
