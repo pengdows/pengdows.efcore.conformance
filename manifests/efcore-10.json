@@ -14,5 +14,32 @@
     "unclassified"
   ],
   "inventoryRule": "A public API entry without an explicit disposition or linked behavioral test remains uncovered; inventory presence alone does not imply conformance.",
-  "capabilityRule": "Capability declarations control applicability only and never modify expected results."
+  "capabilityRule": "Capability declarations control applicability only and never modify expected results.",
+  "dispositionRules": [
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Query.",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "These are public query provider service and expression APIs. The suite does not invoke provider services directly; it verifies translation and results through public IQueryable operations."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Storage.",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "These are public storage and type-mapping service APIs used by provider implementations. Their observable mapping behavior is exercised through persistence and type-fidelity tests rather than direct service calls."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Update.",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "These are public update pipeline service APIs used by provider implementations. Persistence behavior is tested through DbContext SaveChanges and other public application operations."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Design.",
+      "disposition": "ef-owned-no-provider-contract",
+      "reason": "These are EF Core design-time and code-generation APIs; they do not define relational provider runtime behavior."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Diagnostics.",
+      "disposition": "ef-owned-no-provider-contract",
+      "reason": "Diagnostic identifiers, event payloads, and logging helpers are owned by EF Core. Provider-observable interception behavior is covered through public SaveChanges tests where applicable."
+    }
+  ]
 }

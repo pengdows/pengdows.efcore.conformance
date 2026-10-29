@@ -4,6 +4,23 @@ using Microsoft.EntityFrameworkCore;
 using pengdows.efcore.conformance;
 
 var outputPath = args.Length == 0 ? "efcore-10-api-inventory.json" : args[0];
+var contractPath = args.Length > 2
+    ? Path.GetFullPath(args[2])
+    : ResolveContractPath(outputPath);
+var contract = JsonSerializer.Deserialize<ApiContractManifest>(
+    await File.ReadAllTextAsync(contractPath),
+    new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
+    ?? throw new InvalidOperationException($"Could not read API contract manifest '{contractPath}'.");
+var dispositionRules = contract.DispositionRules ?? [];
+var allowedDispositions = contract.AllowedDispositionValues ?? [];
+var invalidRules = dispositionRules.Where(rule =>
+    string.IsNullOrWhiteSpace(rule.SelectorPrefix) ||
+    string.IsNullOrWhiteSpace(rule.Reason) ||
+    !allowedDispositions.Contains(rule.Disposition, StringComparer.Ordinal)).ToArray();
+if (invalidRules.Length > 0)
+{
+    throw new InvalidOperationException($"The API contract manifest contains {invalidRules.Length} invalid disposition rules.");
+}
 var coverageByApiSelector = args.Length > 1
     ? LoadCoverage(Path.GetFullPath(args[1]))
     : new Dictionary<string, HashSet<string>>(StringComparer.Ordinal);
@@ -26,9 +43,10 @@ var entries = assemblies
                 "Type",
                 null,
                 Format(type),
-                IsExcluded(type) ? false : coverageByApiSelector.ContainsKey(type.FullName ?? type.Name) ? true : null,
+                ProviderApplicability(type, coverageByApiSelector.ContainsKey(type.FullName ?? type.Name), dispositionRules),
                 coverageByApiSelector.TryGetValue(type.FullName ?? type.Name, out var typeContracts) ? typeContracts.Order(StringComparer.Ordinal).ToArray() : Array.Empty<string>(),
-                EntryDisposition(type, coverageByApiSelector.ContainsKey(type.FullName ?? type.Name)))
+                EntryDisposition(type, coverageByApiSelector.ContainsKey(type.FullName ?? type.Name), dispositionRules),
+                EntryDispositionReason(type, coverageByApiSelector.ContainsKey(type.FullName ?? type.Name), dispositionRules))
         }
         .Concat(GetPublicMembers(type).Select(member => new ApiInventoryEntry(
             type.Assembly.GetName().Name ?? "unknown",
@@ -36,9 +54,10 @@ var entries = assemblies
             member.MemberType.ToString(),
             member.Name,
             Format(member),
-            IsExcluded(member) ? false : coverageByApiSelector.ContainsKey($"{type.FullName}.{member.Name}") ? true : null,
+            ProviderApplicability(member, coverageByApiSelector.ContainsKey($"{type.FullName}.{member.Name}"), dispositionRules),
             coverageByApiSelector.TryGetValue($"{type.FullName}.{member.Name}", out var contracts) ? contracts.Order(StringComparer.Ordinal).ToArray() : Array.Empty<string>(),
-            EntryDisposition(member, coverageByApiSelector.ContainsKey($"{type.FullName}.{member.Name}"))))))
+            EntryDisposition(member, coverageByApiSelector.ContainsKey($"{type.FullName}.{member.Name}"), dispositionRules),
+            EntryDispositionReason(member, coverageByApiSelector.ContainsKey($"{type.FullName}.{member.Name}"), dispositionRules)))))
     .ToArray();
 
 var inventory = new ApiInventoryDocument(
@@ -54,7 +73,9 @@ var inventory = new ApiInventoryDocument(
         entries.Count(entry => entry.Disposition == "unclassified"),
         entries.Count(entry => entry.Disposition.StartsWith("excluded-", StringComparison.Ordinal)),
         entries.Count(entry => entry.Disposition == "behavior-tested-family"),
-        entries.Where(entry => entry.MemberKind != "Type" && !entry.Disposition.StartsWith("excluded-", StringComparison.Ordinal))
+        entries.Where(entry => entry.MemberKind != "Type" &&
+                               !entry.Disposition.StartsWith("excluded-", StringComparison.Ordinal) &&
+                               entry.Disposition is not ("ef-owned-no-provider-contract" or "not-applicable-with-rationale"))
             .Select(entry => entry.ApiSelector)
             .Distinct(StringComparer.Ordinal)
             .Count(selector => selector is null || !coverageByApiSelector.ContainsKey(selector))),
@@ -106,14 +127,74 @@ static string Disposition(MemberInfo member)
     return obsoleteError ? "excluded-obsolete-error" : "unclassified";
 }
 
-static bool IsExcluded(MemberInfo member) => Disposition(member).StartsWith("excluded-", StringComparison.Ordinal);
-
-static string EntryDisposition(MemberInfo member, bool hasBehavioralCoverage)
+static string EntryDisposition(MemberInfo member, bool hasBehavioralCoverage, ApiDispositionRule[] rules)
 {
     var disposition = Disposition(member);
-    return disposition.StartsWith("excluded-", StringComparison.Ordinal)
-        ? disposition
-        : hasBehavioralCoverage ? "behavior-tested-family" : disposition;
+    if (disposition.StartsWith("excluded-", StringComparison.Ordinal))
+    {
+        return disposition;
+    }
+
+    if (hasBehavioralCoverage)
+    {
+        return "behavior-tested-family";
+    }
+
+    return FindDispositionRule(member, rules)?.Disposition ?? disposition;
+}
+
+static bool? ProviderApplicability(MemberInfo member, bool hasBehavioralCoverage, ApiDispositionRule[] rules)
+{
+    var disposition = EntryDisposition(member, hasBehavioralCoverage, rules);
+    return disposition switch
+    {
+        "behavior-tested-family" or "capability-gated" => true,
+        "ef-owned-no-provider-contract" or "not-applicable-with-rationale" or "excluded-ef-internal" or "excluded-obsolete-error" => false,
+        _ => null
+    };
+}
+
+static string? EntryDispositionReason(MemberInfo member, bool hasBehavioralCoverage, ApiDispositionRule[] rules)
+{
+    var disposition = EntryDisposition(member, hasBehavioralCoverage, rules);
+    if (disposition.StartsWith("excluded-", StringComparison.Ordinal))
+    {
+        return null;
+    }
+
+    if (disposition == "behavior-tested-family")
+    {
+        return "A behavioral test exercises this public API member family through EF Core public operations.";
+    }
+
+    return FindDispositionRule(member, rules)?.Reason;
+}
+
+static string ResolveContractPath(string inventoryOutputPath)
+{
+    var outputDirectory = Path.GetDirectoryName(Path.GetFullPath(inventoryOutputPath)) ?? ".";
+    var candidates = new[]
+    {
+        Path.Combine(outputDirectory, "efcore-10.json"),
+        Path.GetFullPath(Path.Combine("manifests", "efcore-10.json"))
+    };
+
+    return candidates.FirstOrDefault(File.Exists)
+        ?? throw new FileNotFoundException("Could not locate manifests/efcore-10.json beside the inventory output or in the current repository.");
+}
+
+static ApiDispositionRule? FindDispositionRule(MemberInfo member, ApiDispositionRule[] rules)
+{
+    var selector = member is Type type
+        ? type.FullName ?? type.Name
+        : member.DeclaringType?.FullName is { } declaringType
+            ? $"{declaringType}.{member.Name}"
+            : member.Name;
+
+    return rules
+        .Where(rule => selector.StartsWith(rule.SelectorPrefix, StringComparison.Ordinal))
+        .OrderByDescending(rule => rule.SelectorPrefix.Length)
+        .FirstOrDefault();
 }
 
 static Dictionary<string, HashSet<string>> LoadCoverage(string testAssemblyPath)
@@ -242,7 +323,9 @@ static string Constant(object? value) => value switch
 internal sealed record ApiAssembly(string Name, string Version);
 internal sealed record ApiInventorySummary(int TotalEntries, int PublicTypes, int PublicMembers, int AwaitingClassification, int ExplicitlyExcluded, int MemberEntriesInCoveredFamilies, int UncoveredMemberFamilies);
 internal sealed record CoverageSelectorReport(string[] UnmatchedEfCoreSelectors, string[] ExternalApiSelectors);
-internal sealed record ApiInventoryEntry(string AssemblyName, string DeclaringType, string MemberKind, string? ApiMemberName, string Signature, bool? ProviderApplicable, string[] BehavioralContracts, string Disposition)
+internal sealed record ApiDispositionRule(string SelectorPrefix, string Disposition, string Reason);
+internal sealed record ApiContractManifest(string? Contract, string? TargetFramework, string? EfCorePackageVersion, string? ProviderFamily, string[]? AllowedDispositionValues, ApiDispositionRule[]? DispositionRules);
+internal sealed record ApiInventoryEntry(string AssemblyName, string DeclaringType, string MemberKind, string? ApiMemberName, string Signature, bool? ProviderApplicable, string[] BehavioralContracts, string Disposition, string? DispositionReason)
 {
     public string? ApiSelector => MemberKind == "Type" ? DeclaringType : ApiMemberName is null ? null : $"{DeclaringType}.{ApiMemberName}";
 }
