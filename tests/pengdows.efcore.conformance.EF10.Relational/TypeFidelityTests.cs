@@ -43,6 +43,16 @@ public sealed class TypeFidelityTests
         var actual = await read.ScalarRecords.AsNoTracking()
             .SingleAsync(record => record.Id == expected.Id, TestContext.Current.CancellationToken);
         AssertValue(expected, actual);
+
+        var matchingId = await read.ScalarRecords.AsNoTracking()
+            .Where(record => record.Id == expected.Id &&
+                             record.Day == expected.Day &&
+                             record.Start == expected.Start &&
+                             record.Enabled == expected.Enabled &&
+                             record.Mood == expected.Mood)
+            .Select(record => record.Id)
+            .SingleAsync(TestContext.Current.CancellationToken);
+        Assert.Equal(expected.Id, matchingId);
     }
 
     [Fact]
@@ -67,6 +77,16 @@ public sealed class TypeFidelityTests
         await using var read = ProviderTestRuntime.CreateContext();
         var actual = read.ScalarRecords.AsNoTracking().Single(record => record.Id == expected.Id);
         AssertValue(expected, actual);
+
+        var matchingId = read.ScalarRecords.AsNoTracking()
+            .Where(record => record.Id == expected.Id &&
+                             record.Day == expected.Day &&
+                             record.Start == expected.Start &&
+                             record.Enabled == expected.Enabled &&
+                             record.Mood == expected.Mood)
+            .Select(record => record.Id)
+            .Single();
+        Assert.Equal(expected.Id, matchingId);
     }
 
     [Fact]
@@ -100,6 +120,16 @@ public sealed class TypeFidelityTests
         var actual = await read.ScalarRecords.AsNoTracking()
             .SingleAsync(record => record.Id == expected.Id, TestContext.Current.CancellationToken);
         AssertValue(expected, actual);
+
+        var matchingId = await read.ScalarRecords.AsNoTracking()
+            .Where(record => record.Id == expected.Id &&
+                             record.Day == expected.Day &&
+                             record.Start == expected.Start &&
+                             record.Enabled == expected.Enabled &&
+                             record.Mood == expected.Mood)
+            .Select(record => record.Id)
+            .SingleAsync(TestContext.Current.CancellationToken);
+        Assert.Equal(expected.Id, matchingId);
     }
 
     [Fact]
@@ -132,6 +162,16 @@ public sealed class TypeFidelityTests
         await using var read = ProviderTestRuntime.CreateContext();
         var actual = read.ScalarRecords.AsNoTracking().Single(record => record.Id == expected.Id);
         AssertValue(expected, actual);
+
+        var matchingId = read.ScalarRecords.AsNoTracking()
+            .Where(record => record.Id == expected.Id &&
+                             record.Day == expected.Day &&
+                             record.Start == expected.Start &&
+                             record.Enabled == expected.Enabled &&
+                             record.Mood == expected.Mood)
+            .Select(record => record.Id)
+            .Single();
+        Assert.Equal(expected.Id, matchingId);
     }
 
     [Fact]
