@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12269,
+    "AwaitingClassification": 12257,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 296,
-    "UncoveredMemberFamilies": 8965
+    "MemberEntriesInCoveredFamilies": 308,
+    "UncoveredMemberFamilies": 8958
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -1837,9 +1837,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "Property",
       "Signature": "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyEntry Property(Microsoft.EntityFrameworkCore.Metadata.IProperty property)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-PROPERTY-VALUES-SET"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry.Property"
     },
     {
@@ -1848,9 +1850,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "Property",
       "Signature": "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyEntry Property(System.String propertyName)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-PROPERTY-VALUES-SET"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry.Property"
     },
     {
@@ -2179,9 +2183,11 @@
       "MemberKind": "Property",
       "ApiMemberName": "CurrentValues",
       "Signature": "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyValues CurrentValues get;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-PROPERTY-VALUES-SET"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry.CurrentValues"
     },
     {
@@ -13739,9 +13745,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "ToObject",
       "Signature": "System.Object ToObject()",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-PROPERTY-VALUES-SET"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyValues.ToObject"
     },
     {
@@ -13750,9 +13758,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "SetValues",
       "Signature": "System.Void SetValues(System.Object obj)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-PROPERTY-VALUES-SET"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyValues.SetValues"
     },
     {
@@ -13761,9 +13771,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "Clone",
       "Signature": "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyValues Clone()",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-PROPERTY-VALUES-SET"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyValues.Clone"
     },
     {
@@ -13772,9 +13784,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "SetValues",
       "Signature": "System.Void SetValues(Microsoft.EntityFrameworkCore.ChangeTracking.PropertyValues propertyValues)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-PROPERTY-VALUES-SET"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyValues.SetValues"
     },
     {
@@ -13783,9 +13797,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "SetValues",
       "Signature": "System.Void SetValues\u003CTProperty\u003E(System.Collections.Generic.IDictionary\u003CSystem.String, TProperty\u003E values)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-PROPERTY-VALUES-SET"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyValues.SetValues"
     },
     {
@@ -13819,9 +13835,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "TryGetValue",
       "Signature": "System.Boolean TryGetValue\u003CTValue\u003E(System.String propertyName, out TValue value)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-PROPERTY-VALUES-SET"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyValues.TryGetValue"
     },
     {
@@ -13910,9 +13928,11 @@
       "MemberKind": "Property",
       "ApiMemberName": "Item",
       "Signature": "System.Object Item[System.String propertyName] get; set;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-PROPERTY-VALUES-SET"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyValues.Item"
     },
     {
@@ -13921,9 +13941,11 @@
       "MemberKind": "Property",
       "ApiMemberName": "Item",
       "Signature": "System.Object Item[Microsoft.EntityFrameworkCore.Metadata.IProperty property] get; set;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-PROPERTY-VALUES-SET"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyValues.Item"
     },
     {
@@ -13932,9 +13954,11 @@
       "MemberKind": "Property",
       "ApiMemberName": "Item",
       "Signature": "System.Collections.IList Item[Microsoft.EntityFrameworkCore.Metadata.IComplexProperty complexProperty] get; set;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-PROPERTY-VALUES-SET"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyValues.Item"
     },
     {
@@ -14666,6 +14690,7 @@
         "EF10-TRACKING-ENTRY-DETECT-CHANGES",
         "EF10-TRACKING-HAS-CHANGES",
         "EF10-TRACKING-PROPERTY-ENTRY-SYNC",
+        "EF10-TRACKING-PROPERTY-VALUES-SET",
         "EF10-TRACKING-UPDATE-DETACHED-SYNC",
         "EF10-TRANSACTION-COMMIT-SYNC",
         "EF10-TRANSACTION-EXTERNAL-SYNC",
@@ -14712,6 +14737,7 @@
         "EF10-TRACKING-ENTRY-DETECT-CHANGES",
         "EF10-TRACKING-HAS-CHANGES",
         "EF10-TRACKING-PROPERTY-ENTRY-SYNC",
+        "EF10-TRACKING-PROPERTY-VALUES-SET",
         "EF10-TRACKING-UPDATE-DETACHED-SYNC",
         "EF10-TRANSACTION-COMMIT-SYNC",
         "EF10-TRANSACTION-EXTERNAL-SYNC",

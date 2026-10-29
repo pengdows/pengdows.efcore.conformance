@@ -506,6 +506,36 @@ public sealed class StateManagementTests
             .Single());
     }
 
+    [Fact]
+    [BehavioralCoverage("EF10-TRACKING-PROPERTY-VALUES-SET", "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry.CurrentValues", "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyValues.SetValues", "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyValues.TryGetValue", "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyValues.Clone", "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyValues.ToObject", "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyValues.Item", "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry.Property", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges")]
+    public async Task PropertyValues_SetValuesAndSnapshotHelpersPreserveMappedValues()
+    {
+        var id = Guid.NewGuid();
+        await SeedAsync(id);
+
+        await using (var update = ProviderTestRuntime.CreateContext())
+        {
+            var person = update.People.Single(item => item.Id == id);
+            var entry = update.Entry(person);
+            var values = entry.CurrentValues;
+            Assert.Equal(person.Name, values[nameof(Person.Name)]);
+
+            values.SetValues(new Person { Id = id, Name = "Set through PropertyValues", Age = 56 });
+
+            Assert.True(entry.Property(nameof(Person.Age)).IsModified);
+            Assert.True(values.TryGetValue<int>(nameof(Person.Age), out var age));
+            Assert.Equal(56, age);
+            Assert.Equal("Set through PropertyValues", values.Clone().ToObject() is Person copy ? copy.Name : null);
+            Assert.Equal(1, update.SaveChanges());
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        var actual = await verify.People.AsNoTracking()
+            .SingleAsync(item => item.Id == id, TestContext.Current.CancellationToken);
+        Assert.Equal("Set through PropertyValues", actual.Name);
+        Assert.Equal(56, actual.Age);
+    }
+
     private static async Task SeedAsync(Guid id)
     {
         await using var context = ProviderTestRuntime.CreateContext();
