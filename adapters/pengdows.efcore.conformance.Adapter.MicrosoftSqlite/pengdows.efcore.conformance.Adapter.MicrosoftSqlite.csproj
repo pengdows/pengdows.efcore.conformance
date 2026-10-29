@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>pengdows.efcore.conformance.Adapter.MicrosoftSqlite</AssemblyName>
+    <RootNamespace>pengdows.efcore.conformance.Adapter.MicrosoftSqlite</RootNamespace>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
+    <ProjectReference Include="../../src/pengdows.efcore.conformance.Contracts/pengdows.efcore.conformance.Contracts.csproj" />
+  </ItemGroup>
+</Project>

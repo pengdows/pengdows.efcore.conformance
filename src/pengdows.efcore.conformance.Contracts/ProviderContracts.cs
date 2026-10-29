@@ -36,7 +36,27 @@ public sealed record ProviderCapabilities(
     IReadOnlySet<string> SupportedFeatures,
     IReadOnlySet<string> UnsupportedFeatures)
 {
+    public static IReadOnlySet<string> KnownFeatures { get; } = new HashSet<string>(StringComparer.Ordinal)
+    {
+        "relational",
+        "transactions",
+        "savepoints",
+        "migrations",
+        "raw-sql",
+        "execute-update",
+        "execute-delete",
+        "primitive-collections"
+    };
+
+    public IReadOnlyList<string> UndeclaredFeatures => KnownFeatures
+        .Except(SupportedFeatures, StringComparer.Ordinal)
+        .Except(UnsupportedFeatures, StringComparer.Ordinal)
+        .Order(StringComparer.Ordinal)
+        .ToArray();
+
     public bool Supports(string feature) => SupportedFeatures.Contains(feature);
+
+    public bool IsDeclared(string feature) => SupportedFeatures.Contains(feature) || UnsupportedFeatures.Contains(feature);
 
     public void Validate()
     {
@@ -45,20 +65,53 @@ public sealed record ProviderCapabilities(
         {
             throw new InvalidOperationException($"Capabilities cannot be both supported and unsupported: {string.Join(", ", conflicts)}.");
         }
+
+        var unknown = SupportedFeatures.Concat(UnsupportedFeatures).Except(KnownFeatures, StringComparer.Ordinal).Distinct(StringComparer.Ordinal).ToArray();
+        if (unknown.Length > 0)
+        {
+            throw new InvalidOperationException($"Provider declared unknown capabilities: {string.Join(", ", unknown)}.");
+        }
     }
+}
+
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
+public sealed class CapabilityRequirementAttribute(string feature) : Attribute
+{
+    public string Feature { get; } = feature;
 }
 
 public enum ConformanceOutcome
 {
     Pass,
     Fail,
+    Untranslatable,
     Unsupported,
+    UndeclaredCapability,
     Error,
-    Skip
+    Skip,
+    Inconclusive
+}
+
+public enum ConformanceSeverity
+{
+    Hard,
+    Soft
+}
+
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
+public sealed class ConformanceSeverityAttribute(ConformanceSeverity severity) : Attribute
+{
+    public ConformanceSeverity Severity { get; } = severity;
 }
 
 public sealed class ConformanceInfrastructureException(string message, Exception innerException)
     : Exception(message, innerException);
+
+public sealed class UndeclaredCapabilityException(string feature)
+    : Exception($"Provider capability '{feature}' was not declared.")
+{
+    public string Feature { get; } = feature;
+}
 
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
 public sealed class NativeTypeCoverageAttribute(string databaseTypeName, Type clrType, string behavioralContractId) : Attribute
@@ -81,4 +134,5 @@ public sealed record ConformanceResult(
     string DisplayName,
     ConformanceOutcome Outcome,
     string? Reason = null,
-    string? ExceptionType = null);
+    string? ExceptionType = null,
+    ConformanceSeverity Severity = ConformanceSeverity.Hard);

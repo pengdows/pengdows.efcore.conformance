@@ -57,10 +57,10 @@ internal static class ProviderTestRuntime
 
         if (capabilities.UnsupportedFeatures.Contains(feature))
         {
-            Assert.Skip($"UNSUPPORTED: adapter declares that '{feature}' is not supported.");
+            Assert.Skip($"Provider declares capability '{feature}' unsupported.");
         }
 
-        Assert.Skip($"SKIP: adapter did not declare applicability for '{feature}'.");
+        throw new UndeclaredCapabilityException(feature);
     }
 
     private static IProviderAdapter LoadAdapter()
@@ -142,7 +142,7 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
             entity.ToTable("ef10conformancescalars");
             entity.HasKey(record => record.Id);
             entity.Property(record => record.Id).HasColumnName("id");
-            entity.Property(record => record.Amount).HasColumnName("amount").HasColumnType("decimal(18,4)");
+            entity.Property(record => record.Amount).HasColumnName("amount").HasPrecision(18, 4);
             entity.Property(record => record.Day).HasColumnName("day");
             entity.Property(record => record.Start).HasColumnName("start");
             entity.Property(record => record.Enabled).HasColumnName("enabled");

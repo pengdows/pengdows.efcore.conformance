@@ -5,6 +5,7 @@ using Xunit;
 namespace pengdows.efcore.conformance.EF10.Relational;
 
 [Collection(RelationalTestCollection.Name)]
+[CapabilityRequirement("primitive-collections")]
 public sealed class PrimitiveCollectionTests
 {
     [Fact]

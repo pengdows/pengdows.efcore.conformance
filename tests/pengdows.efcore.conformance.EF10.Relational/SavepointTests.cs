@@ -5,6 +5,8 @@ using Xunit;
 namespace pengdows.efcore.conformance.EF10.Relational;
 
 [Collection(RelationalTestCollection.Name)]
+[CapabilityRequirement("transactions")]
+[CapabilityRequirement("savepoints")]
 public sealed class SavepointTests
 {
     [Fact]
@@ -12,6 +14,7 @@ public sealed class SavepointTests
     public async Task RollbackToSavepointAsync_RevertsChangesAfterSavepoint()
     {
         ProviderTestRuntime.RequireCapability("savepoints");
+        ProviderTestRuntime.RequireCapability("transactions");
         var id = Guid.NewGuid();
         var token = TestContext.Current.CancellationToken;
 
@@ -33,6 +36,7 @@ public sealed class SavepointTests
     public async Task RollbackToSavepoint_RevertsChangesAfterSavepointSynchronously()
     {
         ProviderTestRuntime.RequireCapability("savepoints");
+        ProviderTestRuntime.RequireCapability("transactions");
         var id = Guid.NewGuid();
         var token = TestContext.Current.CancellationToken;
 

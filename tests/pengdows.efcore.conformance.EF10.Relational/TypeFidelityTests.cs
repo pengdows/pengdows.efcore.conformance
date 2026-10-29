@@ -21,8 +21,7 @@ public sealed class TypeFidelityTests
     };
 
     [Fact]
-    [BehavioralCoverage("EF10-TYPES-ROUNDTRIP-ASYNC", "Microsoft.EntityFrameworkCore.RelationalPropertyBuilderExtensions.HasColumnType", "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder.HasPrecision", "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder`1.HasConversion", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync")]
-    [NativeTypeCoverage("decimal(18,4)", typeof(decimal), "EF10-TYPES-ROUNDTRIP-ASYNC")]
+    [BehavioralCoverage("EF10-TYPES-ROUNDTRIP-ASYNC", "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder.HasPrecision", "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder`1.HasConversion", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync")]
     [NativeTypeCoverage("DATE", typeof(DateOnly), "EF10-TYPES-ROUNDTRIP-ASYNC")]
     [NativeTypeCoverage("TIME", typeof(TimeOnly), "EF10-TYPES-ROUNDTRIP-ASYNC")]
     [NativeTypeCoverage("BOOLEAN", typeof(bool), "EF10-TYPES-ROUNDTRIP-ASYNC")]
@@ -47,8 +46,7 @@ public sealed class TypeFidelityTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-TYPES-ROUNDTRIP-SYNC", "Microsoft.EntityFrameworkCore.RelationalPropertyBuilderExtensions.HasColumnType", "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder`1.HasConversion", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges")]
-    [NativeTypeCoverage("decimal(18,4)", typeof(decimal), "EF10-TYPES-ROUNDTRIP-SYNC")]
+    [BehavioralCoverage("EF10-TYPES-ROUNDTRIP-SYNC", "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder.HasPrecision", "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder`1.HasConversion", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges")]
     [NativeTypeCoverage("DATE", typeof(DateOnly), "EF10-TYPES-ROUNDTRIP-SYNC")]
     [NativeTypeCoverage("TIME", typeof(TimeOnly), "EF10-TYPES-ROUNDTRIP-SYNC")]
     [NativeTypeCoverage("BOOLEAN", typeof(bool), "EF10-TYPES-ROUNDTRIP-SYNC")]
@@ -122,7 +120,7 @@ public sealed class TypeFidelityTests
 
     [Theory]
     [MemberData(nameof(DecimalBoundaryValues))]
-    [BehavioralCoverage("EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC", "Microsoft.EntityFrameworkCore.RelationalPropertyBuilderExtensions.HasColumnType", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    [BehavioralCoverage("EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC", "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder.HasPrecision", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
     public async Task Decimal18Scale4_RoundTripsBoundaryValuesAsynchronously(decimal amount)
     {
         var expected = CreateValue(amount);
@@ -142,7 +140,7 @@ public sealed class TypeFidelityTests
 
     [Theory]
     [MemberData(nameof(DecimalBoundaryValues))]
-    [BehavioralCoverage("EF10-TYPES-DECIMAL-BOUNDARIES-SYNC", "Microsoft.EntityFrameworkCore.RelationalPropertyBuilderExtensions.HasColumnType", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "System.Linq.Queryable.Single")]
+    [BehavioralCoverage("EF10-TYPES-DECIMAL-BOUNDARIES-SYNC", "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder.HasPrecision", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "System.Linq.Queryable.Single")]
     public async Task Decimal18Scale4_RoundTripsBoundaryValuesSynchronously(decimal amount)
     {
         var expected = CreateValue(amount);

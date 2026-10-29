@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12360,
+    "AwaitingClassification": 12363,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 205,
-    "UncoveredMemberFamilies": 9026
+    "MemberEntriesInCoveredFamilies": 202,
+    "UncoveredMemberFamilies": 9027
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -48342,6 +48342,7 @@
       "Signature": "System.Int32 ExecuteDelete\u003CTSource\u003E(System.Linq.IQueryable\u003CTSource\u003E source)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-BULK-DELETE-NO-MATCH-SYNC",
         "EF10-BULK-DELETE-SYNC"
       ],
       "Disposition": "behavior-tested-family",
@@ -48369,6 +48370,8 @@
       "Signature": "System.Int32 ExecuteUpdate\u003CTSource\u003E(System.Linq.IQueryable\u003CTSource\u003E source, System.Action\u003CMicrosoft.EntityFrameworkCore.Query.UpdateSettersBuilder\u003CTSource\u003E\u003E setPropertyCalls)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-BULK-UPDATE-MULTIPLE-PROPERTIES-SYNC",
+        "EF10-BULK-UPDATE-NO-MATCH-SYNC",
         "EF10-BULK-UPDATE-SYNC"
       ],
       "Disposition": "behavior-tested-family",
@@ -75607,7 +75610,10 @@
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder HasPrecision(System.Int32 precision, System.Int32 scale)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
-        "EF10-TYPES-ROUNDTRIP-ASYNC"
+        "EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC",
+        "EF10-TYPES-DECIMAL-BOUNDARIES-SYNC",
+        "EF10-TYPES-ROUNDTRIP-ASYNC",
+        "EF10-TYPES-ROUNDTRIP-SYNC"
       ],
       "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder.HasPrecision"
@@ -75620,7 +75626,10 @@
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder HasPrecision(System.Int32 precision)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
-        "EF10-TYPES-ROUNDTRIP-ASYNC"
+        "EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC",
+        "EF10-TYPES-DECIMAL-BOUNDARIES-SYNC",
+        "EF10-TYPES-ROUNDTRIP-ASYNC",
+        "EF10-TYPES-ROUNDTRIP-SYNC"
       ],
       "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder.HasPrecision"
@@ -172881,14 +172890,9 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasColumnType",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder HasColumnType(Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder propertyBuilder, System.String typeName)",
-      "ProviderApplicable": true,
-      "BehavioralContracts": [
-        "EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC",
-        "EF10-TYPES-DECIMAL-BOUNDARIES-SYNC",
-        "EF10-TYPES-ROUNDTRIP-ASYNC",
-        "EF10-TYPES-ROUNDTRIP-SYNC"
-      ],
-      "Disposition": "behavior-tested-family",
+      "ProviderApplicable": null,
+      "BehavioralContracts": [],
+      "Disposition": "unclassified",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalPropertyBuilderExtensions.HasColumnType"
     },
     {
@@ -172897,14 +172901,9 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasColumnType",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder\u003CTProperty\u003E HasColumnType\u003CTProperty\u003E(Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder\u003CTProperty\u003E propertyBuilder, System.String typeName)",
-      "ProviderApplicable": true,
-      "BehavioralContracts": [
-        "EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC",
-        "EF10-TYPES-DECIMAL-BOUNDARIES-SYNC",
-        "EF10-TYPES-ROUNDTRIP-ASYNC",
-        "EF10-TYPES-ROUNDTRIP-SYNC"
-      ],
-      "Disposition": "behavior-tested-family",
+      "ProviderApplicable": null,
+      "BehavioralContracts": [],
+      "Disposition": "unclassified",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalPropertyBuilderExtensions.HasColumnType"
     },
     {
@@ -172913,14 +172912,9 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasColumnType",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionPropertyBuilder HasColumnType(Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionPropertyBuilder propertyBuilder, System.String typeName, System.Boolean fromDataAnnotation = false)",
-      "ProviderApplicable": true,
-      "BehavioralContracts": [
-        "EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC",
-        "EF10-TYPES-DECIMAL-BOUNDARIES-SYNC",
-        "EF10-TYPES-ROUNDTRIP-ASYNC",
-        "EF10-TYPES-ROUNDTRIP-SYNC"
-      ],
-      "Disposition": "behavior-tested-family",
+      "ProviderApplicable": null,
+      "BehavioralContracts": [],
+      "Disposition": "unclassified",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalPropertyBuilderExtensions.HasColumnType"
     },
     {

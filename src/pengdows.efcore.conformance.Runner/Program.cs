@@ -12,6 +12,11 @@ if (args.Length == 0 || args[0] is "--help" or "-h")
     return args.Length > 0 ? 0 : 2;
 }
 
+if (args[0] == "--compare")
+{
+    return await CompareReportsAsync(args);
+}
+
 if (args[0] == "--run")
 {
     return await RunTestsAsync(args);
@@ -75,6 +80,11 @@ return 0;
 
 static IReadOnlyList<NativeTypeCoverageResult> BuildNativeTypeCoverage(TypeDiscoveryReport report, string testAssemblyPath)
 {
+    if (!report.HasIndependentTypeInventory)
+    {
+        return Array.Empty<NativeTypeCoverageResult>();
+    }
+
     var assembly = Assembly.LoadFrom(testAssemblyPath);
     var cases = new List<(string DatabaseTypeName, string ClrTypeName, string ContractId)>();
     foreach (var type in assembly.GetTypes())
@@ -94,7 +104,7 @@ static IReadOnlyList<NativeTypeCoverageResult> BuildNativeTypeCoverage(TypeDisco
         }
     }
 
-    var observedTypes = report.Types.Concat(report.SupplementalTypes)
+    var observedTypes = report.Types.Concat(report.SupplementalTypes.Where(type => type.IsIndependentDiscovery))
         .Select(type => type.DatabaseTypeName.Trim())
         .Distinct(StringComparer.OrdinalIgnoreCase)
         .ToArray();
@@ -163,6 +173,30 @@ async Task<int> RunTestsAsync(string[] arguments)
         return 2;
     }
 
+    if (!runAdapter.Capabilities.SupportedFeatures.Contains("relational"))
+    {
+        var outcome = runAdapter.Capabilities.UnsupportedFeatures.Contains("relational")
+            ? ConformanceOutcome.Unsupported
+            : ConformanceOutcome.UndeclaredCapability;
+        var required = new ConformanceResult("CAPABILITY-relational", "Relational provider support is required", outcome,
+            "This runner only executes the relational EF Core profile.");
+        await WriteReportsAsync(reportDirectory, runAdapter, project, [required]);
+        return outcome == ConformanceOutcome.Unsupported ? 0 : 2;
+    }
+
+    var undeclared = runAdapter.Capabilities.UndeclaredFeatures;
+    if (undeclared.Count > 0)
+    {
+        var capabilityResults = undeclared.Select(feature => new ConformanceResult(
+            $"CAPABILITY-{feature}",
+            $"Undeclared provider capability: {feature}",
+            ConformanceOutcome.UndeclaredCapability,
+            "Strict mode requires an explicit supported or unsupported declaration for every known capability.")).ToArray();
+        await WriteReportsAsync(reportDirectory, runAdapter, project, capabilityResults);
+        Console.Error.WriteLine($"Provider left {undeclared.Count} known capabilities undeclared; strict conformance run stopped.");
+        return 2;
+    }
+
     var trxPath = Path.Combine(reportDirectory, "conformance.trx");
     var logPath = Path.Combine(reportDirectory, "dotnet-test.log");
     var startInfo = new ProcessStartInfo("dotnet")
@@ -202,8 +236,11 @@ async Task<int> RunTestsAsync(string[] arguments)
 
     var combined = Sanitize(string.Join(Environment.NewLine, stdout, stderr), cs);
     await File.WriteAllTextAsync(logPath, combined);
-    var coverageByMethod = LoadTestCoverage(GetTestAssemblyPath(project));
-    var results = File.Exists(trxPath) ? ReadResults(trxPath, cs, coverageByMethod) : [];
+    var testAssembly = GetTestAssemblyPath(project);
+    var coverageByMethod = LoadTestCoverage(testAssembly);
+    var capabilitiesByMethod = LoadCapabilityRequirements(testAssembly);
+    var severityByMethod = LoadSeverityRequirements(testAssembly);
+    var results = File.Exists(trxPath) ? ReadResults(trxPath, cs, coverageByMethod, capabilitiesByMethod, severityByMethod, runAdapter.Capabilities) : [];
     if (File.Exists(trxPath))
     {
         var trxText = await File.ReadAllTextAsync(trxPath);
@@ -216,9 +253,84 @@ async Task<int> RunTestsAsync(string[] arguments)
 
     await WriteReportsAsync(reportDirectory, runAdapter, project, results);
     Console.WriteLine($"Provider: {runAdapter.Name} {runAdapter.Version}");
-    Console.WriteLine($"Results: {results.Count} total; {results.Count(item => item.Outcome == ConformanceOutcome.Pass)} passed; {results.Count(item => item.Outcome == ConformanceOutcome.Fail)} failed; {results.Count(item => item.Outcome == ConformanceOutcome.Unsupported)} unsupported; {results.Count(item => item.Outcome == ConformanceOutcome.Error)} errors; {results.Count(item => item.Outcome == ConformanceOutcome.Skip)} skipped.");
+    Console.WriteLine($"Results: {results.Count} total; {results.Count(item => item.Outcome == ConformanceOutcome.Pass)} passed; {results.Count(item => item.Outcome is ConformanceOutcome.Fail or ConformanceOutcome.Untranslatable)} failed; {results.Count(item => item.Outcome == ConformanceOutcome.Unsupported)} unsupported; {results.Count(item => item.Outcome == ConformanceOutcome.UndeclaredCapability)} undeclared capabilities; {results.Count(item => item.Outcome == ConformanceOutcome.Error)} errors; {results.Count(item => item.Outcome is ConformanceOutcome.Skip or ConformanceOutcome.Inconclusive)} skipped/inconclusive.");
     Console.WriteLine($"Reports written to {reportDirectory}");
     return process.ExitCode;
+}
+
+static async Task<int> CompareReportsAsync(string[] arguments)
+{
+    if (arguments.Length != 4)
+    {
+        Console.Error.WriteLine("Usage: --compare <candidate-results.json> <reference-results.json> <comparison.json>");
+        return 2;
+    }
+
+    var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+    options.Converters.Add(new JsonStringEnumConverter());
+    var candidate = JsonSerializer.Deserialize<ConformanceRunReport>(await File.ReadAllTextAsync(arguments[1]), options);
+    var reference = JsonSerializer.Deserialize<ConformanceRunReport>(await File.ReadAllTextAsync(arguments[2]), options);
+    if (candidate is null || reference is null)
+    {
+        Console.Error.WriteLine("Could not read one of the conformance result reports.");
+        return 2;
+    }
+
+    if (!string.Equals(candidate.EfCoreVersion, reference.EfCoreVersion, StringComparison.Ordinal) ||
+        !string.Equals(candidate.TestProject, reference.TestProject, StringComparison.Ordinal))
+    {
+        Console.Error.WriteLine("Comparison requires reports from the same EF Core version and test project.");
+        return 2;
+    }
+
+    var candidateByName = candidate.Results.ToDictionary(result => result.DisplayName, StringComparer.Ordinal);
+    var referenceByName = reference.Results.ToDictionary(result => result.DisplayName, StringComparer.Ordinal);
+    var allNames = candidateByName.Keys.Concat(referenceByName.Keys).Distinct(StringComparer.Ordinal).Order(StringComparer.Ordinal);
+    var comparisons = allNames.Select(name =>
+    {
+        candidateByName.TryGetValue(name, out var candidateResult);
+        referenceByName.TryGetValue(name, out var referenceResult);
+        var classification = ClassifyComparison(candidateResult, referenceResult);
+        return new ConformanceComparisonResult(
+            candidateResult?.ContractId ?? referenceResult?.ContractId ?? name,
+            name,
+            candidateResult?.Outcome,
+            referenceResult?.Outcome,
+            classification,
+            candidateResult?.Reason,
+            referenceResult?.Reason);
+    }).ToArray();
+    var report = new ConformanceComparisonReport(
+        DateTimeOffset.UtcNow,
+        candidate.EfCoreVersion,
+        candidate.Provider,
+        reference.Provider,
+        comparisons.Length,
+        comparisons.Count(item => item.Classification == "PASS_ON_BOTH"),
+        comparisons.Count(item => item.Classification == "CANDIDATE_ONLY_FAILURE"),
+        comparisons.Count(item => item.Classification == "FAILS_ON_REFERENCE_TOO"),
+        comparisons);
+    var outputPath = Path.GetFullPath(arguments[3]);
+    Directory.CreateDirectory(Path.GetDirectoryName(outputPath)!);
+    await using var output = File.Create(outputPath);
+    await JsonSerializer.SerializeAsync(output, report, options);
+    Console.WriteLine($"Compared {report.Total} cases: {report.PassedOnBoth} pass on both; {report.CandidateOnlyFailures} fail only on candidate; {report.FailuresAlsoOnReference} fail on reference too.");
+    Console.WriteLine($"Comparison written to {outputPath}");
+    return 0;
+}
+
+static string ClassifyComparison(ConformanceResult? candidate, ConformanceResult? reference)
+{
+    if (candidate is null) return "MISSING_FROM_CANDIDATE";
+    if (reference is null) return "MISSING_FROM_REFERENCE";
+    var candidateFailed = candidate.Outcome is ConformanceOutcome.Fail or ConformanceOutcome.Untranslatable;
+    var referenceFailed = reference.Outcome is ConformanceOutcome.Fail or ConformanceOutcome.Untranslatable;
+    if (!candidateFailed && !referenceFailed && candidate.Outcome == ConformanceOutcome.Pass && reference.Outcome == ConformanceOutcome.Pass) return "PASS_ON_BOTH";
+    if (candidateFailed && referenceFailed) return "FAILS_ON_REFERENCE_TOO";
+    if (candidateFailed && reference.Outcome == ConformanceOutcome.Pass) return "CANDIDATE_ONLY_FAILURE";
+    if (candidate.Outcome == ConformanceOutcome.Pass && referenceFailed) return "REFERENCE_ONLY_FAILURE";
+    if (candidate.Outcome == ConformanceOutcome.Unsupported || reference.Outcome == ConformanceOutcome.Unsupported) return "CAPABILITY_OUTCOME_DIFFERS";
+    return "OUTCOME_DIFFERS";
 }
 
 static string GetConnectionString() =>
@@ -229,7 +341,13 @@ static string GetConnectionString() =>
 static IProviderAdapter LoadAdapter(string assemblyPath, string typeName)
     => ProviderAdapterLoader.Load(assemblyPath, typeName);
 
-static List<ConformanceResult> ReadResults(string trxPath, string connectionString, IReadOnlyDictionary<string, HashSet<string>> coverageByMethod)
+static List<ConformanceResult> ReadResults(
+    string trxPath,
+    string connectionString,
+    IReadOnlyDictionary<string, HashSet<string>> coverageByMethod,
+    IReadOnlyDictionary<string, HashSet<string>> capabilitiesByMethod,
+    IReadOnlyDictionary<string, ConformanceSeverity> severityByMethod,
+    ProviderCapabilities capabilities)
 {
     var document = XDocument.Load(trxPath);
     var ns = document.Root?.Name.Namespace ?? XNamespace.None;
@@ -242,20 +360,76 @@ static List<ConformanceResult> ReadResults(string trxPath, string connectionStri
         var separator = message?.IndexOf(" :", StringComparison.Ordinal) ?? -1;
         var exceptionType = errorInfo?.Element(ns + "ErrorType")?.Value
                             ?? (separator > 0 ? message![..separator] : null);
+        var methodKey = ExtractMethodKey(name);
+        var unsupportedByDeclaration = capabilitiesByMethod.TryGetValue(methodKey, out var requiredFeatures) &&
+                                       requiredFeatures.Any(feature => capabilities.UnsupportedFeatures.Contains(feature));
         var outcome = outcomeText.ToUpperInvariant() switch
         {
             "PASSED" => ConformanceOutcome.Pass,
-            "NOTEXECUTED" when message?.StartsWith("UNSUPPORTED:", StringComparison.OrdinalIgnoreCase) == true => ConformanceOutcome.Unsupported,
+            "NOTEXECUTED" when unsupportedByDeclaration => ConformanceOutcome.Unsupported,
             "NOTEXECUTED" or "INCONCLUSIVE" => ConformanceOutcome.Skip,
+            _ when exceptionType?.EndsWith(nameof(UndeclaredCapabilityException), StringComparison.Ordinal) == true => ConformanceOutcome.UndeclaredCapability,
             _ when exceptionType?.EndsWith(nameof(ConformanceInfrastructureException), StringComparison.Ordinal) == true => ConformanceOutcome.Error,
+            _ when exceptionType?.EndsWith(nameof(InvalidOperationException), StringComparison.Ordinal) == true &&
+                   message?.Contains("could not be translated", StringComparison.OrdinalIgnoreCase) == true => ConformanceOutcome.Untranslatable,
             _ => ConformanceOutcome.Fail
         };
-        var methodKey = ExtractMethodKey(name);
         var contractId = coverageByMethod.TryGetValue(methodKey, out var contracts)
             ? string.Join(",", contracts.Order(StringComparer.Ordinal))
             : name;
-        return new ConformanceResult(contractId, name, outcome, message is null ? null : Sanitize(message, connectionString), exceptionType);
+        var severity = severityByMethod.TryGetValue(methodKey, out var configuredSeverity) ? configuredSeverity : ConformanceSeverity.Hard;
+        return new ConformanceResult(contractId, name, outcome, message is null ? null : Sanitize(message, connectionString), exceptionType, severity);
     }).ToList();
+}
+
+static Dictionary<string, HashSet<string>> LoadCapabilityRequirements(string assemblyPath)
+{
+    var requirements = new Dictionary<string, HashSet<string>>(StringComparer.Ordinal);
+    if (!File.Exists(assemblyPath)) return requirements;
+    var assembly = Assembly.LoadFrom(assemblyPath);
+    foreach (var type in assembly.GetTypes())
+    {
+        var typeFeatures = CustomAttributeData.GetCustomAttributes(type)
+            .Where(attribute => attribute.AttributeType == typeof(CapabilityRequirementAttribute))
+            .Select(attribute => (string)attribute.ConstructorArguments[0].Value!)
+            .ToArray();
+        foreach (var method in type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly))
+        {
+            var features = typeFeatures.Concat(CustomAttributeData.GetCustomAttributes(method)
+                    .Where(attribute => attribute.AttributeType == typeof(CapabilityRequirementAttribute))
+                    .Select(attribute => (string)attribute.ConstructorArguments[0].Value!))
+                .ToHashSet(StringComparer.Ordinal);
+            if (features.Count > 0) requirements[$"{type.FullName}.{method.Name}"] = features;
+        }
+    }
+
+    return requirements;
+}
+
+static Dictionary<string, ConformanceSeverity> LoadSeverityRequirements(string assemblyPath)
+{
+    var severities = new Dictionary<string, ConformanceSeverity>(StringComparer.Ordinal);
+    if (!File.Exists(assemblyPath)) return severities;
+    var assembly = Assembly.LoadFrom(assemblyPath);
+    foreach (var type in assembly.GetTypes())
+    {
+        var typeSeverity = CustomAttributeData.GetCustomAttributes(type)
+            .FirstOrDefault(attribute => attribute.AttributeType == typeof(ConformanceSeverityAttribute))
+            ?.ConstructorArguments[0].Value;
+        foreach (var method in type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly))
+        {
+            var methodSeverity = CustomAttributeData.GetCustomAttributes(method)
+                .FirstOrDefault(attribute => attribute.AttributeType == typeof(ConformanceSeverityAttribute))
+                ?.ConstructorArguments[0].Value;
+            var value = methodSeverity ?? typeSeverity;
+            if (value is not null)
+            {
+                severities[$"{type.FullName}.{method.Name}"] = (ConformanceSeverity)value;
+            }
+        }
+    }
+
+    return severities;
 }
 
 static string GetTestAssemblyPath(string projectPath)
@@ -317,9 +491,12 @@ static async Task WriteReportsAsync(string directory, IProviderAdapter adapter, 
         results.Count,
         results.Count(item => item.Outcome == ConformanceOutcome.Pass),
         results.Count(item => item.Outcome == ConformanceOutcome.Fail),
+        results.Count(item => item.Outcome == ConformanceOutcome.Untranslatable),
         results.Count(item => item.Outcome == ConformanceOutcome.Unsupported),
+        results.Count(item => item.Outcome == ConformanceOutcome.UndeclaredCapability),
         results.Count(item => item.Outcome == ConformanceOutcome.Error),
         results.Count(item => item.Outcome == ConformanceOutcome.Skip),
+        results.Count(item => item.Outcome == ConformanceOutcome.Inconclusive),
         results);
     await using (var stream = File.Create(Path.Combine(directory, "conformance-results.json")))
     {
@@ -333,12 +510,12 @@ static async Task WriteReportsAsync(string directory, IProviderAdapter adapter, 
         var testCase = new XElement("testcase",
             new XAttribute("classname", item.DisplayName.Contains('.') ? item.DisplayName[..item.DisplayName.LastIndexOf('.')] : "conformance"),
             new XAttribute("name", item.DisplayName));
-        if (item.Outcome is ConformanceOutcome.Fail or ConformanceOutcome.Error)
+        if (item.Outcome is ConformanceOutcome.Fail or ConformanceOutcome.Untranslatable or ConformanceOutcome.Error or ConformanceOutcome.UndeclaredCapability)
         {
-            testCase.Add(new XElement(item.Outcome == ConformanceOutcome.Error ? "error" : "failure",
+            testCase.Add(new XElement(item.Outcome is ConformanceOutcome.Error or ConformanceOutcome.UndeclaredCapability ? "error" : "failure",
                 new XAttribute("message", item.Reason ?? item.Outcome.ToString()), item.Reason));
         }
-        else if (item.Outcome is ConformanceOutcome.Skip or ConformanceOutcome.Unsupported)
+        else if (item.Outcome is ConformanceOutcome.Skip or ConformanceOutcome.Unsupported or ConformanceOutcome.Inconclusive)
         {
             testCase.Add(new XElement("skipped", new XAttribute("message", item.Reason ?? item.Outcome.ToString())));
         }
@@ -348,9 +525,9 @@ static async Task WriteReportsAsync(string directory, IProviderAdapter adapter, 
     var junit = new XDocument(new XElement("testsuites", new XElement("testsuite",
         new XAttribute("name", $"EF Core 10: {adapter.Name}"),
         new XAttribute("tests", results.Count),
-        new XAttribute("failures", results.Count(item => item.Outcome == ConformanceOutcome.Fail)),
-        new XAttribute("errors", results.Count(item => item.Outcome == ConformanceOutcome.Error)),
-        new XAttribute("skipped", results.Count(item => item.Outcome is ConformanceOutcome.Skip or ConformanceOutcome.Unsupported)),
+        new XAttribute("failures", results.Count(item => item.Outcome is ConformanceOutcome.Fail or ConformanceOutcome.Untranslatable)),
+        new XAttribute("errors", results.Count(item => item.Outcome is ConformanceOutcome.Error or ConformanceOutcome.UndeclaredCapability)),
+        new XAttribute("skipped", results.Count(item => item.Outcome is ConformanceOutcome.Skip or ConformanceOutcome.Unsupported or ConformanceOutcome.Inconclusive)),
         cases)));
     await File.WriteAllTextAsync(Path.Combine(directory, "conformance-results.junit.xml"), junit.ToString());
 }
@@ -362,8 +539,11 @@ static void PrintUsage()
     Console.WriteLine("Usage: <adapter-assembly> <adapter-type>");
     Console.WriteLine("       --discover-types <adapter-assembly> <adapter-type> [output-json [test-assembly]]");
     Console.WriteLine("       --run <test-project> <adapter-assembly> <adapter-type> <report-directory>");
+    Console.WriteLine("       --compare <candidate-results.json> <reference-results.json> <comparison.json>");
     Console.WriteLine("Set PENGDOWS_EFCORE_CONFORMANCE_CONNECTION_STRING in the environment.");
 }
 
 internal sealed record AdapterLoadReport(string Provider, string ProviderVersion, string AdapterType, string[] DeclaredSupportedFeatures, string[] DeclaredUnsupportedFeatures, string Status);
-internal sealed record ConformanceRunReport(DateTimeOffset GeneratedAtUtc, string EfCoreVersion, string TestProject, string Provider, string ProviderVersion, int Total, int Passed, int Failed, int Unsupported, int Errors, int Skipped, IReadOnlyList<ConformanceResult> Results);
+internal sealed record ConformanceRunReport(DateTimeOffset GeneratedAtUtc, string EfCoreVersion, string TestProject, string Provider, string ProviderVersion, int Total, int Passed, int Failed, int Untranslatable, int Unsupported, int UndeclaredCapabilities, int Errors, int Skipped, int Inconclusive, IReadOnlyList<ConformanceResult> Results);
+internal sealed record ConformanceComparisonResult(string ContractId, string DisplayName, ConformanceOutcome? CandidateOutcome, ConformanceOutcome? ReferenceOutcome, string Classification, string? CandidateReason, string? ReferenceReason);
+internal sealed record ConformanceComparisonReport(DateTimeOffset GeneratedAtUtc, string EfCoreVersion, string CandidateProvider, string ReferenceProvider, int Total, int PassedOnBoth, int CandidateOnlyFailures, int FailuresAlsoOnReference, IReadOnlyList<ConformanceComparisonResult> Results);

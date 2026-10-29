@@ -8,9 +8,11 @@ namespace pengdows.efcore.conformance.EF10.Relational;
 public sealed class BulkOperationTests
 {
     [Fact]
+    [CapabilityRequirement("execute-update")]
     [BehavioralCoverage("EF10-BULK-UPDATE-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteUpdateAsync")]
     public async Task ExecuteUpdateAsync_ChangesMatchingRows()
     {
+        ProviderTestRuntime.RequireCapability("execute-update");
         var id = await SeedAsync();
 
         await using (var update = ProviderTestRuntime.CreateContext())
@@ -29,9 +31,11 @@ public sealed class BulkOperationTests
     }
 
     [Fact]
+    [CapabilityRequirement("execute-update")]
     [BehavioralCoverage("EF10-BULK-UPDATE-SYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteUpdate")]
     public async Task ExecuteUpdate_ChangesMatchingRowsSynchronously()
     {
+        ProviderTestRuntime.RequireCapability("execute-update");
         var id = await SeedAsync();
 
         await using (var update = ProviderTestRuntime.CreateContext())
@@ -47,9 +51,11 @@ public sealed class BulkOperationTests
     }
 
     [Fact]
+    [CapabilityRequirement("execute-update")]
     [BehavioralCoverage("EF10-BULK-UPDATE-MULTIPLE-PROPERTIES-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteUpdateAsync")]
     public async Task ExecuteUpdateAsync_ChangesMultipleProperties()
     {
+        ProviderTestRuntime.RequireCapability("execute-update");
         var id = await SeedAsync();
 
         await using (var update = ProviderTestRuntime.CreateContext())
@@ -71,9 +77,11 @@ public sealed class BulkOperationTests
     }
 
     [Fact]
+    [CapabilityRequirement("execute-update")]
     [BehavioralCoverage("EF10-BULK-UPDATE-NO-MATCH-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteUpdateAsync")]
     public async Task ExecuteUpdateAsync_ReturnsZeroWhenNoRowsMatch()
     {
+        ProviderTestRuntime.RequireCapability("execute-update");
         var missingId = Guid.NewGuid();
         await using var context = ProviderTestRuntime.CreateContext();
 
@@ -87,9 +95,11 @@ public sealed class BulkOperationTests
     }
 
     [Fact]
+    [CapabilityRequirement("execute-update")]
     [BehavioralCoverage("EF10-BULK-UPDATE-MULTIPLE-PROPERTIES-SYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteUpdate")]
     public async Task ExecuteUpdate_ChangesMultiplePropertiesSynchronously()
     {
+        ProviderTestRuntime.RequireCapability("execute-update");
         var id = await SeedAsync();
 
         await using (var update = ProviderTestRuntime.CreateContext())
@@ -109,9 +119,11 @@ public sealed class BulkOperationTests
     }
 
     [Fact]
+    [CapabilityRequirement("execute-update")]
     [BehavioralCoverage("EF10-BULK-UPDATE-NO-MATCH-SYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteUpdate")]
     public async Task ExecuteUpdate_ReturnsZeroWhenNoRowsMatchSynchronously()
     {
+        ProviderTestRuntime.RequireCapability("execute-update");
         var missingId = Guid.NewGuid();
         await using var context = ProviderTestRuntime.CreateContext();
 
@@ -123,9 +135,11 @@ public sealed class BulkOperationTests
     }
 
     [Fact]
+    [CapabilityRequirement("execute-delete")]
     [BehavioralCoverage("EF10-BULK-DELETE-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteDeleteAsync")]
     public async Task ExecuteDeleteAsync_RemovesMatchingRows()
     {
+        ProviderTestRuntime.RequireCapability("execute-delete");
         var id = await SeedAsync();
 
         await using var delete = ProviderTestRuntime.CreateContext();
@@ -137,9 +151,11 @@ public sealed class BulkOperationTests
     }
 
     [Fact]
+    [CapabilityRequirement("execute-delete")]
     [BehavioralCoverage("EF10-BULK-DELETE-SYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteDelete")]
     public async Task ExecuteDelete_RemovesMatchingRowsSynchronously()
     {
+        ProviderTestRuntime.RequireCapability("execute-delete");
         var id = await SeedAsync();
 
         await using var delete = ProviderTestRuntime.CreateContext();
@@ -150,9 +166,11 @@ public sealed class BulkOperationTests
     }
 
     [Fact]
+    [CapabilityRequirement("execute-delete")]
     [BehavioralCoverage("EF10-BULK-DELETE-NO-MATCH-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteDeleteAsync")]
     public async Task ExecuteDeleteAsync_ReturnsZeroWhenNoRowsMatch()
     {
+        ProviderTestRuntime.RequireCapability("execute-delete");
         var missingId = Guid.NewGuid();
         await using var context = ProviderTestRuntime.CreateContext();
 
@@ -164,9 +182,11 @@ public sealed class BulkOperationTests
     }
 
     [Fact]
+    [CapabilityRequirement("execute-delete")]
     [BehavioralCoverage("EF10-BULK-DELETE-NO-MATCH-SYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteDelete")]
     public async Task ExecuteDelete_ReturnsZeroWhenNoRowsMatchSynchronously()
     {
+        ProviderTestRuntime.RequireCapability("execute-delete");
         var missingId = Guid.NewGuid();
         await using var context = ProviderTestRuntime.CreateContext();
 

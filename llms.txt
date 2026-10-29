@@ -1,0 +1,54 @@
+# pengdows.efcore.conformance
+
+> Black-box conformance tests for relational providers of Entity Framework Core 10.
+
+## Purpose
+
+This repository tests externally observable behavior through documented EF Core public APIs. The provider is configured through an adapter, operations run through `DbContext`, LINQ, and EF Core relational APIs, and results are asserted through fresh contexts or documented public state.
+
+## Boundary
+
+- Do not inspect generated SQL, EF provider services, EF internals, or provider implementation types in shared tests.
+- Keep provider setup and database provisioning in `IProviderAdapter` implementations.
+- Capabilities declare applicability only. They never alter expected values or assertions.
+- Strict runs require a supported or unsupported declaration for every feature in `ProviderCapabilities.KnownFeatures`.
+- ADO.NET `DataTypes` metadata is the preferred native type inventory. Mark catalog evidence independent only when it is independent of the EF model. Types read from test-created tables are `SELF_DERIVED` and excluded from coverage totals.
+- Run the same test assembly against one provider per process. Compare report JSON with the runner's `--compare` command.
+
+## Project map
+
+- `src/pengdows.efcore.conformance.Contracts/`: adapter contracts, capabilities, type discovery, and outcomes.
+- `src/pengdows.efcore.conformance.Runner/`: adapter loading, test execution, JSON/JUnit reports, type discovery, and cross-provider comparison.
+- `src/pengdows.efcore.conformance.Inventory/`: reflection-generated EF Core public API inventory.
+- `tests/pengdows.efcore.conformance.EF10.Relational/`: shared EF Core 10 relational behavioral tests.
+- `adapters/pengdows.efcore.conformance.Adapter.MicrosoftSqlite/`: Microsoft provider reference adapter; included in the standalone solution.
+- `adapters/pengdows.efcore.conformance.Adapter.PengdowsSqlite/`: pengdows adapter; depends on the separate pengdows ADO.NET repository and is intentionally outside the solution build.
+- `manifests/`: EF Core 10 contract and generated API inventory.
+
+## Build and run
+
+```sh
+dotnet build pengdows.efcore.conformance.slnx
+export PENGDOWS_EFCORE_CONFORMANCE_CONNECTION_STRING='Data Source=/tmp/efcore-reference.db'
+dotnet run --project src/pengdows.efcore.conformance.Runner -- --run \
+  tests/pengdows.efcore.conformance.EF10.Relational/pengdows.efcore.conformance.EF10.Relational.csproj \
+  "$PWD/adapters/pengdows.efcore.conformance.Adapter.MicrosoftSqlite/bin/Debug/net10.0/pengdows.efcore.conformance.Adapter.MicrosoftSqlite.dll" \
+  pengdows.efcore.conformance.Adapter.MicrosoftSqlite.MicrosoftSqliteAdapter /tmp/efcore-reference-report
+```
+
+Run the same test assembly for another provider with a separate disposable database and report directory. Compare results:
+
+```sh
+dotnet run --project src/pengdows.efcore.conformance.Runner -- --compare \
+  /tmp/candidate-report/conformance-results.json \
+  /tmp/efcore-reference-report/conformance-results.json \
+  /tmp/provider-comparison.json
+```
+
+## Current status
+
+- EF Core baseline: 10.0.14 on `net10.0`.
+- The public API inventory is generated from the Core, Abstractions, and Relational assemblies. Inventory presence is not test coverage; the manifest explicitly shows unclassified and uncovered members.
+- Current comparable SQLite runs execute 156 cases each: 147 pass on both; 4 decimal boundary cases fail only on pengdows SQLite; 5 cases fail on both SQLite providers. Shared failures are async negative `ElementAt`, both `RightJoin` unmatched-row cases, and both TPT affected-entry-count cases. Shared failures are not automatically attributed to EF Core.
+- SQLite ADO.NET providers do not advertise `DataTypes`. Supplemental types discovered from test-created schema are self-derived; independent native type coverage is not currently established.
+- The test suite is a growing conformance slice, not yet complete coverage of every applicable EF Core public API. Consult `README.md` and `manifests/efcore-10-api-inventory.json` for current counts and uncovered members.

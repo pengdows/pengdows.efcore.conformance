@@ -5,12 +5,14 @@ using Xunit;
 namespace pengdows.efcore.conformance.EF10.Relational;
 
 [Collection(RelationalTestCollection.Name)]
+[CapabilityRequirement("transactions")]
 public sealed class TransactionTests
 {
     [Fact]
     [BehavioralCoverage("EF10-TRANSACTION-ROLLBACK-ASYNC", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.BeginTransactionAsync", "Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction.RollbackAsync", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync")]
     public async Task TransactionRollback_DoesNotPersistSavedChanges()
     {
+        ProviderTestRuntime.RequireCapability("transactions");
         var id = Guid.NewGuid();
         var cancellationToken = TestContext.Current.CancellationToken;
 
@@ -31,6 +33,7 @@ public sealed class TransactionTests
     [BehavioralCoverage("EF10-TRANSACTION-COMMIT-SYNC", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.BeginTransaction", "Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction.Commit", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges")]
     public async Task TransactionCommit_PersistsSavedChangesSynchronously()
     {
+        ProviderTestRuntime.RequireCapability("transactions");
         var id = Guid.NewGuid();
         var cancellationToken = TestContext.Current.CancellationToken;
 
@@ -54,6 +57,7 @@ public sealed class TransactionTests
     [BehavioralCoverage("EF10-TRANSACTION-ROLLBACK-SYNC", "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.BeginTransaction", "Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction.Rollback", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges")]
     public async Task TransactionRollback_DoesNotPersistSavedChangesSynchronously()
     {
+        ProviderTestRuntime.RequireCapability("transactions");
         var id = Guid.NewGuid();
 
         await using (var context = ProviderTestRuntime.CreateContext())
@@ -73,6 +77,7 @@ public sealed class TransactionTests
     [BehavioralCoverage("EF10-TRANSACTION-COMMIT-ASYNC", "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.BeginTransactionAsync", "Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction.CommitAsync", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync")]
     public async Task TransactionCommit_PersistsSavedChangesAsynchronously()
     {
+        ProviderTestRuntime.RequireCapability("transactions");
         var id = Guid.NewGuid();
         var cancellationToken = TestContext.Current.CancellationToken;
 
@@ -96,6 +101,7 @@ public sealed class TransactionTests
     [BehavioralCoverage("EF10-TRANSACTION-CURRENT-SYNC", "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.CurrentTransaction", "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.BeginTransaction")]
     public async Task CurrentTransaction_ReflectsSynchronousTransactionLifetime()
     {
+        ProviderTestRuntime.RequireCapability("transactions");
         await using var context = ProviderTestRuntime.CreateContext();
         await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
 
@@ -112,6 +118,7 @@ public sealed class TransactionTests
     [BehavioralCoverage("EF10-TRANSACTION-CURRENT-ASYNC", "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.CurrentTransaction", "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.BeginTransactionAsync")]
     public async Task CurrentTransaction_ReflectsAsynchronousTransactionLifetime()
     {
+        ProviderTestRuntime.RequireCapability("transactions");
         await using var context = ProviderTestRuntime.CreateContext();
         await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
 

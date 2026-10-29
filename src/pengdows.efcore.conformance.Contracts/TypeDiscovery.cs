@@ -19,6 +19,11 @@ public sealed record DatabaseTypeDefinition(
 {
     /// <summary>Exact CLR type identity when the provider returned a System.Type value.</summary>
     public string? ClrTypeAssemblyQualifiedName { get; init; }
+
+    /// <summary>True when discovered independently from the EF model's currently declared columns.</summary>
+    public bool IsIndependentDiscovery { get; init; }
+
+    public string DiscoveryClassification => IsIndependentDiscovery ? "INDEPENDENT" : "SELF_DERIVED";
 }
 
 public sealed record TypeDiscoveryReport(
@@ -29,6 +34,12 @@ public sealed record TypeDiscoveryReport(
     IReadOnlyList<string> Diagnostics)
 {
     public IReadOnlyList<NativeTypeCoverageResult> NativeTypeCoverage { get; init; } = Array.Empty<NativeTypeCoverageResult>();
+
+    public bool HasIndependentTypeInventory => Types.Count > 0 || SupplementalTypes.Any(type => type.IsIndependentDiscovery);
+
+    public bool UsesOnlySelfDerivedTypeEvidence => !HasIndependentTypeInventory && SupplementalTypes.Count > 0;
+
+    public int SelfDerivedSupplementalTypeCount => SupplementalTypes.Count(type => !type.IsIndependentDiscovery);
 
     public bool DataTypesCollectionAdvertised => MetadataCollections.Contains("DataTypes", StringComparer.OrdinalIgnoreCase);
 
@@ -146,6 +157,7 @@ public static class AdoNetTypeDiscovery
                         "ADO.NET GetSchema(DataTypes)",
                         raw)
                     {
+                        IsIndependentDiscovery = true,
                         ClrTypeAssemblyQualifiedName = clrTypeValue switch
                         {
                             Type clrType => clrType.AssemblyQualifiedName,
@@ -171,6 +183,15 @@ public static class AdoNetTypeDiscovery
             {
                 diagnostics.Add($"Supplemental database type discovery unavailable: {exception.GetType().FullName}: {exception.Message}");
             }
+        }
+
+        if (supplementalTypes.Any(type => !type.IsIndependentDiscovery))
+        {
+            diagnostics.Add("Supplemental types derived from the current database schema are self-derived evidence and are excluded from independent native-type coverage counts.");
+        }
+        else if (definitions.Count == 0 && supplementalTypes.Count == 0)
+        {
+            diagnostics.Add("No independent native-type inventory is available; type coverage counts are not reported.");
         }
 
         return new TypeDiscoveryReport(

@@ -5,6 +5,7 @@ using Xunit;
 namespace pengdows.efcore.conformance.EF10.Relational;
 
 [Collection(RelationalTestCollection.Name)]
+[CapabilityRequirement("raw-sql")]
 public sealed class RawSqlTests
 {
     [Fact]
@@ -197,6 +198,7 @@ public sealed class RawSqlTests
 
     private static async Task SeedAsync(Guid id, string name)
     {
+        ProviderTestRuntime.RequireCapability("raw-sql");
         await using var context = ProviderTestRuntime.CreateContext();
         await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
         context.People.Add(new Person { Id = id, Name = name, Age = 29 });
