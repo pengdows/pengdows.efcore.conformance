@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12121,
+    "AwaitingClassification": 12120,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 444,
-    "UncoveredMemberFamilies": 8935
+    "MemberEntriesInCoveredFamilies": 445,
+    "UncoveredMemberFamilies": 8934
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -1463,9 +1463,12 @@
       "MemberKind": "Property",
       "ApiMemberName": "IsModified",
       "Signature": "System.Boolean IsModified get; set;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPLEX-TYPE-UPDATE-ASYNC",
+        "EF10-COMPLEX-TYPE-UPDATE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.ComplexPropertyEntry.IsModified"
     },
     {
@@ -14681,6 +14684,7 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-COMPLEX-TYPE-SYNC",
+        "EF10-COMPLEX-TYPE-UPDATE-SYNC",
         "EF10-CONCURRENCY-SAVE-SYNC",
         "EF10-GENERATED-KEYS-SYNC",
         "EF10-INHERITANCE-TPC-SYNC",
@@ -14732,6 +14736,7 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-COMPLEX-TYPE-SYNC",
+        "EF10-COMPLEX-TYPE-UPDATE-SYNC",
         "EF10-CONCURRENCY-SAVE-SYNC",
         "EF10-GENERATED-KEYS-SYNC",
         "EF10-INHERITANCE-TPC-SYNC",
@@ -14783,6 +14788,7 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-COMPLEX-TYPE-ASYNC",
+        "EF10-COMPLEX-TYPE-UPDATE-ASYNC",
         "EF10-CONCURRENCY-SAVE-ASYNC",
         "EF10-DBSET-ATTACH-RANGE",
         "EF10-GENERATED-KEYS-ASYNC",
@@ -14837,6 +14843,7 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-COMPLEX-TYPE-ASYNC",
+        "EF10-COMPLEX-TYPE-UPDATE-ASYNC",
         "EF10-CONCURRENCY-SAVE-ASYNC",
         "EF10-DBSET-ATTACH-RANGE",
         "EF10-GENERATED-KEYS-ASYNC",

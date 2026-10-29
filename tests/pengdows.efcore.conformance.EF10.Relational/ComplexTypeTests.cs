@@ -51,6 +51,62 @@ public sealed class ComplexTypeTests
         Assert.Equal("Sync City", actual.City);
     }
 
+    [Fact]
+    [BehavioralCoverage("EF10-COMPLEX-TYPE-UPDATE-ASYNC", "Microsoft.EntityFrameworkCore.ChangeTracking.ComplexPropertyEntry.IsModified", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync")]
+    public async Task ComplexProperty_NestedUpdatePersistsAsynchronously()
+    {
+        var record = CreateRecord("303 Update Street", "Original Async City");
+        await using (var seed = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(seed, TestContext.Current.CancellationToken);
+            seed.ComplexRecords.Add(record);
+            await seed.SaveChangesAsync(TestContext.Current.CancellationToken);
+        }
+
+        await using (var update = ProviderTestRuntime.CreateContext())
+        {
+            var tracked = await update.ComplexRecords.SingleAsync(
+                item => item.Id == record.Id,
+                TestContext.Current.CancellationToken);
+            tracked.Address.City = "Updated Async City";
+            Assert.True(update.Entry(tracked).ComplexProperty(item => item.Address).IsModified);
+            Assert.Equal(1, await update.SaveChangesAsync(TestContext.Current.CancellationToken));
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        var actual = await verify.ComplexRecords.AsNoTracking().SingleAsync(
+            item => item.Id == record.Id,
+            TestContext.Current.CancellationToken);
+        Assert.Equal(record.Address.Street, actual.Address.Street);
+        Assert.Equal("Updated Async City", actual.Address.City);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-COMPLEX-TYPE-UPDATE-SYNC", "Microsoft.EntityFrameworkCore.ChangeTracking.ComplexPropertyEntry.IsModified", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges")]
+    public async Task ComplexProperty_NestedUpdatePersistsSynchronously()
+    {
+        var record = CreateRecord("404 Update Street", "Original Sync City");
+        await using (var seed = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(seed, TestContext.Current.CancellationToken);
+            seed.ComplexRecords.Add(record);
+            await seed.SaveChangesAsync(TestContext.Current.CancellationToken);
+        }
+
+        await using (var update = ProviderTestRuntime.CreateContext())
+        {
+            var tracked = update.ComplexRecords.Single(item => item.Id == record.Id);
+            tracked.Address.City = "Updated Sync City";
+            Assert.True(update.Entry(tracked).ComplexProperty(item => item.Address).IsModified);
+            Assert.Equal(1, update.SaveChanges());
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        var actual = verify.ComplexRecords.AsNoTracking().Single(item => item.Id == record.Id);
+        Assert.Equal(record.Address.Street, actual.Address.Street);
+        Assert.Equal("Updated Sync City", actual.Address.City);
+    }
+
     private static ComplexRecord CreateRecord(string street, string city) => new()
     {
         Id = Guid.NewGuid(),
