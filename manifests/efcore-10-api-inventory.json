@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 246,
+    "AwaitingClassification": 244,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 558,
-    "UncoveredMemberFamilies": 165
+    "MemberEntriesInCoveredFamilies": 560,
+    "UncoveredMemberFamilies": 164
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -16027,6 +16027,7 @@
         "EF10-INTERCEPTION-SAVE-SYNC",
         "EF10-JSON-MAPPING-SYNC",
         "EF10-MODEL-ATTRIBUTES-SYNC",
+        "EF10-OWNED-ATTRIBUTE-SYNC",
         "EF10-PERSIST-ACCEPT-CHANGES-SYNC",
         "EF10-PERSIST-ADD-RANGE-SYNC",
         "EF10-PERSIST-CONTEXT-ADD-RANGE-SYNC",
@@ -16090,6 +16091,7 @@
         "EF10-INTERCEPTION-SAVE-SYNC",
         "EF10-JSON-MAPPING-SYNC",
         "EF10-MODEL-ATTRIBUTES-SYNC",
+        "EF10-OWNED-ATTRIBUTE-SYNC",
         "EF10-PERSIST-ACCEPT-CHANGES-SYNC",
         "EF10-PERSIST-ADD-RANGE-SYNC",
         "EF10-PERSIST-CONTEXT-ADD-RANGE-SYNC",
@@ -16154,6 +16156,7 @@
         "EF10-INTERCEPTION-SAVE-ASYNC",
         "EF10-JSON-MAPPING-ASYNC",
         "EF10-MODEL-ATTRIBUTES-ASYNC",
+        "EF10-OWNED-ATTRIBUTE-ASYNC",
         "EF10-PERSIST-ACCEPT-CHANGES-ASYNC",
         "EF10-PERSIST-ADD-ASYNC",
         "EF10-PERSIST-ADD-RANGE-ASYNC",
@@ -16220,6 +16223,7 @@
         "EF10-INTERCEPTION-SAVE-ASYNC",
         "EF10-JSON-MAPPING-ASYNC",
         "EF10-MODEL-ATTRIBUTES-ASYNC",
+        "EF10-OWNED-ATTRIBUTE-ASYNC",
         "EF10-PERSIST-ACCEPT-CHANGES-ASYNC",
         "EF10-PERSIST-ADD-ASYNC",
         "EF10-PERSIST-ADD-RANGE-ASYNC",
@@ -52243,6 +52247,7 @@
         "EF10-DB-FUNCTION-ATTRIBUTE-ASYNC",
         "EF10-DB-FUNCTION-NULLABLE-ASYNC",
         "EF10-JSON-MAPPING-ASYNC",
+        "EF10-OWNED-ATTRIBUTE-ASYNC",
         "EF10-PERSIST-ADD-ASYNC",
         "EF10-PERSIST-CONTEXT-ADD-ASYNC",
         "EF10-PERSIST-CONTEXT-ADD-SYNC",
@@ -52280,6 +52285,7 @@
         "EF10-DB-FUNCTION-ATTRIBUTE-ASYNC",
         "EF10-DB-FUNCTION-NULLABLE-ASYNC",
         "EF10-JSON-MAPPING-ASYNC",
+        "EF10-OWNED-ATTRIBUTE-ASYNC",
         "EF10-PERSIST-ADD-ASYNC",
         "EF10-PERSIST-CONTEXT-ADD-ASYNC",
         "EF10-PERSIST-CONTEXT-ADD-SYNC",
@@ -156818,10 +156824,13 @@
       "MemberKind": "Type",
       "ApiMemberName": null,
       "Signature": "class Microsoft.EntityFrameworkCore.OwnedAttribute",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-OWNED-ATTRIBUTE-ASYNC",
+        "EF10-OWNED-ATTRIBUTE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.OwnedAttribute"
     },
     {
@@ -156830,10 +156839,13 @@
       "MemberKind": "Constructor",
       "ApiMemberName": ".ctor",
       "Signature": ".ctor()",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-OWNED-ATTRIBUTE-ASYNC",
+        "EF10-OWNED-ATTRIBUTE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.OwnedAttribute..ctor"
     },
     {

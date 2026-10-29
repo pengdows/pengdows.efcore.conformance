@@ -106,6 +106,8 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
 
     public DbSet<ComplexRecord> ComplexRecords => Set<ComplexRecord>();
 
+    public DbSet<OwnedAttributeRecord> OwnedAttributeRecords => Set<OwnedAttributeRecord>();
+
     public DbSet<JsonProfileRecord> JsonProfileRecords => Set<JsonProfileRecord>();
 
     public DbSet<PrimitiveCollectionRecord> PrimitiveCollectionRecords => Set<PrimitiveCollectionRecord>();
@@ -272,6 +274,12 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
                 address.Property(value => value.Street).HasColumnName("address_street").IsRequired();
                 address.Property(value => value.City).HasColumnName("address_city").IsRequired();
             });
+        });
+        modelBuilder.Entity<OwnedAttributeRecord>(entity =>
+        {
+            entity.ToTable("ef10conformance_ownedattribute");
+            entity.HasKey(record => record.Id);
+            entity.Property(record => record.Id).HasColumnName("id");
         });
         modelBuilder.Entity<JsonProfileRecord>(entity =>
         {
@@ -554,6 +562,21 @@ internal sealed class JsonProfile
 internal sealed class JsonPreferences
 {
     public bool EmailNotifications { get; set; }
+}
+
+internal sealed class OwnedAttributeRecord
+{
+    public Guid Id { get; set; }
+
+    public OwnedAttributeValue Value { get; set; } = new();
+}
+
+[Owned]
+internal sealed class OwnedAttributeValue
+{
+    public string Label { get; set; } = string.Empty;
+
+    public int Rank { get; set; }
 }
 
 internal sealed class AddressInfo
