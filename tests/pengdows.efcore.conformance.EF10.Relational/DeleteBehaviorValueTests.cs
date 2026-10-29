@@ -9,7 +9,7 @@ namespace pengdows.efcore.conformance.EF10.Relational;
 public sealed class DeleteBehaviorValueTests
 {
     [Fact]
-    [BehavioralCoverage("EF10-DELETE-BEHAVIOR-CASCADE-ASYNC", "Microsoft.EntityFrameworkCore.DeleteBehavior.Cascade", "Microsoft.EntityFrameworkCore.DeleteBehaviorAttribute", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlInterpolatedAsync")]
+    [BehavioralCoverage("EF10-DELETE-BEHAVIOR-CASCADE-ASYNC", "Microsoft.EntityFrameworkCore.DeleteBehavior", "Microsoft.EntityFrameworkCore.DeleteBehavior.Cascade", "Microsoft.EntityFrameworkCore.DeleteBehavior.SetNull", "Microsoft.EntityFrameworkCore.DeleteBehaviorAttribute", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlInterpolatedAsync")]
     public async Task DeleteBehaviorCascade_RemovesDependentOnDatabaseDeleteAsynchronously()
     {
         ProviderTestRuntime.RequireCapability("relational");
@@ -37,7 +37,7 @@ public sealed class DeleteBehaviorValueTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-DELETE-BEHAVIOR-CASCADE-SYNC", "Microsoft.EntityFrameworkCore.DeleteBehavior.Cascade", "Microsoft.EntityFrameworkCore.DeleteBehaviorAttribute", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlInterpolated")]
+    [BehavioralCoverage("EF10-DELETE-BEHAVIOR-CASCADE-SYNC", "Microsoft.EntityFrameworkCore.DeleteBehavior", "Microsoft.EntityFrameworkCore.DeleteBehavior.Cascade", "Microsoft.EntityFrameworkCore.DeleteBehavior.SetNull", "Microsoft.EntityFrameworkCore.DeleteBehaviorAttribute", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlInterpolated")]
     public async Task DeleteBehaviorCascade_RemovesDependentOnDatabaseDeleteSynchronously()
     {
         var (cascade, setNull) = await SeedAsync();

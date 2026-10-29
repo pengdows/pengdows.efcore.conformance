@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 224,
+    "AwaitingClassification": 222,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 580,
-    "UncoveredMemberFamilies": 148
+    "MemberEntriesInCoveredFamilies": 582,
+    "UncoveredMemberFamilies": 147
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -19272,10 +19272,13 @@
       "MemberKind": "Type",
       "ApiMemberName": null,
       "Signature": "enum Microsoft.EntityFrameworkCore.DeleteBehavior",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DELETE-BEHAVIOR-CASCADE-ASYNC",
+        "EF10-DELETE-BEHAVIOR-CASCADE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DeleteBehavior"
     },
     {
@@ -19326,10 +19329,13 @@
       "MemberKind": "Field",
       "ApiMemberName": "SetNull",
       "Signature": "Microsoft.EntityFrameworkCore.DeleteBehavior SetNull = 2",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DELETE-BEHAVIOR-CASCADE-ASYNC",
+        "EF10-DELETE-BEHAVIOR-CASCADE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DeleteBehavior.SetNull"
     },
     {
