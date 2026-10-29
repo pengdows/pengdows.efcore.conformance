@@ -331,6 +331,27 @@ public sealed class QueryTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-QUERY-FOR-EACH-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ForEachAsync")]
+    public async Task ForEachAsync_VisitsEveryMatchingEntity()
+    {
+        var batch = Guid.NewGuid().ToString("N");
+        await SeedAsync(Enumerable.Range(0, 4).Select(index => new Person
+        {
+            Id = Guid.NewGuid(),
+            Name = $"{batch}-{index}",
+            Age = index
+        }));
+
+        await using var context = ProviderTestRuntime.CreateContext();
+        var names = new List<string>();
+        await context.People
+            .Where(person => person.Name.StartsWith(batch))
+            .ForEachAsync(person => names.Add(person.Name), TestContext.Current.CancellationToken);
+
+        Assert.Equal(Enumerable.Range(0, 4).Select(index => $"{batch}-{index}"), names.Order(StringComparer.Ordinal));
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-QUERY-STREAM-SYNC", "System.Linq.IQueryable.GetEnumerator")]
     public async Task QueryableEnumeration_StreamsMatchingEntitiesSynchronously()
     {

@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12291,
+    "AwaitingClassification": 12290,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 274,
-    "UncoveredMemberFamilies": 8983
+    "MemberEntriesInCoveredFamilies": 275,
+    "UncoveredMemberFamilies": 8982
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -48465,9 +48465,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "ForEachAsync",
       "Signature": "System.Threading.Tasks.Task ForEachAsync\u003CT\u003E(System.Linq.IQueryable\u003CT\u003E source, System.Action\u003CT\u003E action, System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-QUERY-FOR-EACH-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ForEachAsync"
     },
     {
