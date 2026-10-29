@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.ComponentModel;
 using System.Data.Common;
 using pengdows.efcore.conformance;
 using Xunit;
@@ -109,6 +110,8 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
     public DbSet<OwnedAttributeRecord> OwnedAttributeRecords => Set<OwnedAttributeRecord>();
 
     public DbSet<BackingFieldRecord> BackingFieldRecords => Set<BackingFieldRecord>();
+
+    public DbSet<NotifyingRecord> NotifyingRecords => Set<NotifyingRecord>();
 
     public DbSet<JsonProfileRecord> JsonProfileRecords => Set<JsonProfileRecord>();
 
@@ -385,6 +388,14 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
             entity.HasKey(record => record.Id);
             entity.Property(record => record.Id).HasColumnName("id");
             entity.Property(record => record.Label).HasColumnName("label");
+        });
+        modelBuilder.Entity<NotifyingRecord>(entity =>
+        {
+            entity.ToTable("ef10conformance_notifyingrecords");
+            entity.HasKey(record => record.Id);
+            entity.Property(record => record.Id).HasColumnName("id");
+            entity.Property(record => record.Name).HasColumnName("name");
+            entity.HasChangeTrackingStrategy(ChangeTrackingStrategy.ChangedNotifications);
         });
         modelBuilder.Entity<JsonProfileRecord>(entity =>
         {
@@ -798,6 +809,30 @@ internal sealed class BackingFieldRecord
     public string Label => _label;
 
     public void ChangeLabel(string value) => _label = value;
+}
+
+internal sealed class NotifyingRecord : INotifyPropertyChanged
+{
+    private string _name = string.Empty;
+
+    public Guid Id { get; set; }
+
+    public string Name
+    {
+        get => _name;
+        set
+        {
+            if (_name == value)
+            {
+                return;
+            }
+
+            _name = value;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Name)));
+        }
+    }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
 }
 
 internal sealed class AddressInfo
