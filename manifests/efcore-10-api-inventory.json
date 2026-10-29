@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12421,
+    "AwaitingClassification": 12419,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 144,
-    "UncoveredMemberFamilies": 9065
+    "MemberEntriesInCoveredFamilies": 146,
+    "UncoveredMemberFamilies": 9063
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -1943,9 +1943,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "Reload",
       "Signature": "System.Void Reload()",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-RELOAD-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry.Reload"
     },
     {
@@ -1954,9 +1956,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "ReloadAsync",
       "Signature": "System.Threading.Tasks.Task ReloadAsync(System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-RELOAD-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry.ReloadAsync"
     },
     {
@@ -14693,7 +14697,9 @@
         "EF10-TRACKING-DETACH",
         "EF10-TRACKING-FIND",
         "EF10-TRACKING-FIND-ASYNC",
-        "EF10-TRACKING-NO-TRACKING"
+        "EF10-TRACKING-NO-TRACKING",
+        "EF10-TRACKING-RELOAD-ASYNC",
+        "EF10-TRACKING-RELOAD-SYNC"
       ],
       "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbContext.Entry"
@@ -14710,7 +14716,9 @@
         "EF10-TRACKING-DETACH",
         "EF10-TRACKING-FIND",
         "EF10-TRACKING-FIND-ASYNC",
-        "EF10-TRACKING-NO-TRACKING"
+        "EF10-TRACKING-NO-TRACKING",
+        "EF10-TRACKING-RELOAD-ASYNC",
+        "EF10-TRACKING-RELOAD-SYNC"
       ],
       "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbContext.Entry"

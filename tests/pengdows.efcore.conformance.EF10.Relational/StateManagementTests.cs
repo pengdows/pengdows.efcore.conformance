@@ -207,6 +207,52 @@ public sealed class StateManagementTests
             .SingleAsync(TestContext.Current.CancellationToken));
     }
 
+    [Fact]
+    [BehavioralCoverage("EF10-TRACKING-RELOAD-SYNC", "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry.Reload", "Microsoft.EntityFrameworkCore.DbContext.Entry")]
+    public async Task EntityEntryReload_RefreshesTrackedValuesSynchronously()
+    {
+        var id = Guid.NewGuid();
+        await SeedAsync(id);
+
+        await using var trackedContext = ProviderTestRuntime.CreateContext();
+        var tracked = trackedContext.People.Single(person => person.Id == id);
+
+        await using (var writer = ProviderTestRuntime.CreateContext())
+        {
+            var stored = writer.People.Single(person => person.Id == id);
+            stored.Name = "Changed by another context";
+            writer.SaveChanges();
+        }
+
+        trackedContext.Entry(tracked).Reload();
+
+        Assert.Equal("Changed by another context", tracked.Name);
+        Assert.Equal(EntityState.Unchanged, trackedContext.Entry(tracked).State);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-TRACKING-RELOAD-ASYNC", "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry.ReloadAsync", "Microsoft.EntityFrameworkCore.DbContext.Entry")]
+    public async Task EntityEntryReloadAsync_RefreshesTrackedValues()
+    {
+        var id = Guid.NewGuid();
+        await SeedAsync(id);
+
+        await using var trackedContext = ProviderTestRuntime.CreateContext();
+        var tracked = await trackedContext.People.SingleAsync(person => person.Id == id, TestContext.Current.CancellationToken);
+
+        await using (var writer = ProviderTestRuntime.CreateContext())
+        {
+            var stored = await writer.People.SingleAsync(person => person.Id == id, TestContext.Current.CancellationToken);
+            stored.Name = "Changed asynchronously by another context";
+            await writer.SaveChangesAsync(TestContext.Current.CancellationToken);
+        }
+
+        await trackedContext.Entry(tracked).ReloadAsync(TestContext.Current.CancellationToken);
+
+        Assert.Equal("Changed asynchronously by another context", tracked.Name);
+        Assert.Equal(EntityState.Unchanged, trackedContext.Entry(tracked).State);
+    }
+
     private static async Task SeedAsync(Guid id)
     {
         await using var context = ProviderTestRuntime.CreateContext();
