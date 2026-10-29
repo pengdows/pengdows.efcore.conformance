@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12349,
+    "AwaitingClassification": 12348,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 216,
-    "UncoveredMemberFamilies": 9017
+    "MemberEntriesInCoveredFamilies": 217,
+    "UncoveredMemberFamilies": 9016
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [
@@ -47370,6 +47370,7 @@
         "EF10-RAW-SQL-FROM-ASYNC",
         "EF10-RAW-SQL-FROM-RAW-ASYNC",
         "EF10-RAW-SQL-FROM-SQL-ASYNC",
+        "EF10-RAW-SQL-SCALAR-RAW-ASYNC",
         "EF10-RELATIONSHIPS-FOREIGN-KEY",
         "EF10-RELATIONSHIPS-INCLUDE-ASYNC",
         "EF10-RELATIONSHIPS-SPLIT-QUERY-ASYNC",
@@ -47396,6 +47397,7 @@
         "EF10-RAW-SQL-FROM-ASYNC",
         "EF10-RAW-SQL-FROM-RAW-ASYNC",
         "EF10-RAW-SQL-FROM-SQL-ASYNC",
+        "EF10-RAW-SQL-SCALAR-RAW-ASYNC",
         "EF10-RELATIONSHIPS-FOREIGN-KEY",
         "EF10-RELATIONSHIPS-INCLUDE-ASYNC",
         "EF10-RELATIONSHIPS-SPLIT-QUERY-ASYNC",
@@ -167128,9 +167130,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "SqlQueryRaw",
       "Signature": "System.Linq.IQueryable\u003CTResult\u003E SqlQueryRaw\u003CTResult\u003E(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade, System.String sql, System.Object[] parameters)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-RAW-SQL-SCALAR-RAW-ASYNC",
+        "EF10-RAW-SQL-SCALAR-RAW-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.SqlQueryRaw"
     },
     {
