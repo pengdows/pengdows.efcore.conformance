@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12369,
+    "AwaitingClassification": 12368,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 196,
-    "UncoveredMemberFamilies": 9034
+    "MemberEntriesInCoveredFamilies": 197,
+    "UncoveredMemberFamilies": 9033
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -14606,6 +14606,7 @@
         "EF10-TRACKING-CLEAR",
         "EF10-TRACKING-DETECT-CHANGES-SYNC",
         "EF10-TRACKING-PROPERTY-ENTRY-SYNC",
+        "EF10-TRACKING-UPDATE-DETACHED-SYNC",
         "EF10-TRANSACTION-COMMIT-SYNC",
         "EF10-TRANSACTION-ROLLBACK-SYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-SYNC",
@@ -14639,6 +14640,7 @@
         "EF10-TRACKING-CLEAR",
         "EF10-TRACKING-DETECT-CHANGES-SYNC",
         "EF10-TRACKING-PROPERTY-ENTRY-SYNC",
+        "EF10-TRACKING-UPDATE-DETACHED-SYNC",
         "EF10-TRANSACTION-COMMIT-SYNC",
         "EF10-TRANSACTION-ROLLBACK-SYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-SYNC",
@@ -14673,6 +14675,7 @@
         "EF10-TRACKING-ATTACH",
         "EF10-TRACKING-DETECT-CHANGES-ASYNC",
         "EF10-TRACKING-PROPERTY-ENTRY-ASYNC",
+        "EF10-TRACKING-UPDATE-DETACHED-ASYNC",
         "EF10-TRANSACTION-COMMIT-ASYNC",
         "EF10-TRANSACTION-ROLLBACK-ASYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC",
@@ -14707,6 +14710,7 @@
         "EF10-TRACKING-ATTACH",
         "EF10-TRACKING-DETECT-CHANGES-ASYNC",
         "EF10-TRACKING-PROPERTY-ENTRY-ASYNC",
+        "EF10-TRACKING-UPDATE-DETACHED-ASYNC",
         "EF10-TRANSACTION-COMMIT-ASYNC",
         "EF10-TRANSACTION-ROLLBACK-ASYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC",
@@ -14751,7 +14755,9 @@
         "EF10-TRACKING-FIND-ASYNC",
         "EF10-TRACKING-NO-TRACKING",
         "EF10-TRACKING-RELOAD-ASYNC",
-        "EF10-TRACKING-RELOAD-SYNC"
+        "EF10-TRACKING-RELOAD-SYNC",
+        "EF10-TRACKING-UPDATE-DETACHED-ASYNC",
+        "EF10-TRACKING-UPDATE-DETACHED-SYNC"
       ],
       "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbContext.Entry"
@@ -14770,7 +14776,9 @@
         "EF10-TRACKING-FIND-ASYNC",
         "EF10-TRACKING-NO-TRACKING",
         "EF10-TRACKING-RELOAD-ASYNC",
-        "EF10-TRACKING-RELOAD-SYNC"
+        "EF10-TRACKING-RELOAD-SYNC",
+        "EF10-TRACKING-UPDATE-DETACHED-ASYNC",
+        "EF10-TRACKING-UPDATE-DETACHED-SYNC"
       ],
       "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbContext.Entry"
@@ -16903,9 +16911,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "Update",
       "Signature": "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry\u003CTEntity\u003E Update(TEntity entity)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-UPDATE-DETACHED-ASYNC",
+        "EF10-TRACKING-UPDATE-DETACHED-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbSet\u00601.Update"
     },
     {

@@ -117,6 +117,49 @@ public sealed class StateManagementTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-TRACKING-UPDATE-DETACHED-ASYNC", "Microsoft.EntityFrameworkCore.DbSet`1.Update", "Microsoft.EntityFrameworkCore.DbContext.Entry", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync")]
+    public async Task Update_TracksDetachedEntityAndPersistsChangesAsynchronously()
+    {
+        var id = Guid.NewGuid();
+        await SeedAsync(id);
+
+        await using (var update = ProviderTestRuntime.CreateContext())
+        {
+            var detached = new Person { Id = id, Name = $"Updated {id:N}", Age = 61 };
+            update.People.Update(detached);
+            Assert.Equal(EntityState.Modified, update.Entry(detached).State);
+            Assert.Equal(1, await update.SaveChangesAsync(TestContext.Current.CancellationToken));
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        var actual = await verify.People.AsNoTracking()
+            .SingleAsync(person => person.Id == id, TestContext.Current.CancellationToken);
+        Assert.Equal($"Updated {id:N}", actual.Name);
+        Assert.Equal(61, actual.Age);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-TRACKING-UPDATE-DETACHED-SYNC", "Microsoft.EntityFrameworkCore.DbSet`1.Update", "Microsoft.EntityFrameworkCore.DbContext.Entry", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges")]
+    public async Task Update_TracksDetachedEntityAndPersistsChangesSynchronously()
+    {
+        var id = Guid.NewGuid();
+        await SeedAsync(id);
+
+        await using (var update = ProviderTestRuntime.CreateContext())
+        {
+            var detached = new Person { Id = id, Name = $"Updated sync {id:N}", Age = 62 };
+            update.People.Update(detached);
+            Assert.Equal(EntityState.Modified, update.Entry(detached).State);
+            Assert.Equal(1, update.SaveChanges());
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        var actual = verify.People.AsNoTracking().Single(person => person.Id == id);
+        Assert.Equal($"Updated sync {id:N}", actual.Name);
+        Assert.Equal(62, actual.Age);
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-TRACKING-DETACH", "Microsoft.EntityFrameworkCore.DbContext.Entry")]
     public async Task EntryDetach_RemovesEntityFromContextTracking()
     {
