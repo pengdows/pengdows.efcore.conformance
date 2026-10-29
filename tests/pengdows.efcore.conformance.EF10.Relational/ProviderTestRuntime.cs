@@ -84,6 +84,12 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
 
     public DbSet<ScalarRecord> ScalarRecords => Set<ScalarRecord>();
 
+    public DbSet<TphItem> TphItems => Set<TphItem>();
+
+    public DbSet<TptItem> TptItems => Set<TptItem>();
+
+    public DbSet<TpcItem> TpcItems => Set<TpcItem>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Person>(entity =>
@@ -136,6 +142,35 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
             entity.Property(record => record.Payload).HasColumnName("payload");
             entity.Property(record => record.Mood).HasColumnName("mood").HasConversion<string>();
         });
+        modelBuilder.Entity<TphItem>(entity =>
+        {
+            entity.ToTable("ef10conformancetph");
+            entity.HasKey(item => item.Id);
+            entity.Property(item => item.Id).HasColumnName("id");
+            entity.Property(item => item.Name).HasColumnName("name").IsRequired();
+            entity.HasDiscriminator<string>("kind")
+                .HasValue<TphArticle>("article")
+                .HasValue<TphVideo>("video");
+        });
+        modelBuilder.Entity<TptItem>(entity =>
+        {
+            entity.UseTptMappingStrategy();
+            entity.ToTable("ef10conformancetptbase");
+            entity.HasKey(item => item.Id);
+            entity.Property(item => item.Id).HasColumnName("id");
+            entity.Property(item => item.Name).HasColumnName("name").IsRequired();
+        });
+        modelBuilder.Entity<TptArticle>().ToTable("ef10conformancetptarticle");
+        modelBuilder.Entity<TptVideo>().ToTable("ef10conformancetptvideo");
+        modelBuilder.Entity<TpcItem>(entity =>
+        {
+            entity.UseTpcMappingStrategy();
+            entity.HasKey(item => item.Id);
+            entity.Property(item => item.Id).HasColumnName("id");
+            entity.Property(item => item.Name).HasColumnName("name").IsRequired();
+        });
+        modelBuilder.Entity<TpcArticle>().ToTable("ef10conformancetpcarticle");
+        modelBuilder.Entity<TpcVideo>().ToTable("ef10conformancetpcvideo");
     }
 }
 
@@ -208,4 +243,55 @@ internal enum TestMood
 {
     Calm,
     Curious
+}
+
+internal abstract class TphItem
+{
+    public Guid Id { get; set; }
+
+    public string Name { get; set; } = string.Empty;
+}
+
+internal sealed class TphArticle : TphItem
+{
+    public string Body { get; set; } = string.Empty;
+}
+
+internal sealed class TphVideo : TphItem
+{
+    public int DurationSeconds { get; set; }
+}
+
+internal abstract class TptItem
+{
+    public Guid Id { get; set; }
+
+    public string Name { get; set; } = string.Empty;
+}
+
+internal sealed class TptArticle : TptItem
+{
+    public string Body { get; set; } = string.Empty;
+}
+
+internal sealed class TptVideo : TptItem
+{
+    public int DurationSeconds { get; set; }
+}
+
+internal abstract class TpcItem
+{
+    public Guid Id { get; set; }
+
+    public string Name { get; set; } = string.Empty;
+}
+
+internal sealed class TpcArticle : TpcItem
+{
+    public string Body { get; set; } = string.Empty;
+}
+
+internal sealed class TpcVideo : TpcItem
+{
+    public int DurationSeconds { get; set; }
 }

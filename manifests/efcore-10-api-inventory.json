@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12402,
+    "AwaitingClassification": 12395,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 163,
-    "UncoveredMemberFamilies": 9052
+    "MemberEntriesInCoveredFamilies": 170,
+    "UncoveredMemberFamilies": 9049
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [
@@ -45,6 +45,7 @@
       "System.Linq.Queryable.LeftJoin",
       "System.Linq.Queryable.Max",
       "System.Linq.Queryable.Min",
+      "System.Linq.Queryable.OfType",
       "System.Linq.Queryable.OrderBy",
       "System.Linq.Queryable.Select",
       "System.Linq.Queryable.Single",
@@ -14587,6 +14588,9 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-CONCURRENCY-SAVE-SYNC",
+        "EF10-INHERITANCE-TPC-SYNC",
+        "EF10-INHERITANCE-TPH-SYNC",
+        "EF10-INHERITANCE-TPT-SYNC",
         "EF10-INTERCEPTION-SAVE-SYNC",
         "EF10-PERSIST-ACCEPT-CHANGES-SYNC",
         "EF10-PERSIST-ADD-RANGE-SYNC",
@@ -14614,6 +14618,9 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-CONCURRENCY-SAVE-SYNC",
+        "EF10-INHERITANCE-TPC-SYNC",
+        "EF10-INHERITANCE-TPH-SYNC",
+        "EF10-INHERITANCE-TPT-SYNC",
         "EF10-INTERCEPTION-SAVE-SYNC",
         "EF10-PERSIST-ACCEPT-CHANGES-SYNC",
         "EF10-PERSIST-ADD-RANGE-SYNC",
@@ -14641,6 +14648,9 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-CONCURRENCY-SAVE-ASYNC",
+        "EF10-INHERITANCE-TPC-ASYNC",
+        "EF10-INHERITANCE-TPH-ASYNC",
+        "EF10-INHERITANCE-TPT-ASYNC",
         "EF10-INTERCEPTION-SAVE-ASYNC",
         "EF10-PERSIST-ACCEPT-CHANGES-ASYNC",
         "EF10-PERSIST-ADD-RANGE-ASYNC",
@@ -14669,6 +14679,9 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-CONCURRENCY-SAVE-ASYNC",
+        "EF10-INHERITANCE-TPC-ASYNC",
+        "EF10-INHERITANCE-TPH-ASYNC",
+        "EF10-INHERITANCE-TPT-ASYNC",
         "EF10-INTERCEPTION-SAVE-ASYNC",
         "EF10-PERSIST-ACCEPT-CHANGES-ASYNC",
         "EF10-PERSIST-ADD-RANGE-ASYNC",
@@ -47944,6 +47957,9 @@
       "Signature": "System.Threading.Tasks.Task\u003CSystem.Collections.Generic.List\u003CTSource\u003E\u003E ToListAsync\u003CTSource\u003E(System.Linq.IQueryable\u003CTSource\u003E source, System.Threading.CancellationToken cancellationToken = null)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-INHERITANCE-TPC-ASYNC",
+        "EF10-INHERITANCE-TPH-ASYNC",
+        "EF10-INHERITANCE-TPT-ASYNC",
         "EF10-LINQ-LEFTJOIN-ASYNC",
         "EF10-QUERY-COMPOSITION-ASYNC",
         "EF10-QUERY-FILTERS-NAMED-ASYNC",
@@ -65698,9 +65714,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasDiscriminator",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.DiscriminatorBuilder HasDiscriminator()",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-INHERITANCE-TPH-ASYNC",
+        "EF10-INHERITANCE-TPH-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder.HasDiscriminator"
     },
     {
@@ -65709,9 +65728,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasDiscriminator",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.DiscriminatorBuilder HasDiscriminator(System.String name, System.Type type)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-INHERITANCE-TPH-ASYNC",
+        "EF10-INHERITANCE-TPH-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder.HasDiscriminator"
     },
     {
@@ -65720,9 +65742,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasDiscriminator",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.DiscriminatorBuilder\u003CTDiscriminator\u003E HasDiscriminator\u003CTDiscriminator\u003E(System.String name)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-INHERITANCE-TPH-ASYNC",
+        "EF10-INHERITANCE-TPH-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder.HasDiscriminator"
     },
     {
@@ -167524,9 +167549,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "UseTpcMappingStrategy",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder UseTpcMappingStrategy(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder entityTypeBuilder)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-INHERITANCE-TPC-ASYNC",
+        "EF10-INHERITANCE-TPC-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalEntityTypeBuilderExtensions.UseTpcMappingStrategy"
     },
     {
@@ -167546,9 +167574,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "UseTptMappingStrategy",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder UseTptMappingStrategy(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder entityTypeBuilder)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-INHERITANCE-TPT-ASYNC",
+        "EF10-INHERITANCE-TPT-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalEntityTypeBuilderExtensions.UseTptMappingStrategy"
     },
     {
@@ -167557,9 +167588,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "UseTpcMappingStrategy",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder\u003CTEntity\u003E UseTpcMappingStrategy\u003CTEntity\u003E(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder\u003CTEntity\u003E entityTypeBuilder) where TEntity : class",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-INHERITANCE-TPC-ASYNC",
+        "EF10-INHERITANCE-TPC-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalEntityTypeBuilderExtensions.UseTpcMappingStrategy"
     },
     {
@@ -167579,9 +167613,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "UseTptMappingStrategy",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder\u003CTEntity\u003E UseTptMappingStrategy\u003CTEntity\u003E(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder\u003CTEntity\u003E entityTypeBuilder) where TEntity : class",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-INHERITANCE-TPT-ASYNC",
+        "EF10-INHERITANCE-TPT-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalEntityTypeBuilderExtensions.UseTptMappingStrategy"
     },
     {
