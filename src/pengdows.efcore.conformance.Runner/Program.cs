@@ -254,6 +254,7 @@ async Task<int> RunTestsAsync(string[] arguments, string? configuredConnectionSt
     startInfo.ArgumentList.Add(reportDirectory);
     startInfo.Environment["PENGDOWS_EFCORE_ADAPTER_ASSEMBLY"] = adapterPath;
     startInfo.Environment["PENGDOWS_EFCORE_ADAPTER_TYPE"] = adapterType;
+    startInfo.Environment["PENGDOWS_EFCORE_CONFORMANCE_CONNECTION_STRING"] = cs;
 
     using var process = new Process { StartInfo = startInfo };
     string stdout;

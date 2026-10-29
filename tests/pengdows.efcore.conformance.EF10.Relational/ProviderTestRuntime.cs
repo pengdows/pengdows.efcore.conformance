@@ -115,6 +115,12 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
 
     public DbSet<PropertyAccessRecord> PropertyAccessRecords => Set<PropertyAccessRecord>();
 
+    public DbSet<SnapshotStrategyRecord> SnapshotStrategyRecords => Set<SnapshotStrategyRecord>();
+
+    public DbSet<ChangingStrategyRecord> ChangingStrategyRecords => Set<ChangingStrategyRecord>();
+
+    public DbSet<ChangingStrategyWithOriginalsRecord> ChangingStrategyWithOriginalsRecords => Set<ChangingStrategyWithOriginalsRecord>();
+
     public DbSet<JsonProfileRecord> JsonProfileRecords => Set<JsonProfileRecord>();
 
     public DbSet<PrimitiveCollectionRecord> PrimitiveCollectionRecords => Set<PrimitiveCollectionRecord>();
@@ -411,6 +417,30 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
             entity.Property(record => record.PreferField).HasColumnName("preferfield").UsePropertyAccessMode(PropertyAccessMode.PreferField);
             entity.Property(record => record.PreferFieldDuringConstruction).HasColumnName("preferfieldduringconstruction").UsePropertyAccessMode(PropertyAccessMode.PreferFieldDuringConstruction);
             entity.Property(record => record.PreferProperty).HasColumnName("preferproperty").UsePropertyAccessMode(PropertyAccessMode.PreferProperty);
+        });
+        modelBuilder.Entity<SnapshotStrategyRecord>(entity =>
+        {
+            entity.ToTable("ef10conformance_snapshotstrategy");
+            entity.HasKey(record => record.Id);
+            entity.Property(record => record.Id).HasColumnName("id");
+            entity.Property(record => record.Name).HasColumnName("name");
+            entity.HasChangeTrackingStrategy(ChangeTrackingStrategy.Snapshot);
+        });
+        modelBuilder.Entity<ChangingStrategyRecord>(entity =>
+        {
+            entity.ToTable("ef10conformance_changingstrategy");
+            entity.HasKey(record => record.Id);
+            entity.Property(record => record.Id).HasColumnName("id");
+            entity.Property(record => record.Name).HasColumnName("name");
+            entity.HasChangeTrackingStrategy(ChangeTrackingStrategy.ChangingAndChangedNotifications);
+        });
+        modelBuilder.Entity<ChangingStrategyWithOriginalsRecord>(entity =>
+        {
+            entity.ToTable("ef10conformance_changingstrategyoriginals");
+            entity.HasKey(record => record.Id);
+            entity.Property(record => record.Id).HasColumnName("id");
+            entity.Property(record => record.Name).HasColumnName("name");
+            entity.HasChangeTrackingStrategy(ChangeTrackingStrategy.ChangingAndChangedNotificationsWithOriginalValues);
         });
         modelBuilder.Entity<JsonProfileRecord>(entity =>
         {
@@ -876,6 +906,67 @@ internal sealed class PropertyAccessRecord
     public string PreferProperty { get => _preferProperty; set { _preferProperty = value; SetterCalls++; } }
 
     public void ResetSetterCalls() => SetterCalls = 0;
+}
+
+internal sealed class SnapshotStrategyRecord
+{
+    public Guid Id { get; set; }
+
+    public string Name { get; set; } = string.Empty;
+}
+
+internal sealed class ChangingStrategyRecord : INotifyPropertyChanging, INotifyPropertyChanged
+{
+    private string _name = string.Empty;
+
+    public Guid Id { get; set; }
+
+    public string Name
+    {
+        get => _name;
+        set
+        {
+            if (_name == value)
+            {
+                return;
+            }
+
+            PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(nameof(Name)));
+            _name = value;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Name)));
+        }
+    }
+
+    public event PropertyChangingEventHandler? PropertyChanging;
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+}
+
+internal sealed class ChangingStrategyWithOriginalsRecord : INotifyPropertyChanging, INotifyPropertyChanged
+{
+    private string _name = string.Empty;
+
+    public Guid Id { get; set; }
+
+    public string Name
+    {
+        get => _name;
+        set
+        {
+            if (_name == value)
+            {
+                return;
+            }
+
+            PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(nameof(Name)));
+            _name = value;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Name)));
+        }
+    }
+
+    public event PropertyChangingEventHandler? PropertyChanging;
+
+    public event PropertyChangedEventHandler? PropertyChanged;
 }
 
 internal sealed class AddressInfo

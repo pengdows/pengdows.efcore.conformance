@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 214,
+    "AwaitingClassification": 211,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 590,
-    "UncoveredMemberFamilies": 139
+    "MemberEntriesInCoveredFamilies": 593,
+    "UncoveredMemberFamilies": 136
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -15880,8 +15880,12 @@
       "Signature": "enum Microsoft.EntityFrameworkCore.ChangeTrackingStrategy",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-TRACKING-CHANGING-STRATEGIES-ASYNC",
+        "EF10-TRACKING-CHANGING-STRATEGIES-SYNC",
         "EF10-TRACKING-NOTIFICATION-ASYNC",
-        "EF10-TRACKING-NOTIFICATION-SYNC"
+        "EF10-TRACKING-NOTIFICATION-SYNC",
+        "EF10-TRACKING-SNAPSHOT-STRATEGY-ASYNC",
+        "EF10-TRACKING-SNAPSHOT-STRATEGY-SYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -15905,10 +15909,13 @@
       "MemberKind": "Field",
       "ApiMemberName": "Snapshot",
       "Signature": "Microsoft.EntityFrameworkCore.ChangeTrackingStrategy Snapshot = 0",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-SNAPSHOT-STRATEGY-ASYNC",
+        "EF10-TRACKING-SNAPSHOT-STRATEGY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTrackingStrategy.Snapshot"
     },
     {
@@ -15932,10 +15939,13 @@
       "MemberKind": "Field",
       "ApiMemberName": "ChangingAndChangedNotifications",
       "Signature": "Microsoft.EntityFrameworkCore.ChangeTrackingStrategy ChangingAndChangedNotifications = 2",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-CHANGING-STRATEGIES-ASYNC",
+        "EF10-TRACKING-CHANGING-STRATEGIES-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTrackingStrategy.ChangingAndChangedNotifications"
     },
     {
@@ -15944,10 +15954,13 @@
       "MemberKind": "Field",
       "ApiMemberName": "ChangingAndChangedNotificationsWithOriginalValues",
       "Signature": "Microsoft.EntityFrameworkCore.ChangeTrackingStrategy ChangingAndChangedNotificationsWithOriginalValues = 3",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-CHANGING-STRATEGIES-ASYNC",
+        "EF10-TRACKING-CHANGING-STRATEGIES-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTrackingStrategy.ChangingAndChangedNotificationsWithOriginalValues"
     },
     {
@@ -16073,6 +16086,7 @@
         "EF10-SAVE-EVENTS-FAILURE-SYNC",
         "EF10-SAVE-EVENTS-SUCCESS-SYNC",
         "EF10-TRACKING-AUTO-DETECT-SAVE-SYNC",
+        "EF10-TRACKING-CHANGING-STRATEGIES-SYNC",
         "EF10-TRACKING-CLEAR",
         "EF10-TRACKING-DETECT-CHANGES-SYNC",
         "EF10-TRACKING-ENTRY-DETECT-CHANGES",
@@ -16080,6 +16094,7 @@
         "EF10-TRACKING-NOTIFICATION-SYNC",
         "EF10-TRACKING-PROPERTY-ENTRY-SYNC",
         "EF10-TRACKING-PROPERTY-VALUES-SET",
+        "EF10-TRACKING-SNAPSHOT-STRATEGY-SYNC",
         "EF10-TRACKING-UPDATE-DETACHED-SYNC",
         "EF10-TRANSACTION-COMMIT-SYNC",
         "EF10-TRANSACTION-EXTERNAL-SYNC",
@@ -16142,6 +16157,7 @@
         "EF10-SAVE-EVENTS-FAILURE-SYNC",
         "EF10-SAVE-EVENTS-SUCCESS-SYNC",
         "EF10-TRACKING-AUTO-DETECT-SAVE-SYNC",
+        "EF10-TRACKING-CHANGING-STRATEGIES-SYNC",
         "EF10-TRACKING-CLEAR",
         "EF10-TRACKING-DETECT-CHANGES-SYNC",
         "EF10-TRACKING-ENTRY-DETECT-CHANGES",
@@ -16149,6 +16165,7 @@
         "EF10-TRACKING-NOTIFICATION-SYNC",
         "EF10-TRACKING-PROPERTY-ENTRY-SYNC",
         "EF10-TRACKING-PROPERTY-VALUES-SET",
+        "EF10-TRACKING-SNAPSHOT-STRATEGY-SYNC",
         "EF10-TRACKING-UPDATE-DETACHED-SYNC",
         "EF10-TRANSACTION-COMMIT-SYNC",
         "EF10-TRANSACTION-EXTERNAL-SYNC",
@@ -16217,9 +16234,11 @@
         "EF10-TRACKING-ATTACH",
         "EF10-TRACKING-AUTO-DETECT-SAVE-ASYNC",
         "EF10-TRACKING-CASCADE-CHANGES",
+        "EF10-TRACKING-CHANGING-STRATEGIES-ASYNC",
         "EF10-TRACKING-DETECT-CHANGES-ASYNC",
         "EF10-TRACKING-NOTIFICATION-ASYNC",
         "EF10-TRACKING-PROPERTY-ENTRY-ASYNC",
+        "EF10-TRACKING-SNAPSHOT-STRATEGY-ASYNC",
         "EF10-TRACKING-TRACK-GRAPH",
         "EF10-TRACKING-UPDATE-DETACHED-ASYNC",
         "EF10-TRANSACTION-COMMIT-ASYNC",
@@ -16289,9 +16308,11 @@
         "EF10-TRACKING-ATTACH",
         "EF10-TRACKING-AUTO-DETECT-SAVE-ASYNC",
         "EF10-TRACKING-CASCADE-CHANGES",
+        "EF10-TRACKING-CHANGING-STRATEGIES-ASYNC",
         "EF10-TRACKING-DETECT-CHANGES-ASYNC",
         "EF10-TRACKING-NOTIFICATION-ASYNC",
         "EF10-TRACKING-PROPERTY-ENTRY-ASYNC",
+        "EF10-TRACKING-SNAPSHOT-STRATEGY-ASYNC",
         "EF10-TRACKING-TRACK-GRAPH",
         "EF10-TRACKING-UPDATE-DETACHED-ASYNC",
         "EF10-TRANSACTION-COMMIT-ASYNC",
