@@ -14601,6 +14601,7 @@
         "EF10-PERSIST-INSERT-FAILURE-SYNC",
         "EF10-PERSIST-INSERT-SYNC",
         "EF10-PERSIST-REMOVE-RANGE",
+        "EF10-PERSIST-SAVE-NO-CHANGES-SYNC",
         "EF10-PERSIST-UPDATE-SYNC",
         "EF10-PRIMITIVE-COLLECTION-SYNC",
         "EF10-TRACKING-CLEAR",
@@ -14635,6 +14636,7 @@
         "EF10-PERSIST-INSERT-FAILURE-SYNC",
         "EF10-PERSIST-INSERT-SYNC",
         "EF10-PERSIST-REMOVE-RANGE",
+        "EF10-PERSIST-SAVE-NO-CHANGES-SYNC",
         "EF10-PERSIST-UPDATE-SYNC",
         "EF10-PRIMITIVE-COLLECTION-SYNC",
         "EF10-TRACKING-CLEAR",
@@ -14668,6 +14670,7 @@
         "EF10-PERSIST-DELETE-ASYNC",
         "EF10-PERSIST-INSERT-ASYNC",
         "EF10-PERSIST-INSERT-FAILURE-ASYNC",
+        "EF10-PERSIST-SAVE-NO-CHANGES-ASYNC",
         "EF10-PERSIST-UPDATE-ASYNC",
         "EF10-PERSIST-UPDATE-RANGE",
         "EF10-PRIMITIVE-COLLECTION-ASYNC",
@@ -14703,6 +14706,7 @@
         "EF10-PERSIST-DELETE-ASYNC",
         "EF10-PERSIST-INSERT-ASYNC",
         "EF10-PERSIST-INSERT-FAILURE-ASYNC",
+        "EF10-PERSIST-SAVE-NO-CHANGES-ASYNC",
         "EF10-PERSIST-UPDATE-ASYNC",
         "EF10-PERSIST-UPDATE-RANGE",
         "EF10-PRIMITIVE-COLLECTION-ASYNC",
@@ -16821,7 +16825,8 @@
       "Signature": "TEntity Find(System.Object[] keyValues)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
-        "EF10-TRACKING-FIND"
+        "EF10-TRACKING-FIND",
+        "EF10-TRACKING-FIND-MISSING-SYNC"
       ],
       "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbSet\u00601.Find"
@@ -16834,7 +16839,8 @@
       "Signature": "System.Threading.Tasks.ValueTask\u003CTEntity\u003E FindAsync(System.Object[] keyValues)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
-        "EF10-TRACKING-FIND-ASYNC"
+        "EF10-TRACKING-FIND-ASYNC",
+        "EF10-TRACKING-FIND-MISSING-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbSet\u00601.FindAsync"
@@ -16847,7 +16853,8 @@
       "Signature": "System.Threading.Tasks.ValueTask\u003CTEntity\u003E FindAsync(System.Object[] keyValues, System.Threading.CancellationToken cancellationToken)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
-        "EF10-TRACKING-FIND-ASYNC"
+        "EF10-TRACKING-FIND-ASYNC",
+        "EF10-TRACKING-FIND-MISSING-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbSet\u00601.FindAsync"

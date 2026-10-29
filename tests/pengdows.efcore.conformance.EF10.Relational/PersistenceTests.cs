@@ -62,6 +62,26 @@ public sealed class PersistenceTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-PERSIST-SAVE-NO-CHANGES-ASYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync")]
+    public async Task SaveChangesAsync_ReturnsZeroWhenThereAreNoChanges()
+    {
+        await using var context = ProviderTestRuntime.CreateContext();
+        await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
+
+        Assert.Equal(0, await context.SaveChangesAsync(TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-PERSIST-SAVE-NO-CHANGES-SYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges")]
+    public async Task SaveChanges_ReturnsZeroWhenThereAreNoChangesSynchronously()
+    {
+        await using var context = ProviderTestRuntime.CreateContext();
+        await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
+
+        Assert.Equal(0, context.SaveChanges());
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-PERSIST-UPDATE-ASYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.AsNoTracking")]
     public async Task SaveChangesAsync_PersistsUpdatedValuesForFreshContext()
     {

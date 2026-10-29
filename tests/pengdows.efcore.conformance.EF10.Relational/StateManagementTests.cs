@@ -40,6 +40,26 @@ public sealed class StateManagementTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-TRACKING-FIND-MISSING-SYNC", "Microsoft.EntityFrameworkCore.DbSet`1.Find")]
+    public async Task Find_ReturnsNullForMissingKeySynchronously()
+    {
+        await using var context = ProviderTestRuntime.CreateContext();
+        await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
+
+        Assert.Null(context.People.Find(Guid.NewGuid()));
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-TRACKING-FIND-MISSING-ASYNC", "Microsoft.EntityFrameworkCore.DbSet`1.FindAsync")]
+    public async Task FindAsync_ReturnsNullForMissingKey()
+    {
+        await using var context = ProviderTestRuntime.CreateContext();
+        await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
+
+        Assert.Null(await context.People.FindAsync([Guid.NewGuid()], TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-TRACKING-NO-TRACKING", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.AsNoTracking", "Microsoft.EntityFrameworkCore.DbContext.Entry")]
     public async Task AsNoTracking_MaterializesDetachedEntity()
     {
