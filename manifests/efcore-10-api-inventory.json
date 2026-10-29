@@ -50,6 +50,7 @@
       "System.Linq.Queryable.OrderBy",
       "System.Linq.Queryable.RightJoin",
       "System.Linq.Queryable.Select",
+      "System.Linq.Queryable.SelectMany",
       "System.Linq.Queryable.Single",
       "System.Linq.Queryable.SingleOrDefault",
       "System.Linq.Queryable.Skip",
@@ -48021,6 +48022,7 @@
         "EF10-QUERY-FILTERS-NAMED-ASYNC",
         "EF10-QUERY-GROUPBY-ASYNC",
         "EF10-QUERY-NULL-PREDICATE-ASYNC",
+        "EF10-RELATIONSHIPS-SELECTMANY-ASYNC",
         "EF10-TRACKING-NO-TRACKING-IDENTITY-ASYNC"
       ],
       "Disposition": "behavior-tested-family",

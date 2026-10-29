@@ -57,6 +57,40 @@ public sealed class RelationshipTests
         Assert.Equal(expected.Title, post.Title);
     }
 
+    [Fact]
+    [BehavioralCoverage("EF10-RELATIONSHIPS-SELECTMANY-ASYNC", "System.Linq.Queryable.SelectMany", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync")]
+    public async Task SelectMany_FlattensRelatedPostsAsynchronously()
+    {
+        var blog = await CreateBlogAsync();
+
+        await using var context = ProviderTestRuntime.CreateContext();
+        var titles = await context.Blogs
+            .Where(item => item.Id == blog.Id)
+            .SelectMany(item => item.Posts)
+            .Select(post => post.Title)
+            .OrderBy(title => title)
+            .ToListAsync(TestContext.Current.CancellationToken);
+
+        Assert.Equal(new[] { "First", "Second" }, titles);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-RELATIONSHIPS-SELECTMANY-SYNC", "System.Linq.Queryable.SelectMany", "System.Linq.Enumerable.ToList")]
+    public async Task SelectMany_FlattensRelatedPostsSynchronously()
+    {
+        var blog = await CreateBlogAsync();
+
+        await using var context = ProviderTestRuntime.CreateContext();
+        var titles = context.Blogs
+            .Where(item => item.Id == blog.Id)
+            .SelectMany(item => item.Posts)
+            .Select(post => post.Title)
+            .OrderBy(title => title)
+            .ToList();
+
+        Assert.Equal(new[] { "First", "Second" }, titles);
+    }
+
     private static async Task<Blog> CreateBlogAsync()
     {
         var blog = new Blog
