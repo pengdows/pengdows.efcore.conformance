@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12239,
+    "AwaitingClassification": 12237,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 326,
-    "UncoveredMemberFamilies": 8941
+    "MemberEntriesInCoveredFamilies": 328,
+    "UncoveredMemberFamilies": 8939
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -47218,9 +47218,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "Constant",
       "Signature": "T Constant\u003CT\u003E(T argument)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-QUERY-EF-CONSTANT-PARAMETER-ASYNC",
+        "EF10-QUERY-EF-CONSTANT-PARAMETER-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.Constant"
     },
     {
@@ -47229,9 +47232,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "Parameter",
       "Signature": "T Parameter\u003CT\u003E(T argument)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-QUERY-EF-CONSTANT-PARAMETER-ASYNC",
+        "EF10-QUERY-EF-CONSTANT-PARAMETER-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.Parameter"
     },
     {
@@ -48287,6 +48293,7 @@
         "EF10-PRIMITIVE-COLLECTION-ASYNC",
         "EF10-QUERY-CANCELLATION",
         "EF10-QUERY-COMPOSITION-ASYNC",
+        "EF10-QUERY-EF-CONSTANT-PARAMETER-ASYNC",
         "EF10-QUERY-FILTERS-NAMED-ASYNC",
         "EF10-QUERY-GROUPBY-ASYNC",
         "EF10-QUERY-NULL-PREDICATE-ASYNC",

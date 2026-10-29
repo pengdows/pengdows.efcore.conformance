@@ -527,6 +527,62 @@ public sealed class QueryTests
         Assert.Equal(new[] { "Shadow property query sync" }, names);
     }
 
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-EF-CONSTANT-PARAMETER-ASYNC", "Microsoft.EntityFrameworkCore.EF.Constant", "Microsoft.EntityFrameworkCore.EF.Parameter", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync")]
+    public async Task EfConstantAndParameter_PreservePredicateResultsAsynchronously()
+    {
+        var batch = Guid.NewGuid().ToString("N");
+        await SeedAsync(new[]
+        {
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-young", Age = 19 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-middle", Age = 25 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-older", Age = 40 }
+        });
+
+        await using var query = ProviderTestRuntime.CreateContext();
+        var minimumAge = 25;
+        var constantNames = await query.People
+            .Where(person => person.Name.StartsWith(batch) && person.Age >= EF.Constant(minimumAge))
+            .Select(person => person.Name)
+            .ToListAsync(TestContext.Current.CancellationToken);
+        var parameterNames = await query.People
+            .Where(person => person.Name.StartsWith(batch) && person.Age >= EF.Parameter(minimumAge))
+            .Select(person => person.Name)
+            .ToListAsync(TestContext.Current.CancellationToken);
+
+        var expected = new[] { $"{batch}-middle", $"{batch}-older" };
+        Assert.Equal(expected, constantNames.Order(StringComparer.Ordinal));
+        Assert.Equal(expected, parameterNames.Order(StringComparer.Ordinal));
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-EF-CONSTANT-PARAMETER-SYNC", "Microsoft.EntityFrameworkCore.EF.Constant", "Microsoft.EntityFrameworkCore.EF.Parameter", "System.Linq.Queryable.ToList")]
+    public async Task EfConstantAndParameter_PreservePredicateResultsSynchronously()
+    {
+        var batch = Guid.NewGuid().ToString("N");
+        await SeedAsync(new[]
+        {
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-young", Age = 19 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-middle", Age = 25 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-older", Age = 40 }
+        });
+
+        await using var query = ProviderTestRuntime.CreateContext();
+        var minimumAge = 25;
+        var constantNames = query.People
+            .Where(person => person.Name.StartsWith(batch) && person.Age >= EF.Constant(minimumAge))
+            .Select(person => person.Name)
+            .ToList();
+        var parameterNames = query.People
+            .Where(person => person.Name.StartsWith(batch) && person.Age >= EF.Parameter(minimumAge))
+            .Select(person => person.Name)
+            .ToList();
+
+        var expected = new[] { $"{batch}-middle", $"{batch}-older" };
+        Assert.Equal(expected, constantNames.Order(StringComparer.Ordinal));
+        Assert.Equal(expected, parameterNames.Order(StringComparer.Ordinal));
+    }
+
     private static async Task SeedAsync(IEnumerable<Person> people)
     {
         await using var context = ProviderTestRuntime.CreateContext();
