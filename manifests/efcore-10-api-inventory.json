@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 220,
+    "AwaitingClassification": 213,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 584,
-    "UncoveredMemberFamilies": 146
+    "MemberEntriesInCoveredFamilies": 591,
+    "UncoveredMemberFamilies": 140
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -16060,6 +16060,7 @@
         "EF10-PERSIST-SAVE-NO-CHANGES-SYNC",
         "EF10-PERSIST-UPDATE-SYNC",
         "EF10-PRIMITIVE-COLLECTION-SYNC",
+        "EF10-PROPERTY-ACCESS-MODES-SYNC",
         "EF10-SAVE-EVENTS-FAILURE-SYNC",
         "EF10-SAVE-EVENTS-SUCCESS-SYNC",
         "EF10-TRACKING-AUTO-DETECT-SAVE-SYNC",
@@ -16128,6 +16129,7 @@
         "EF10-PERSIST-SAVE-NO-CHANGES-SYNC",
         "EF10-PERSIST-UPDATE-SYNC",
         "EF10-PRIMITIVE-COLLECTION-SYNC",
+        "EF10-PROPERTY-ACCESS-MODES-SYNC",
         "EF10-SAVE-EVENTS-FAILURE-SYNC",
         "EF10-SAVE-EVENTS-SUCCESS-SYNC",
         "EF10-TRACKING-AUTO-DETECT-SAVE-SYNC",
@@ -16199,6 +16201,7 @@
         "EF10-PERSIST-UPDATE-ASYNC",
         "EF10-PERSIST-UPDATE-RANGE",
         "EF10-PRIMITIVE-COLLECTION-ASYNC",
+        "EF10-PROPERTY-ACCESS-MODES-ASYNC",
         "EF10-RELATIONSHIPS-FOREIGN-KEY",
         "EF10-SAVE-EVENTS-FAILURE-ASYNC",
         "EF10-SAVE-EVENTS-SUCCESS-ASYNC",
@@ -16270,6 +16273,7 @@
         "EF10-PERSIST-UPDATE-ASYNC",
         "EF10-PERSIST-UPDATE-RANGE",
         "EF10-PRIMITIVE-COLLECTION-ASYNC",
+        "EF10-PROPERTY-ACCESS-MODES-ASYNC",
         "EF10-RELATIONSHIPS-FOREIGN-KEY",
         "EF10-SAVE-EVENTS-FAILURE-ASYNC",
         "EF10-SAVE-EVENTS-SUCCESS-ASYNC",
@@ -52308,6 +52312,7 @@
         "EF10-PERSIST-INSERT-ASYNC",
         "EF10-PERSIST-UPDATE-ASYNC",
         "EF10-PERSIST-UPDATE-RANGE",
+        "EF10-PROPERTY-ACCESS-MODES-ASYNC",
         "EF10-QUERY-IGNORE-AUTO-INCLUDES-ASYNC",
         "EF10-QUERY-SINGLE-ASYNC",
         "EF10-QUERY-SINGLE-MULTIPLE-ASYNC",
@@ -52346,6 +52351,7 @@
         "EF10-PERSIST-INSERT-ASYNC",
         "EF10-PERSIST-UPDATE-ASYNC",
         "EF10-PERSIST-UPDATE-RANGE",
+        "EF10-PROPERTY-ACCESS-MODES-ASYNC",
         "EF10-QUERY-IGNORE-AUTO-INCLUDES-ASYNC",
         "EF10-QUERY-SINGLE-ASYNC",
         "EF10-QUERY-SINGLE-MULTIPLE-ASYNC",
@@ -157101,10 +157107,13 @@
       "MemberKind": "Type",
       "ApiMemberName": null,
       "Signature": "enum Microsoft.EntityFrameworkCore.PropertyAccessMode",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-PROPERTY-ACCESS-MODES-ASYNC",
+        "EF10-PROPERTY-ACCESS-MODES-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.PropertyAccessMode"
     },
     {
@@ -157125,10 +157134,13 @@
       "MemberKind": "Field",
       "ApiMemberName": "Field",
       "Signature": "Microsoft.EntityFrameworkCore.PropertyAccessMode Field = 0",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-PROPERTY-ACCESS-MODES-ASYNC",
+        "EF10-PROPERTY-ACCESS-MODES-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.PropertyAccessMode.Field"
     },
     {
@@ -157137,10 +157149,13 @@
       "MemberKind": "Field",
       "ApiMemberName": "FieldDuringConstruction",
       "Signature": "Microsoft.EntityFrameworkCore.PropertyAccessMode FieldDuringConstruction = 1",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-PROPERTY-ACCESS-MODES-ASYNC",
+        "EF10-PROPERTY-ACCESS-MODES-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.PropertyAccessMode.FieldDuringConstruction"
     },
     {
@@ -157149,10 +157164,13 @@
       "MemberKind": "Field",
       "ApiMemberName": "Property",
       "Signature": "Microsoft.EntityFrameworkCore.PropertyAccessMode Property = 2",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-PROPERTY-ACCESS-MODES-ASYNC",
+        "EF10-PROPERTY-ACCESS-MODES-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.PropertyAccessMode.Property"
     },
     {
@@ -157161,10 +157179,13 @@
       "MemberKind": "Field",
       "ApiMemberName": "PreferField",
       "Signature": "Microsoft.EntityFrameworkCore.PropertyAccessMode PreferField = 3",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-PROPERTY-ACCESS-MODES-ASYNC",
+        "EF10-PROPERTY-ACCESS-MODES-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.PropertyAccessMode.PreferField"
     },
     {
@@ -157173,10 +157194,13 @@
       "MemberKind": "Field",
       "ApiMemberName": "PreferFieldDuringConstruction",
       "Signature": "Microsoft.EntityFrameworkCore.PropertyAccessMode PreferFieldDuringConstruction = 4",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-PROPERTY-ACCESS-MODES-ASYNC",
+        "EF10-PROPERTY-ACCESS-MODES-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.PropertyAccessMode.PreferFieldDuringConstruction"
     },
     {
@@ -157185,10 +157209,13 @@
       "MemberKind": "Field",
       "ApiMemberName": "PreferProperty",
       "Signature": "Microsoft.EntityFrameworkCore.PropertyAccessMode PreferProperty = 5",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-PROPERTY-ACCESS-MODES-ASYNC",
+        "EF10-PROPERTY-ACCESS-MODES-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.PropertyAccessMode.PreferProperty"
     },
     {

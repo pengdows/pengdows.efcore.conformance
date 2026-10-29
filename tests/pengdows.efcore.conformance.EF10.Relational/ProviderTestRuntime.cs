@@ -113,6 +113,8 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
 
     public DbSet<NotifyingRecord> NotifyingRecords => Set<NotifyingRecord>();
 
+    public DbSet<PropertyAccessRecord> PropertyAccessRecords => Set<PropertyAccessRecord>();
+
     public DbSet<JsonProfileRecord> JsonProfileRecords => Set<JsonProfileRecord>();
 
     public DbSet<PrimitiveCollectionRecord> PrimitiveCollectionRecords => Set<PrimitiveCollectionRecord>();
@@ -396,6 +398,19 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
             entity.Property(record => record.Id).HasColumnName("id");
             entity.Property(record => record.Name).HasColumnName("name");
             entity.HasChangeTrackingStrategy(ChangeTrackingStrategy.ChangedNotifications);
+        });
+        modelBuilder.Entity<PropertyAccessRecord>(entity =>
+        {
+            entity.ToTable("ef10conformance_propertyaccess");
+            entity.HasKey(record => record.Id);
+            entity.Property(record => record.Id).HasColumnName("id");
+            entity.Ignore(record => record.SetterCalls);
+            entity.Property(record => record.Field).HasColumnName("field").UsePropertyAccessMode(PropertyAccessMode.Field);
+            entity.Property(record => record.FieldDuringConstruction).HasColumnName("fieldduringconstruction").UsePropertyAccessMode(PropertyAccessMode.FieldDuringConstruction);
+            entity.Property(record => record.Property).HasColumnName("property").UsePropertyAccessMode(PropertyAccessMode.Property);
+            entity.Property(record => record.PreferField).HasColumnName("preferfield").UsePropertyAccessMode(PropertyAccessMode.PreferField);
+            entity.Property(record => record.PreferFieldDuringConstruction).HasColumnName("preferfieldduringconstruction").UsePropertyAccessMode(PropertyAccessMode.PreferFieldDuringConstruction);
+            entity.Property(record => record.PreferProperty).HasColumnName("preferproperty").UsePropertyAccessMode(PropertyAccessMode.PreferProperty);
         });
         modelBuilder.Entity<JsonProfileRecord>(entity =>
         {
@@ -833,6 +848,34 @@ internal sealed class NotifyingRecord : INotifyPropertyChanged
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
+}
+
+internal sealed class PropertyAccessRecord
+{
+    private string _field = string.Empty;
+    private string _fieldDuringConstruction = string.Empty;
+    private string _property = string.Empty;
+    private string _preferField = string.Empty;
+    private string _preferFieldDuringConstruction = string.Empty;
+    private string _preferProperty = string.Empty;
+
+    public Guid Id { get; set; }
+
+    public int SetterCalls { get; private set; }
+
+    public string Field { get => _field; set { _field = value; SetterCalls++; } }
+
+    public string FieldDuringConstruction { get => _fieldDuringConstruction; set { _fieldDuringConstruction = value; SetterCalls++; } }
+
+    public string Property { get => _property; set { _property = value; SetterCalls++; } }
+
+    public string PreferField { get => _preferField; set { _preferField = value; SetterCalls++; } }
+
+    public string PreferFieldDuringConstruction { get => _preferFieldDuringConstruction; set { _preferFieldDuringConstruction = value; SetterCalls++; } }
+
+    public string PreferProperty { get => _preferProperty; set { _preferProperty = value; SetterCalls++; } }
+
+    public void ResetSetterCalls() => SetterCalls = 0;
 }
 
 internal sealed class AddressInfo
