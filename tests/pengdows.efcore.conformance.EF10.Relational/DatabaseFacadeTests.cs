@@ -104,7 +104,7 @@ public sealed class DatabaseFacadeTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-DATABASE-FACADE-AUTO-TRANSACTION-BEHAVIOR", "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.AutoTransactionBehavior")]
+    [BehavioralCoverage("EF10-DATABASE-FACADE-AUTO-TRANSACTION-BEHAVIOR", "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.AutoTransactionBehavior", "Microsoft.EntityFrameworkCore.AutoTransactionBehavior", "Microsoft.EntityFrameworkCore.AutoTransactionBehavior.Always", "Microsoft.EntityFrameworkCore.AutoTransactionBehavior.Never", "Microsoft.EntityFrameworkCore.AutoTransactionBehavior.WhenNeeded")]
     public async Task AutoTransactionBehavior_CanBeChangedAndRestored()
     {
         ProviderTestRuntime.RequireCapability("relational");
@@ -122,7 +122,7 @@ public sealed class DatabaseFacadeTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-DATABASE-FACADE-AUTO-TRANSACTIONS-LEGACY", "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.AutoTransactionsEnabled", "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.AutoTransactionBehavior", "Microsoft.EntityFrameworkCore.AutoTransactionBehavior")]
+    [BehavioralCoverage("EF10-DATABASE-FACADE-AUTO-TRANSACTIONS-LEGACY", "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.AutoTransactionsEnabled", "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.AutoTransactionBehavior", "Microsoft.EntityFrameworkCore.AutoTransactionBehavior", "Microsoft.EntityFrameworkCore.AutoTransactionBehavior.Never", "Microsoft.EntityFrameworkCore.AutoTransactionBehavior.WhenNeeded")]
     public async Task AutoTransactionsEnabled_ReflectsTheAutomaticTransactionBehavior()
     {
         ProviderTestRuntime.RequireCapability("relational");
