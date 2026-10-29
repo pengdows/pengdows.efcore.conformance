@@ -35,6 +35,12 @@ public sealed class MigrationsTests
                 Assert.Equal(1, await migrate.Database.ExecuteSqlInterpolatedAsync(
                     $"INSERT INTO ef10conformance_migrationchild (id, probeid, code) VALUES ({Guid.NewGuid()}, {id}, {"child-async"})",
                     cancellationToken));
+                await Assert.ThrowsAnyAsync<DbException>(() => migrate.Database.ExecuteSqlInterpolatedAsync(
+                    $"INSERT INTO ef10conformance_migrationchild (id, probeid, code) VALUES ({Guid.NewGuid()}, {id}, {"child-async"})",
+                    cancellationToken));
+                await Assert.ThrowsAnyAsync<DbException>(() => migrate.Database.ExecuteSqlInterpolatedAsync(
+                    $"INSERT INTO ef10conformance_migrationchild (id, probeid, code) VALUES ({Guid.NewGuid()}, {Guid.NewGuid()}, {"orphan-async"})",
+                    cancellationToken));
                 Assert.Equal(1, await migrate.Database.SqlQuery<int>(
                     $"SELECT COUNT(*) AS Value FROM ef10conformance_migrationchild child INNER JOIN ef10conformance_migrationprobe_renamed probe ON child.probeid = probe.id WHERE probe.id = {id}")
                     .SingleAsync(cancellationToken));
@@ -117,6 +123,10 @@ public sealed class MigrationsTests
                     $"INSERT INTO ef10conformance_migrationprobe_renamed (id, value, description) VALUES ({id}, {expected}, {"sync row"})"));
                 Assert.Equal(1, migrate.Database.ExecuteSqlInterpolated(
                     $"INSERT INTO ef10conformance_migrationchild (id, probeid, code) VALUES ({Guid.NewGuid()}, {id}, {"child-sync"})"));
+                Assert.ThrowsAny<DbException>(() => migrate.Database.ExecuteSqlInterpolated(
+                    $"INSERT INTO ef10conformance_migrationchild (id, probeid, code) VALUES ({Guid.NewGuid()}, {id}, {"child-sync"})"));
+                Assert.ThrowsAny<DbException>(() => migrate.Database.ExecuteSqlInterpolated(
+                    $"INSERT INTO ef10conformance_migrationchild (id, probeid, code) VALUES ({Guid.NewGuid()}, {Guid.NewGuid()}, {"orphan-sync"})"));
                 Assert.Equal(1, migrate.Database.SqlQuery<int>(
                     $"SELECT COUNT(*) AS Value FROM ef10conformance_migrationchild child INNER JOIN ef10conformance_migrationprobe_renamed probe ON child.probeid = probe.id WHERE probe.id = {id}")
                     .Single());
