@@ -133,7 +133,7 @@ public sealed class TransactionTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-TRANSACTION-EXTERNAL-SYNC", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.UseTransaction", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetDbConnection", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges")]
+    [BehavioralCoverage("EF10-TRANSACTION-EXTERNAL-SYNC", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.UseTransaction", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetDbConnection", "Microsoft.EntityFrameworkCore.Storage.DbContextTransactionExtensions.GetDbTransaction", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges")]
     public async Task UseTransaction_EnlistsContextInExternalTransactionSynchronously()
     {
         ProviderTestRuntime.RequireCapability("transactions");
@@ -149,6 +149,7 @@ public sealed class TransactionTests
             using var efTransaction = context.Database.UseTransaction(externalTransaction);
 
             Assert.NotNull(efTransaction);
+            Assert.Same(externalTransaction, efTransaction.GetDbTransaction());
             Assert.Same(efTransaction, context.Database.CurrentTransaction);
             context.People.Add(new Person { Id = id, Name = "External sync rollback", Age = 31 });
             Assert.Equal(1, context.SaveChanges());
@@ -160,7 +161,7 @@ public sealed class TransactionTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-TRANSACTION-EXTERNAL-ASYNC", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.UseTransactionAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetDbConnection", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync")]
+    [BehavioralCoverage("EF10-TRANSACTION-EXTERNAL-ASYNC", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.UseTransactionAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetDbConnection", "Microsoft.EntityFrameworkCore.Storage.DbContextTransactionExtensions.GetDbTransaction", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync")]
     public async Task UseTransactionAsync_EnlistsContextInExternalTransactionAsynchronously()
     {
         ProviderTestRuntime.RequireCapability("transactions");
@@ -176,6 +177,7 @@ public sealed class TransactionTests
             await using var efTransaction = await context.Database.UseTransactionAsync(externalTransaction, cancellationToken);
 
             Assert.NotNull(efTransaction);
+            Assert.Same(externalTransaction, efTransaction.GetDbTransaction());
             Assert.Same(efTransaction, context.Database.CurrentTransaction);
             context.People.Add(new Person { Id = id, Name = "External async rollback", Age = 32 });
             Assert.Equal(1, await context.SaveChangesAsync(cancellationToken));

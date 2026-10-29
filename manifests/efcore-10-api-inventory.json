@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12250,
+    "AwaitingClassification": 12245,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 315,
-    "UncoveredMemberFamilies": 8951
+    "MemberEntriesInCoveredFamilies": 320,
+    "UncoveredMemberFamilies": 8946
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -177831,9 +177831,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "GetDbTransaction",
       "Signature": "System.Data.Common.DbTransaction GetDbTransaction(Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction dbContextTransaction)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRANSACTION-EXTERNAL-ASYNC",
+        "EF10-TRANSACTION-EXTERNAL-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Storage.DbContextTransactionExtensions.GetDbTransaction"
     },
     {
@@ -178644,6 +178647,7 @@
       "Signature": "System.Void CreateSavepoint(System.String name)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-SAVEPOINT-RELEASE-SYNC",
         "EF10-SAVEPOINT-ROLLBACK-SYNC"
       ],
       "Disposition": "behavior-tested-family",
@@ -178657,6 +178661,7 @@
       "Signature": "System.Threading.Tasks.Task CreateSavepointAsync(System.String name, System.Threading.CancellationToken cancellationToken = null)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-SAVEPOINT-RELEASE-ASYNC",
         "EF10-SAVEPOINT-ROLLBACK-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
@@ -178694,9 +178699,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "ReleaseSavepoint",
       "Signature": "System.Void ReleaseSavepoint(System.String name)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-SAVEPOINT-RELEASE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction.ReleaseSavepoint"
     },
     {
@@ -178705,9 +178712,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "ReleaseSavepointAsync",
       "Signature": "System.Threading.Tasks.Task ReleaseSavepointAsync(System.String name, System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-SAVEPOINT-RELEASE-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction.ReleaseSavepointAsync"
     },
     {
@@ -178716,9 +178725,12 @@
       "MemberKind": "Property",
       "ApiMemberName": "TransactionId",
       "Signature": "System.Guid TransactionId get;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-SAVEPOINT-RELEASE-ASYNC",
+        "EF10-SAVEPOINT-RELEASE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction.TransactionId"
     },
     {
@@ -178727,9 +178739,12 @@
       "MemberKind": "Property",
       "ApiMemberName": "SupportsSavepoints",
       "Signature": "System.Boolean SupportsSavepoints get;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-SAVEPOINT-RELEASE-ASYNC",
+        "EF10-SAVEPOINT-RELEASE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction.SupportsSavepoints"
     },
     {
