@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12335,
+    "AwaitingClassification": 12333,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 230,
-    "UncoveredMemberFamilies": 9008
+    "MemberEntriesInCoveredFamilies": 232,
+    "UncoveredMemberFamilies": 9006
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [
@@ -167122,9 +167122,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "ExecuteSql",
       "Signature": "System.Int32 ExecuteSql(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade, System.FormattableString sql)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-RAW-SQL-EXECUTE-FORMATTABLE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSql"
     },
     {
@@ -167188,9 +167190,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "ExecuteSqlAsync",
       "Signature": "System.Threading.Tasks.Task\u003CSystem.Int32\u003E ExecuteSqlAsync(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade, System.FormattableString sql, System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-RAW-SQL-EXECUTE-FORMATTABLE-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlAsync"
     },
     {

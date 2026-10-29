@@ -197,6 +197,47 @@ public sealed class RawSqlTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-RAW-SQL-EXECUTE-FORMATTABLE-ASYNC", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlAsync")]
+    public async Task ExecuteSqlAsync_UpdatesPersistedValues()
+    {
+        var id = Guid.NewGuid();
+        await SeedAsync(id, "Before FormattableString command");
+
+        await using (var context = ProviderTestRuntime.CreateContext())
+        {
+            Assert.Equal(1, await context.Database.ExecuteSqlAsync(
+                $"UPDATE ef10conformancepeople SET name = {"After FormattableString command"} WHERE id = {id}",
+                TestContext.Current.CancellationToken));
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.Equal("After FormattableString command", await verify.People.AsNoTracking()
+            .Where(person => person.Id == id)
+            .Select(person => person.Name)
+            .SingleAsync(TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-RAW-SQL-EXECUTE-FORMATTABLE-SYNC", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSql")]
+    public async Task ExecuteSql_UpdatesPersistedValuesSynchronously()
+    {
+        var id = Guid.NewGuid();
+        await SeedAsync(id, "Before sync FormattableString command");
+
+        await using (var context = ProviderTestRuntime.CreateContext())
+        {
+            Assert.Equal(1, context.Database.ExecuteSql(
+                $"UPDATE ef10conformancepeople SET name = {"After sync FormattableString command"} WHERE id = {id}"));
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.Equal("After sync FormattableString command", verify.People.AsNoTracking()
+            .Where(person => person.Id == id)
+            .Select(person => person.Name)
+            .Single());
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-RAW-SQL-SCALAR-RAW-ASYNC", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.SqlQueryRaw", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
     public async Task SqlQueryRaw_ReturnsParameterizedScalarAsynchronously()
     {
