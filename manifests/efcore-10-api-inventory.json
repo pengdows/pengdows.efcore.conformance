@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12342,
+    "AwaitingClassification": 12336,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 223,
-    "UncoveredMemberFamilies": 9014
+    "MemberEntriesInCoveredFamilies": 229,
+    "UncoveredMemberFamilies": 9009
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [
@@ -167263,9 +167263,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "GetConnectionString",
       "Signature": "System.String GetConnectionString(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DATABASE-FACADE-CONNECTION-STRING"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetConnectionString"
     },
     {
@@ -167274,9 +167276,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "SetConnectionString",
       "Signature": "System.Void SetConnectionString(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade, System.String connectionString)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DATABASE-FACADE-CONNECTION-STRING"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.SetConnectionString"
     },
     {
@@ -167415,9 +167419,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "SetCommandTimeout",
       "Signature": "System.Void SetCommandTimeout(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade, System.Nullable\u003CSystem.Int32\u003E timeout)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DATABASE-FACADE-COMMAND-TIMEOUT"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.SetCommandTimeout"
     },
     {
@@ -167426,9 +167432,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "SetCommandTimeout",
       "Signature": "System.Void SetCommandTimeout(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade, System.TimeSpan timeout)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DATABASE-FACADE-COMMAND-TIMEOUT"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.SetCommandTimeout"
     },
     {
@@ -167437,9 +167445,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "GetCommandTimeout",
       "Signature": "System.Nullable\u003CSystem.Int32\u003E GetCommandTimeout(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DATABASE-FACADE-COMMAND-TIMEOUT"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetCommandTimeout"
     },
     {
@@ -167459,9 +167469,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "IsRelational",
       "Signature": "System.Boolean IsRelational(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DATABASE-FACADE-COMMAND-TIMEOUT"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.IsRelational"
     },
     {
