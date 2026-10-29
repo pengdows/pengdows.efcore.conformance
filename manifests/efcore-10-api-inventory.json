@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12298,
+    "AwaitingClassification": 12291,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 267,
-    "UncoveredMemberFamilies": 8986
+    "MemberEntriesInCoveredFamilies": 274,
+    "UncoveredMemberFamilies": 8983
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -48175,9 +48175,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "ToArrayAsync",
       "Signature": "System.Threading.Tasks.Task\u003CTSource[]\u003E ToArrayAsync\u003CTSource\u003E(System.Linq.IQueryable\u003CTSource\u003E source, System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-QUERY-ASYNC-MATERIALIZERS"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToArrayAsync"
     },
     {
@@ -48186,9 +48188,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "ToHashSetAsync",
       "Signature": "System.Threading.Tasks.Task\u003CSystem.Collections.Generic.HashSet\u003CTSource\u003E\u003E ToHashSetAsync\u003CTSource\u003E(System.Linq.IQueryable\u003CTSource\u003E source, System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-QUERY-ASYNC-MATERIALIZERS"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToHashSetAsync"
     },
     {
@@ -48197,9 +48201,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "ToHashSetAsync",
       "Signature": "System.Threading.Tasks.Task\u003CSystem.Collections.Generic.HashSet\u003CTSource\u003E\u003E ToHashSetAsync\u003CTSource\u003E(System.Linq.IQueryable\u003CTSource\u003E source, System.Collections.Generic.IEqualityComparer\u003CTSource\u003E comparer, System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-QUERY-ASYNC-MATERIALIZERS"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToHashSetAsync"
     },
     {
@@ -48407,9 +48413,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "ToDictionaryAsync",
       "Signature": "System.Threading.Tasks.Task\u003CSystem.Collections.Generic.Dictionary\u003CTKey, TSource\u003E\u003E ToDictionaryAsync\u003CTSource, TKey\u003E(System.Linq.IQueryable\u003CTSource\u003E source, System.Func\u003CTSource, TKey\u003E keySelector, System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-QUERY-ASYNC-MATERIALIZERS"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToDictionaryAsync"
     },
     {
@@ -48418,9 +48426,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "ToDictionaryAsync",
       "Signature": "System.Threading.Tasks.Task\u003CSystem.Collections.Generic.Dictionary\u003CTKey, TSource\u003E\u003E ToDictionaryAsync\u003CTSource, TKey\u003E(System.Linq.IQueryable\u003CTSource\u003E source, System.Func\u003CTSource, TKey\u003E keySelector, System.Collections.Generic.IEqualityComparer\u003CTKey\u003E comparer, System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-QUERY-ASYNC-MATERIALIZERS"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToDictionaryAsync"
     },
     {
@@ -48429,9 +48439,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "ToDictionaryAsync",
       "Signature": "System.Threading.Tasks.Task\u003CSystem.Collections.Generic.Dictionary\u003CTKey, TElement\u003E\u003E ToDictionaryAsync\u003CTSource, TKey, TElement\u003E(System.Linq.IQueryable\u003CTSource\u003E source, System.Func\u003CTSource, TKey\u003E keySelector, System.Func\u003CTSource, TElement\u003E elementSelector, System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-QUERY-ASYNC-MATERIALIZERS"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToDictionaryAsync"
     },
     {
@@ -48440,9 +48452,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "ToDictionaryAsync",
       "Signature": "System.Threading.Tasks.Task\u003CSystem.Collections.Generic.Dictionary\u003CTKey, TElement\u003E\u003E ToDictionaryAsync\u003CTSource, TKey, TElement\u003E(System.Linq.IQueryable\u003CTSource\u003E source, System.Func\u003CTSource, TKey\u003E keySelector, System.Func\u003CTSource, TElement\u003E elementSelector, System.Collections.Generic.IEqualityComparer\u003CTKey\u003E comparer, System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-QUERY-ASYNC-MATERIALIZERS"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToDictionaryAsync"
     },
     {

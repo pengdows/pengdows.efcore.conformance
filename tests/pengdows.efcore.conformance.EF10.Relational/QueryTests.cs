@@ -276,6 +276,37 @@ public sealed class QueryTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-QUERY-ASYNC-MATERIALIZERS", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToArrayAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToHashSetAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToDictionaryAsync")]
+    public async Task AsyncMaterializers_ReturnExpectedArraySetAndDictionary()
+    {
+        var people = new[]
+        {
+            new Person { Id = Guid.NewGuid(), Name = "Materialize Ada", Age = 36 },
+            new Person { Id = Guid.NewGuid(), Name = "Materialize Grace", Age = 85 },
+            new Person { Id = Guid.NewGuid(), Name = "Materialize Katherine", Age = 36 }
+        };
+        await SeedAsync(people);
+
+        await using var context = ProviderTestRuntime.CreateContext();
+        var query = context.People.Where(person => person.Name.StartsWith("Materialize"));
+
+        var array = await query.OrderBy(person => person.Name)
+            .Select(person => person.Name)
+            .ToArrayAsync(TestContext.Current.CancellationToken);
+        var idSet = await query.Select(person => person.Id)
+            .ToHashSetAsync(TestContext.Current.CancellationToken);
+        var byId = await query.ToDictionaryAsync(
+            person => person.Id,
+            person => person.Name,
+            TestContext.Current.CancellationToken);
+
+        Assert.Equal(new[] { "Materialize Ada", "Materialize Grace", "Materialize Katherine" }, array);
+        Assert.True(idSet.SetEquals(people.Select(person => person.Id)));
+        Assert.Equal(people.Length, byId.Count);
+        Assert.All(people, person => Assert.Equal(person.Name, byId[person.Id]));
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-QUERY-STREAM-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.AsAsyncEnumerable")]
     public async Task AsAsyncEnumerable_StreamsMatchingEntities()
     {
