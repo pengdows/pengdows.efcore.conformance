@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12363,
+    "AwaitingClassification": 12354,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 202,
-    "UncoveredMemberFamilies": 9027
+    "MemberEntriesInCoveredFamilies": 211,
+    "UncoveredMemberFamilies": 9020
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -166964,9 +166964,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "GetAppliedMigrations",
       "Signature": "System.Collections.Generic.IEnumerable\u003CSystem.String\u003E GetAppliedMigrations(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-APPLY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetAppliedMigrations"
     },
     {
@@ -166975,9 +166977,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "GetAppliedMigrationsAsync",
       "Signature": "System.Threading.Tasks.Task\u003CSystem.Collections.Generic.IEnumerable\u003CSystem.String\u003E\u003E GetAppliedMigrationsAsync(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade, System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-APPLY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetAppliedMigrationsAsync"
     },
     {
@@ -166986,9 +166990,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "GetPendingMigrations",
       "Signature": "System.Collections.Generic.IEnumerable\u003CSystem.String\u003E GetPendingMigrations(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-APPLY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetPendingMigrations"
     },
     {
@@ -166997,9 +167003,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "GetPendingMigrationsAsync",
       "Signature": "System.Threading.Tasks.Task\u003CSystem.Collections.Generic.IEnumerable\u003CSystem.String\u003E\u003E GetPendingMigrationsAsync(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade, System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-APPLY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetPendingMigrationsAsync"
     },
     {
@@ -167008,9 +167016,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "Migrate",
       "Signature": "System.Void Migrate(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-APPLY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.Migrate"
     },
     {
@@ -167019,9 +167029,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "Migrate",
       "Signature": "System.Void Migrate(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade, System.String targetMigration)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-APPLY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.Migrate"
     },
     {
@@ -167030,9 +167042,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "MigrateAsync",
       "Signature": "System.Threading.Tasks.Task MigrateAsync(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade, System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-APPLY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.MigrateAsync"
     },
     {
@@ -167041,9 +167055,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "MigrateAsync",
       "Signature": "System.Threading.Tasks.Task MigrateAsync(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade, System.String targetMigration, System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-APPLY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.MigrateAsync"
     },
     {
@@ -167067,6 +167083,7 @@
       "Signature": "System.Int32 ExecuteSqlInterpolated(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade, System.FormattableString sql)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-MIGRATIONS-APPLY-SYNC",
         "EF10-RAW-SQL-COMMAND-SYNC"
       ],
       "Disposition": "behavior-tested-family",
@@ -167113,9 +167130,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "SqlQuery",
       "Signature": "System.Linq.IQueryable\u003CTResult\u003E SqlQuery\u003CTResult\u003E(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade, System.FormattableString sql)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-APPLY-ASYNC",
+        "EF10-MIGRATIONS-APPLY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.SqlQuery"
     },
     {
@@ -167126,6 +167146,7 @@
       "Signature": "System.Threading.Tasks.Task\u003CSystem.Int32\u003E ExecuteSqlInterpolatedAsync(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade, System.FormattableString sql, System.Threading.CancellationToken cancellationToken = null)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-MIGRATIONS-APPLY-ASYNC",
         "EF10-RAW-SQL-COMMAND-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
