@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12235,
+    "AwaitingClassification": 12122,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 330,
-    "UncoveredMemberFamilies": 8938
+    "MemberEntriesInCoveredFamilies": 443,
+    "UncoveredMemberFamilies": 8936
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -45967,9 +45967,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, System.Collections.Generic.IAsyncEnumerable\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, Microsoft.EntityFrameworkCore.DbSet\u003CTResult\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext where TResult : class",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -45978,9 +45980,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, System.Collections.Generic.IAsyncEnumerable\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TResult, TProperty\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, Microsoft.EntityFrameworkCore.Query.IIncludableQueryable\u003CTResult, TProperty\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -45989,9 +45993,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, System.Collections.Generic.IAsyncEnumerable\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, System.Linq.IQueryable\u003CTResult\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46000,9 +46006,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, System.Threading.Tasks.Task\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46011,9 +46019,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, System.Threading.CancellationToken, System.Threading.Tasks.Task\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, System.Threading.CancellationToken, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46022,9 +46032,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, System.Collections.Generic.IAsyncEnumerable\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TResult, TProperty\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, Microsoft.EntityFrameworkCore.Query.IIncludableQueryable\u003CTResult, TProperty\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46033,9 +46045,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, System.Collections.Generic.IAsyncEnumerable\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, System.Linq.IQueryable\u003CTResult\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46044,9 +46058,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, System.Threading.Tasks.Task\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46055,9 +46071,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, System.Threading.CancellationToken, System.Threading.Tasks.Task\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, System.Threading.CancellationToken, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46066,9 +46084,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, System.Collections.Generic.IAsyncEnumerable\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TResult, TProperty\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, Microsoft.EntityFrameworkCore.Query.IIncludableQueryable\u003CTResult, TProperty\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46077,9 +46097,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, System.Collections.Generic.IAsyncEnumerable\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, System.Linq.IQueryable\u003CTResult\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46088,9 +46110,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, System.Threading.Tasks.Task\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46099,9 +46123,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, System.Threading.CancellationToken, System.Threading.Tasks.Task\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, System.Threading.CancellationToken, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46110,9 +46136,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, System.Collections.Generic.IAsyncEnumerable\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TResult, TProperty\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, Microsoft.EntityFrameworkCore.Query.IIncludableQueryable\u003CTResult, TProperty\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46121,9 +46149,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, System.Collections.Generic.IAsyncEnumerable\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, System.Linq.IQueryable\u003CTResult\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46132,9 +46162,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, System.Threading.Tasks.Task\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46143,9 +46175,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, System.Threading.CancellationToken, System.Threading.Tasks.Task\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, System.Threading.CancellationToken, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46154,9 +46188,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, System.Collections.Generic.IAsyncEnumerable\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TResult, TProperty\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, Microsoft.EntityFrameworkCore.Query.IIncludableQueryable\u003CTResult, TProperty\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46165,9 +46201,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, System.Collections.Generic.IAsyncEnumerable\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, System.Linq.IQueryable\u003CTResult\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46176,9 +46214,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, System.Threading.Tasks.Task\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46187,9 +46227,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, System.Threading.CancellationToken, System.Threading.Tasks.Task\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, System.Threading.CancellationToken, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46198,9 +46240,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, System.Collections.Generic.IAsyncEnumerable\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TResult, TProperty\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, Microsoft.EntityFrameworkCore.Query.IIncludableQueryable\u003CTResult, TProperty\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46209,9 +46253,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, System.Collections.Generic.IAsyncEnumerable\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, System.Linq.IQueryable\u003CTResult\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46220,9 +46266,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, System.Threading.Tasks.Task\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46231,9 +46279,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, System.Threading.CancellationToken, System.Threading.Tasks.Task\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, System.Threading.CancellationToken, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46242,9 +46292,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, System.Collections.Generic.IAsyncEnumerable\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TResult, TProperty\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, Microsoft.EntityFrameworkCore.Query.IIncludableQueryable\u003CTResult, TProperty\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46253,9 +46305,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, System.Collections.Generic.IAsyncEnumerable\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, System.Linq.IQueryable\u003CTResult\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46264,9 +46318,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, System.Threading.Tasks.Task\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46275,9 +46331,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, System.Threading.CancellationToken, System.Threading.Tasks.Task\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, System.Threading.CancellationToken, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46286,9 +46344,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, System.Collections.Generic.IAsyncEnumerable\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TResult, TProperty\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, Microsoft.EntityFrameworkCore.Query.IIncludableQueryable\u003CTResult, TProperty\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46297,9 +46357,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, System.Collections.Generic.IAsyncEnumerable\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, System.Linq.IQueryable\u003CTResult\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46308,9 +46370,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, System.Threading.Tasks.Task\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46319,9 +46383,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, System.Threading.CancellationToken, System.Threading.Tasks.Task\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, System.Threading.CancellationToken, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46330,9 +46396,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, System.Collections.Generic.IAsyncEnumerable\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TResult, TProperty\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, Microsoft.EntityFrameworkCore.Query.IIncludableQueryable\u003CTResult, TProperty\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46341,9 +46409,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, System.Collections.Generic.IAsyncEnumerable\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, System.Linq.IQueryable\u003CTResult\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46352,9 +46422,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, System.Threading.Tasks.Task\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46363,9 +46435,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, System.Threading.CancellationToken, System.Threading.Tasks.Task\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, System.Threading.CancellationToken, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46374,9 +46448,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, System.Collections.Generic.IAsyncEnumerable\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TResult, TProperty\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, Microsoft.EntityFrameworkCore.Query.IIncludableQueryable\u003CTResult, TProperty\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46385,9 +46461,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, System.Collections.Generic.IAsyncEnumerable\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, System.Linq.IQueryable\u003CTResult\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46396,9 +46474,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, System.Threading.Tasks.Task\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46407,9 +46487,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, System.Threading.CancellationToken, System.Threading.Tasks.Task\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, System.Threading.CancellationToken, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46418,9 +46500,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, System.Collections.Generic.IAsyncEnumerable\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TResult, TProperty\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, Microsoft.EntityFrameworkCore.Query.IIncludableQueryable\u003CTResult, TProperty\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46429,9 +46513,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, System.Collections.Generic.IAsyncEnumerable\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, System.Linq.IQueryable\u003CTResult\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46440,9 +46526,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, System.Threading.Tasks.Task\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46451,9 +46539,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, System.Threading.CancellationToken, System.Threading.Tasks.Task\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, System.Threading.CancellationToken, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46462,9 +46552,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, System.Collections.Generic.IAsyncEnumerable\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TResult, TProperty\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, Microsoft.EntityFrameworkCore.Query.IIncludableQueryable\u003CTResult, TProperty\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46473,9 +46565,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, System.Collections.Generic.IAsyncEnumerable\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, System.Linq.IQueryable\u003CTResult\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46484,9 +46578,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, System.Threading.Tasks.Task\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46495,9 +46591,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, System.Threading.CancellationToken, System.Threading.Tasks.Task\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, System.Threading.CancellationToken, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46506,9 +46604,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, System.Collections.Generic.IAsyncEnumerable\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TResult, TProperty\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, Microsoft.EntityFrameworkCore.Query.IIncludableQueryable\u003CTResult, TProperty\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46517,9 +46617,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, System.Collections.Generic.IAsyncEnumerable\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, System.Linq.IQueryable\u003CTResult\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46528,9 +46630,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, System.Threading.Tasks.Task\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46539,9 +46643,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, System.Threading.CancellationToken, System.Threading.Tasks.Task\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, System.Threading.CancellationToken, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46550,9 +46656,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, System.Collections.Generic.IAsyncEnumerable\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TResult, TProperty\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, Microsoft.EntityFrameworkCore.Query.IIncludableQueryable\u003CTResult, TProperty\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46561,9 +46669,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, System.Collections.Generic.IAsyncEnumerable\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, System.Linq.IQueryable\u003CTResult\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46572,9 +46682,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, System.Threading.Tasks.Task\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46583,9 +46695,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, System.Threading.CancellationToken, System.Threading.Tasks.Task\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, System.Threading.CancellationToken, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46594,9 +46708,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, System.Collections.Generic.IAsyncEnumerable\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, TResult, TProperty\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, Microsoft.EntityFrameworkCore.Query.IIncludableQueryable\u003CTResult, TProperty\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46605,9 +46721,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, System.Collections.Generic.IAsyncEnumerable\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, System.Linq.IQueryable\u003CTResult\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46616,9 +46734,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, System.Threading.Tasks.Task\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46627,9 +46747,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, System.Threading.CancellationToken, System.Threading.Tasks.Task\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, System.Threading.CancellationToken, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46638,9 +46760,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, TParam15, System.Collections.Generic.IAsyncEnumerable\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, TParam15, TResult, TProperty\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, TParam15, Microsoft.EntityFrameworkCore.Query.IIncludableQueryable\u003CTResult, TProperty\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46649,9 +46773,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, TParam15, System.Collections.Generic.IAsyncEnumerable\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, TParam15, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, TParam15, System.Linq.IQueryable\u003CTResult\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46660,9 +46786,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileAsyncQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, TParam15, System.Threading.Tasks.Task\u003CTResult\u003E\u003E CompileAsyncQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, TParam15, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, TParam15, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileAsyncQuery"
     },
     {
@@ -46671,9 +46799,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, System.Collections.Generic.IEnumerable\u003CTResult\u003E\u003E CompileQuery\u003CTContext, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, Microsoft.EntityFrameworkCore.DbSet\u003CTResult\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext where TResult : class",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -46682,9 +46812,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, System.Collections.Generic.IEnumerable\u003CTResult\u003E\u003E CompileQuery\u003CTContext, TResult, TProperty\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, Microsoft.EntityFrameworkCore.Query.IIncludableQueryable\u003CTResult, TProperty\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -46693,9 +46825,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, System.Collections.Generic.IEnumerable\u003CTResult\u003E\u003E CompileQuery\u003CTContext, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, System.Linq.IQueryable\u003CTResult\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -46704,9 +46838,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TResult\u003E CompileQuery\u003CTContext, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -46715,9 +46851,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, System.Collections.Generic.IEnumerable\u003CTResult\u003E\u003E CompileQuery\u003CTContext, TParam1, TResult, TProperty\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, Microsoft.EntityFrameworkCore.Query.IIncludableQueryable\u003CTResult, TProperty\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -46726,9 +46864,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, System.Collections.Generic.IEnumerable\u003CTResult\u003E\u003E CompileQuery\u003CTContext, TParam1, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, System.Linq.IQueryable\u003CTResult\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -46737,9 +46877,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TResult\u003E CompileQuery\u003CTContext, TParam1, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -46748,9 +46890,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, System.Collections.Generic.IEnumerable\u003CTResult\u003E\u003E CompileQuery\u003CTContext, TParam1, TParam2, TResult, TProperty\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, Microsoft.EntityFrameworkCore.Query.IIncludableQueryable\u003CTResult, TProperty\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -46759,9 +46903,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, System.Collections.Generic.IEnumerable\u003CTResult\u003E\u003E CompileQuery\u003CTContext, TParam1, TParam2, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, System.Linq.IQueryable\u003CTResult\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -46770,9 +46916,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TResult\u003E CompileQuery\u003CTContext, TParam1, TParam2, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -46781,9 +46929,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, System.Collections.Generic.IEnumerable\u003CTResult\u003E\u003E CompileQuery\u003CTContext, TParam1, TParam2, TParam3, TResult, TProperty\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, Microsoft.EntityFrameworkCore.Query.IIncludableQueryable\u003CTResult, TProperty\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -46792,9 +46942,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, System.Collections.Generic.IEnumerable\u003CTResult\u003E\u003E CompileQuery\u003CTContext, TParam1, TParam2, TParam3, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, System.Linq.IQueryable\u003CTResult\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -46803,9 +46955,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TResult\u003E CompileQuery\u003CTContext, TParam1, TParam2, TParam3, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -46814,9 +46968,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, System.Collections.Generic.IEnumerable\u003CTResult\u003E\u003E CompileQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TResult, TProperty\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, Microsoft.EntityFrameworkCore.Query.IIncludableQueryable\u003CTResult, TProperty\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -46825,9 +46981,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, System.Collections.Generic.IEnumerable\u003CTResult\u003E\u003E CompileQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, System.Linq.IQueryable\u003CTResult\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -46836,9 +46994,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TResult\u003E CompileQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -46847,9 +47007,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, System.Collections.Generic.IEnumerable\u003CTResult\u003E\u003E CompileQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TResult, TProperty\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, Microsoft.EntityFrameworkCore.Query.IIncludableQueryable\u003CTResult, TProperty\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -46858,9 +47020,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, System.Collections.Generic.IEnumerable\u003CTResult\u003E\u003E CompileQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, System.Linq.IQueryable\u003CTResult\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -46869,9 +47033,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TResult\u003E CompileQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -46880,9 +47046,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, System.Collections.Generic.IEnumerable\u003CTResult\u003E\u003E CompileQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TResult, TProperty\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, Microsoft.EntityFrameworkCore.Query.IIncludableQueryable\u003CTResult, TProperty\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -46891,9 +47059,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, System.Collections.Generic.IEnumerable\u003CTResult\u003E\u003E CompileQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, System.Linq.IQueryable\u003CTResult\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -46902,9 +47072,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TResult\u003E CompileQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -46913,9 +47085,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, System.Collections.Generic.IEnumerable\u003CTResult\u003E\u003E CompileQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TResult, TProperty\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, Microsoft.EntityFrameworkCore.Query.IIncludableQueryable\u003CTResult, TProperty\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -46924,9 +47098,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, System.Collections.Generic.IEnumerable\u003CTResult\u003E\u003E CompileQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, System.Linq.IQueryable\u003CTResult\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -46935,9 +47111,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TResult\u003E CompileQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -46946,9 +47124,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, System.Collections.Generic.IEnumerable\u003CTResult\u003E\u003E CompileQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TResult, TProperty\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, Microsoft.EntityFrameworkCore.Query.IIncludableQueryable\u003CTResult, TProperty\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -46957,9 +47137,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, System.Collections.Generic.IEnumerable\u003CTResult\u003E\u003E CompileQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, System.Linq.IQueryable\u003CTResult\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -46968,9 +47150,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TResult\u003E CompileQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -46979,9 +47163,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, System.Collections.Generic.IEnumerable\u003CTResult\u003E\u003E CompileQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TResult, TProperty\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, Microsoft.EntityFrameworkCore.Query.IIncludableQueryable\u003CTResult, TProperty\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -46990,9 +47176,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, System.Collections.Generic.IEnumerable\u003CTResult\u003E\u003E CompileQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, System.Linq.IQueryable\u003CTResult\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -47001,9 +47189,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TResult\u003E CompileQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -47012,9 +47202,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, System.Collections.Generic.IEnumerable\u003CTResult\u003E\u003E CompileQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TResult, TProperty\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, Microsoft.EntityFrameworkCore.Query.IIncludableQueryable\u003CTResult, TProperty\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -47023,9 +47215,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, System.Collections.Generic.IEnumerable\u003CTResult\u003E\u003E CompileQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, System.Linq.IQueryable\u003CTResult\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -47034,9 +47228,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TResult\u003E CompileQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -47045,9 +47241,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, System.Collections.Generic.IEnumerable\u003CTResult\u003E\u003E CompileQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TResult, TProperty\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, Microsoft.EntityFrameworkCore.Query.IIncludableQueryable\u003CTResult, TProperty\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -47056,9 +47254,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, System.Collections.Generic.IEnumerable\u003CTResult\u003E\u003E CompileQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, System.Linq.IQueryable\u003CTResult\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -47067,9 +47267,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TResult\u003E CompileQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -47078,9 +47280,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, System.Collections.Generic.IEnumerable\u003CTResult\u003E\u003E CompileQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TResult, TProperty\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, Microsoft.EntityFrameworkCore.Query.IIncludableQueryable\u003CTResult, TProperty\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -47089,9 +47293,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, System.Collections.Generic.IEnumerable\u003CTResult\u003E\u003E CompileQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, System.Linq.IQueryable\u003CTResult\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -47100,9 +47306,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TResult\u003E CompileQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -47111,9 +47319,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, System.Collections.Generic.IEnumerable\u003CTResult\u003E\u003E CompileQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TResult, TProperty\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, Microsoft.EntityFrameworkCore.Query.IIncludableQueryable\u003CTResult, TProperty\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -47122,9 +47332,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, System.Collections.Generic.IEnumerable\u003CTResult\u003E\u003E CompileQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, System.Linq.IQueryable\u003CTResult\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -47133,9 +47345,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TResult\u003E CompileQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -47144,9 +47358,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, System.Collections.Generic.IEnumerable\u003CTResult\u003E\u003E CompileQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, TResult, TProperty\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, Microsoft.EntityFrameworkCore.Query.IIncludableQueryable\u003CTResult, TProperty\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -47155,9 +47371,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, System.Collections.Generic.IEnumerable\u003CTResult\u003E\u003E CompileQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, System.Linq.IQueryable\u003CTResult\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -47166,9 +47384,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, TResult\u003E CompileQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -47177,9 +47397,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, TParam15, System.Collections.Generic.IEnumerable\u003CTResult\u003E\u003E CompileQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, TParam15, TResult, TProperty\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, TParam15, Microsoft.EntityFrameworkCore.Query.IIncludableQueryable\u003CTResult, TProperty\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -47188,9 +47410,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, TParam15, System.Collections.Generic.IEnumerable\u003CTResult\u003E\u003E CompileQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, TParam15, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, TParam15, System.Linq.IQueryable\u003CTResult\u003E\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
@@ -47199,9 +47423,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CompileQuery",
       "Signature": "System.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, TParam15, TResult\u003E CompileQuery\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, TParam15, TResult\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTContext, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, TParam15, TResult\u003E\u003E queryExpression) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPILED-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.CompileQuery"
     },
     {
