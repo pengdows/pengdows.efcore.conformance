@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12282,
+    "AwaitingClassification": 12276,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 283,
-    "UncoveredMemberFamilies": 8976
+    "MemberEntriesInCoveredFamilies": 289,
+    "UncoveredMemberFamilies": 8971
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -14718,6 +14718,7 @@
       "BehavioralContracts": [
         "EF10-COMPLEX-TYPE-ASYNC",
         "EF10-CONCURRENCY-SAVE-ASYNC",
+        "EF10-DBSET-ATTACH-RANGE",
         "EF10-INHERITANCE-TPC-ASYNC",
         "EF10-INHERITANCE-TPH-ASYNC",
         "EF10-INHERITANCE-TPT-ASYNC",
@@ -14762,6 +14763,7 @@
       "BehavioralContracts": [
         "EF10-COMPLEX-TYPE-ASYNC",
         "EF10-CONCURRENCY-SAVE-ASYNC",
+        "EF10-DBSET-ATTACH-RANGE",
         "EF10-INHERITANCE-TPC-ASYNC",
         "EF10-INHERITANCE-TPH-ASYNC",
         "EF10-INHERITANCE-TPT-ASYNC",
@@ -14830,6 +14832,7 @@
       "Signature": "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry\u003CTEntity\u003E Entry\u003CTEntity\u003E(TEntity entity) where TEntity : class",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-DBSET-ATTACH-RANGE",
         "EF10-PERSIST-CONTEXT-ATTACH",
         "EF10-PERSIST-CONTEXT-ATTACH-RANGE",
         "EF10-PERSIST-CONTEXT-UPDATE",
@@ -14859,6 +14862,7 @@
       "Signature": "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry Entry(System.Object entity)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-DBSET-ATTACH-RANGE",
         "EF10-PERSIST-CONTEXT-ATTACH",
         "EF10-PERSIST-CONTEXT-ATTACH-RANGE",
         "EF10-PERSIST-CONTEXT-UPDATE",
@@ -16946,9 +16950,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "AsAsyncEnumerable",
       "Signature": "System.Collections.Generic.IAsyncEnumerable\u003CTEntity\u003E AsAsyncEnumerable()",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DBSET-AS-ASYNC-ENUMERABLE"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbSet\u00601.AsAsyncEnumerable"
     },
     {
@@ -16957,9 +16963,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "AsQueryable",
       "Signature": "System.Linq.IQueryable\u003CTEntity\u003E AsQueryable()",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DBSET-AS-QUERYABLE"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbSet\u00601.AsQueryable"
     },
     {
@@ -17105,9 +17113,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "AttachRange",
       "Signature": "System.Void AttachRange(TEntity[] entities)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DBSET-ATTACH-RANGE"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbSet\u00601.AttachRange"
     },
     {
@@ -17168,9 +17178,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "AttachRange",
       "Signature": "System.Void AttachRange(System.Collections.Generic.IEnumerable\u003CTEntity\u003E entities)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DBSET-ATTACH-RANGE"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbSet\u00601.AttachRange"
     },
     {
@@ -17205,9 +17217,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "Entry",
       "Signature": "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry\u003CTEntity\u003E Entry(TEntity entity)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DBSET-AS-QUERYABLE"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbSet\u00601.Entry"
     },
     {
@@ -17271,9 +17285,11 @@
       "MemberKind": "Property",
       "ApiMemberName": "Local",
       "Signature": "Microsoft.EntityFrameworkCore.ChangeTracking.LocalView\u003CTEntity\u003E Local get;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DBSET-LOCAL"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbSet\u00601.Local"
     },
     {
