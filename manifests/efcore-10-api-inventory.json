@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12336,
+    "AwaitingClassification": 12335,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 229,
-    "UncoveredMemberFamilies": 9009
+    "MemberEntriesInCoveredFamilies": 230,
+    "UncoveredMemberFamilies": 9008
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [
@@ -167482,9 +167482,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasPendingModelChanges",
       "Signature": "System.Boolean HasPendingModelChanges(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-APPLY-ASYNC",
+        "EF10-MIGRATIONS-APPLY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.HasPendingModelChanges"
     },
     {
