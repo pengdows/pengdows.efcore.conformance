@@ -26,7 +26,7 @@ public sealed class InterceptionTests
         Assert.Equal(1, interceptor.SavingChangesCalls);
         Assert.Equal(1, interceptor.SavedChangesCalls);
         Assert.Equal(0, interceptor.SavingChangesAsyncCalls);
-        Assert.Equal(0, interceptor.SavedChangesAsyncCalls);
+        Assert.Equal(0, interceptor.SavingChangesAsyncCalls);
         Assert.Equal(1, interceptor.LastSavedChangesResult);
 
         await using var verify = ProviderTestRuntime.CreateContext();
