@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 using pengdows.efcore.conformance;
 using Xunit;
 
@@ -25,5 +26,35 @@ public sealed class DatabaseLifecycleTests
         await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
 
         Assert.True(context.Database.CanConnect());
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-DATABASE-CONNECTION-LIFECYCLE-SYNC", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.OpenConnection", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.CloseConnection", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetDbConnection")]
+    public async Task ConnectionLifecycle_OpensAndClosesSynchronously()
+    {
+        await using var context = ProviderTestRuntime.CreateContext();
+        await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
+        var connection = context.Database.GetDbConnection();
+
+        Assert.Equal(ConnectionState.Closed, connection.State);
+        context.Database.OpenConnection();
+        Assert.Equal(ConnectionState.Open, connection.State);
+        context.Database.CloseConnection();
+        Assert.Equal(ConnectionState.Closed, connection.State);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-DATABASE-CONNECTION-LIFECYCLE-ASYNC", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.OpenConnectionAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.CloseConnectionAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetDbConnection")]
+    public async Task ConnectionLifecycle_OpensAndClosesAsynchronously()
+    {
+        await using var context = ProviderTestRuntime.CreateContext();
+        await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
+        var connection = context.Database.GetDbConnection();
+
+        Assert.Equal(ConnectionState.Closed, connection.State);
+        await context.Database.OpenConnectionAsync(TestContext.Current.CancellationToken);
+        Assert.Equal(ConnectionState.Open, connection.State);
+        await context.Database.CloseConnectionAsync();
+        Assert.Equal(ConnectionState.Closed, connection.State);
     }
 }

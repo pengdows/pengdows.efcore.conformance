@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12382,
+    "AwaitingClassification": 12377,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 183,
-    "UncoveredMemberFamilies": 9047
+    "MemberEntriesInCoveredFamilies": 188,
+    "UncoveredMemberFamilies": 9042
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [
@@ -167106,9 +167106,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "GetDbConnection",
       "Signature": "System.Data.Common.DbConnection GetDbConnection(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DATABASE-CONNECTION-LIFECYCLE-ASYNC",
+        "EF10-DATABASE-CONNECTION-LIFECYCLE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetDbConnection"
     },
     {
@@ -167150,9 +167153,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "OpenConnection",
       "Signature": "System.Void OpenConnection(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DATABASE-CONNECTION-LIFECYCLE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.OpenConnection"
     },
     {
@@ -167161,9 +167166,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "OpenConnectionAsync",
       "Signature": "System.Threading.Tasks.Task OpenConnectionAsync(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade, System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DATABASE-CONNECTION-LIFECYCLE-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.OpenConnectionAsync"
     },
     {
@@ -167172,9 +167179,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CloseConnection",
       "Signature": "System.Void CloseConnection(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DATABASE-CONNECTION-LIFECYCLE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.CloseConnection"
     },
     {
@@ -167183,9 +167192,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CloseConnectionAsync",
       "Signature": "System.Threading.Tasks.Task CloseConnectionAsync(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DATABASE-CONNECTION-LIFECYCLE-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.CloseConnectionAsync"
     },
     {
