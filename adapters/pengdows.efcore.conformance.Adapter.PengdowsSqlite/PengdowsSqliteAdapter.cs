@@ -18,7 +18,8 @@ public sealed class PengdowsSqliteAdapter : IAdoNetProviderAdapter, ISupplementa
             "migrations",
             "raw-sql",
             "execute-update",
-            "execute-delete"
+            "execute-delete",
+            "primitive-collections"
         },
         new HashSet<string>(StringComparer.Ordinal));
 

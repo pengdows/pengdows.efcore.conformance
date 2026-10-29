@@ -92,6 +92,8 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
 
     public DbSet<ComplexRecord> ComplexRecords => Set<ComplexRecord>();
 
+    public DbSet<PrimitiveCollectionRecord> PrimitiveCollectionRecords => Set<PrimitiveCollectionRecord>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Person>(entity =>
@@ -183,6 +185,13 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
                 address.Property(value => value.Street).HasColumnName("address_street").IsRequired();
                 address.Property(value => value.City).HasColumnName("address_city").IsRequired();
             });
+        });
+        modelBuilder.Entity<PrimitiveCollectionRecord>(entity =>
+        {
+            entity.ToTable("ef10conformanceprimitivecollections");
+            entity.HasKey(record => record.Id);
+            entity.Property(record => record.Id).HasColumnName("id");
+            entity.Property(record => record.Values).HasColumnName("values");
         });
     }
 }
@@ -321,4 +330,11 @@ internal sealed class AddressInfo
     public string Street { get; set; } = string.Empty;
 
     public string City { get; set; } = string.Empty;
+}
+
+internal sealed class PrimitiveCollectionRecord
+{
+    public Guid Id { get; set; }
+
+    public List<int> Values { get; set; } = [];
 }
