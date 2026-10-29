@@ -47181,7 +47181,8 @@
       "Signature": "System.Threading.Tasks.Task\u003CTSource\u003E ElementAtAsync\u003CTSource\u003E(System.Linq.IQueryable\u003CTSource\u003E source, System.Int32 index, System.Threading.CancellationToken cancellationToken = null)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
-        "EF10-QUERY-ELEMENTAT-ASYNC"
+        "EF10-QUERY-ELEMENTAT-ASYNC",
+        "EF10-QUERY-ELEMENTAT-NEGATIVE-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ElementAtAsync"

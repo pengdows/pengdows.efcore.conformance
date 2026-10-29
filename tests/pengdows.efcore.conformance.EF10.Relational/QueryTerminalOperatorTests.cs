@@ -246,6 +246,32 @@ public sealed class QueryTerminalOperatorTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-QUERY-ELEMENTAT-NEGATIVE-SYNC", "System.Linq.Queryable.ElementAt")]
+    public async Task ElementAt_ThrowsForNegativeIndexSynchronously()
+    {
+        var (batch, _, _, _) = await SeedThreePeopleAsync();
+        await using var context = ProviderTestRuntime.CreateContext();
+
+        Assert.Throws<ArgumentOutOfRangeException>(() => context.People
+            .Where(person => person.Name.StartsWith(batch))
+            .OrderBy(person => person.Age)
+            .ElementAt(-1));
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-ELEMENTAT-NEGATIVE-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ElementAtAsync")]
+    public async Task ElementAtAsync_ThrowsForNegativeIndex()
+    {
+        var (batch, _, _, _) = await SeedThreePeopleAsync();
+        await using var context = ProviderTestRuntime.CreateContext();
+
+        await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => context.People
+            .Where(person => person.Name.StartsWith(batch))
+            .OrderBy(person => person.Age)
+            .ElementAtAsync(-1, TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-QUERY-ELEMENTAT-OR-DEFAULT-SYNC", "System.Linq.Queryable.ElementAtOrDefault")]
     public async Task ElementAtOrDefault_ReturnsDefaultOutOfRangeSynchronously()
     {
