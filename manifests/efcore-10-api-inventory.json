@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12377,
+    "AwaitingClassification": 12375,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 188,
-    "UncoveredMemberFamilies": 9042
+    "MemberEntriesInCoveredFamilies": 190,
+    "UncoveredMemberFamilies": 9040
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [
@@ -50009,9 +50009,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "EnsureCreated",
       "Signature": "System.Boolean EnsureCreated()",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DATABASE-ENSURE-CREATED-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.EnsureCreated"
     },
     {
@@ -50020,9 +50022,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "EnsureCreatedAsync",
       "Signature": "System.Threading.Tasks.Task\u003CSystem.Boolean\u003E EnsureCreatedAsync(System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DATABASE-ENSURE-CREATED-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.EnsureCreatedAsync"
     },
     {

@@ -29,6 +29,26 @@ public sealed class DatabaseLifecycleTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-DATABASE-ENSURE-CREATED-ASYNC", "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.EnsureCreatedAsync")]
+    public async Task EnsureCreatedAsync_ReturnsFalseWhenSchemaAlreadyExists()
+    {
+        await using var context = ProviderTestRuntime.CreateContext();
+        await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
+
+        Assert.False(await context.Database.EnsureCreatedAsync(TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-DATABASE-ENSURE-CREATED-SYNC", "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.EnsureCreated")]
+    public async Task EnsureCreated_ReturnsFalseWhenSchemaAlreadyExistsSynchronously()
+    {
+        await using var context = ProviderTestRuntime.CreateContext();
+        await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
+
+        Assert.False(context.Database.EnsureCreated());
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-DATABASE-CONNECTION-LIFECYCLE-SYNC", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.OpenConnection", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.CloseConnection", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetDbConnection")]
     public async Task ConnectionLifecycle_OpensAndClosesSynchronously()
     {
