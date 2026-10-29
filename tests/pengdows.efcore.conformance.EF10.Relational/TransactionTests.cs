@@ -49,4 +49,36 @@ public sealed class TransactionTests
         Assert.Equal("Committed", persisted.Name);
         Assert.Equal(19, persisted.Age);
     }
+
+    [Fact]
+    [BehavioralCoverage("EF10-TRANSACTION-CURRENT-SYNC", "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.CurrentTransaction", "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.BeginTransaction")]
+    public async Task CurrentTransaction_ReflectsSynchronousTransactionLifetime()
+    {
+        await using var context = ProviderTestRuntime.CreateContext();
+        await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
+
+        Assert.Null(context.Database.CurrentTransaction);
+        using (context.Database.BeginTransaction())
+        {
+            Assert.NotNull(context.Database.CurrentTransaction);
+        }
+
+        Assert.Null(context.Database.CurrentTransaction);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-TRANSACTION-CURRENT-ASYNC", "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.CurrentTransaction", "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.BeginTransactionAsync")]
+    public async Task CurrentTransaction_ReflectsAsynchronousTransactionLifetime()
+    {
+        await using var context = ProviderTestRuntime.CreateContext();
+        await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
+
+        Assert.Null(context.Database.CurrentTransaction);
+        await using (await context.Database.BeginTransactionAsync(TestContext.Current.CancellationToken))
+        {
+            Assert.NotNull(context.Database.CurrentTransaction);
+        }
+
+        Assert.Null(context.Database.CurrentTransaction);
+    }
 }

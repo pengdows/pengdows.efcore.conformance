@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12375,
+    "AwaitingClassification": 12372,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 190,
-    "UncoveredMemberFamilies": 9040
+    "MemberEntriesInCoveredFamilies": 193,
+    "UncoveredMemberFamilies": 9037
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [
@@ -50083,9 +50083,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "BeginTransaction",
       "Signature": "Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction BeginTransaction()",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRANSACTION-CURRENT-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.BeginTransaction"
     },
     {
@@ -50094,9 +50096,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "BeginTransactionAsync",
       "Signature": "System.Threading.Tasks.Task\u003CMicrosoft.EntityFrameworkCore.Storage.IDbContextTransaction\u003E BeginTransactionAsync(System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRANSACTION-CURRENT-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.BeginTransactionAsync"
     },
     {
@@ -50204,9 +50208,12 @@
       "MemberKind": "Property",
       "ApiMemberName": "CurrentTransaction",
       "Signature": "Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction CurrentTransaction get;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRANSACTION-CURRENT-ASYNC",
+        "EF10-TRANSACTION-CURRENT-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.CurrentTransaction"
     },
     {
