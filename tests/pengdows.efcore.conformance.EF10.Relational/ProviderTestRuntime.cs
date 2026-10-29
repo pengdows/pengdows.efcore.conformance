@@ -20,12 +20,13 @@ internal static class ProviderTestRuntime
 
     public static string ConnectionString => RequiredEnvironmentVariable("PENGDOWS_EFCORE_CONFORMANCE_CONNECTION_STRING");
 
-    public static ConformanceDbContext CreateContext()
+    public static ConformanceDbContext CreateContext(Action<DbContextOptionsBuilder<ConformanceDbContext>>? configureOptions = null)
     {
         try
         {
             var options = new DbContextOptionsBuilder<ConformanceDbContext>();
             Adapter.Configure(options, ConnectionString);
+            configureOptions?.Invoke(options);
             return new ConformanceDbContext(options.Options);
         }
         catch (Exception exception) when (exception is not ConformanceInfrastructureException)

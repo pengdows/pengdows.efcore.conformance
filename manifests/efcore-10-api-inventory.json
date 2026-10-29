@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12408,
+    "AwaitingClassification": 12402,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 157,
-    "UncoveredMemberFamilies": 9057
+    "MemberEntriesInCoveredFamilies": 163,
+    "UncoveredMemberFamilies": 9052
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [
@@ -14587,6 +14587,7 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-CONCURRENCY-SAVE-SYNC",
+        "EF10-INTERCEPTION-SAVE-SYNC",
         "EF10-PERSIST-ACCEPT-CHANGES-SYNC",
         "EF10-PERSIST-ADD-RANGE-SYNC",
         "EF10-PERSIST-DELETE-SYNC",
@@ -14613,6 +14614,7 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-CONCURRENCY-SAVE-SYNC",
+        "EF10-INTERCEPTION-SAVE-SYNC",
         "EF10-PERSIST-ACCEPT-CHANGES-SYNC",
         "EF10-PERSIST-ADD-RANGE-SYNC",
         "EF10-PERSIST-DELETE-SYNC",
@@ -14639,6 +14641,7 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-CONCURRENCY-SAVE-ASYNC",
+        "EF10-INTERCEPTION-SAVE-ASYNC",
         "EF10-PERSIST-ACCEPT-CHANGES-ASYNC",
         "EF10-PERSIST-ADD-RANGE-ASYNC",
         "EF10-PERSIST-DELETE-ASYNC",
@@ -14666,6 +14669,7 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-CONCURRENCY-SAVE-ASYNC",
+        "EF10-INTERCEPTION-SAVE-ASYNC",
         "EF10-PERSIST-ACCEPT-CHANGES-ASYNC",
         "EF10-PERSIST-ADD-RANGE-ASYNC",
         "EF10-PERSIST-DELETE-ASYNC",
@@ -15619,9 +15623,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "AddInterceptors",
       "Signature": "Microsoft.EntityFrameworkCore.DbContextOptionsBuilder AddInterceptors(System.Collections.Generic.IEnumerable\u003CMicrosoft.EntityFrameworkCore.Diagnostics.IInterceptor\u003E interceptors)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-INTERCEPTION-SAVE-ASYNC",
+        "EF10-INTERCEPTION-SAVE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbContextOptionsBuilder.AddInterceptors"
     },
     {
@@ -15630,9 +15637,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "AddInterceptors",
       "Signature": "Microsoft.EntityFrameworkCore.DbContextOptionsBuilder AddInterceptors(Microsoft.EntityFrameworkCore.Diagnostics.IInterceptor[] interceptors)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-INTERCEPTION-SAVE-ASYNC",
+        "EF10-INTERCEPTION-SAVE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbContextOptionsBuilder.AddInterceptors"
     },
     {
@@ -44322,9 +44332,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "SavingChanges",
       "Signature": "Microsoft.EntityFrameworkCore.Diagnostics.InterceptionResult\u003CSystem.Int32\u003E SavingChanges(Microsoft.EntityFrameworkCore.Diagnostics.DbContextEventData eventData, Microsoft.EntityFrameworkCore.Diagnostics.InterceptionResult\u003CSystem.Int32\u003E result)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-INTERCEPTION-SAVE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Diagnostics.SaveChangesInterceptor.SavingChanges"
     },
     {
@@ -44333,9 +44345,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "SavedChanges",
       "Signature": "System.Int32 SavedChanges(Microsoft.EntityFrameworkCore.Diagnostics.SaveChangesCompletedEventData eventData, System.Int32 result)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-INTERCEPTION-SAVE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Diagnostics.SaveChangesInterceptor.SavedChanges"
     },
     {
@@ -44355,9 +44369,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "SavingChangesAsync",
       "Signature": "System.Threading.Tasks.ValueTask\u003CMicrosoft.EntityFrameworkCore.Diagnostics.InterceptionResult\u003CSystem.Int32\u003E\u003E SavingChangesAsync(Microsoft.EntityFrameworkCore.Diagnostics.DbContextEventData eventData, Microsoft.EntityFrameworkCore.Diagnostics.InterceptionResult\u003CSystem.Int32\u003E result, System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-INTERCEPTION-SAVE-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Diagnostics.SaveChangesInterceptor.SavingChangesAsync"
     },
     {
@@ -44366,9 +44382,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "SavedChangesAsync",
       "Signature": "System.Threading.Tasks.ValueTask\u003CSystem.Int32\u003E SavedChangesAsync(Microsoft.EntityFrameworkCore.Diagnostics.SaveChangesCompletedEventData eventData, System.Int32 result, System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-INTERCEPTION-SAVE-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Diagnostics.SaveChangesInterceptor.SavedChangesAsync"
     },
     {
