@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12432,
+    "AwaitingClassification": 12424,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 133,
-    "UncoveredMemberFamilies": 9072
+    "MemberEntriesInCoveredFamilies": 141,
+    "UncoveredMemberFamilies": 9068
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -14559,9 +14559,11 @@
       "BehavioralContracts": [
         "EF10-CONCURRENCY-SAVE-SYNC",
         "EF10-PERSIST-ACCEPT-CHANGES-SYNC",
+        "EF10-PERSIST-ADD-RANGE-SYNC",
         "EF10-PERSIST-DELETE-SYNC",
         "EF10-PERSIST-INSERT-FAILURE-SYNC",
         "EF10-PERSIST-INSERT-SYNC",
+        "EF10-PERSIST-REMOVE-RANGE",
         "EF10-PERSIST-UPDATE-SYNC",
         "EF10-TRANSACTION-COMMIT-SYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-SYNC",
@@ -14580,9 +14582,11 @@
       "BehavioralContracts": [
         "EF10-CONCURRENCY-SAVE-SYNC",
         "EF10-PERSIST-ACCEPT-CHANGES-SYNC",
+        "EF10-PERSIST-ADD-RANGE-SYNC",
         "EF10-PERSIST-DELETE-SYNC",
         "EF10-PERSIST-INSERT-FAILURE-SYNC",
         "EF10-PERSIST-INSERT-SYNC",
+        "EF10-PERSIST-REMOVE-RANGE",
         "EF10-PERSIST-UPDATE-SYNC",
         "EF10-TRANSACTION-COMMIT-SYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-SYNC",
@@ -14601,10 +14605,12 @@
       "BehavioralContracts": [
         "EF10-CONCURRENCY-SAVE-ASYNC",
         "EF10-PERSIST-ACCEPT-CHANGES-ASYNC",
+        "EF10-PERSIST-ADD-RANGE-ASYNC",
         "EF10-PERSIST-DELETE-ASYNC",
         "EF10-PERSIST-INSERT-ASYNC",
         "EF10-PERSIST-INSERT-FAILURE-ASYNC",
         "EF10-PERSIST-UPDATE-ASYNC",
+        "EF10-PERSIST-UPDATE-RANGE",
         "EF10-RELATIONSHIPS-FOREIGN-KEY",
         "EF10-TRACKING-ATTACH",
         "EF10-TRANSACTION-ROLLBACK-ASYNC",
@@ -14624,10 +14630,12 @@
       "BehavioralContracts": [
         "EF10-CONCURRENCY-SAVE-ASYNC",
         "EF10-PERSIST-ACCEPT-CHANGES-ASYNC",
+        "EF10-PERSIST-ADD-RANGE-ASYNC",
         "EF10-PERSIST-DELETE-ASYNC",
         "EF10-PERSIST-INSERT-ASYNC",
         "EF10-PERSIST-INSERT-FAILURE-ASYNC",
         "EF10-PERSIST-UPDATE-ASYNC",
+        "EF10-PERSIST-UPDATE-RANGE",
         "EF10-RELATIONSHIPS-FOREIGN-KEY",
         "EF10-TRACKING-ATTACH",
         "EF10-TRANSACTION-ROLLBACK-ASYNC",
@@ -16826,9 +16834,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "AddRange",
       "Signature": "System.Void AddRange(TEntity[] entities)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-PERSIST-ADD-RANGE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbSet\u00601.AddRange"
     },
     {
@@ -16837,9 +16847,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "AddRangeAsync",
       "Signature": "System.Threading.Tasks.Task AddRangeAsync(TEntity[] entities)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-PERSIST-ADD-RANGE-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbSet\u00601.AddRangeAsync"
     },
     {
@@ -16859,9 +16871,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "RemoveRange",
       "Signature": "System.Void RemoveRange(TEntity[] entities)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-PERSIST-REMOVE-RANGE"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbSet\u00601.RemoveRange"
     },
     {
@@ -16870,9 +16884,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "UpdateRange",
       "Signature": "System.Void UpdateRange(TEntity[] entities)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-PERSIST-UPDATE-RANGE"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbSet\u00601.UpdateRange"
     },
     {
@@ -16881,9 +16897,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "AddRange",
       "Signature": "System.Void AddRange(System.Collections.Generic.IEnumerable\u003CTEntity\u003E entities)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-PERSIST-ADD-RANGE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbSet\u00601.AddRange"
     },
     {
@@ -16892,9 +16910,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "AddRangeAsync",
       "Signature": "System.Threading.Tasks.Task AddRangeAsync(System.Collections.Generic.IEnumerable\u003CTEntity\u003E entities, System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-PERSIST-ADD-RANGE-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbSet\u00601.AddRangeAsync"
     },
     {
@@ -16914,9 +16934,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "RemoveRange",
       "Signature": "System.Void RemoveRange(System.Collections.Generic.IEnumerable\u003CTEntity\u003E entities)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-PERSIST-REMOVE-RANGE"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbSet\u00601.RemoveRange"
     },
     {
@@ -16925,9 +16947,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "UpdateRange",
       "Signature": "System.Void UpdateRange(System.Collections.Generic.IEnumerable\u003CTEntity\u003E entities)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-PERSIST-UPDATE-RANGE"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbSet\u00601.UpdateRange"
     },
     {
@@ -46985,7 +47009,9 @@
       "Signature": "System.Threading.Tasks.Task\u003CSystem.Boolean\u003E AnyAsync\u003CTSource\u003E(System.Linq.IQueryable\u003CTSource\u003E source, System.Threading.CancellationToken cancellationToken = null)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
-        "EF10-PERSIST-DELETE-ASYNC"
+        "EF10-PERSIST-ADD-RANGE-ASYNC",
+        "EF10-PERSIST-DELETE-ASYNC",
+        "EF10-PERSIST-REMOVE-RANGE"
       ],
       "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.AnyAsync"
@@ -46998,7 +47024,9 @@
       "Signature": "System.Threading.Tasks.Task\u003CSystem.Boolean\u003E AnyAsync\u003CTSource\u003E(System.Linq.IQueryable\u003CTSource\u003E source, System.Linq.Expressions.Expression\u003CSystem.Func\u003CTSource, System.Boolean\u003E\u003E predicate, System.Threading.CancellationToken cancellationToken = null)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
-        "EF10-PERSIST-DELETE-ASYNC"
+        "EF10-PERSIST-ADD-RANGE-ASYNC",
+        "EF10-PERSIST-DELETE-ASYNC",
+        "EF10-PERSIST-REMOVE-RANGE"
       ],
       "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.AnyAsync"
@@ -47204,6 +47232,7 @@
       "BehavioralContracts": [
         "EF10-PERSIST-INSERT-ASYNC",
         "EF10-PERSIST-UPDATE-ASYNC",
+        "EF10-PERSIST-UPDATE-RANGE",
         "EF10-QUERY-SINGLE-ASYNC",
         "EF10-QUERY-SINGLE-MULTIPLE-ASYNC",
         "EF10-RAW-SQL-FROM-ASYNC",
@@ -47224,6 +47253,7 @@
       "BehavioralContracts": [
         "EF10-PERSIST-INSERT-ASYNC",
         "EF10-PERSIST-UPDATE-ASYNC",
+        "EF10-PERSIST-UPDATE-RANGE",
         "EF10-QUERY-SINGLE-ASYNC",
         "EF10-QUERY-SINGLE-MULTIPLE-ASYNC",
         "EF10-RAW-SQL-FROM-ASYNC",

@@ -224,6 +224,108 @@ public sealed class PersistenceTests
         Assert.Equal(51, persisted.Age);
     }
 
+    [Fact]
+    [BehavioralCoverage("EF10-PERSIST-ADD-RANGE-SYNC", "Microsoft.EntityFrameworkCore.DbSet`1.AddRange", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "System.Linq.Queryable.Any")]
+    public async Task AddRange_PersistsEveryEntitySynchronously()
+    {
+        var people = CreatePeople("AddRange");
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.People.AddRange(people);
+            Assert.Equal(people.Length, write.SaveChanges());
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        foreach (var person in people)
+        {
+            Assert.True(verify.People.Any(item => item.Id == person.Id && item.Name == person.Name));
+        }
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-PERSIST-ADD-RANGE-ASYNC", "Microsoft.EntityFrameworkCore.DbSet`1.AddRangeAsync", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.AnyAsync")]
+    public async Task AddRangeAsync_PersistsEveryEntity()
+    {
+        var people = CreatePeople("AddRangeAsync");
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            await write.People.AddRangeAsync(people, TestContext.Current.CancellationToken);
+            Assert.Equal(people.Length, await write.SaveChangesAsync(TestContext.Current.CancellationToken));
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        foreach (var person in people)
+        {
+            Assert.True(await verify.People.AnyAsync(
+                item => item.Id == person.Id && item.Name == person.Name,
+                TestContext.Current.CancellationToken));
+        }
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-PERSIST-UPDATE-RANGE", "Microsoft.EntityFrameworkCore.DbSet`1.UpdateRange", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    public async Task UpdateRange_PersistsAllDetachedEntityUpdates()
+    {
+        var existing = CreatePeople("UpdateRange");
+        await SeedAsync(existing[0].Id, existing[0].Name, existing[0].Age);
+        await SeedAsync(existing[1].Id, existing[1].Name, existing[1].Age);
+        var updates = existing.Select(person => new Person
+        {
+            Id = person.Id,
+            Name = $"Updated {person.Name}",
+            Age = person.Age + 10
+        }).ToArray();
+
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            write.People.UpdateRange(updates);
+            Assert.Equal(2, await write.SaveChangesAsync(TestContext.Current.CancellationToken));
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        foreach (var update in updates)
+        {
+            var actual = await verify.People.AsNoTracking().SingleAsync(
+                item => item.Id == update.Id,
+                TestContext.Current.CancellationToken);
+            Assert.Equal(update.Name, actual.Name);
+            Assert.Equal(update.Age, actual.Age);
+        }
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-PERSIST-REMOVE-RANGE", "Microsoft.EntityFrameworkCore.DbSet`1.RemoveRange", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.AnyAsync")]
+    public async Task RemoveRange_RemovesAllEntities()
+    {
+        var people = CreatePeople("RemoveRange");
+        await SeedAsync(people[0].Id, people[0].Name, people[0].Age);
+        await SeedAsync(people[1].Id, people[1].Name, people[1].Age);
+
+        await using (var delete = ProviderTestRuntime.CreateContext())
+        {
+            var ids = people.Select(person => person.Id).ToArray();
+            var loaded = delete.People.Where(item => ids.Contains(item.Id)).ToArray();
+            delete.People.RemoveRange(loaded);
+            Assert.Equal(2, delete.SaveChanges());
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        foreach (var person in people)
+        {
+            Assert.False(await verify.People.AnyAsync(
+                item => item.Id == person.Id,
+                TestContext.Current.CancellationToken));
+        }
+    }
+
+    private static Person[] CreatePeople(string prefix) =>
+    [
+        new Person { Id = Guid.NewGuid(), Name = $"{prefix} first {Guid.NewGuid():N}", Age = 21 },
+        new Person { Id = Guid.NewGuid(), Name = $"{prefix} second {Guid.NewGuid():N}", Age = 22 }
+    ];
+
     private static async Task SeedAsync(Guid id, string name, int age)
     {
         await using var context = ProviderTestRuntime.CreateContext();
