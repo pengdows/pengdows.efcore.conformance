@@ -103,6 +103,8 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
 
     public DbSet<PrimitiveCollectionRecord> PrimitiveCollectionRecords => Set<PrimitiveCollectionRecord>();
 
+    public DbSet<GeneratedKeyRecord> GeneratedKeyRecords => Set<GeneratedKeyRecord>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Person>(entity =>
@@ -216,6 +218,13 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
             entity.HasKey(record => record.Id);
             entity.Property(record => record.Id).HasColumnName("id");
             entity.Property(record => record.Values).HasColumnName("values");
+        });
+        modelBuilder.Entity<GeneratedKeyRecord>(entity =>
+        {
+            entity.ToTable("ef10conformancegeneratedkeys");
+            entity.HasKey(record => record.Id);
+            entity.Property(record => record.Id).HasColumnName("id").ValueGeneratedOnAdd();
+            entity.Property(record => record.Name).HasColumnName("name").IsRequired().HasMaxLength(160);
         });
     }
 }
@@ -382,4 +391,11 @@ internal sealed class PrimitiveCollectionRecord
     public Guid Id { get; set; }
 
     public List<int> Values { get; set; } = [];
+}
+
+internal sealed class GeneratedKeyRecord
+{
+    public int Id { get; set; }
+
+    public string Name { get; set; } = string.Empty;
 }

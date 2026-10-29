@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12122,
+    "AwaitingClassification": 12121,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 443,
-    "UncoveredMemberFamilies": 8936
+    "MemberEntriesInCoveredFamilies": 444,
+    "UncoveredMemberFamilies": 8935
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -14682,6 +14682,7 @@
       "BehavioralContracts": [
         "EF10-COMPLEX-TYPE-SYNC",
         "EF10-CONCURRENCY-SAVE-SYNC",
+        "EF10-GENERATED-KEYS-SYNC",
         "EF10-INHERITANCE-TPC-SYNC",
         "EF10-INHERITANCE-TPH-SYNC",
         "EF10-INHERITANCE-TPT-SYNC",
@@ -14732,6 +14733,7 @@
       "BehavioralContracts": [
         "EF10-COMPLEX-TYPE-SYNC",
         "EF10-CONCURRENCY-SAVE-SYNC",
+        "EF10-GENERATED-KEYS-SYNC",
         "EF10-INHERITANCE-TPC-SYNC",
         "EF10-INHERITANCE-TPH-SYNC",
         "EF10-INHERITANCE-TPT-SYNC",
@@ -14783,6 +14785,7 @@
         "EF10-COMPLEX-TYPE-ASYNC",
         "EF10-CONCURRENCY-SAVE-ASYNC",
         "EF10-DBSET-ATTACH-RANGE",
+        "EF10-GENERATED-KEYS-ASYNC",
         "EF10-INHERITANCE-TPC-ASYNC",
         "EF10-INHERITANCE-TPH-ASYNC",
         "EF10-INHERITANCE-TPT-ASYNC",
@@ -14836,6 +14839,7 @@
         "EF10-COMPLEX-TYPE-ASYNC",
         "EF10-CONCURRENCY-SAVE-ASYNC",
         "EF10-DBSET-ATTACH-RANGE",
+        "EF10-GENERATED-KEYS-ASYNC",
         "EF10-INHERITANCE-TPC-ASYNC",
         "EF10-INHERITANCE-TPH-ASYNC",
         "EF10-INHERITANCE-TPT-ASYNC",
@@ -76292,9 +76296,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "ValueGeneratedOnAdd",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder ValueGeneratedOnAdd()",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-GENERATED-KEYS-ASYNC",
+        "EF10-GENERATED-KEYS-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder.ValueGeneratedOnAdd"
     },
     {
