@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12120,
+    "AwaitingClassification": 12119,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 445,
-    "UncoveredMemberFamilies": 8934
+    "MemberEntriesInCoveredFamilies": 446,
+    "UncoveredMemberFamilies": 8933
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -1973,6 +1973,7 @@
       "Signature": "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyValues GetDatabaseValues()",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-CONCURRENCY-RESOLVE-SYNC",
         "EF10-TRACKING-DATABASE-VALUES-SYNC"
       ],
       "Disposition": "behavior-tested-family",
@@ -1986,6 +1987,7 @@
       "Signature": "System.Threading.Tasks.Task\u003CMicrosoft.EntityFrameworkCore.ChangeTracking.PropertyValues\u003E GetDatabaseValuesAsync(System.Threading.CancellationToken cancellationToken = null)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-CONCURRENCY-RESOLVE-ASYNC",
         "EF10-TRACKING-DATABASE-VALUES-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
@@ -13780,6 +13782,8 @@
       "Signature": "System.Void SetValues(System.Object obj)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-CONCURRENCY-RESOLVE-ASYNC",
+        "EF10-CONCURRENCY-RESOLVE-SYNC",
         "EF10-TRACKING-PROPERTY-VALUES-SET"
       ],
       "Disposition": "behavior-tested-family",
@@ -13806,6 +13810,8 @@
       "Signature": "System.Void SetValues(Microsoft.EntityFrameworkCore.ChangeTracking.PropertyValues propertyValues)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-CONCURRENCY-RESOLVE-ASYNC",
+        "EF10-CONCURRENCY-RESOLVE-SYNC",
         "EF10-TRACKING-PROPERTY-VALUES-SET"
       ],
       "Disposition": "behavior-tested-family",
@@ -13819,6 +13825,8 @@
       "Signature": "System.Void SetValues\u003CTProperty\u003E(System.Collections.Generic.IDictionary\u003CSystem.String, TProperty\u003E values)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-CONCURRENCY-RESOLVE-ASYNC",
+        "EF10-CONCURRENCY-RESOLVE-SYNC",
         "EF10-TRACKING-PROPERTY-VALUES-SET"
       ],
       "Disposition": "behavior-tested-family",
@@ -14685,6 +14693,7 @@
       "BehavioralContracts": [
         "EF10-COMPLEX-TYPE-SYNC",
         "EF10-COMPLEX-TYPE-UPDATE-SYNC",
+        "EF10-CONCURRENCY-RESOLVE-SYNC",
         "EF10-CONCURRENCY-SAVE-SYNC",
         "EF10-GENERATED-KEYS-SYNC",
         "EF10-INHERITANCE-TPC-SYNC",
@@ -14737,6 +14746,7 @@
       "BehavioralContracts": [
         "EF10-COMPLEX-TYPE-SYNC",
         "EF10-COMPLEX-TYPE-UPDATE-SYNC",
+        "EF10-CONCURRENCY-RESOLVE-SYNC",
         "EF10-CONCURRENCY-SAVE-SYNC",
         "EF10-GENERATED-KEYS-SYNC",
         "EF10-INHERITANCE-TPC-SYNC",
@@ -14789,6 +14799,7 @@
       "BehavioralContracts": [
         "EF10-COMPLEX-TYPE-ASYNC",
         "EF10-COMPLEX-TYPE-UPDATE-ASYNC",
+        "EF10-CONCURRENCY-RESOLVE-ASYNC",
         "EF10-CONCURRENCY-SAVE-ASYNC",
         "EF10-DBSET-ATTACH-RANGE",
         "EF10-GENERATED-KEYS-ASYNC",
@@ -14844,6 +14855,7 @@
       "BehavioralContracts": [
         "EF10-COMPLEX-TYPE-ASYNC",
         "EF10-COMPLEX-TYPE-UPDATE-ASYNC",
+        "EF10-CONCURRENCY-RESOLVE-ASYNC",
         "EF10-CONCURRENCY-SAVE-ASYNC",
         "EF10-DBSET-ATTACH-RANGE",
         "EF10-GENERATED-KEYS-ASYNC",
@@ -17594,9 +17606,12 @@
       "MemberKind": "Property",
       "ApiMemberName": "Entries",
       "Signature": "System.Collections.Generic.IReadOnlyList\u003CMicrosoft.EntityFrameworkCore.ChangeTracking.EntityEntry\u003E Entries get;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-CONCURRENCY-RESOLVE-ASYNC",
+        "EF10-CONCURRENCY-RESOLVE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbUpdateException.Entries"
     },
     {
