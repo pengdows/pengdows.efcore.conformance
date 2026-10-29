@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12113,
+    "AwaitingClassification": 12107,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 452,
-    "UncoveredMemberFamilies": 8930
+    "MemberEntriesInCoveredFamilies": 458,
+    "UncoveredMemberFamilies": 8929
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -199026,9 +199026,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "AddDbContext",
       "Signature": "Microsoft.Extensions.DependencyInjection.IServiceCollection AddDbContext\u003CTContext\u003E(Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection, System.Action\u003CMicrosoft.EntityFrameworkCore.DbContextOptionsBuilder\u003E optionsAction = null, Microsoft.Extensions.DependencyInjection.ServiceLifetime contextLifetime = Scoped, Microsoft.Extensions.DependencyInjection.ServiceLifetime optionsLifetime = Scoped) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DBCONTEXT-DI-ASYNC",
+        "EF10-DBCONTEXT-DI-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.Extensions.DependencyInjection.EntityFrameworkServiceCollectionExtensions.AddDbContext"
     },
     {
@@ -199037,9 +199040,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "AddDbContext",
       "Signature": "Microsoft.Extensions.DependencyInjection.IServiceCollection AddDbContext\u003CTContextService, TContextImplementation\u003E(Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection, System.Action\u003CMicrosoft.EntityFrameworkCore.DbContextOptionsBuilder\u003E optionsAction = null, Microsoft.Extensions.DependencyInjection.ServiceLifetime contextLifetime = Scoped, Microsoft.Extensions.DependencyInjection.ServiceLifetime optionsLifetime = Scoped) where TContextImplementation : Microsoft.EntityFrameworkCore.DbContext, TContextService",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DBCONTEXT-DI-ASYNC",
+        "EF10-DBCONTEXT-DI-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.Extensions.DependencyInjection.EntityFrameworkServiceCollectionExtensions.AddDbContext"
     },
     {
@@ -199092,9 +199098,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "AddDbContext",
       "Signature": "Microsoft.Extensions.DependencyInjection.IServiceCollection AddDbContext\u003CTContext\u003E(Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection, Microsoft.Extensions.DependencyInjection.ServiceLifetime contextLifetime, Microsoft.Extensions.DependencyInjection.ServiceLifetime optionsLifetime = Scoped) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DBCONTEXT-DI-ASYNC",
+        "EF10-DBCONTEXT-DI-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.Extensions.DependencyInjection.EntityFrameworkServiceCollectionExtensions.AddDbContext"
     },
     {
@@ -199103,9 +199112,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "AddDbContext",
       "Signature": "Microsoft.Extensions.DependencyInjection.IServiceCollection AddDbContext\u003CTContextService, TContextImplementation\u003E(Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection, Microsoft.Extensions.DependencyInjection.ServiceLifetime contextLifetime, Microsoft.Extensions.DependencyInjection.ServiceLifetime optionsLifetime = Scoped) where TContextService : class where TContextImplementation : Microsoft.EntityFrameworkCore.DbContext, TContextService",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DBCONTEXT-DI-ASYNC",
+        "EF10-DBCONTEXT-DI-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.Extensions.DependencyInjection.EntityFrameworkServiceCollectionExtensions.AddDbContext"
     },
     {
@@ -199114,9 +199126,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "AddDbContext",
       "Signature": "Microsoft.Extensions.DependencyInjection.IServiceCollection AddDbContext\u003CTContext\u003E(Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection, System.Action\u003CSystem.IServiceProvider, Microsoft.EntityFrameworkCore.DbContextOptionsBuilder\u003E optionsAction, Microsoft.Extensions.DependencyInjection.ServiceLifetime contextLifetime = Scoped, Microsoft.Extensions.DependencyInjection.ServiceLifetime optionsLifetime = Scoped) where TContext : Microsoft.EntityFrameworkCore.DbContext",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DBCONTEXT-DI-ASYNC",
+        "EF10-DBCONTEXT-DI-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.Extensions.DependencyInjection.EntityFrameworkServiceCollectionExtensions.AddDbContext"
     },
     {
@@ -199125,9 +199140,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "AddDbContext",
       "Signature": "Microsoft.Extensions.DependencyInjection.IServiceCollection AddDbContext\u003CTContextService, TContextImplementation\u003E(Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection, System.Action\u003CSystem.IServiceProvider, Microsoft.EntityFrameworkCore.DbContextOptionsBuilder\u003E optionsAction, Microsoft.Extensions.DependencyInjection.ServiceLifetime contextLifetime = Scoped, Microsoft.Extensions.DependencyInjection.ServiceLifetime optionsLifetime = Scoped) where TContextImplementation : Microsoft.EntityFrameworkCore.DbContext, TContextService",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DBCONTEXT-DI-ASYNC",
+        "EF10-DBCONTEXT-DI-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.Extensions.DependencyInjection.EntityFrameworkServiceCollectionExtensions.AddDbContext"
     },
     {
