@@ -108,6 +108,8 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
 
     public DbSet<OwnedAttributeRecord> OwnedAttributeRecords => Set<OwnedAttributeRecord>();
 
+    public DbSet<BackingFieldRecord> BackingFieldRecords => Set<BackingFieldRecord>();
+
     public DbSet<JsonProfileRecord> JsonProfileRecords => Set<JsonProfileRecord>();
 
     public DbSet<PrimitiveCollectionRecord> PrimitiveCollectionRecords => Set<PrimitiveCollectionRecord>();
@@ -280,6 +282,13 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
             entity.ToTable("ef10conformance_ownedattribute");
             entity.HasKey(record => record.Id);
             entity.Property(record => record.Id).HasColumnName("id");
+        });
+        modelBuilder.Entity<BackingFieldRecord>(entity =>
+        {
+            entity.ToTable("ef10conformance_backingfield");
+            entity.HasKey(record => record.Id);
+            entity.Property(record => record.Id).HasColumnName("id");
+            entity.Property(record => record.Label).HasColumnName("label");
         });
         modelBuilder.Entity<JsonProfileRecord>(entity =>
         {
@@ -577,6 +586,18 @@ internal sealed class OwnedAttributeValue
     public string Label { get; set; } = string.Empty;
 
     public int Rank { get; set; }
+}
+
+internal sealed class BackingFieldRecord
+{
+    private string _label = string.Empty;
+
+    public Guid Id { get; set; }
+
+    [BackingField(nameof(_label))]
+    public string Label => _label;
+
+    public void ChangeLabel(string value) => _label = value;
 }
 
 internal sealed class AddressInfo

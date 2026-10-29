@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 244,
+    "AwaitingClassification": 241,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 560,
-    "UncoveredMemberFamilies": 164
+    "MemberEntriesInCoveredFamilies": 563,
+    "UncoveredMemberFamilies": 162
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -132,10 +132,13 @@
       "MemberKind": "Type",
       "ApiMemberName": null,
       "Signature": "class Microsoft.EntityFrameworkCore.BackingFieldAttribute",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-BACKING-FIELD-ASYNC",
+        "EF10-BACKING-FIELD-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.BackingFieldAttribute"
     },
     {
@@ -144,10 +147,13 @@
       "MemberKind": "Constructor",
       "ApiMemberName": ".ctor",
       "Signature": ".ctor(System.String name)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-BACKING-FIELD-ASYNC",
+        "EF10-BACKING-FIELD-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.BackingFieldAttribute..ctor"
     },
     {
@@ -156,10 +162,13 @@
       "MemberKind": "Property",
       "ApiMemberName": "Name",
       "Signature": "System.String Name get;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-BACKING-FIELD-ASYNC",
+        "EF10-BACKING-FIELD-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.BackingFieldAttribute.Name"
     },
     {
@@ -16010,6 +16019,7 @@
       "Signature": "System.Int32 SaveChanges()",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-BACKING-FIELD-SYNC",
         "EF10-COMPLEX-TYPE-SYNC",
         "EF10-COMPLEX-TYPE-UPDATE-SYNC",
         "EF10-CONCURRENCY-RESOLVE-SYNC",
@@ -16074,6 +16084,7 @@
       "Signature": "System.Int32 SaveChanges(System.Boolean acceptAllChangesOnSuccess)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-BACKING-FIELD-SYNC",
         "EF10-COMPLEX-TYPE-SYNC",
         "EF10-COMPLEX-TYPE-UPDATE-SYNC",
         "EF10-CONCURRENCY-RESOLVE-SYNC",
@@ -16138,6 +16149,7 @@
       "Signature": "System.Threading.Tasks.Task\u003CSystem.Int32\u003E SaveChangesAsync(System.Threading.CancellationToken cancellationToken = null)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-BACKING-FIELD-ASYNC",
         "EF10-COMPLEX-TYPE-ASYNC",
         "EF10-COMPLEX-TYPE-UPDATE-ASYNC",
         "EF10-CONCURRENCY-RESOLVE-ASYNC",
@@ -16205,6 +16217,7 @@
       "Signature": "System.Threading.Tasks.Task\u003CSystem.Int32\u003E SaveChangesAsync(System.Boolean acceptAllChangesOnSuccess, System.Threading.CancellationToken cancellationToken = null)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-BACKING-FIELD-ASYNC",
         "EF10-COMPLEX-TYPE-ASYNC",
         "EF10-COMPLEX-TYPE-UPDATE-ASYNC",
         "EF10-CONCURRENCY-RESOLVE-ASYNC",
