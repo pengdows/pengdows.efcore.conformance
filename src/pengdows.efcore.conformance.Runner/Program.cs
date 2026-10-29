@@ -148,9 +148,9 @@ static string GetNativeTypeFamily(string databaseTypeName)
 
 async Task<int> RunTestsAsync(string[] arguments)
 {
-    if (arguments.Length != 5)
+    if (arguments.Length is < 5 or > 6 || (arguments.Length == 6 && arguments[5] != "--cleanup-database"))
     {
-        Console.Error.WriteLine("Usage: --run <test-project> <adapter-assembly> <adapter-type> <report-directory>");
+        Console.Error.WriteLine("Usage: --run <test-project> <adapter-assembly> <adapter-type> <report-directory> [--cleanup-database]");
         return 2;
     }
 
@@ -159,6 +159,7 @@ async Task<int> RunTestsAsync(string[] arguments)
     var adapterPath = Path.GetFullPath(arguments[2]);
     var adapterType = arguments[3];
     var reportDirectory = Path.GetFullPath(arguments[4]);
+    var cleanupDatabase = arguments.Length == 6;
     Directory.CreateDirectory(reportDirectory);
 
     IProviderAdapter runAdapter;
@@ -251,11 +252,32 @@ async Task<int> RunTestsAsync(string[] arguments)
         results.Add(new ConformanceResult("RUNNER-NO-RESULTS", "Test host produced no test results", ConformanceOutcome.Error, $"See {Path.GetFileName(logPath)} for the test host output."));
     }
 
+    if (cleanupDatabase)
+    {
+        try
+        {
+            await CleanupDatabaseAsync(runAdapter, cs);
+        }
+        catch (Exception exception)
+        {
+            results.Add(new ConformanceResult("RUNNER-CLEANUP", "Clean up disposable conformance database", ConformanceOutcome.Error,
+                Sanitize(exception.ToString(), cs), exception.GetType().FullName));
+        }
+    }
+
     await WriteReportsAsync(reportDirectory, runAdapter, project, results);
     Console.WriteLine($"Provider: {runAdapter.Name} {runAdapter.Version}");
     Console.WriteLine($"Results: {results.Count} total; {results.Count(item => item.Outcome == ConformanceOutcome.Pass)} passed; {results.Count(item => item.Outcome is ConformanceOutcome.Fail or ConformanceOutcome.Untranslatable)} failed; {results.Count(item => item.Outcome == ConformanceOutcome.Unsupported)} unsupported; {results.Count(item => item.Outcome == ConformanceOutcome.UndeclaredCapability)} undeclared capabilities; {results.Count(item => item.Outcome == ConformanceOutcome.Error)} errors; {results.Count(item => item.Outcome is ConformanceOutcome.Skip or ConformanceOutcome.Inconclusive)} skipped/inconclusive.");
     Console.WriteLine($"Reports written to {reportDirectory}");
-    return process.ExitCode;
+    return results.Any(item => item.Outcome == ConformanceOutcome.Error) && process.ExitCode == 0 ? 1 : process.ExitCode;
+}
+
+static async Task CleanupDatabaseAsync(IProviderAdapter adapter, string connectionString)
+{
+    var options = new DbContextOptionsBuilder();
+    adapter.Configure(options, connectionString);
+    await using var context = new DbContext(options.Options);
+    await adapter.CleanupDatabaseAsync(context, CancellationToken.None);
 }
 
 static async Task<int> CompareReportsAsync(string[] arguments)
@@ -539,6 +561,7 @@ static void PrintUsage()
     Console.WriteLine("Usage: <adapter-assembly> <adapter-type>");
     Console.WriteLine("       --discover-types <adapter-assembly> <adapter-type> [output-json [test-assembly]]");
     Console.WriteLine("       --run <test-project> <adapter-assembly> <adapter-type> <report-directory>");
+    Console.WriteLine("            append --cleanup-database to delete a dedicated disposable database after the run");
     Console.WriteLine("       --compare <candidate-results.json> <reference-results.json> <comparison.json>");
     Console.WriteLine("Set PENGDOWS_EFCORE_CONFORMANCE_CONNECTION_STRING in the environment.");
 }

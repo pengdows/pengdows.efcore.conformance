@@ -45,6 +45,8 @@ dotnet run --project src/pengdows.efcore.conformance.Runner -- --compare \
   /tmp/provider-comparison.json
 ```
 
+Append `--cleanup-database` to `--run` only when the configured database is dedicated and disposable. The runner then calls the adapter cleanup hook after writing test results.
+
 ## Current status
 
 - EF Core baseline: 10.0.14 on `net10.0`.
