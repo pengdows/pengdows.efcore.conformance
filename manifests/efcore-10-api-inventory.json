@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 240,
+    "AwaitingClassification": 236,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 564,
-    "UncoveredMemberFamilies": 161
+    "MemberEntriesInCoveredFamilies": 568,
+    "UncoveredMemberFamilies": 157
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -16027,6 +16027,7 @@
         "EF10-DB-FUNCTION-ATTRIBUTE-SYNC",
         "EF10-DB-FUNCTION-NULLABLE-SYNC",
         "EF10-DELETE-BEHAVIOR-CASCADE-SYNC",
+        "EF10-DELETE-BEHAVIOR-CLIENT-SYNC",
         "EF10-DELETE-BEHAVIOR-RESTRICT-SYNC",
         "EF10-ENTITY-TYPE-CONFIGURATION-SYNC",
         "EF10-FILTERED-INDEX-SYNC",
@@ -16093,6 +16094,7 @@
         "EF10-DB-FUNCTION-ATTRIBUTE-SYNC",
         "EF10-DB-FUNCTION-NULLABLE-SYNC",
         "EF10-DELETE-BEHAVIOR-CASCADE-SYNC",
+        "EF10-DELETE-BEHAVIOR-CLIENT-SYNC",
         "EF10-DELETE-BEHAVIOR-RESTRICT-SYNC",
         "EF10-ENTITY-TYPE-CONFIGURATION-SYNC",
         "EF10-FILTERED-INDEX-SYNC",
@@ -16160,6 +16162,7 @@
         "EF10-DB-FUNCTION-NULLABLE-ASYNC",
         "EF10-DBSET-ATTACH-RANGE",
         "EF10-DELETE-BEHAVIOR-CASCADE-ASYNC",
+        "EF10-DELETE-BEHAVIOR-CLIENT-ASYNC",
         "EF10-DELETE-BEHAVIOR-RESTRICT-ASYNC",
         "EF10-ENTITY-TYPE-CONFIGURATION-ASYNC",
         "EF10-FILTERED-INDEX-ASYNC",
@@ -16229,6 +16232,7 @@
         "EF10-DB-FUNCTION-NULLABLE-ASYNC",
         "EF10-DBSET-ATTACH-RANGE",
         "EF10-DELETE-BEHAVIOR-CASCADE-ASYNC",
+        "EF10-DELETE-BEHAVIOR-CLIENT-ASYNC",
         "EF10-DELETE-BEHAVIOR-RESTRICT-ASYNC",
         "EF10-ENTITY-TYPE-CONFIGURATION-ASYNC",
         "EF10-FILTERED-INDEX-ASYNC",
@@ -19292,10 +19296,13 @@
       "MemberKind": "Field",
       "ApiMemberName": "ClientSetNull",
       "Signature": "Microsoft.EntityFrameworkCore.DeleteBehavior ClientSetNull = 0",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DELETE-BEHAVIOR-CLIENT-ASYNC",
+        "EF10-DELETE-BEHAVIOR-CLIENT-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DeleteBehavior.ClientSetNull"
     },
     {
@@ -19346,10 +19353,13 @@
       "MemberKind": "Field",
       "ApiMemberName": "ClientCascade",
       "Signature": "Microsoft.EntityFrameworkCore.DeleteBehavior ClientCascade = 4",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DELETE-BEHAVIOR-CLIENT-ASYNC",
+        "EF10-DELETE-BEHAVIOR-CLIENT-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DeleteBehavior.ClientCascade"
     },
     {
@@ -19358,10 +19368,13 @@
       "MemberKind": "Field",
       "ApiMemberName": "NoAction",
       "Signature": "Microsoft.EntityFrameworkCore.DeleteBehavior NoAction = 5",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DELETE-BEHAVIOR-CLIENT-ASYNC",
+        "EF10-DELETE-BEHAVIOR-CLIENT-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DeleteBehavior.NoAction"
     },
     {
@@ -19370,10 +19383,13 @@
       "MemberKind": "Field",
       "ApiMemberName": "ClientNoAction",
       "Signature": "Microsoft.EntityFrameworkCore.DeleteBehavior ClientNoAction = 6",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DELETE-BEHAVIOR-CLIENT-ASYNC",
+        "EF10-DELETE-BEHAVIOR-CLIENT-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DeleteBehavior.ClientNoAction"
     },
     {
@@ -183156,6 +183172,7 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-DELETE-BEHAVIOR-CASCADE-SYNC",
+        "EF10-DELETE-BEHAVIOR-CLIENT-SYNC",
         "EF10-DELETE-BEHAVIOR-RESTRICT-SYNC",
         "EF10-MIGRATIONS-APPLY-SYNC",
         "EF10-RAW-SQL-COMMAND-SYNC"
@@ -183231,6 +183248,7 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-DELETE-BEHAVIOR-CASCADE-ASYNC",
+        "EF10-DELETE-BEHAVIOR-CLIENT-ASYNC",
         "EF10-DELETE-BEHAVIOR-RESTRICT-ASYNC",
         "EF10-MIGRATIONS-APPLY-ASYNC",
         "EF10-RAW-SQL-COMMAND-ASYNC"

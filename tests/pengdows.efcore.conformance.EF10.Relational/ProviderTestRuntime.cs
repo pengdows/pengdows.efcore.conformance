@@ -221,6 +221,68 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
             entity.Property(dependent => dependent.Id).HasColumnName("id");
             entity.Property(dependent => dependent.PrincipalId).HasColumnName("principalid");
         });
+        modelBuilder.Entity<ClientCascadePrincipal>(entity =>
+        {
+            entity.ToTable("ef10conformance_clientcascadeprincipals");
+            entity.HasKey(principal => principal.Id);
+            entity.Property(principal => principal.Id).HasColumnName("id");
+            entity.HasMany(principal => principal.Dependents).WithOne(dependent => dependent.Principal)
+                .HasForeignKey(dependent => dependent.PrincipalId).IsRequired();
+        });
+        modelBuilder.Entity<ClientCascadeDependent>(entity =>
+        {
+            entity.ToTable("ef10conformance_clientcascadedependents");
+            entity.HasKey(dependent => dependent.Id);
+            entity.Property(dependent => dependent.Id).HasColumnName("id");
+            entity.Property(dependent => dependent.PrincipalId).HasColumnName("principalid");
+        });
+        modelBuilder.Entity<ClientSetNullPrincipal>(entity =>
+        {
+            entity.ToTable("ef10conformance_clientsetnullprincipals");
+            entity.HasKey(principal => principal.Id);
+            entity.Property(principal => principal.Id).HasColumnName("id");
+            entity.HasMany(principal => principal.Dependents)
+                .WithOne(dependent => dependent.Principal)
+                .HasForeignKey(dependent => dependent.PrincipalId)
+                .IsRequired(false);
+        });
+        modelBuilder.Entity<ClientSetNullDependent>(entity =>
+        {
+            entity.ToTable("ef10conformance_clientsetnulldependents");
+            entity.HasKey(dependent => dependent.Id);
+            entity.Property(dependent => dependent.Id).HasColumnName("id");
+            entity.Property(dependent => dependent.PrincipalId).HasColumnName("principalid");
+        });
+        modelBuilder.Entity<NoActionPrincipal>(entity =>
+        {
+            entity.ToTable("ef10conformance_noactionprincipals");
+            entity.HasKey(principal => principal.Id);
+            entity.Property(principal => principal.Id).HasColumnName("id");
+            entity.HasMany(principal => principal.Dependents).WithOne(dependent => dependent.Principal)
+                .HasForeignKey(dependent => dependent.PrincipalId).IsRequired();
+        });
+        modelBuilder.Entity<NoActionDependent>(entity =>
+        {
+            entity.ToTable("ef10conformance_noactiondependents");
+            entity.HasKey(dependent => dependent.Id);
+            entity.Property(dependent => dependent.Id).HasColumnName("id");
+            entity.Property(dependent => dependent.PrincipalId).HasColumnName("principalid");
+        });
+        modelBuilder.Entity<ClientNoActionPrincipal>(entity =>
+        {
+            entity.ToTable("ef10conformance_clientnoactionprincipals");
+            entity.HasKey(principal => principal.Id);
+            entity.Property(principal => principal.Id).HasColumnName("id");
+            entity.HasMany(principal => principal.Dependents).WithOne(dependent => dependent.Principal)
+                .HasForeignKey(dependent => dependent.PrincipalId).IsRequired();
+        });
+        modelBuilder.Entity<ClientNoActionDependent>(entity =>
+        {
+            entity.ToTable("ef10conformance_clientnoactiondependents");
+            entity.HasKey(dependent => dependent.Id);
+            entity.Property(dependent => dependent.Id).HasColumnName("id");
+            entity.Property(dependent => dependent.PrincipalId).HasColumnName("principalid");
+        });
         modelBuilder.Entity<Blog>(entity =>
         {
             entity.ToTable("ef10conformanceblogs");
@@ -351,6 +413,8 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
         });
         modelBuilder.Entity<AttributeConfiguredRecord>();
     }
+
+
 }
 
 internal sealed class Person
@@ -508,6 +572,74 @@ internal sealed class SetNullDependent
 
     [DeleteBehavior(DeleteBehavior.SetNull)]
     public SetNullPrincipal? Principal { get; set; }
+}
+
+internal sealed class ClientCascadePrincipal
+{
+    public Guid Id { get; set; }
+
+    public ICollection<ClientCascadeDependent> Dependents { get; set; } = new List<ClientCascadeDependent>();
+}
+
+internal sealed class ClientCascadeDependent
+{
+    public Guid Id { get; set; }
+
+    public Guid PrincipalId { get; set; }
+
+    [DeleteBehavior(DeleteBehavior.ClientCascade)]
+    public ClientCascadePrincipal? Principal { get; set; }
+}
+
+internal sealed class ClientSetNullPrincipal
+{
+    public Guid Id { get; set; }
+
+    public ICollection<ClientSetNullDependent> Dependents { get; set; } = new List<ClientSetNullDependent>();
+}
+
+internal sealed class ClientSetNullDependent
+{
+    public Guid Id { get; set; }
+
+    public Guid? PrincipalId { get; set; }
+
+    [DeleteBehavior(DeleteBehavior.ClientSetNull)]
+    public ClientSetNullPrincipal? Principal { get; set; }
+}
+
+internal sealed class NoActionPrincipal
+{
+    public Guid Id { get; set; }
+
+    public ICollection<NoActionDependent> Dependents { get; set; } = new List<NoActionDependent>();
+}
+
+internal sealed class NoActionDependent
+{
+    public Guid Id { get; set; }
+
+    public Guid PrincipalId { get; set; }
+
+    [DeleteBehavior(DeleteBehavior.NoAction)]
+    public NoActionPrincipal? Principal { get; set; }
+}
+
+internal sealed class ClientNoActionPrincipal
+{
+    public Guid Id { get; set; }
+
+    public ICollection<ClientNoActionDependent> Dependents { get; set; } = new List<ClientNoActionDependent>();
+}
+
+internal sealed class ClientNoActionDependent
+{
+    public Guid Id { get; set; }
+
+    public Guid PrincipalId { get; set; }
+
+    [DeleteBehavior(DeleteBehavior.ClientNoAction)]
+    public ClientNoActionPrincipal? Principal { get; set; }
 }
 
 [System.ComponentModel.DataAnnotations.Schema.Table("ef10conformance_attributeconfigured")]
