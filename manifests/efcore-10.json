@@ -1,0 +1,18 @@
+{
+  "contract": "EF Core 10 relational public API conformance",
+  "targetFramework": "net10.0",
+  "efCorePackageVersion": "10.0.14",
+  "providerFamily": "relational",
+  "apiInventory": "manifests/efcore-10-api-inventory.json",
+  "allowedDispositionValues": [
+    "behavior-tested-family",
+    "ef-owned-no-provider-contract",
+    "capability-gated",
+    "not-applicable-with-rationale",
+    "excluded-ef-internal",
+    "excluded-obsolete-error",
+    "unclassified"
+  ],
+  "inventoryRule": "A public API entry without an explicit disposition or linked behavioral test remains uncovered; inventory presence alone does not imply conformance.",
+  "capabilityRule": "Capability declarations control applicability only and never modify expected results."
+}

@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>pengdows.efcore.conformance.Runner</AssemblyName>
+    <RootNamespace>pengdows.efcore.conformance.Runner</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\pengdows.efcore.conformance.Contracts\pengdows.efcore.conformance.Contracts.csproj" />
+  </ItemGroup>
+</Project>

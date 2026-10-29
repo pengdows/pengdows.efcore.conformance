@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>pengdows.efcore.conformance.Inventory</AssemblyName>
+    <RootNamespace>pengdows.efcore.conformance.Inventory</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
+    <ProjectReference Include="..\pengdows.efcore.conformance.Contracts\pengdows.efcore.conformance.Contracts.csproj" />
+  </ItemGroup>
+</Project>
