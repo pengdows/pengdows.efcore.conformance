@@ -8,14 +8,14 @@ namespace pengdows.efcore.conformance.EF10.Relational;
 public sealed class DbSetApiTests
 {
     [Fact]
-    [BehavioralCoverage("EF10-DBSET-AS-QUERYABLE", "Microsoft.EntityFrameworkCore.DbSet`1.AsQueryable", "Microsoft.EntityFrameworkCore.DbSet`1.Entry")]
+    [BehavioralCoverage("EF10-DBSET-AS-QUERYABLE", "Microsoft.EntityFrameworkCore.DbContext.Set", "Microsoft.EntityFrameworkCore.DbSet`1.AsQueryable", "Microsoft.EntityFrameworkCore.DbSet`1.Entry")]
     public async Task AsQueryable_ComposesAndDbSetEntryReturnsTrackedEntityEntry()
     {
         var id = Guid.NewGuid();
         await SeedAsync(id, "DbSet queryable entry", 51);
 
         await using var context = ProviderTestRuntime.CreateContext();
-        var person = context.People.AsQueryable()
+        var person = context.Set<Person>().AsQueryable()
             .Where(item => item.Id == id)
             .Single();
         var entry = context.People.Entry(person);

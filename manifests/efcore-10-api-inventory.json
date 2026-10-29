@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12272,
+    "AwaitingClassification": 12270,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 293,
-    "UncoveredMemberFamilies": 8967
+    "MemberEntriesInCoveredFamilies": 295,
+    "UncoveredMemberFamilies": 8966
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -14608,9 +14608,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "Set",
       "Signature": "Microsoft.EntityFrameworkCore.DbSet\u003CTEntity\u003E Set\u003CTEntity\u003E() where TEntity : class",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DBSET-AS-QUERYABLE"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbContext.Set"
     },
     {
@@ -14619,9 +14621,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "Set",
       "Signature": "Microsoft.EntityFrameworkCore.DbSet\u003CTEntity\u003E Set\u003CTEntity\u003E(System.String name) where TEntity : class",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DBSET-AS-QUERYABLE"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbContext.Set"
     },
     {
