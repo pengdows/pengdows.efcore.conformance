@@ -11,7 +11,7 @@ public sealed class QueryTerminalOperatorTests
     [BehavioralCoverage("EF10-QUERY-FIRST-SYNC", "System.Linq.Queryable.First")]
     public async Task First_ReturnsFirstMatchingEntitySynchronously()
     {
-        var (batch, expected, _) = await SeedThreePeopleAsync();
+        var (batch, expected, _, _) = await SeedThreePeopleAsync();
 
         await using var context = ProviderTestRuntime.CreateContext();
         var actual = context.People
@@ -26,7 +26,7 @@ public sealed class QueryTerminalOperatorTests
     [BehavioralCoverage("EF10-QUERY-FIRST-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.FirstAsync")]
     public async Task FirstAsync_ReturnsFirstMatchingEntity()
     {
-        var (batch, expected, _) = await SeedThreePeopleAsync();
+        var (batch, expected, _, _) = await SeedThreePeopleAsync();
 
         await using var context = ProviderTestRuntime.CreateContext();
         var actual = await context.People
@@ -93,7 +93,7 @@ public sealed class QueryTerminalOperatorTests
     [BehavioralCoverage("EF10-QUERY-SINGLE-SYNC", "System.Linq.Queryable.Single")]
     public async Task Single_ReturnsOnlyMatchingEntitySynchronously()
     {
-        var (_, _, expected) = await SeedThreePeopleAsync();
+        var (_, _, expected, _) = await SeedThreePeopleAsync();
 
         await using var context = ProviderTestRuntime.CreateContext();
         var actual = context.People.Single(person => person.Name == expected.Name);
@@ -105,7 +105,7 @@ public sealed class QueryTerminalOperatorTests
     [BehavioralCoverage("EF10-QUERY-SINGLE-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
     public async Task SingleAsync_ReturnsOnlyMatchingEntity()
     {
-        var (_, _, expected) = await SeedThreePeopleAsync();
+        var (_, _, expected, _) = await SeedThreePeopleAsync();
 
         await using var context = ProviderTestRuntime.CreateContext();
         var actual = await context.People.SingleAsync(
@@ -119,7 +119,7 @@ public sealed class QueryTerminalOperatorTests
     [BehavioralCoverage("EF10-QUERY-SINGLE-MULTIPLE-SYNC", "System.Linq.Queryable.Single")]
     public async Task Single_ThrowsForMultipleMatchingEntitiesSynchronously()
     {
-        var (batch, _, _) = await SeedThreePeopleAsync();
+        var (batch, _, _, _) = await SeedThreePeopleAsync();
         await using var context = ProviderTestRuntime.CreateContext();
 
         Assert.Throws<InvalidOperationException>(() => context.People.Single(person => person.Name.StartsWith(batch)));
@@ -129,7 +129,7 @@ public sealed class QueryTerminalOperatorTests
     [BehavioralCoverage("EF10-QUERY-SINGLE-MULTIPLE-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
     public async Task SingleAsync_ThrowsForMultipleMatchingEntities()
     {
-        var (batch, _, _) = await SeedThreePeopleAsync();
+        var (batch, _, _, _) = await SeedThreePeopleAsync();
         await using var context = ProviderTestRuntime.CreateContext();
 
         await Assert.ThrowsAsync<InvalidOperationException>(() => context.People.SingleAsync(
@@ -165,7 +165,115 @@ public sealed class QueryTerminalOperatorTests
         Assert.Null(actual);
     }
 
-    private static async Task<(string Batch, Person First, Person Middle)> SeedThreePeopleAsync()
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-LAST-SYNC", "System.Linq.Queryable.Last")]
+    public async Task Last_ReturnsLastEntityInExplicitOrderSynchronously()
+    {
+        var (batch, _, _, expected) = await SeedThreePeopleAsync();
+        await using var context = ProviderTestRuntime.CreateContext();
+
+        var actual = context.People.Where(person => person.Name.StartsWith(batch))
+            .OrderBy(person => person.Age)
+            .Last();
+
+        Assert.Equal(expected.Id, actual.Id);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-LAST-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.LastAsync")]
+    public async Task LastAsync_ReturnsLastEntityInExplicitOrder()
+    {
+        var (batch, _, _, expected) = await SeedThreePeopleAsync();
+        await using var context = ProviderTestRuntime.CreateContext();
+
+        var actual = await context.People.Where(person => person.Name.StartsWith(batch))
+            .OrderBy(person => person.Age)
+            .LastAsync(TestContext.Current.CancellationToken);
+
+        Assert.Equal(expected.Id, actual.Id);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-LAST-OR-DEFAULT-SYNC", "System.Linq.Queryable.LastOrDefault")]
+    public async Task LastOrDefault_ReturnsDefaultForEmptyResultSynchronously()
+    {
+        var missingName = Guid.NewGuid().ToString("N");
+        await using var context = ProviderTestRuntime.CreateContext();
+        await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
+
+        Assert.Null(context.People.Where(person => person.Name == missingName).OrderBy(person => person.Age).LastOrDefault());
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-LAST-OR-DEFAULT-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.LastOrDefaultAsync")]
+    public async Task LastOrDefaultAsync_ReturnsDefaultForEmptyResult()
+    {
+        var missingName = Guid.NewGuid().ToString("N");
+        await using var context = ProviderTestRuntime.CreateContext();
+        await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
+
+        Assert.Null(await context.People.Where(person => person.Name == missingName)
+            .OrderBy(person => person.Age)
+            .LastOrDefaultAsync(TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-ELEMENTAT-SYNC", "System.Linq.Queryable.ElementAt")]
+    public async Task ElementAt_ReturnsEntityAtIndexSynchronously()
+    {
+        var (batch, _, expected, _) = await SeedThreePeopleAsync();
+        await using var context = ProviderTestRuntime.CreateContext();
+
+        var actual = context.People.Where(person => person.Name.StartsWith(batch))
+            .OrderBy(person => person.Age)
+            .ElementAt(1);
+
+        Assert.Equal(expected.Id, actual.Id);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-ELEMENTAT-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ElementAtAsync")]
+    public async Task ElementAtAsync_ReturnsEntityAtIndex()
+    {
+        var (batch, _, expected, _) = await SeedThreePeopleAsync();
+        await using var context = ProviderTestRuntime.CreateContext();
+
+        var actual = await context.People.Where(person => person.Name.StartsWith(batch))
+            .OrderBy(person => person.Age)
+            .ElementAtAsync(1, TestContext.Current.CancellationToken);
+
+        Assert.Equal(expected.Id, actual.Id);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-ELEMENTAT-OR-DEFAULT-SYNC", "System.Linq.Queryable.ElementAtOrDefault")]
+    public async Task ElementAtOrDefault_ReturnsDefaultOutOfRangeSynchronously()
+    {
+        var (batch, _, _, _) = await SeedThreePeopleAsync();
+        await using var context = ProviderTestRuntime.CreateContext();
+
+        var actual = context.People.Where(person => person.Name.StartsWith(batch))
+            .OrderBy(person => person.Age)
+            .ElementAtOrDefault(10);
+
+        Assert.Null(actual);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-ELEMENTAT-OR-DEFAULT-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ElementAtOrDefaultAsync")]
+    public async Task ElementAtOrDefaultAsync_ReturnsDefaultOutOfRange()
+    {
+        var (batch, _, _, _) = await SeedThreePeopleAsync();
+        await using var context = ProviderTestRuntime.CreateContext();
+
+        var actual = await context.People.Where(person => person.Name.StartsWith(batch))
+            .OrderBy(person => person.Age)
+            .ElementAtOrDefaultAsync(10, TestContext.Current.CancellationToken);
+
+        Assert.Null(actual);
+    }
+
+    private static async Task<(string Batch, Person First, Person Middle, Person Last)> SeedThreePeopleAsync()
     {
         var batch = Guid.NewGuid().ToString("N");
         var people = new[]
@@ -179,6 +287,6 @@ public sealed class QueryTerminalOperatorTests
         await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
         context.People.AddRange(people);
         await context.SaveChangesAsync(TestContext.Current.CancellationToken);
-        return (batch, people[0], people[1]);
+        return (batch, people[0], people[1], people[2]);
     }
 }
