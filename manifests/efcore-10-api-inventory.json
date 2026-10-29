@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 241,
+    "AwaitingClassification": 240,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 563,
-    "UncoveredMemberFamilies": 162
+    "MemberEntriesInCoveredFamilies": 564,
+    "UncoveredMemberFamilies": 161
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -16026,6 +16026,7 @@
         "EF10-CONCURRENCY-SAVE-SYNC",
         "EF10-DB-FUNCTION-ATTRIBUTE-SYNC",
         "EF10-DB-FUNCTION-NULLABLE-SYNC",
+        "EF10-DELETE-BEHAVIOR-CASCADE-SYNC",
         "EF10-DELETE-BEHAVIOR-RESTRICT-SYNC",
         "EF10-ENTITY-TYPE-CONFIGURATION-SYNC",
         "EF10-FILTERED-INDEX-SYNC",
@@ -16091,6 +16092,7 @@
         "EF10-CONCURRENCY-SAVE-SYNC",
         "EF10-DB-FUNCTION-ATTRIBUTE-SYNC",
         "EF10-DB-FUNCTION-NULLABLE-SYNC",
+        "EF10-DELETE-BEHAVIOR-CASCADE-SYNC",
         "EF10-DELETE-BEHAVIOR-RESTRICT-SYNC",
         "EF10-ENTITY-TYPE-CONFIGURATION-SYNC",
         "EF10-FILTERED-INDEX-SYNC",
@@ -16157,6 +16159,7 @@
         "EF10-DB-FUNCTION-ATTRIBUTE-ASYNC",
         "EF10-DB-FUNCTION-NULLABLE-ASYNC",
         "EF10-DBSET-ATTACH-RANGE",
+        "EF10-DELETE-BEHAVIOR-CASCADE-ASYNC",
         "EF10-DELETE-BEHAVIOR-RESTRICT-ASYNC",
         "EF10-ENTITY-TYPE-CONFIGURATION-ASYNC",
         "EF10-FILTERED-INDEX-ASYNC",
@@ -16225,6 +16228,7 @@
         "EF10-DB-FUNCTION-ATTRIBUTE-ASYNC",
         "EF10-DB-FUNCTION-NULLABLE-ASYNC",
         "EF10-DBSET-ATTACH-RANGE",
+        "EF10-DELETE-BEHAVIOR-CASCADE-ASYNC",
         "EF10-DELETE-BEHAVIOR-RESTRICT-ASYNC",
         "EF10-ENTITY-TYPE-CONFIGURATION-ASYNC",
         "EF10-FILTERED-INDEX-ASYNC",
@@ -19327,10 +19331,13 @@
       "MemberKind": "Field",
       "ApiMemberName": "Cascade",
       "Signature": "Microsoft.EntityFrameworkCore.DeleteBehavior Cascade = 3",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DELETE-BEHAVIOR-CASCADE-ASYNC",
+        "EF10-DELETE-BEHAVIOR-CASCADE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DeleteBehavior.Cascade"
     },
     {
@@ -19377,6 +19384,8 @@
       "Signature": "class Microsoft.EntityFrameworkCore.DeleteBehaviorAttribute",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-DELETE-BEHAVIOR-CASCADE-ASYNC",
+        "EF10-DELETE-BEHAVIOR-CASCADE-SYNC",
         "EF10-DELETE-BEHAVIOR-RESTRICT-ASYNC",
         "EF10-DELETE-BEHAVIOR-RESTRICT-SYNC"
       ],
@@ -183146,6 +183155,7 @@
       "Signature": "System.Int32 ExecuteSqlInterpolated(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade, System.FormattableString sql)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-DELETE-BEHAVIOR-CASCADE-SYNC",
         "EF10-DELETE-BEHAVIOR-RESTRICT-SYNC",
         "EF10-MIGRATIONS-APPLY-SYNC",
         "EF10-RAW-SQL-COMMAND-SYNC"
@@ -183220,6 +183230,7 @@
       "Signature": "System.Threading.Tasks.Task\u003CSystem.Int32\u003E ExecuteSqlInterpolatedAsync(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade, System.FormattableString sql, System.Threading.CancellationToken cancellationToken = null)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-DELETE-BEHAVIOR-CASCADE-ASYNC",
         "EF10-DELETE-BEHAVIOR-RESTRICT-ASYNC",
         "EF10-MIGRATIONS-APPLY-ASYNC",
         "EF10-RAW-SQL-COMMAND-ASYNC"

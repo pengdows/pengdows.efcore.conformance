@@ -187,6 +187,40 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
             entity.Property(dependent => dependent.Id).HasColumnName("id");
             entity.Property(dependent => dependent.PrincipalId).HasColumnName("principalid");
         });
+        modelBuilder.Entity<CascadePrincipal>(entity =>
+        {
+            entity.ToTable("ef10conformance_cascadeprincipals");
+            entity.HasKey(principal => principal.Id);
+            entity.Property(principal => principal.Id).HasColumnName("id");
+            entity.HasMany(principal => principal.Dependents)
+                .WithOne(dependent => dependent.Principal)
+                .HasForeignKey(dependent => dependent.PrincipalId)
+                .IsRequired();
+        });
+        modelBuilder.Entity<CascadeDependent>(entity =>
+        {
+            entity.ToTable("ef10conformance_cascadedependents");
+            entity.HasKey(dependent => dependent.Id);
+            entity.Property(dependent => dependent.Id).HasColumnName("id");
+            entity.Property(dependent => dependent.PrincipalId).HasColumnName("principalid");
+        });
+        modelBuilder.Entity<SetNullPrincipal>(entity =>
+        {
+            entity.ToTable("ef10conformance_setnullprincipals");
+            entity.HasKey(principal => principal.Id);
+            entity.Property(principal => principal.Id).HasColumnName("id");
+            entity.HasMany(principal => principal.Dependents)
+                .WithOne(dependent => dependent.Principal)
+                .HasForeignKey(dependent => dependent.PrincipalId)
+                .IsRequired(false);
+        });
+        modelBuilder.Entity<SetNullDependent>(entity =>
+        {
+            entity.ToTable("ef10conformance_setnulldependents");
+            entity.HasKey(dependent => dependent.Id);
+            entity.Property(dependent => dependent.Id).HasColumnName("id");
+            entity.Property(dependent => dependent.PrincipalId).HasColumnName("principalid");
+        });
         modelBuilder.Entity<Blog>(entity =>
         {
             entity.ToTable("ef10conformanceblogs");
@@ -440,6 +474,40 @@ internal sealed class RestrictDependent
 
     [DeleteBehavior(DeleteBehavior.Restrict)]
     public RestrictPrincipal? Principal { get; set; }
+}
+
+internal sealed class CascadePrincipal
+{
+    public Guid Id { get; set; }
+
+    public ICollection<CascadeDependent> Dependents { get; set; } = new List<CascadeDependent>();
+}
+
+internal sealed class CascadeDependent
+{
+    public Guid Id { get; set; }
+
+    public Guid PrincipalId { get; set; }
+
+    [DeleteBehavior(DeleteBehavior.Cascade)]
+    public CascadePrincipal? Principal { get; set; }
+}
+
+internal sealed class SetNullPrincipal
+{
+    public Guid Id { get; set; }
+
+    public ICollection<SetNullDependent> Dependents { get; set; } = new List<SetNullDependent>();
+}
+
+internal sealed class SetNullDependent
+{
+    public Guid Id { get; set; }
+
+    public Guid? PrincipalId { get; set; }
+
+    [DeleteBehavior(DeleteBehavior.SetNull)]
+    public SetNullPrincipal? Principal { get; set; }
 }
 
 [System.ComponentModel.DataAnnotations.Schema.Table("ef10conformance_attributeconfigured")]
