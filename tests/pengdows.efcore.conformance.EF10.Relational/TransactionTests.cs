@@ -185,4 +185,65 @@ public sealed class TransactionTests
         await using var verify = ProviderTestRuntime.CreateContext();
         Assert.False(await verify.People.AnyAsync(person => person.Id == id, cancellationToken));
     }
+
+    [Fact]
+    [BehavioralCoverage("EF10-TRANSACTION-FACADE-COMMIT-ROLLBACK-SYNC", "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.CommitTransaction", "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.RollbackTransaction", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges")]
+    public async Task DatabaseFacadeCommitAndRollbackTransaction_ApplySynchronously()
+    {
+        ProviderTestRuntime.RequireCapability("transactions");
+        var committedId = Guid.NewGuid();
+        var rolledBackId = Guid.NewGuid();
+
+        await using (var commit = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(commit, TestContext.Current.CancellationToken);
+            using var transaction = commit.Database.BeginTransaction();
+            commit.People.Add(new Person { Id = committedId, Name = "Facade committed", Age = 63 });
+            Assert.Equal(1, commit.SaveChanges());
+            commit.Database.CommitTransaction();
+        }
+
+        await using (var rollback = ProviderTestRuntime.CreateContext())
+        {
+            using var transaction = rollback.Database.BeginTransaction();
+            rollback.People.Add(new Person { Id = rolledBackId, Name = "Facade rolled back", Age = 64 });
+            Assert.Equal(1, rollback.SaveChanges());
+            rollback.Database.RollbackTransaction();
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.True(await verify.People.AnyAsync(person => person.Id == committedId, TestContext.Current.CancellationToken));
+        Assert.False(await verify.People.AnyAsync(person => person.Id == rolledBackId, TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-TRANSACTION-FACADE-COMMIT-ROLLBACK-ASYNC", "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.CommitTransactionAsync", "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.RollbackTransactionAsync", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync")]
+    public async Task DatabaseFacadeCommitAndRollbackTransaction_ApplyAsynchronously()
+    {
+        ProviderTestRuntime.RequireCapability("transactions");
+        var committedId = Guid.NewGuid();
+        var rolledBackId = Guid.NewGuid();
+        var cancellationToken = TestContext.Current.CancellationToken;
+
+        await using (var commit = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(commit, cancellationToken);
+            await using var transaction = await commit.Database.BeginTransactionAsync(cancellationToken);
+            commit.People.Add(new Person { Id = committedId, Name = "Facade committed async", Age = 65 });
+            Assert.Equal(1, await commit.SaveChangesAsync(cancellationToken));
+            await commit.Database.CommitTransactionAsync(cancellationToken);
+        }
+
+        await using (var rollback = ProviderTestRuntime.CreateContext())
+        {
+            await using var transaction = await rollback.Database.BeginTransactionAsync(cancellationToken);
+            rollback.People.Add(new Person { Id = rolledBackId, Name = "Facade rolled back async", Age = 66 });
+            Assert.Equal(1, await rollback.SaveChangesAsync(cancellationToken));
+            await rollback.Database.RollbackTransactionAsync(cancellationToken);
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.True(await verify.People.AnyAsync(person => person.Id == committedId, cancellationToken));
+        Assert.False(await verify.People.AnyAsync(person => person.Id == rolledBackId, cancellationToken));
+    }
 }

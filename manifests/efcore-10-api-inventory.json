@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12257,
+    "AwaitingClassification": 12253,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 308,
-    "UncoveredMemberFamilies": 8958
+    "MemberEntriesInCoveredFamilies": 312,
+    "UncoveredMemberFamilies": 8954
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -14694,6 +14694,7 @@
         "EF10-TRACKING-UPDATE-DETACHED-SYNC",
         "EF10-TRANSACTION-COMMIT-SYNC",
         "EF10-TRANSACTION-EXTERNAL-SYNC",
+        "EF10-TRANSACTION-FACADE-COMMIT-ROLLBACK-SYNC",
         "EF10-TRANSACTION-ROLLBACK-SYNC",
         "EF10-TYPES-ADDITIONAL-SCALARS-SYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-SYNC",
@@ -14741,6 +14742,7 @@
         "EF10-TRACKING-UPDATE-DETACHED-SYNC",
         "EF10-TRANSACTION-COMMIT-SYNC",
         "EF10-TRANSACTION-EXTERNAL-SYNC",
+        "EF10-TRANSACTION-FACADE-COMMIT-ROLLBACK-SYNC",
         "EF10-TRANSACTION-ROLLBACK-SYNC",
         "EF10-TYPES-ADDITIONAL-SCALARS-SYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-SYNC",
@@ -14788,6 +14790,7 @@
         "EF10-TRACKING-UPDATE-DETACHED-ASYNC",
         "EF10-TRANSACTION-COMMIT-ASYNC",
         "EF10-TRANSACTION-EXTERNAL-ASYNC",
+        "EF10-TRANSACTION-FACADE-COMMIT-ROLLBACK-ASYNC",
         "EF10-TRANSACTION-ROLLBACK-ASYNC",
         "EF10-TYPES-ADDITIONAL-SCALARS-ASYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC",
@@ -14835,6 +14838,7 @@
         "EF10-TRACKING-UPDATE-DETACHED-ASYNC",
         "EF10-TRANSACTION-COMMIT-ASYNC",
         "EF10-TRANSACTION-EXTERNAL-ASYNC",
+        "EF10-TRANSACTION-FACADE-COMMIT-ROLLBACK-ASYNC",
         "EF10-TRANSACTION-ROLLBACK-ASYNC",
         "EF10-TYPES-ADDITIONAL-SCALARS-ASYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC",
@@ -50421,9 +50425,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CommitTransaction",
       "Signature": "System.Void CommitTransaction()",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRANSACTION-FACADE-COMMIT-ROLLBACK-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.CommitTransaction"
     },
     {
@@ -50432,9 +50438,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "CommitTransactionAsync",
       "Signature": "System.Threading.Tasks.Task CommitTransactionAsync(System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRANSACTION-FACADE-COMMIT-ROLLBACK-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.CommitTransactionAsync"
     },
     {
@@ -50443,9 +50451,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "RollbackTransaction",
       "Signature": "System.Void RollbackTransaction()",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRANSACTION-FACADE-COMMIT-ROLLBACK-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.RollbackTransaction"
     },
     {
@@ -50454,9 +50464,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "RollbackTransactionAsync",
       "Signature": "System.Threading.Tasks.Task RollbackTransactionAsync(System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRANSACTION-FACADE-COMMIT-ROLLBACK-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.RollbackTransactionAsync"
     },
     {
