@@ -82,6 +82,85 @@ public sealed class RawSqlTests
         Assert.Equal("After sync raw update", name);
     }
 
+    [Fact]
+    [BehavioralCoverage("EF10-RAW-SQL-FROM-RAW-ASYNC", "Microsoft.EntityFrameworkCore.RelationalQueryableExtensions.FromSqlRaw", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    public async Task FromSqlRaw_ParametersAndComposesQueryAsynchronously()
+    {
+        var id = Guid.NewGuid();
+        const string value = "FromSqlRaw parameter value";
+        await SeedAsync(id, value);
+
+        await using var context = ProviderTestRuntime.CreateContext();
+        var actual = await context.People
+            .FromSqlRaw("SELECT * FROM ef10conformancepeople WHERE id = {0}", id)
+            .Where(person => person.Name == value)
+            .SingleAsync(TestContext.Current.CancellationToken);
+
+        Assert.Equal(id, actual.Id);
+        Assert.Equal(value, actual.Name);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-RAW-SQL-FROM-RAW-SYNC", "Microsoft.EntityFrameworkCore.RelationalQueryableExtensions.FromSqlRaw", "System.Linq.Queryable.Single")]
+    public async Task FromSqlRaw_ParametersAndComposesQuerySynchronously()
+    {
+        var id = Guid.NewGuid();
+        const string value = "FromSqlRaw sync parameter value";
+        await SeedAsync(id, value);
+
+        await using var context = ProviderTestRuntime.CreateContext();
+        var actual = context.People
+            .FromSqlRaw("SELECT * FROM ef10conformancepeople WHERE id = {0}", id)
+            .Where(person => person.Name == value)
+            .Single();
+
+        Assert.Equal(id, actual.Id);
+        Assert.Equal(value, actual.Name);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-RAW-SQL-EXECUTE-RAW-ASYNC", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRawAsync")]
+    public async Task ExecuteSqlRawAsync_ParametersUpdatePersistedValues()
+    {
+        var id = Guid.NewGuid();
+        await SeedAsync(id, "Before raw command");
+
+        await using (var context = ProviderTestRuntime.CreateContext())
+        {
+            Assert.Equal(1, await context.Database.ExecuteSqlRawAsync(
+                "UPDATE ef10conformancepeople SET name = {0} WHERE id = {1}",
+                ["After raw command", id],
+                TestContext.Current.CancellationToken));
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.Equal("After raw command", await verify.People.AsNoTracking()
+            .Where(person => person.Id == id)
+            .Select(person => person.Name)
+            .SingleAsync(TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-RAW-SQL-EXECUTE-RAW-SYNC", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRaw")]
+    public async Task ExecuteSqlRaw_ParametersUpdatePersistedValuesSynchronously()
+    {
+        var id = Guid.NewGuid();
+        await SeedAsync(id, "Before sync raw command");
+
+        await using (var context = ProviderTestRuntime.CreateContext())
+        {
+            Assert.Equal(1, context.Database.ExecuteSqlRaw(
+                "UPDATE ef10conformancepeople SET name = {0} WHERE id = {1}",
+                ["After sync raw command", id]));
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.Equal("After sync raw command", await verify.People.AsNoTracking()
+            .Where(person => person.Id == id)
+            .Select(person => person.Name)
+            .SingleAsync(TestContext.Current.CancellationToken));
+    }
+
     private static async Task SeedAsync(Guid id, string name)
     {
         await using var context = ProviderTestRuntime.CreateContext();
