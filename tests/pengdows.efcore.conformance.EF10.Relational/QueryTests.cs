@@ -352,6 +352,54 @@ public sealed class QueryTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-QUERY-LOAD-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.LoadAsync", "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.Entries")]
+    public async Task LoadAsync_TracksEveryMatchingEntity()
+    {
+        var batch = Guid.NewGuid().ToString("N");
+        await SeedAsync(Enumerable.Range(0, 3).Select(index => new Person
+        {
+            Id = Guid.NewGuid(),
+            Name = $"{batch}-{index}",
+            Age = index
+        }));
+
+        await using var context = ProviderTestRuntime.CreateContext();
+        await context.People
+            .Where(person => person.Name.StartsWith(batch))
+            .LoadAsync(TestContext.Current.CancellationToken);
+
+        var tracked = context.ChangeTracker.Entries<Person>()
+            .Select(entry => entry.Entity.Name)
+            .Order(StringComparer.Ordinal)
+            .ToArray();
+        Assert.Equal(Enumerable.Range(0, 3).Select(index => $"{batch}-{index}").Order(StringComparer.Ordinal), tracked);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-LOAD-SYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.Load", "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.Entries")]
+    public async Task Load_TracksEveryMatchingEntitySynchronously()
+    {
+        var batch = Guid.NewGuid().ToString("N");
+        await SeedAsync(Enumerable.Range(0, 3).Select(index => new Person
+        {
+            Id = Guid.NewGuid(),
+            Name = $"{batch}-{index}",
+            Age = index
+        }));
+
+        await using var context = ProviderTestRuntime.CreateContext();
+        context.People
+            .Where(person => person.Name.StartsWith(batch))
+            .Load();
+
+        var tracked = context.ChangeTracker.Entries<Person>()
+            .Select(entry => entry.Entity.Name)
+            .Order(StringComparer.Ordinal)
+            .ToArray();
+        Assert.Equal(Enumerable.Range(0, 3).Select(index => $"{batch}-{index}").Order(StringComparer.Ordinal), tracked);
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-QUERY-STREAM-SYNC", "System.Linq.IQueryable.GetEnumerator")]
     public async Task QueryableEnumeration_StreamsMatchingEntitiesSynchronously()
     {

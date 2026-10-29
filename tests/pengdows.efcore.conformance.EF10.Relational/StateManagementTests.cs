@@ -106,6 +106,35 @@ public sealed class StateManagementTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-TRACKING-AS-TRACKING-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.AsTracking", "Microsoft.EntityFrameworkCore.DbContext.Entry")]
+    public async Task AsTracking_OverridesNoTrackingContextDefaultAsynchronously()
+    {
+        var id = Guid.NewGuid();
+        await SeedAsync(id);
+
+        await using var context = ProviderTestRuntime.CreateContext(options =>
+            options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
+        var person = await context.People.AsTracking()
+            .SingleAsync(item => item.Id == id, TestContext.Current.CancellationToken);
+
+        Assert.Equal(EntityState.Unchanged, context.Entry(person).State);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-TRACKING-AS-TRACKING-OVERRIDE-SYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.AsTracking", "Microsoft.EntityFrameworkCore.DbContext.Entry")]
+    public async Task AsTracking_UsesRequestedQueryTrackingBehaviorSynchronously()
+    {
+        var id = Guid.NewGuid();
+        await SeedAsync(id);
+
+        await using var context = ProviderTestRuntime.CreateContext();
+        var person = context.People.AsTracking(QueryTrackingBehavior.NoTracking)
+            .Single(item => item.Id == id);
+
+        Assert.Equal(EntityState.Detached, context.Entry(person).State);
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-TRACKING-NO-TRACKING-IDENTITY-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.AsNoTrackingWithIdentityResolution", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync", "System.Linq.Queryable.Join")]
     public async Task AsNoTrackingWithIdentityResolution_ReusesRepeatedEntityInstancesAsynchronously()
     {

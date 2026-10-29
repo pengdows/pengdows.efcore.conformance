@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12288,
+    "AwaitingClassification": 12282,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 277,
-    "UncoveredMemberFamilies": 8980
+    "MemberEntriesInCoveredFamilies": 283,
+    "UncoveredMemberFamilies": 8976
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -288,9 +288,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "Entries",
       "Signature": "System.Collections.Generic.IEnumerable\u003CMicrosoft.EntityFrameworkCore.ChangeTracking.EntityEntry\u003E Entries()",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-QUERY-LOAD-ASYNC",
+        "EF10-QUERY-LOAD-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.Entries"
     },
     {
@@ -299,9 +302,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "Entries",
       "Signature": "System.Collections.Generic.IEnumerable\u003CMicrosoft.EntityFrameworkCore.ChangeTracking.EntityEntry\u003CTEntity\u003E\u003E Entries\u003CTEntity\u003E() where TEntity : class",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-QUERY-LOAD-ASYNC",
+        "EF10-QUERY-LOAD-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.Entries"
     },
     {
@@ -14828,6 +14834,8 @@
         "EF10-PERSIST-CONTEXT-ATTACH-RANGE",
         "EF10-PERSIST-CONTEXT-UPDATE",
         "EF10-PERSIST-CONTEXT-UPDATE-RANGE",
+        "EF10-TRACKING-AS-TRACKING-ASYNC",
+        "EF10-TRACKING-AS-TRACKING-OVERRIDE-SYNC",
         "EF10-TRACKING-ATTACH",
         "EF10-TRACKING-DBCONTEXT-FIND",
         "EF10-TRACKING-DBCONTEXT-FIND-ASYNC",
@@ -14855,6 +14863,8 @@
         "EF10-PERSIST-CONTEXT-ATTACH-RANGE",
         "EF10-PERSIST-CONTEXT-UPDATE",
         "EF10-PERSIST-CONTEXT-UPDATE-RANGE",
+        "EF10-TRACKING-AS-TRACKING-ASYNC",
+        "EF10-TRACKING-AS-TRACKING-OVERRIDE-SYNC",
         "EF10-TRACKING-ATTACH",
         "EF10-TRACKING-DBCONTEXT-FIND",
         "EF10-TRACKING-DBCONTEXT-FIND-ASYNC",
@@ -48351,9 +48361,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "AsTracking",
       "Signature": "System.Linq.IQueryable\u003CTEntity\u003E AsTracking\u003CTEntity\u003E(System.Linq.IQueryable\u003CTEntity\u003E source) where TEntity : class",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-AS-TRACKING-ASYNC",
+        "EF10-TRACKING-AS-TRACKING-OVERRIDE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.AsTracking"
     },
     {
@@ -48362,9 +48375,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "AsTracking",
       "Signature": "System.Linq.IQueryable\u003CTEntity\u003E AsTracking\u003CTEntity\u003E(System.Linq.IQueryable\u003CTEntity\u003E source, Microsoft.EntityFrameworkCore.QueryTrackingBehavior track) where TEntity : class",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRACKING-AS-TRACKING-ASYNC",
+        "EF10-TRACKING-AS-TRACKING-OVERRIDE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.AsTracking"
     },
     {
@@ -48395,9 +48411,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "Load",
       "Signature": "System.Void Load\u003CTSource\u003E(System.Linq.IQueryable\u003CTSource\u003E source)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-QUERY-LOAD-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.Load"
     },
     {
@@ -48406,9 +48424,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "LoadAsync",
       "Signature": "System.Threading.Tasks.Task LoadAsync\u003CTSource\u003E(System.Linq.IQueryable\u003CTSource\u003E source, System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-QUERY-LOAD-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.LoadAsync"
     },
     {
