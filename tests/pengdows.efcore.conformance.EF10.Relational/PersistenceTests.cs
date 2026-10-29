@@ -309,6 +309,28 @@ public sealed class PersistenceTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-PERSIST-CANCELLATION", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync")]
+    public async Task SaveChangesAsync_ObservesCancellationAndLeavesChangesPending()
+    {
+        var person = new Person { Id = Guid.NewGuid(), Name = "Canceled save", Age = 29 };
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.People.Add(person);
+            using var cancellation = new CancellationTokenSource();
+            await cancellation.CancelAsync();
+
+            await Assert.ThrowsAnyAsync<OperationCanceledException>(async () =>
+                await write.SaveChangesAsync(cancellation.Token));
+
+            Assert.Equal(EntityState.Added, write.Entry(person).State);
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.False(await verify.People.AnyAsync(item => item.Id == person.Id, TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-PERSIST-ACCEPT-CHANGES-SYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.AcceptAllChanges")]
     public async Task SaveChanges_CanDeferAcceptingTrackedChangesSynchronously()
     {

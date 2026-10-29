@@ -466,6 +466,19 @@ public sealed class QueryTests
         Assert.Equal(new int?[] { 4 }, valueMatches);
     }
 
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-CANCELLATION", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync")]
+    public async Task ToListAsync_ObservesCancellationBeforeQueryExecution()
+    {
+        await using var context = ProviderTestRuntime.CreateContext();
+        await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
+        using var cancellation = new CancellationTokenSource();
+        await cancellation.CancelAsync();
+
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(async () =>
+            await context.People.ToListAsync(cancellation.Token));
+    }
+
     private static async Task SeedAsync(IEnumerable<Person> people)
     {
         await using var context = ProviderTestRuntime.CreateContext();

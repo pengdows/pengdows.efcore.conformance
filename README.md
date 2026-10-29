@@ -48,13 +48,13 @@ Direct `dotnet test tests/pengdows.efcore.conformance.EF10.Relational` runs requ
 
 Use a dedicated disposable database. The current tests insert unique rows and do not delete the database or its contents. An adapter may implement `IAdoNetProviderAdapter` to enable public `DbConnection.GetSchema` type discovery. It may also implement `ISupplementalTypeDiscovery` to report types observed through database catalog metadata when the ADO.NET provider omits `DataTypes`. Supplemental discovery is marked `INDEPENDENT` only when it is independent of the EF model. Discovery from tables created by these tests is marked `SELF_DERIVED` and excluded from native-type coverage counts. SQLite does not advertise `DataTypes`; its current-schema type list is self-derived and cannot establish complete database-type coverage.
 
-The runner does not inspect EF provider services or generated SQL. Latest comparable full runs covered 216 cases per adapter:
+The runner does not inspect EF provider services or generated SQL. Latest comparable full runs covered 218 cases per adapter:
 
 | Result | pengdows ADO.NET SQLite | Microsoft EF Core SQLite |
 |---|---:|---:|
-| Passed | 207 | 211 |
+| Passed | 209 | 213 |
 | Failed | 9 | 5 |
-| Passed on both | 207 | 207 |
+| Passed on both | 209 | 209 |
 | Candidate-only failures | 4 | — |
 | Failures also on reference | 5 | 5 |
 
