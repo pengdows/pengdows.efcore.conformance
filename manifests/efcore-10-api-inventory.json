@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 210,
+    "AwaitingClassification": 206,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 594,
-    "UncoveredMemberFamilies": 135
+    "MemberEntriesInCoveredFamilies": 605,
+    "UncoveredMemberFamilies": 132
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -17411,10 +17411,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "ConfigureWarnings",
       "Signature": "Microsoft.EntityFrameworkCore.DbContextOptionsBuilder ConfigureWarnings(System.Action\u003CMicrosoft.EntityFrameworkCore.Diagnostics.WarningsConfigurationBuilder\u003E warningsConfigurationBuilderAction)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "ef-owned-no-provider-contract",
-      "DispositionReason": "Generic options builder behavior is owned by EF Core. Provider configuration is supplied through the adapter and its resulting runtime behavior is tested.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-WARNING-BEHAVIOR-ASYNC",
+        "EF10-WARNING-BEHAVIOR-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbContextOptionsBuilder.ConfigureWarnings"
     },
     {
@@ -24847,10 +24850,13 @@
       "MemberKind": "Field",
       "ApiMemberName": "RowLimitingOperationWithoutOrderByWarning",
       "Signature": "Microsoft.Extensions.Logging.EventId RowLimitingOperationWithoutOrderByWarning",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "ef-owned-no-provider-contract",
-      "DispositionReason": "Diagnostic identifiers, event payloads, and logging helpers are owned by EF Core. Provider-observable interception behavior is covered through public SaveChanges tests where applicable.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-WARNING-BEHAVIOR-ASYNC",
+        "EF10-WARNING-BEHAVIOR-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Diagnostics.CoreEventId.RowLimitingOperationWithoutOrderByWarning"
     },
     {
@@ -50223,10 +50229,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "Default",
       "Signature": "Microsoft.EntityFrameworkCore.Diagnostics.WarningsConfigurationBuilder Default(Microsoft.EntityFrameworkCore.WarningBehavior warningBehavior)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "ef-owned-no-provider-contract",
-      "DispositionReason": "Diagnostic identifiers, event payloads, and logging helpers are owned by EF Core. Provider-observable interception behavior is covered through public SaveChanges tests where applicable.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-WARNING-BEHAVIOR-ASYNC",
+        "EF10-WARNING-BEHAVIOR-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Diagnostics.WarningsConfigurationBuilder.Default"
     },
     {
@@ -50235,10 +50244,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "Throw",
       "Signature": "Microsoft.EntityFrameworkCore.Diagnostics.WarningsConfigurationBuilder Throw(Microsoft.Extensions.Logging.EventId[] eventIds)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "ef-owned-no-provider-contract",
-      "DispositionReason": "Diagnostic identifiers, event payloads, and logging helpers are owned by EF Core. Provider-observable interception behavior is covered through public SaveChanges tests where applicable.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-WARNING-BEHAVIOR-ASYNC",
+        "EF10-WARNING-BEHAVIOR-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Diagnostics.WarningsConfigurationBuilder.Throw"
     },
     {
@@ -50247,10 +50259,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "Log",
       "Signature": "Microsoft.EntityFrameworkCore.Diagnostics.WarningsConfigurationBuilder Log(Microsoft.Extensions.Logging.EventId[] eventIds)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "ef-owned-no-provider-contract",
-      "DispositionReason": "Diagnostic identifiers, event payloads, and logging helpers are owned by EF Core. Provider-observable interception behavior is covered through public SaveChanges tests where applicable.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-WARNING-BEHAVIOR-ASYNC",
+        "EF10-WARNING-BEHAVIOR-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Diagnostics.WarningsConfigurationBuilder.Log"
     },
     {
@@ -50259,10 +50274,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "Log",
       "Signature": "Microsoft.EntityFrameworkCore.Diagnostics.WarningsConfigurationBuilder Log(System.ValueTuple\u003CMicrosoft.Extensions.Logging.EventId, Microsoft.Extensions.Logging.LogLevel\u003E[] eventsAndLevels)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "ef-owned-no-provider-contract",
-      "DispositionReason": "Diagnostic identifiers, event payloads, and logging helpers are owned by EF Core. Provider-observable interception behavior is covered through public SaveChanges tests where applicable.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-WARNING-BEHAVIOR-ASYNC",
+        "EF10-WARNING-BEHAVIOR-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Diagnostics.WarningsConfigurationBuilder.Log"
     },
     {
@@ -50271,10 +50289,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "Ignore",
       "Signature": "Microsoft.EntityFrameworkCore.Diagnostics.WarningsConfigurationBuilder Ignore(Microsoft.Extensions.Logging.EventId[] eventIds)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "ef-owned-no-provider-contract",
-      "DispositionReason": "Diagnostic identifiers, event payloads, and logging helpers are owned by EF Core. Provider-observable interception behavior is covered through public SaveChanges tests where applicable.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-WARNING-BEHAVIOR-ASYNC",
+        "EF10-WARNING-BEHAVIOR-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Diagnostics.WarningsConfigurationBuilder.Ignore"
     },
     {
@@ -217424,10 +217445,13 @@
       "MemberKind": "Type",
       "ApiMemberName": null,
       "Signature": "enum Microsoft.EntityFrameworkCore.WarningBehavior",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-WARNING-BEHAVIOR-ASYNC",
+        "EF10-WARNING-BEHAVIOR-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.WarningBehavior"
     },
     {
@@ -217448,10 +217472,13 @@
       "MemberKind": "Field",
       "ApiMemberName": "Log",
       "Signature": "Microsoft.EntityFrameworkCore.WarningBehavior Log = 0",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-WARNING-BEHAVIOR-ASYNC",
+        "EF10-WARNING-BEHAVIOR-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.WarningBehavior.Log"
     },
     {
@@ -217460,10 +217487,13 @@
       "MemberKind": "Field",
       "ApiMemberName": "Ignore",
       "Signature": "Microsoft.EntityFrameworkCore.WarningBehavior Ignore = 1",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-WARNING-BEHAVIOR-ASYNC",
+        "EF10-WARNING-BEHAVIOR-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.WarningBehavior.Ignore"
     },
     {
@@ -217472,10 +217502,13 @@
       "MemberKind": "Field",
       "ApiMemberName": "Throw",
       "Signature": "Microsoft.EntityFrameworkCore.WarningBehavior Throw = 2",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-WARNING-BEHAVIOR-ASYNC",
+        "EF10-WARNING-BEHAVIOR-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.WarningBehavior.Throw"
     },
     {
