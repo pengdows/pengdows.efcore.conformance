@@ -19,18 +19,20 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12367,
+    "AwaitingClassification": 12363,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 198,
-    "UncoveredMemberFamilies": 9032
+    "MemberEntriesInCoveredFamilies": 202,
+    "UncoveredMemberFamilies": 9029
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
     "ExternalApiSelectors": [
       "System.Linq.Enumerable.ToList",
       "System.Linq.IQueryable.GetEnumerator",
+      "System.Linq.Queryable.All",
       "System.Linq.Queryable.Any",
       "System.Linq.Queryable.Average",
+      "System.Linq.Queryable.Contains",
       "System.Linq.Queryable.Count",
       "System.Linq.Queryable.ElementAt",
       "System.Linq.Queryable.ElementAtOrDefault",
@@ -41,6 +43,7 @@
       "System.Linq.Queryable.Last",
       "System.Linq.Queryable.LastOrDefault",
       "System.Linq.Queryable.LeftJoin",
+      "System.Linq.Queryable.LongCount",
       "System.Linq.Queryable.Max",
       "System.Linq.Queryable.Min",
       "System.Linq.Queryable.OfType",
@@ -47147,9 +47150,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "AllAsync",
       "Signature": "System.Threading.Tasks.Task\u003CSystem.Boolean\u003E AllAsync\u003CTSource\u003E(System.Linq.IQueryable\u003CTSource\u003E source, System.Linq.Expressions.Expression\u003CSystem.Func\u003CTSource, System.Boolean\u003E\u003E predicate, System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-QUERY-ALL-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.AllAsync"
     },
     {
@@ -47184,9 +47189,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "LongCountAsync",
       "Signature": "System.Threading.Tasks.Task\u003CSystem.Int64\u003E LongCountAsync\u003CTSource\u003E(System.Linq.IQueryable\u003CTSource\u003E source, System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-QUERY-LONGCOUNT-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.LongCountAsync"
     },
     {
@@ -47195,9 +47202,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "LongCountAsync",
       "Signature": "System.Threading.Tasks.Task\u003CSystem.Int64\u003E LongCountAsync\u003CTSource\u003E(System.Linq.IQueryable\u003CTSource\u003E source, System.Linq.Expressions.Expression\u003CSystem.Func\u003CTSource, System.Boolean\u003E\u003E predicate, System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-QUERY-LONGCOUNT-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.LongCountAsync"
     },
     {
@@ -47987,9 +47996,11 @@
       "MemberKind": "Method",
       "ApiMemberName": "ContainsAsync",
       "Signature": "System.Threading.Tasks.Task\u003CSystem.Boolean\u003E ContainsAsync\u003CTSource\u003E(System.Linq.IQueryable\u003CTSource\u003E source, TSource item, System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-QUERY-CONTAINS-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ContainsAsync"
     },
     {
