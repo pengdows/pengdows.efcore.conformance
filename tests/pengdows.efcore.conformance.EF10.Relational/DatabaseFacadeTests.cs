@@ -120,4 +120,25 @@ public sealed class DatabaseFacadeTests
         context.Database.AutoTransactionBehavior = original;
         Assert.Equal(original, context.Database.AutoTransactionBehavior);
     }
+
+    [Fact]
+    [BehavioralCoverage("EF10-DATABASE-FACADE-AUTO-TRANSACTIONS-LEGACY", "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.AutoTransactionsEnabled", "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.AutoTransactionBehavior", "Microsoft.EntityFrameworkCore.AutoTransactionBehavior")]
+    public async Task AutoTransactionsEnabled_ReflectsTheAutomaticTransactionBehavior()
+    {
+        ProviderTestRuntime.RequireCapability("relational");
+        await using var context = ProviderTestRuntime.CreateContext();
+#pragma warning disable CS0618
+        var original = context.Database.AutoTransactionsEnabled;
+
+        context.Database.AutoTransactionsEnabled = false;
+        Assert.False(context.Database.AutoTransactionsEnabled);
+        Assert.Equal(AutoTransactionBehavior.Never, context.Database.AutoTransactionBehavior);
+
+        context.Database.AutoTransactionsEnabled = true;
+        Assert.True(context.Database.AutoTransactionsEnabled);
+        Assert.Equal(AutoTransactionBehavior.WhenNeeded, context.Database.AutoTransactionBehavior);
+
+        context.Database.AutoTransactionsEnabled = original;
+#pragma warning restore CS0618
+    }
 }

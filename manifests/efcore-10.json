@@ -140,6 +140,311 @@
       "selectorPrefix": "Microsoft.EntityFrameworkCore.Infrastructure.ServiceCollectionMap",
       "disposition": "not-applicable-with-rationale",
       "reason": "This type maps EF Core internal service registrations and is outside the black-box provider boundary."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Metadata.",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "These are EF Core model metadata APIs. Provider conformance is checked through the configured model's observable schema, query, migration, and persistence behavior instead of direct metadata inspection."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Scaffolding.",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "These are design-time reverse-engineering APIs. They are outside the relational runtime provider contract tested by this suite."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.ChangeTracking.",
+      "disposition": "ef-owned-no-provider-contract",
+      "reason": "Change tracking entry and collection APIs are owned by EF Core. Provider interaction is covered through tests that load, modify, and persist entities via public APIs."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.DbContextOptionsBuilder",
+      "disposition": "ef-owned-no-provider-contract",
+      "reason": "Generic options builder behavior is owned by EF Core. Provider configuration is supplied through the adapter and its resulting runtime behavior is tested."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.ModelBuilder",
+      "disposition": "ef-owned-no-provider-contract",
+      "reason": "ModelBuilder behavior is owned by EF Core. Provider obligations are tested against the built model through schema, query, migration, and persistence outcomes."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.ModelConfigurationBuilder",
+      "disposition": "ef-owned-no-provider-contract",
+      "reason": "Pre-convention model configuration is owned by EF Core; provider effects are evaluated through the resulting model's observable database behavior."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.ExecutionStrategyExtensions",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "Execution strategy behavior is provider-specific and explicitly outside the base relational conformance contract."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.Operations.",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "Migration operation objects are inputs to EF Core's provider migration services, not app-facing operations. Observable support is evaluated through applying migrations."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.HistoryRepository",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "Migration history repository types are provider service APIs. The suite checks applied and pending migration state through public DatabaseFacade APIs."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.MigrationsAnnotationProvider",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "Migration annotation provider types are provider service APIs and are not invoked directly by the black-box suite."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.RelationalAnnotationNames",
+      "disposition": "ef-owned-no-provider-contract",
+      "reason": "Relational annotation name constants are EF Core metadata identifiers and do not define provider runtime behavior."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Metadata.RelationalAnnotationNames",
+      "disposition": "ef-owned-no-provider-contract",
+      "reason": "Relational annotation name constants are EF Core metadata identifiers and do not define provider runtime behavior."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.RelationalIndexExtensions",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "These extensions inspect relational index metadata. Provider index behavior is checked through observable schema and migration behavior."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.RelationalForeignKeyExtensions",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "These extensions inspect relational foreign-key metadata. Provider relationship behavior is checked through persistence and navigation operations."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.RelationalKeyExtensions",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "These extensions inspect relational key metadata. Provider key behavior is checked through persistence and generated-value scenarios."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.RelationalTriggerExtensions",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "These extensions inspect relational trigger metadata. Trigger metadata is outside this suite's baseline provider behavior contract."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.RelationalElementTypeExtensions",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "These extensions inspect relational primitive collection element metadata. Provider collection behavior is checked through persistence and query results."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Infrastructure.",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "This public infrastructure namespace contains EF-owned model/runtime helpers and provider service extension points. The suite tests application-facing context, connection, factory, and interception behavior through their public results; it does not inspect provider services or EF implementation helpers."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.ValueGeneration.",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "Value-generator classes and selector services are provider implementation extension points. The suite checks generated values through public entity persistence and retrieval instead of invoking provider generators directly."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.RelationalDbContextOptionsBuilder",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "Provider-specific options are configured by the adapter. Shared tests evaluate the resulting public EF Core behavior without depending on provider-specific option-builder implementations."
+    },
+    {
+      "selectorPrefix": "Microsoft.Extensions.DependencyInjection.EntityFrameworkServiceCollectionExtensions",
+      "disposition": "ef-owned-no-provider-contract",
+      "reason": "These generic dependency-injection registration methods are owned by EF Core. The suite checks provider use through scoped contexts and context factories; provider pooling implementation details are outside this contract."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.DbLoggerCategory",
+      "disposition": "ef-owned-no-provider-contract",
+      "reason": "Logger category names and nested category helpers are EF Core diagnostics identifiers. Provider behavior is checked through public operation results and interception callbacks, not SQL logging output."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Infrastructure.EntityFrameworkEventSource",
+      "disposition": "ef-owned-no-provider-contract",
+      "reason": "EventSource instrumentation is EF Core runtime diagnostics and is not a provider API contract."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Infrastructure.EntityFrameworkMetricsData",
+      "disposition": "ef-owned-no-provider-contract",
+      "reason": "EF Core metrics payload helpers are runtime diagnostics, not provider-observable database behavior."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToQueryString",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "This method returns generated SQL text. SQL inspection is explicitly outside the black-box conformance boundary."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.TagWith",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "Query tags are observable through generated command text only and do not change the logical query result. SQL-text assertions are outside this suite's boundary."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.TagWithCallSite",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "Call-site query tags are observable through generated command text only and do not change the logical query result. SQL-text assertions are outside this suite's boundary."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.CreateExecutionStrategy",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "Provider-specific execution strategy behavior is explicitly outside the baseline relational provider contract."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.DbContextId",
+      "disposition": "ef-owned-no-provider-contract",
+      "reason": "Context identity values and their equality/formatting are assigned by EF Core and do not exercise provider behavior."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.DbSet`1.EntityType",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "This property exposes EF model metadata. The suite evaluates the configured entity model through database operations rather than inspecting model internals."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.DbUpdateException..ctor",
+      "disposition": "ef-owned-no-provider-contract",
+      "reason": "Exception construction is owned by EF Core. Provider-raised write failures and their affected entity entries are tested through SaveChanges."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException..ctor",
+      "disposition": "ef-owned-no-provider-contract",
+      "reason": "Exception construction is owned by EF Core. Provider concurrency behavior is tested through conflicting persistence operations and resolution."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.DbContext.FromExpression",
+      "disposition": "ef-owned-no-provider-contract",
+      "reason": "FromExpression constructs query roots for application-defined queryable functions. Its expression-root construction is EF-owned; provider translation is tested through ordinary query execution."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.IHistoryRepository",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "This interface is a provider migration-history service. Applied/pending migration behavior and history persistence are tested through the public DatabaseFacade migration APIs, without resolving provider services."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.IMigrationsAnnotationProvider",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "This interface is a provider migration service used to interpret model annotations. Migration behavior is checked by applying public migration classes, not by invoking provider services directly."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.MigrationsSqlGeneratorDependencies",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "These constructor dependencies belong to the provider migration SQL-generation service and are excluded by the black-box boundary."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.MigrationCommandListBuilder",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "This builder is part of provider SQL-generation infrastructure. The suite validates migrations by applying them and observing schema/data behavior, without inspecting generated SQL commands."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.MigrationsSqlGenerator",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "SQL generation is a provider implementation service. Conformance is tested by applying migrations through DatabaseFacade and observing the resulting database behavior."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.MigrationCommand",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "Migration command objects are provider service output and expose implementation details excluded from this black-box suite."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.MigrationExecutionState",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "Migration execution state is an EF/provider implementation detail. The suite checks externally visible migration state through applied and pending migration APIs."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.IMigrationsAssembly",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "This interface exposes migration assembly services. The suite tests migration discovery through the public DatabaseFacade APIs instead of resolving provider or EF services."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.IMigrationCommandExecutor",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "Command executor services are provider implementation infrastructure; migrations are verified through public migration operations and database results."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.IMigrator",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "The service interface is an implementation entry point. The app-facing migration contract is exercised through Database.Migrate and Database.MigrateAsync."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.IMigrationsDatabaseLock",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "Migration locking is provider execution infrastructure. This suite does not inspect transaction or lock implementations; it verifies migration outcomes through public APIs."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.IMigrationsModelDiffer",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "Model differ services are design/runtime infrastructure. The suite does not generate provider migration operations from model metadata."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.IMigrationsSqlGenerator",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "This interface is a provider SQL-generation service. Generated SQL is outside the black-box contract; migrations are tested through apply/rollback results."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.IMigrationsIdGenerator",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "Migration ID generation is EF tooling/runtime infrastructure. The suite supplies fixed migration IDs and tests their discovery and application."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.MigrationsAssemblyExtensions",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "These helpers operate on the migrations service; migration discovery is tested through public DatabaseFacade methods."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.ModelCreationDependencies",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "These are EF Core model-creation service dependencies. The suite tests the resulting configured model through public database operations rather than constructing or inspecting services."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GenerateCreateScript",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "This method returns generated SQL text, which is explicitly excluded from the black-box conformance boundary."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.DbContextOptions",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "Options extension enumeration and mutation expose provider configuration and service-extension objects. The suite configures providers through the adapter and checks behavior through ordinary DbContext operations."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.DbContext.ToString",
+      "disposition": "ef-owned-no-provider-contract",
+      "reason": "Formatting a context does not exercise provider behavior."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.DbContext.Equals",
+      "disposition": "ef-owned-no-provider-contract",
+      "reason": "Context object equality is owned by EF Core and does not exercise provider behavior."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.DbContext.GetHashCode",
+      "disposition": "ef-owned-no-provider-contract",
+      "reason": "Context hashing is owned by EF Core and does not exercise provider behavior."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.DbContext.Database",
+      "disposition": "ef-owned-no-provider-contract",
+      "reason": "The context-to-facade accessor is owned by EF Core. DatabaseFacade operations are tested through their public observable behavior."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.DbContext.ChangeTracker",
+      "disposition": "ef-owned-no-provider-contract",
+      "reason": "The context-to-tracker accessor is owned by EF Core. Provider interaction is tested through tracked persistence and query results."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.DbContext.Model",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "This accessor exposes EF model metadata. Direct model metadata inspection is outside the black-box provider boundary; the suite validates the model through its database behavior."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.DbContext.ContextId",
+      "disposition": "ef-owned-no-provider-contract",
+      "reason": "Context identity is assigned by EF Core and does not depend on provider behavior."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.DbContext..ctor",
+      "disposition": "ef-owned-no-provider-contract",
+      "reason": "DbContext construction is owned by EF Core. The suite verifies configured provider use through actual operations on constructed contexts."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.CloseConnection",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "This API is covered by the sync connection lifecycle contract; test coverage takes precedence over this fallback disposition."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.CloseConnectionAsync",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "This API is covered by the async connection lifecycle contract; test coverage takes precedence over this fallback disposition."
     }
   ]
 }

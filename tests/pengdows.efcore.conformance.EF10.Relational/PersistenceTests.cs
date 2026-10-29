@@ -349,7 +349,7 @@ public sealed class PersistenceTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-PERSIST-INSERT-FAILURE-ASYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.DbUpdateException", "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry.State")]
+    [BehavioralCoverage("EF10-PERSIST-INSERT-FAILURE-ASYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.DbUpdateException", "Microsoft.EntityFrameworkCore.DbUpdateException.Entries", "Microsoft.EntityFrameworkCore.DbContext.ChangeTracker", "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry.State")]
     public async Task SaveChangesAsync_FailedInsertLeavesTrackedEntityUnaccepted()
     {
         var id = Guid.NewGuid();
@@ -357,12 +357,14 @@ public sealed class PersistenceTests
 
         await using (var write = ProviderTestRuntime.CreateContext())
         {
-            write.People.Add(new Person { Id = id, Name = "Duplicate row", Age = 42 });
+            var duplicate = new Person { Id = id, Name = "Duplicate row", Age = 42 };
+            write.People.Add(duplicate);
 
-            await Assert.ThrowsAsync<DbUpdateException>(() =>
+            var exception = await Assert.ThrowsAsync<DbUpdateException>(() =>
                 write.SaveChangesAsync(TestContext.Current.CancellationToken));
 
             Assert.Equal(EntityState.Added, write.ChangeTracker.Entries<Person>().Single().State);
+            Assert.Same(duplicate, Assert.Single(exception.Entries).Entity);
         }
 
         await using var verify = ProviderTestRuntime.CreateContext();
@@ -374,7 +376,7 @@ public sealed class PersistenceTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-PERSIST-INSERT-FAILURE-SYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "Microsoft.EntityFrameworkCore.DbUpdateException", "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry.State")]
+    [BehavioralCoverage("EF10-PERSIST-INSERT-FAILURE-SYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "Microsoft.EntityFrameworkCore.DbUpdateException", "Microsoft.EntityFrameworkCore.DbUpdateException.Entries", "Microsoft.EntityFrameworkCore.DbContext.ChangeTracker", "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry.State")]
     public async Task SaveChanges_FailedInsertLeavesTrackedEntityUnacceptedSynchronously()
     {
         var id = Guid.NewGuid();
@@ -382,11 +384,13 @@ public sealed class PersistenceTests
 
         await using (var write = ProviderTestRuntime.CreateContext())
         {
-            write.People.Add(new Person { Id = id, Name = "Duplicate sync row", Age = 52 });
+            var duplicate = new Person { Id = id, Name = "Duplicate sync row", Age = 52 };
+            write.People.Add(duplicate);
 
-            Assert.Throws<DbUpdateException>(() => write.SaveChanges());
+            var exception = Assert.Throws<DbUpdateException>(() => write.SaveChanges());
 
             Assert.Equal(EntityState.Added, write.ChangeTracker.Entries<Person>().Single().State);
+            Assert.Same(duplicate, Assert.Single(exception.Entries).Entity);
         }
 
         await using var verify = ProviderTestRuntime.CreateContext();

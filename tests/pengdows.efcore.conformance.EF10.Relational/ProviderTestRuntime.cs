@@ -105,6 +105,9 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
 
     public DbSet<GeneratedKeyRecord> GeneratedKeyRecords => Set<GeneratedKeyRecord>();
 
+    [DbFunction("lower", IsBuiltIn = true)]
+    public static string Lower(string value) => throw new NotSupportedException("This method is intended for use in EF Core queries.");
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Person>(entity =>
@@ -121,6 +124,20 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
             entity.Property(person => person.IsArchived).HasColumnName("isarchived");
             entity.HasQueryFilter("SoftDelete", person => !person.IsDeleted);
             entity.HasQueryFilter("Archive", person => !person.IsArchived);
+        });
+        modelBuilder.Entity<UniqueValueRecord>(entity =>
+        {
+            entity.ToTable("ef10conformanceuniquevalues");
+            entity.HasKey(record => record.Id);
+            entity.Property(record => record.Id).HasColumnName("id");
+            entity.Property(record => record.Value).HasColumnName("value").IsRequired().HasMaxLength(160);
+        });
+        modelBuilder.Entity<PrecisionAttributeRecord>(entity =>
+        {
+            entity.ToTable("ef10conformanceprecisionattribute");
+            entity.HasKey(record => record.Id);
+            entity.Property(record => record.Id).HasColumnName("id");
+            entity.Property(record => record.Amount).HasColumnName("amount");
         });
         modelBuilder.Entity<Blog>(entity =>
         {
@@ -277,6 +294,22 @@ internal sealed class Comment
     public string Text { get; set; } = string.Empty;
 
     public Post? Post { get; set; }
+}
+
+[Index(nameof(Value), IsUnique = true)]
+internal sealed class UniqueValueRecord
+{
+    public Guid Id { get; set; }
+
+    public string Value { get; set; } = string.Empty;
+}
+
+internal sealed class PrecisionAttributeRecord
+{
+    public Guid Id { get; set; }
+
+    [Precision(18, 4)]
+    public decimal Amount { get; set; }
 }
 
 internal sealed class ScalarRecord
