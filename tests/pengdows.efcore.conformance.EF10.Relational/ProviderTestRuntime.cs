@@ -90,6 +90,8 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
 
     public DbSet<TpcItem> TpcItems => Set<TpcItem>();
 
+    public DbSet<ComplexRecord> ComplexRecords => Set<ComplexRecord>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Person>(entity =>
@@ -171,6 +173,17 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
         });
         modelBuilder.Entity<TpcArticle>().ToTable("ef10conformancetpcarticle");
         modelBuilder.Entity<TpcVideo>().ToTable("ef10conformancetpcvideo");
+        modelBuilder.Entity<ComplexRecord>(entity =>
+        {
+            entity.ToTable("ef10conformancecomplex");
+            entity.HasKey(record => record.Id);
+            entity.Property(record => record.Id).HasColumnName("id");
+            entity.ComplexProperty(record => record.Address, address =>
+            {
+                address.Property(value => value.Street).HasColumnName("address_street").IsRequired();
+                address.Property(value => value.City).HasColumnName("address_city").IsRequired();
+            });
+        });
     }
 }
 
@@ -294,4 +307,18 @@ internal sealed class TpcArticle : TpcItem
 internal sealed class TpcVideo : TpcItem
 {
     public int DurationSeconds { get; set; }
+}
+
+internal sealed class ComplexRecord
+{
+    public Guid Id { get; set; }
+
+    public AddressInfo Address { get; set; } = new();
+}
+
+internal sealed class AddressInfo
+{
+    public string Street { get; set; } = string.Empty;
+
+    public string City { get; set; } = string.Empty;
 }

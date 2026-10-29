@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12395,
+    "AwaitingClassification": 12382,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 170,
-    "UncoveredMemberFamilies": 9049
+    "MemberEntriesInCoveredFamilies": 183,
+    "UncoveredMemberFamilies": 9047
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [
@@ -14588,6 +14588,7 @@
       "Signature": "System.Int32 SaveChanges()",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-COMPLEX-TYPE-SYNC",
         "EF10-CONCURRENCY-SAVE-SYNC",
         "EF10-INHERITANCE-TPC-SYNC",
         "EF10-INHERITANCE-TPH-SYNC",
@@ -14618,6 +14619,7 @@
       "Signature": "System.Int32 SaveChanges(System.Boolean acceptAllChangesOnSuccess)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-COMPLEX-TYPE-SYNC",
         "EF10-CONCURRENCY-SAVE-SYNC",
         "EF10-INHERITANCE-TPC-SYNC",
         "EF10-INHERITANCE-TPH-SYNC",
@@ -14648,6 +14650,7 @@
       "Signature": "System.Threading.Tasks.Task\u003CSystem.Int32\u003E SaveChangesAsync(System.Threading.CancellationToken cancellationToken = null)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-COMPLEX-TYPE-ASYNC",
         "EF10-CONCURRENCY-SAVE-ASYNC",
         "EF10-INHERITANCE-TPC-ASYNC",
         "EF10-INHERITANCE-TPH-ASYNC",
@@ -14679,6 +14682,7 @@
       "Signature": "System.Threading.Tasks.Task\u003CSystem.Int32\u003E SaveChangesAsync(System.Boolean acceptAllChangesOnSuccess, System.Threading.CancellationToken cancellationToken = null)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-COMPLEX-TYPE-ASYNC",
         "EF10-CONCURRENCY-SAVE-ASYNC",
         "EF10-INHERITANCE-TPC-ASYNC",
         "EF10-INHERITANCE-TPH-ASYNC",
@@ -47305,6 +47309,7 @@
       "Signature": "System.Threading.Tasks.Task\u003CTSource\u003E SingleAsync\u003CTSource\u003E(System.Linq.IQueryable\u003CTSource\u003E source, System.Threading.CancellationToken cancellationToken = null)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-COMPLEX-TYPE-ASYNC",
         "EF10-PERSIST-INSERT-ASYNC",
         "EF10-PERSIST-UPDATE-ASYNC",
         "EF10-PERSIST-UPDATE-RANGE",
@@ -47327,6 +47332,7 @@
       "Signature": "System.Threading.Tasks.Task\u003CTSource\u003E SingleAsync\u003CTSource\u003E(System.Linq.IQueryable\u003CTSource\u003E source, System.Linq.Expressions.Expression\u003CSystem.Func\u003CTSource, System.Boolean\u003E\u003E predicate, System.Threading.CancellationToken cancellationToken = null)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-COMPLEX-TYPE-ASYNC",
         "EF10-PERSIST-INSERT-ASYNC",
         "EF10-PERSIST-UPDATE-ASYNC",
         "EF10-PERSIST-UPDATE-RANGE",
@@ -61734,9 +61740,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "Property",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexTypePropertyBuilder Property(System.String propertyName)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPLEX-TYPE-ASYNC",
+        "EF10-COMPLEX-TYPE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexPropertyBuilder.Property"
     },
     {
@@ -61745,9 +61754,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "Property",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexTypePropertyBuilder\u003CTProperty\u003E Property\u003CTProperty\u003E(System.String propertyName)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPLEX-TYPE-ASYNC",
+        "EF10-COMPLEX-TYPE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexPropertyBuilder.Property"
     },
     {
@@ -61756,9 +61768,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "Property",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexTypePropertyBuilder Property(System.Type propertyType, System.String propertyName)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPLEX-TYPE-ASYNC",
+        "EF10-COMPLEX-TYPE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexPropertyBuilder.Property"
     },
     {
@@ -65188,9 +65203,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "ComplexProperty",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexPropertyBuilder ComplexProperty(System.String propertyName)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPLEX-TYPE-ASYNC",
+        "EF10-COMPLEX-TYPE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder.ComplexProperty"
     },
     {
@@ -65199,9 +65217,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "ComplexProperty",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexPropertyBuilder\u003CTProperty\u003E ComplexProperty\u003CTProperty\u003E(System.String propertyName)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPLEX-TYPE-ASYNC",
+        "EF10-COMPLEX-TYPE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder.ComplexProperty"
     },
     {
@@ -65210,9 +65231,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "ComplexProperty",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexPropertyBuilder\u003CTProperty\u003E ComplexProperty\u003CTProperty\u003E(System.String propertyName, System.String complexTypeName)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPLEX-TYPE-ASYNC",
+        "EF10-COMPLEX-TYPE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder.ComplexProperty"
     },
     {
@@ -65221,9 +65245,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "ComplexProperty",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexPropertyBuilder ComplexProperty(System.Type propertyType, System.String propertyName)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPLEX-TYPE-ASYNC",
+        "EF10-COMPLEX-TYPE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder.ComplexProperty"
     },
     {
@@ -65232,9 +65259,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "ComplexProperty",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexPropertyBuilder ComplexProperty(System.Type propertyType, System.String propertyName, System.String complexTypeName)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPLEX-TYPE-ASYNC",
+        "EF10-COMPLEX-TYPE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder.ComplexProperty"
     },
     {
@@ -65243,9 +65273,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "ComplexProperty",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder ComplexProperty(System.String propertyName, System.Action\u003CMicrosoft.EntityFrameworkCore.Metadata.Builders.ComplexPropertyBuilder\u003E buildAction)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPLEX-TYPE-ASYNC",
+        "EF10-COMPLEX-TYPE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder.ComplexProperty"
     },
     {
@@ -65254,9 +65287,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "ComplexProperty",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder ComplexProperty\u003CTProperty\u003E(System.String propertyName, System.Action\u003CMicrosoft.EntityFrameworkCore.Metadata.Builders.ComplexPropertyBuilder\u003CTProperty\u003E\u003E buildAction)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPLEX-TYPE-ASYNC",
+        "EF10-COMPLEX-TYPE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder.ComplexProperty"
     },
     {
@@ -65265,9 +65301,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "ComplexProperty",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder ComplexProperty\u003CTProperty\u003E(System.String propertyName, System.String complexTypeName, System.Action\u003CMicrosoft.EntityFrameworkCore.Metadata.Builders.ComplexPropertyBuilder\u003CTProperty\u003E\u003E buildAction)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPLEX-TYPE-ASYNC",
+        "EF10-COMPLEX-TYPE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder.ComplexProperty"
     },
     {
@@ -65276,9 +65315,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "ComplexProperty",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder ComplexProperty(System.Type propertyType, System.String propertyName, System.Action\u003CMicrosoft.EntityFrameworkCore.Metadata.Builders.ComplexPropertyBuilder\u003E buildAction)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPLEX-TYPE-ASYNC",
+        "EF10-COMPLEX-TYPE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder.ComplexProperty"
     },
     {
@@ -65287,9 +65329,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "ComplexProperty",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder ComplexProperty(System.Type propertyType, System.String propertyName, System.String complexTypeName, System.Action\u003CMicrosoft.EntityFrameworkCore.Metadata.Builders.ComplexPropertyBuilder\u003E buildAction)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMPLEX-TYPE-ASYNC",
+        "EF10-COMPLEX-TYPE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder.ComplexProperty"
     },
     {
