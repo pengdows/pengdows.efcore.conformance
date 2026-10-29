@@ -331,6 +331,29 @@ public sealed class PersistenceTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-PERSIST-CONTEXT-ADD-RANGE-ASYNC", "Microsoft.EntityFrameworkCore.DbContext.AddRangeAsync", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.AnyAsync")]
+    public async Task DbContextAddRangeAsync_PersistsEveryEntity()
+    {
+        var people = CreatePeople("DbContextAddRangeAsync");
+        var cancellationToken = TestContext.Current.CancellationToken;
+
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, cancellationToken);
+            await write.AddRangeAsync(people, cancellationToken);
+            Assert.Equal(people.Length, await write.SaveChangesAsync(cancellationToken));
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        foreach (var person in people)
+        {
+            Assert.True(await verify.People.AnyAsync(
+                item => item.Id == person.Id && item.Name == person.Name,
+                cancellationToken));
+        }
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-PERSIST-UPDATE-RANGE", "Microsoft.EntityFrameworkCore.DbSet`1.UpdateRange", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
     public async Task UpdateRange_PersistsAllDetachedEntityUpdates()
     {
