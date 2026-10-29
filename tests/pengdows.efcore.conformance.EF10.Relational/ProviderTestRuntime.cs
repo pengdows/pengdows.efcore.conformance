@@ -103,6 +103,7 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
             entity.Property(person => person.Id).HasColumnName("id");
             entity.Property(person => person.Name).HasColumnName("name").IsRequired().HasMaxLength(160);
             entity.Property(person => person.Age).HasColumnName("age");
+            entity.Property(person => person.OptionalRank).HasColumnName("optionalrank");
             entity.Property(person => person.Version).HasColumnName("version").IsConcurrencyToken();
             entity.Property(person => person.IsDeleted).HasColumnName("isdeleted");
             entity.Property(person => person.IsArchived).HasColumnName("isarchived");
@@ -203,6 +204,8 @@ internal sealed class Person
     public string Name { get; set; } = string.Empty;
 
     public int Age { get; set; }
+
+    public int? OptionalRank { get; set; }
 
     public int Version { get; set; }
 

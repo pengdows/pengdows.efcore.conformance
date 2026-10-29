@@ -316,6 +316,56 @@ public sealed class QueryTests
         Assert.Equal(new[] { $"{batch}-0", $"{batch}-1", $"{batch}-2" }, names.Order(StringComparer.Ordinal));
     }
 
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-NULL-PREDICATE-ASYNC", "System.Linq.Queryable.Where", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync")]
+    public async Task NullablePredicate_FiltersNullAndNonNullValuesAsynchronously()
+    {
+        var batch = Guid.NewGuid().ToString("N");
+        await SeedAsync(new[]
+        {
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-null", Age = 20, OptionalRank = null },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-value", Age = 21, OptionalRank = 4 }
+        });
+
+        await using var query = ProviderTestRuntime.CreateContext();
+        var nullMatches = await query.People
+            .Where(person => person.Name.StartsWith(batch) && person.OptionalRank == null)
+            .Select(person => person.Name)
+            .ToListAsync(TestContext.Current.CancellationToken);
+        var valueMatches = await query.People
+            .Where(person => person.Name.StartsWith(batch) && person.OptionalRank != null)
+            .Select(person => person.OptionalRank)
+            .ToListAsync(TestContext.Current.CancellationToken);
+
+        Assert.Equal(new[] { $"{batch}-null" }, nullMatches);
+        Assert.Equal(new int?[] { 4 }, valueMatches);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-NULL-PREDICATE-SYNC", "System.Linq.Queryable.Where", "System.Linq.Queryable.ToList")]
+    public async Task NullablePredicate_FiltersNullAndNonNullValuesSynchronously()
+    {
+        var batch = Guid.NewGuid().ToString("N");
+        await SeedAsync(new[]
+        {
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-null", Age = 20, OptionalRank = null },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-value", Age = 21, OptionalRank = 4 }
+        });
+
+        await using var query = ProviderTestRuntime.CreateContext();
+        var nullMatches = query.People
+            .Where(person => person.Name.StartsWith(batch) && person.OptionalRank == null)
+            .Select(person => person.Name)
+            .ToList();
+        var valueMatches = query.People
+            .Where(person => person.Name.StartsWith(batch) && person.OptionalRank != null)
+            .Select(person => person.OptionalRank)
+            .ToList();
+
+        Assert.Equal(new[] { $"{batch}-null" }, nullMatches);
+        Assert.Equal(new int?[] { 4 }, valueMatches);
+    }
+
     private static async Task SeedAsync(IEnumerable<Person> people)
     {
         await using var context = ProviderTestRuntime.CreateContext();

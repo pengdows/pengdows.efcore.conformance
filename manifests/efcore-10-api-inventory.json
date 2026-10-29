@@ -47978,6 +47978,7 @@
         "EF10-QUERY-COMPOSITION-ASYNC",
         "EF10-QUERY-FILTERS-NAMED-ASYNC",
         "EF10-QUERY-GROUPBY-ASYNC",
+        "EF10-QUERY-NULL-PREDICATE-ASYNC",
         "EF10-TRACKING-NO-TRACKING-IDENTITY-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
