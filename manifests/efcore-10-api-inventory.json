@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 204,
+    "AwaitingClassification": 130,
     "ExplicitlyExcluded": 5423,
     "MemberEntriesInCoveredFamilies": 615,
-    "UncoveredMemberFamilies": 131
+    "UncoveredMemberFamilies": 96
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [
@@ -182284,10 +182284,10 @@
       "MemberKind": "Type",
       "ApiMemberName": null,
       "Signature": "class Microsoft.EntityFrameworkCore.RelationalComplexCollectionBuilderExtensions",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalComplexCollectionBuilderExtensions"
     },
     {
@@ -182296,10 +182296,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "ToJson",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexCollectionBuilder ToJson(Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexCollectionBuilder complexCollectionBuilder, System.String jsonColumnName = null)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalComplexCollectionBuilderExtensions.ToJson"
     },
     {
@@ -182308,10 +182308,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "ToJson",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexCollectionBuilder\u003CTComplex\u003E ToJson\u003CTComplex\u003E(Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexCollectionBuilder\u003CTComplex\u003E complexCollectionBuilder, System.String jsonColumnName = null)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalComplexCollectionBuilderExtensions.ToJson"
     },
     {
@@ -182320,10 +182320,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasJsonPropertyName",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexCollectionBuilder HasJsonPropertyName(Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexCollectionBuilder complexCollectionBuilder, System.String name)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalComplexCollectionBuilderExtensions.HasJsonPropertyName"
     },
     {
@@ -182332,10 +182332,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasJsonPropertyName",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexCollectionBuilder\u003CTComplex\u003E HasJsonPropertyName\u003CTComplex\u003E(Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexCollectionBuilder\u003CTComplex\u003E complexCollectionBuilder, System.String name)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalComplexCollectionBuilderExtensions.HasJsonPropertyName"
     },
     {
@@ -182344,10 +182344,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasColumnType",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexCollectionBuilder HasColumnType(Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexCollectionBuilder complexCollectionBuilder, System.String columnType)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalComplexCollectionBuilderExtensions.HasColumnType"
     },
     {
@@ -182356,10 +182356,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasColumnType",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexCollectionBuilder\u003CTComplex\u003E HasColumnType\u003CTComplex\u003E(Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexCollectionBuilder\u003CTComplex\u003E complexCollectionBuilder, System.String columnType)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalComplexCollectionBuilderExtensions.HasColumnType"
     },
     {
@@ -182368,10 +182368,10 @@
       "MemberKind": "Type",
       "ApiMemberName": null,
       "Signature": "class Microsoft.EntityFrameworkCore.RelationalComplexCollectionTypePropertyBuilderExtensions",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalComplexCollectionTypePropertyBuilderExtensions"
     },
     {
@@ -182380,10 +182380,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasJsonPropertyName",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexCollectionTypePropertyBuilder HasJsonPropertyName(Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexCollectionTypePropertyBuilder propertyBuilder, System.String name)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalComplexCollectionTypePropertyBuilderExtensions.HasJsonPropertyName"
     },
     {
@@ -182392,10 +182392,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasJsonPropertyName",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexCollectionTypePropertyBuilder\u003CTProperty\u003E HasJsonPropertyName\u003CTProperty\u003E(Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexCollectionTypePropertyBuilder\u003CTProperty\u003E propertyBuilder, System.String name)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalComplexCollectionTypePropertyBuilderExtensions.HasJsonPropertyName"
     },
     {
@@ -182404,10 +182404,10 @@
       "MemberKind": "Type",
       "ApiMemberName": null,
       "Signature": "class Microsoft.EntityFrameworkCore.RelationalComplexPropertyBuilderExtensions",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalComplexPropertyBuilderExtensions"
     },
     {
@@ -182416,10 +182416,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "ToJson",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexPropertyBuilder ToJson(Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexPropertyBuilder complexPropertyBuilder, System.String jsonColumnName = null)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalComplexPropertyBuilderExtensions.ToJson"
     },
     {
@@ -182428,10 +182428,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "ToJson",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexPropertyBuilder\u003CTComplex\u003E ToJson\u003CTComplex\u003E(Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexPropertyBuilder\u003CTComplex\u003E complexPropertyBuilder, System.String jsonColumnName = null) where TComplex : class",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalComplexPropertyBuilderExtensions.ToJson"
     },
     {
@@ -182440,10 +182440,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasJsonPropertyName",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexPropertyBuilder HasJsonPropertyName(Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexPropertyBuilder complexPropertyBuilder, System.String name)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalComplexPropertyBuilderExtensions.HasJsonPropertyName"
     },
     {
@@ -182452,10 +182452,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasJsonPropertyName",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexPropertyBuilder\u003CTComplex\u003E HasJsonPropertyName\u003CTComplex\u003E(Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexPropertyBuilder\u003CTComplex\u003E complexPropertyBuilder, System.String name)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalComplexPropertyBuilderExtensions.HasJsonPropertyName"
     },
     {
@@ -182464,10 +182464,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasColumnType",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexPropertyBuilder HasColumnType(Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexPropertyBuilder complexPropertyBuilder, System.String columnType)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalComplexPropertyBuilderExtensions.HasColumnType"
     },
     {
@@ -182476,10 +182476,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasColumnType",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexPropertyBuilder\u003CTComplex\u003E HasColumnType\u003CTComplex\u003E(Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexPropertyBuilder\u003CTComplex\u003E complexPropertyBuilder, System.String columnType)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalComplexPropertyBuilderExtensions.HasColumnType"
     },
     {
@@ -182488,10 +182488,10 @@
       "MemberKind": "Type",
       "ApiMemberName": null,
       "Signature": "class Microsoft.EntityFrameworkCore.RelationalComplexPropertyExtensions",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalComplexPropertyExtensions"
     },
     {
@@ -182500,10 +182500,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "GetJsonPropertyName",
       "Signature": "System.String GetJsonPropertyName(Microsoft.EntityFrameworkCore.Metadata.IReadOnlyComplexProperty complexProperty)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalComplexPropertyExtensions.GetJsonPropertyName"
     },
     {
@@ -182512,10 +182512,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "SetJsonPropertyName",
       "Signature": "System.Void SetJsonPropertyName(Microsoft.EntityFrameworkCore.Metadata.IMutableComplexProperty complexProperty, System.String name)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalComplexPropertyExtensions.SetJsonPropertyName"
     },
     {
@@ -182524,10 +182524,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "SetJsonPropertyName",
       "Signature": "System.String SetJsonPropertyName(Microsoft.EntityFrameworkCore.Metadata.IConventionComplexProperty complexProperty, System.String name, System.Boolean fromDataAnnotation = false)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalComplexPropertyExtensions.SetJsonPropertyName"
     },
     {
@@ -182536,10 +182536,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "GetJsonPropertyNameConfigurationSource",
       "Signature": "System.Nullable\u003CMicrosoft.EntityFrameworkCore.Metadata.ConfigurationSource\u003E GetJsonPropertyNameConfigurationSource(Microsoft.EntityFrameworkCore.Metadata.IConventionComplexProperty complexProperty)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalComplexPropertyExtensions.GetJsonPropertyNameConfigurationSource"
     },
     {
@@ -183878,10 +183878,10 @@
       "MemberKind": "Type",
       "ApiMemberName": null,
       "Signature": "class Microsoft.EntityFrameworkCore.RelationalElementTypeBuilderExtensions",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalElementTypeBuilderExtensions"
     },
     {
@@ -183890,10 +183890,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasStoreType",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.ElementTypeBuilder HasStoreType(Microsoft.EntityFrameworkCore.Metadata.Builders.ElementTypeBuilder elementTypeBuilder, System.String typeName)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalElementTypeBuilderExtensions.HasStoreType"
     },
     {
@@ -183902,10 +183902,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasStoreType",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionElementTypeBuilder HasStoreType(Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionElementTypeBuilder elementTypeBuilder, System.String typeName, System.Boolean fromDataAnnotation = false)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalElementTypeBuilderExtensions.HasStoreType"
     },
     {
@@ -183914,10 +183914,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "CanSetStoreType",
       "Signature": "System.Boolean CanSetStoreType(Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionElementTypeBuilder elementTypeBuilder, System.String typeName, System.Boolean fromDataAnnotation = false)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalElementTypeBuilderExtensions.CanSetStoreType"
     },
     {
@@ -183926,10 +183926,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "IsFixedLength",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.ElementTypeBuilder IsFixedLength(Microsoft.EntityFrameworkCore.Metadata.Builders.ElementTypeBuilder elementTypeBuilder, System.Boolean fixedLength = true)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalElementTypeBuilderExtensions.IsFixedLength"
     },
     {
@@ -183938,10 +183938,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "IsFixedLength",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionElementTypeBuilder IsFixedLength(Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionElementTypeBuilder elementTypeBuilder, System.Nullable\u003CSystem.Boolean\u003E fixedLength, System.Boolean fromDataAnnotation = false)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalElementTypeBuilderExtensions.IsFixedLength"
     },
     {
@@ -183950,10 +183950,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "CanSetFixedLength",
       "Signature": "System.Boolean CanSetFixedLength(Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionElementTypeBuilder elementTypeBuilder, System.Nullable\u003CSystem.Boolean\u003E fixedLength, System.Boolean fromDataAnnotation = false)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalElementTypeBuilderExtensions.CanSetFixedLength"
     },
     {
@@ -187406,10 +187406,10 @@
       "MemberKind": "Type",
       "ApiMemberName": null,
       "Signature": "class Microsoft.EntityFrameworkCore.RelationalForeignKeyBuilderExtensions",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalForeignKeyBuilderExtensions"
     },
     {
@@ -187418,10 +187418,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasConstraintName",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.ReferenceCollectionBuilder HasConstraintName(Microsoft.EntityFrameworkCore.Metadata.Builders.ReferenceCollectionBuilder referenceCollectionBuilder, System.String name)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalForeignKeyBuilderExtensions.HasConstraintName"
     },
     {
@@ -187430,10 +187430,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasConstraintName",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.ReferenceCollectionBuilder\u003CTEntity, TRelatedEntity\u003E HasConstraintName\u003CTEntity, TRelatedEntity\u003E(Microsoft.EntityFrameworkCore.Metadata.Builders.ReferenceCollectionBuilder\u003CTEntity, TRelatedEntity\u003E referenceCollectionBuilder, System.String name) where TEntity : class where TRelatedEntity : class",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalForeignKeyBuilderExtensions.HasConstraintName"
     },
     {
@@ -187442,10 +187442,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasConstraintName",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.ReferenceReferenceBuilder HasConstraintName(Microsoft.EntityFrameworkCore.Metadata.Builders.ReferenceReferenceBuilder referenceReferenceBuilder, System.String name)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalForeignKeyBuilderExtensions.HasConstraintName"
     },
     {
@@ -187454,10 +187454,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasConstraintName",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.ReferenceReferenceBuilder\u003CTEntity, TRelatedEntity\u003E HasConstraintName\u003CTEntity, TRelatedEntity\u003E(Microsoft.EntityFrameworkCore.Metadata.Builders.ReferenceReferenceBuilder\u003CTEntity, TRelatedEntity\u003E referenceReferenceBuilder, System.String name) where TEntity : class where TRelatedEntity : class",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalForeignKeyBuilderExtensions.HasConstraintName"
     },
     {
@@ -187466,10 +187466,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasConstraintName",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.OwnershipBuilder HasConstraintName(Microsoft.EntityFrameworkCore.Metadata.Builders.OwnershipBuilder ownershipBuilder, System.String name)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalForeignKeyBuilderExtensions.HasConstraintName"
     },
     {
@@ -187478,10 +187478,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasConstraintName",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.OwnershipBuilder\u003CTEntity, TDependentEntity\u003E HasConstraintName\u003CTEntity, TDependentEntity\u003E(Microsoft.EntityFrameworkCore.Metadata.Builders.OwnershipBuilder\u003CTEntity, TDependentEntity\u003E ownershipBuilder, System.String name) where TEntity : class where TDependentEntity : class",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalForeignKeyBuilderExtensions.HasConstraintName"
     },
     {
@@ -187490,10 +187490,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasConstraintName",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionForeignKeyBuilder HasConstraintName(Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionForeignKeyBuilder relationship, System.String name, System.Boolean fromDataAnnotation = false)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalForeignKeyBuilderExtensions.HasConstraintName"
     },
     {
@@ -187502,10 +187502,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "CanSetConstraintName",
       "Signature": "System.Boolean CanSetConstraintName(Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionForeignKeyBuilder relationship, System.String name, System.Boolean fromDataAnnotation = false)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalForeignKeyBuilderExtensions.CanSetConstraintName"
     },
     {
@@ -187682,10 +187682,10 @@
       "MemberKind": "Type",
       "ApiMemberName": null,
       "Signature": "class Microsoft.EntityFrameworkCore.RelationalIndexBuilderExtensions",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalIndexBuilderExtensions"
     },
     {
@@ -187694,10 +187694,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasDatabaseName",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.IndexBuilder HasDatabaseName(Microsoft.EntityFrameworkCore.Metadata.Builders.IndexBuilder indexBuilder, System.String name)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalIndexBuilderExtensions.HasDatabaseName"
     },
     {
@@ -187706,10 +187706,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasName",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.IndexBuilder HasName(Microsoft.EntityFrameworkCore.Metadata.Builders.IndexBuilder indexBuilder, System.String name)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalIndexBuilderExtensions.HasName"
     },
     {
@@ -187718,10 +187718,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasDatabaseName",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.IndexBuilder\u003CTEntity\u003E HasDatabaseName\u003CTEntity\u003E(Microsoft.EntityFrameworkCore.Metadata.Builders.IndexBuilder\u003CTEntity\u003E indexBuilder, System.String name)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalIndexBuilderExtensions.HasDatabaseName"
     },
     {
@@ -187730,10 +187730,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasDatabaseName",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionIndexBuilder HasDatabaseName(Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionIndexBuilder indexBuilder, System.String name, System.Boolean fromDataAnnotation = false)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalIndexBuilderExtensions.HasDatabaseName"
     },
     {
@@ -187742,10 +187742,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "CanSetDatabaseName",
       "Signature": "System.Boolean CanSetDatabaseName(Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionIndexBuilder indexBuilder, System.String name, System.Boolean fromDataAnnotation = false)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalIndexBuilderExtensions.CanSetDatabaseName"
     },
     {
@@ -187799,10 +187799,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "CanSetFilter",
       "Signature": "System.Boolean CanSetFilter(Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionIndexBuilder indexBuilder, System.String sql, System.Boolean fromDataAnnotation = false)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalIndexBuilderExtensions.CanSetFilter"
     },
     {
@@ -188027,10 +188027,10 @@
       "MemberKind": "Type",
       "ApiMemberName": null,
       "Signature": "class Microsoft.EntityFrameworkCore.RelationalKeyBuilderExtensions",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalKeyBuilderExtensions"
     },
     {
@@ -188039,10 +188039,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasName",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.KeyBuilder HasName(Microsoft.EntityFrameworkCore.Metadata.Builders.KeyBuilder keyBuilder, System.String name)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalKeyBuilderExtensions.HasName"
     },
     {
@@ -188051,10 +188051,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasName",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.KeyBuilder\u003CTEntity\u003E HasName\u003CTEntity\u003E(Microsoft.EntityFrameworkCore.Metadata.Builders.KeyBuilder\u003CTEntity\u003E keyBuilder, System.String name)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalKeyBuilderExtensions.HasName"
     },
     {
@@ -188063,10 +188063,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasName",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionKeyBuilder HasName(Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionKeyBuilder keyBuilder, System.String name, System.Boolean fromDataAnnotation = false)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalKeyBuilderExtensions.HasName"
     },
     {
@@ -188075,10 +188075,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "CanSetName",
       "Signature": "System.Boolean CanSetName(Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionKeyBuilder keyBuilder, System.String name, System.Boolean fromDataAnnotation = false)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalKeyBuilderExtensions.CanSetName"
     },
     {
@@ -189131,10 +189131,10 @@
       "MemberKind": "Type",
       "ApiMemberName": null,
       "Signature": "class Microsoft.EntityFrameworkCore.RelationalOwnedNavigationBuilderExtensions",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalOwnedNavigationBuilderExtensions"
     },
     {
@@ -189203,10 +189203,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasColumnType",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.OwnedNavigationBuilder\u003CTOwnerEntity, TDependentEntity\u003E HasColumnType\u003CTOwnerEntity, TDependentEntity\u003E(Microsoft.EntityFrameworkCore.Metadata.Builders.OwnedNavigationBuilder\u003CTOwnerEntity, TDependentEntity\u003E builder, System.String columnType) where TOwnerEntity : class where TDependentEntity : class",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalOwnedNavigationBuilderExtensions.HasColumnType"
     },
     {
@@ -189215,10 +189215,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasColumnType",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.OwnedNavigationBuilder HasColumnType(Microsoft.EntityFrameworkCore.Metadata.Builders.OwnedNavigationBuilder builder, System.String columnType)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalOwnedNavigationBuilderExtensions.HasColumnType"
     },
     {
@@ -189227,10 +189227,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasJsonPropertyName",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.OwnedNavigationBuilder HasJsonPropertyName(Microsoft.EntityFrameworkCore.Metadata.Builders.OwnedNavigationBuilder navigationBuilder, System.String name)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalOwnedNavigationBuilderExtensions.HasJsonPropertyName"
     },
     {
@@ -189239,10 +189239,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasJsonPropertyName",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.OwnedNavigationBuilder\u003CTSource, TTarget\u003E HasJsonPropertyName\u003CTSource, TTarget\u003E(Microsoft.EntityFrameworkCore.Metadata.Builders.OwnedNavigationBuilder\u003CTSource, TTarget\u003E navigationBuilder, System.String name) where TSource : class where TTarget : class",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalOwnedNavigationBuilderExtensions.HasJsonPropertyName"
     },
     {
@@ -189599,10 +189599,10 @@
       "MemberKind": "Type",
       "ApiMemberName": null,
       "Signature": "class Microsoft.EntityFrameworkCore.RelationalPropertiesConfigurationBuilderExtensions",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalPropertiesConfigurationBuilderExtensions"
     },
     {
@@ -189611,10 +189611,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "HaveColumnType",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertiesConfigurationBuilder HaveColumnType(Microsoft.EntityFrameworkCore.Metadata.Builders.PropertiesConfigurationBuilder propertyBuilder, System.String typeName)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalPropertiesConfigurationBuilderExtensions.HaveColumnType"
     },
     {
@@ -189623,10 +189623,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "HaveColumnType",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertiesConfigurationBuilder\u003CTProperty\u003E HaveColumnType\u003CTProperty\u003E(Microsoft.EntityFrameworkCore.Metadata.Builders.PropertiesConfigurationBuilder\u003CTProperty\u003E propertyBuilder, System.String typeName)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalPropertiesConfigurationBuilderExtensions.HaveColumnType"
     },
     {
@@ -189635,10 +189635,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "AreFixedLength",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertiesConfigurationBuilder AreFixedLength(Microsoft.EntityFrameworkCore.Metadata.Builders.PropertiesConfigurationBuilder propertyBuilder, System.Boolean fixedLength = true)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalPropertiesConfigurationBuilderExtensions.AreFixedLength"
     },
     {
@@ -189647,10 +189647,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "AreFixedLength",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertiesConfigurationBuilder\u003CTProperty\u003E AreFixedLength\u003CTProperty\u003E(Microsoft.EntityFrameworkCore.Metadata.Builders.PropertiesConfigurationBuilder\u003CTProperty\u003E propertyBuilder, System.Boolean fixedLength = true)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalPropertiesConfigurationBuilderExtensions.AreFixedLength"
     },
     {
@@ -189659,10 +189659,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "UseCollation",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertiesConfigurationBuilder UseCollation(Microsoft.EntityFrameworkCore.Metadata.Builders.PropertiesConfigurationBuilder propertyBuilder, System.String collation)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalPropertiesConfigurationBuilderExtensions.UseCollation"
     },
     {
@@ -189671,10 +189671,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "UseCollation",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertiesConfigurationBuilder\u003CTProperty\u003E UseCollation\u003CTProperty\u003E(Microsoft.EntityFrameworkCore.Metadata.Builders.PropertiesConfigurationBuilder\u003CTProperty\u003E propertyBuilder, System.String collation)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalPropertiesConfigurationBuilderExtensions.UseCollation"
     },
     {
@@ -191738,10 +191738,10 @@
       "MemberKind": "Type",
       "ApiMemberName": null,
       "Signature": "class Microsoft.EntityFrameworkCore.RelationalTriggerBuilderExtensions",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalTriggerBuilderExtensions"
     },
     {
@@ -191750,10 +191750,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasDatabaseName",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionTriggerBuilder HasDatabaseName(Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionTriggerBuilder triggerBuilder, System.String name, System.Boolean fromDataAnnotation = false)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalTriggerBuilderExtensions.HasDatabaseName"
     },
     {
@@ -191762,10 +191762,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "CanSetDatabaseName",
       "Signature": "System.Boolean CanSetDatabaseName(Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionTriggerBuilder triggerBuilder, System.String name, System.Boolean fromDataAnnotation = false)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalTriggerBuilderExtensions.CanSetDatabaseName"
     },
     {
@@ -191774,10 +191774,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasTableName",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionTriggerBuilder HasTableName(Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionTriggerBuilder triggerBuilder, System.String name, System.Boolean fromDataAnnotation = false)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalTriggerBuilderExtensions.HasTableName"
     },
     {
@@ -191786,10 +191786,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "CanSetTableName",
       "Signature": "System.Boolean CanSetTableName(Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionTriggerBuilder triggerBuilder, System.String name, System.Boolean fromDataAnnotation = false)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalTriggerBuilderExtensions.CanSetTableName"
     },
     {
@@ -191798,10 +191798,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasTableSchema",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionTriggerBuilder HasTableSchema(Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionTriggerBuilder triggerBuilder, System.String schema, System.Boolean fromDataAnnotation = false)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalTriggerBuilderExtensions.HasTableSchema"
     },
     {
@@ -191810,10 +191810,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "CanSetTableSchema",
       "Signature": "System.Boolean CanSetTableSchema(Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionTriggerBuilder triggerBuilder, System.String schema, System.Boolean fromDataAnnotation = false)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalTriggerBuilderExtensions.CanSetTableSchema"
     },
     {
@@ -192470,10 +192470,10 @@
       "MemberKind": "Type",
       "ApiMemberName": null,
       "Signature": "class Microsoft.EntityFrameworkCore.RelationalTypeMappingConfigurationBuilderExtensions",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalTypeMappingConfigurationBuilderExtensions"
     },
     {
@@ -192482,10 +192482,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasColumnType",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.TypeMappingConfigurationBuilder HasColumnType(Microsoft.EntityFrameworkCore.Metadata.Builders.TypeMappingConfigurationBuilder scalarBuilder, System.String typeName)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalTypeMappingConfigurationBuilderExtensions.HasColumnType"
     },
     {
@@ -192494,10 +192494,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasColumnType",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.TypeMappingConfigurationBuilder\u003CTScalar\u003E HasColumnType\u003CTScalar\u003E(Microsoft.EntityFrameworkCore.Metadata.Builders.TypeMappingConfigurationBuilder\u003CTScalar\u003E scalarBuilder, System.String typeName)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalTypeMappingConfigurationBuilderExtensions.HasColumnType"
     },
     {
@@ -192506,10 +192506,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "IsFixedLength",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.TypeMappingConfigurationBuilder IsFixedLength(Microsoft.EntityFrameworkCore.Metadata.Builders.TypeMappingConfigurationBuilder scalarBuilder, System.Boolean fixedLength = true)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalTypeMappingConfigurationBuilderExtensions.IsFixedLength"
     },
     {
@@ -192518,10 +192518,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "IsFixedLength",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.TypeMappingConfigurationBuilder\u003CTScalar\u003E IsFixedLength\u003CTScalar\u003E(Microsoft.EntityFrameworkCore.Metadata.Builders.TypeMappingConfigurationBuilder\u003CTScalar\u003E scalarBuilder, System.Boolean fixedLength = true)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalTypeMappingConfigurationBuilderExtensions.IsFixedLength"
     },
     {

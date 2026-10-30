@@ -445,6 +445,66 @@
       "selectorPrefix": "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.CloseConnectionAsync",
       "disposition": "not-applicable-with-rationale",
       "reason": "This API is covered by the async connection lifecycle contract; test coverage takes precedence over this fallback disposition."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.RelationalForeignKeyBuilderExtensions",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.RelationalComplexCollectionBuilderExtensions",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.RelationalComplexPropertyBuilderExtensions",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.RelationalElementTypeBuilderExtensions",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.RelationalIndexBuilderExtensions",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.RelationalPropertiesConfigurationBuilderExtensions",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.RelationalTriggerBuilderExtensions",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.RelationalComplexCollectionTypePropertyBuilderExtensions",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.RelationalComplexPropertyExtensions",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.RelationalKeyBuilderExtensions",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.RelationalOwnedNavigationBuilderExtensions",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.RelationalTypeMappingConfigurationBuilderExtensions",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised."
     }
   ]
 }
