@@ -387,8 +387,10 @@ public sealed class Ef10MigrationAddConstraintsMigration : Migration
         migrationBuilder.AlterColumn<long>(
             name: "value",
             table: "ef10conformance_migrationprobe_renamed",
+            type: "bigint",
             nullable: false,
             oldClrType: typeof(int),
+            oldType: "integer",
             oldNullable: false);
     }
 
@@ -397,8 +399,10 @@ public sealed class Ef10MigrationAddConstraintsMigration : Migration
         migrationBuilder.AlterColumn<int>(
             name: "value",
             table: "ef10conformance_migrationprobe_renamed",
+            type: "integer",
             nullable: false,
             oldClrType: typeof(long),
+            oldType: "bigint",
             oldNullable: false);
         migrationBuilder.AlterTable(
             name: "ef10conformance_migrationconstraints",
