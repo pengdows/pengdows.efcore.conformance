@@ -56629,6 +56629,7 @@
       "Signature": "System.Int32 ExecuteUpdate\u003CTSource\u003E(System.Linq.IQueryable\u003CTSource\u003E source, System.Action\u003CMicrosoft.EntityFrameworkCore.Query.UpdateSettersBuilder\u003CTSource\u003E\u003E setPropertyCalls)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-BULK-UPDATE-ACTION-SYNC",
         "EF10-BULK-UPDATE-MULTIPLE-PROPERTIES-SYNC",
         "EF10-BULK-UPDATE-NO-MATCH-SYNC",
         "EF10-BULK-UPDATE-NULL-SYNC",
@@ -56648,6 +56649,7 @@
       "Signature": "System.Threading.Tasks.Task\u003CSystem.Int32\u003E ExecuteUpdateAsync\u003CTSource\u003E(System.Linq.IQueryable\u003CTSource\u003E source, System.Action\u003CMicrosoft.EntityFrameworkCore.Query.UpdateSettersBuilder\u003CTSource\u003E\u003E setPropertyCalls, System.Threading.CancellationToken cancellationToken = null)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-BULK-UPDATE-ACTION-ASYNC",
         "EF10-BULK-UPDATE-ASYNC",
         "EF10-BULK-UPDATE-MULTIPLE-PROPERTIES-ASYNC",
         "EF10-BULK-UPDATE-NO-MATCH-ASYNC",
@@ -189447,7 +189449,10 @@
       "ApiMemberName": "SetProperty",
       "Signature": "Microsoft.EntityFrameworkCore.Query.UpdateSettersBuilder SetProperty(System.Linq.Expressions.LambdaExpression propertyExpression, System.Linq.Expressions.LambdaExpression valueExpression)",
       "ProviderApplicable": false,
-      "BehavioralContracts": [],
+      "BehavioralContracts": [
+        "EF10-BULK-UPDATE-ACTION-ASYNC",
+        "EF10-BULK-UPDATE-ACTION-SYNC"
+      ],
       "Disposition": "excluded-ef-internal",
       "DispositionReason": null,
       "ApiSelector": "Microsoft.EntityFrameworkCore.Query.UpdateSettersBuilder.SetProperty"
@@ -189459,7 +189464,10 @@
       "ApiMemberName": "SetProperty",
       "Signature": "Microsoft.EntityFrameworkCore.Query.UpdateSettersBuilder SetProperty(System.Linq.Expressions.LambdaExpression propertyExpression, System.Linq.Expressions.Expression valueExpression)",
       "ProviderApplicable": false,
-      "BehavioralContracts": [],
+      "BehavioralContracts": [
+        "EF10-BULK-UPDATE-ACTION-ASYNC",
+        "EF10-BULK-UPDATE-ACTION-SYNC"
+      ],
       "Disposition": "excluded-ef-internal",
       "DispositionReason": null,
       "ApiSelector": "Microsoft.EntityFrameworkCore.Query.UpdateSettersBuilder.SetProperty"

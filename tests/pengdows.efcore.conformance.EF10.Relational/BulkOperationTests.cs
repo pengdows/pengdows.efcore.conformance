@@ -128,6 +128,67 @@ public sealed class BulkOperationTests
 
     [Fact]
     [CapabilityRequirement("execute-update")]
+    [BehavioralCoverage("EF10-BULK-UPDATE-ACTION-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteUpdateAsync", "Microsoft.EntityFrameworkCore.Query.UpdateSettersBuilder.SetProperty")]
+    public async Task ExecuteUpdateAsync_BuildsSettersWithConditionalAction()
+    {
+        ProviderTestRuntime.RequireCapability("execute-update");
+        var id = await SeedAsync();
+        const bool updateName = true;
+        const string updatedName = "Conditional async setter";
+
+        await using (var update = ProviderTestRuntime.CreateContext())
+        {
+            var affected = await update.People.Where(person => person.Id == id)
+                .ExecuteUpdateAsync(setters =>
+                {
+                    setters.SetProperty(person => person.Age, 47);
+                    if (updateName)
+                    {
+                        setters.SetProperty(person => person.Name, updatedName);
+                    }
+                }, TestContext.Current.CancellationToken);
+            Assert.Equal(1, affected);
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        var actual = await verify.People.AsNoTracking()
+            .SingleAsync(person => person.Id == id, TestContext.Current.CancellationToken);
+        Assert.Equal(updatedName, actual.Name);
+        Assert.Equal(47, actual.Age);
+    }
+
+    [Fact]
+    [CapabilityRequirement("execute-update")]
+    [BehavioralCoverage("EF10-BULK-UPDATE-ACTION-SYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteUpdate", "Microsoft.EntityFrameworkCore.Query.UpdateSettersBuilder.SetProperty")]
+    public async Task ExecuteUpdate_BuildsSettersWithConditionalActionSynchronously()
+    {
+        ProviderTestRuntime.RequireCapability("execute-update");
+        var id = await SeedAsync();
+        var updateName = false;
+
+        await using (var update = ProviderTestRuntime.CreateContext())
+        {
+            var affected = update.People.Where(person => person.Id == id)
+                .ExecuteUpdate(setters =>
+                {
+                    setters.SetProperty(person => person.Age, 48);
+                    if (updateName)
+                    {
+                        setters.SetProperty(person => person.Name, "This name must remain unchanged");
+                    }
+                });
+            Assert.Equal(1, affected);
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        var actual = await verify.People.AsNoTracking()
+            .SingleAsync(person => person.Id == id, TestContext.Current.CancellationToken);
+        Assert.Equal($"Bulk {id:N}", actual.Name);
+        Assert.Equal(48, actual.Age);
+    }
+
+    [Fact]
+    [CapabilityRequirement("execute-update")]
     [BehavioralCoverage("EF10-BULK-UPDATE-NULL-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteUpdateAsync")]
     public async Task ExecuteUpdateAsync_SetsNullablePropertyToNull()
     {
