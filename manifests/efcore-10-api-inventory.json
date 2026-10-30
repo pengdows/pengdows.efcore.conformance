@@ -2195,6 +2195,7 @@
       "Signature": "System.Void Reload()",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-TRACKING-RELOAD-MISSING-SYNC",
         "EF10-TRACKING-RELOAD-SYNC"
       ],
       "Disposition": "behavior-tested-family",
@@ -2209,7 +2210,8 @@
       "Signature": "System.Threading.Tasks.Task ReloadAsync(System.Threading.CancellationToken cancellationToken = null)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
-        "EF10-TRACKING-RELOAD-ASYNC"
+        "EF10-TRACKING-RELOAD-ASYNC",
+        "EF10-TRACKING-RELOAD-MISSING-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -53595,7 +53597,9 @@
       "Signature": "Microsoft.EntityFrameworkCore.EntityState Detached = 0",
       "ProviderApplicable": true,
       "BehavioralContracts": [
-        "EF10-TRACKING-NO-TRACKING"
+        "EF10-TRACKING-NO-TRACKING",
+        "EF10-TRACKING-RELOAD-MISSING-ASYNC",
+        "EF10-TRACKING-RELOAD-MISSING-SYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",

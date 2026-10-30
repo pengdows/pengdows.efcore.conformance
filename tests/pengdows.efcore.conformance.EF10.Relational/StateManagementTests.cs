@@ -569,6 +569,38 @@ public sealed class StateManagementTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-TRACKING-RELOAD-MISSING-SYNC", "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry.Reload", "Microsoft.EntityFrameworkCore.EntityState.Detached")]
+    public async Task EntityEntryReload_DetachesEntityWhenItsRowNoLongerExists()
+    {
+        var id = Guid.NewGuid();
+        await SeedAsync(id);
+
+        await using var trackedContext = ProviderTestRuntime.CreateContext();
+        var tracked = trackedContext.People.Single(person => person.Id == id);
+        await DeleteAsync(id);
+
+        trackedContext.Entry(tracked).Reload();
+
+        Assert.Equal(EntityState.Detached, trackedContext.Entry(tracked).State);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-TRACKING-RELOAD-MISSING-ASYNC", "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry.ReloadAsync", "Microsoft.EntityFrameworkCore.EntityState.Detached")]
+    public async Task EntityEntryReloadAsync_DetachesEntityWhenItsRowNoLongerExists()
+    {
+        var id = Guid.NewGuid();
+        await SeedAsync(id);
+
+        await using var trackedContext = ProviderTestRuntime.CreateContext();
+        var tracked = await trackedContext.People.SingleAsync(person => person.Id == id, TestContext.Current.CancellationToken);
+        await DeleteAsync(id);
+
+        await trackedContext.Entry(tracked).ReloadAsync(TestContext.Current.CancellationToken);
+
+        Assert.Equal(EntityState.Detached, trackedContext.Entry(tracked).State);
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-TRACKING-PROPERTY-ENTRY-ASYNC", "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry`1.Property", "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyEntry.OriginalValue", "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyEntry`2.CurrentValue", "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyEntry.IsModified", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync")]
     public async Task PropertyEntry_ExposesOriginalAndModifiedValuesAsynchronously()
     {

@@ -65,13 +65,13 @@ Direct `dotnet test tests/pengdows.efcore.conformance.EF10.Relational` runs requ
 
 Use a dedicated disposable database. The migration and database lifecycle cases call `EnsureDeleted` and remove the configured database; other cases use unique rows. An adapter may implement `IAdoNetProviderAdapter` to enable public `DbConnection.GetSchema` type discovery. It may also implement `ISupplementalTypeDiscovery` to report types observed through database catalog metadata when the ADO.NET provider omits `DataTypes`. Supplemental discovery is marked `INDEPENDENT` only when it is independent of the EF model. Discovery from tables created by these tests is marked `SELF_DERIVED` and excluded from native-type coverage counts. SQLite does not advertise `DataTypes`; its current-schema type list is self-derived and cannot establish complete database-type coverage.
 
-The runner does not inspect EF provider services or generated SQL. Latest comparable full runs covered 281 cases per adapter:
+The runner does not inspect EF provider services or generated SQL. Latest comparable full runs covered 283 cases per adapter:
 
 | Result | pengdows ADO.NET SQLite | Microsoft EF Core SQLite |
 |---|---:|---:|
-| Passed | 271 | 276 |
+| Passed | 273 | 278 |
 | Failed | 10 | 5 |
-| Passed on both | 271 | 271 |
+| Passed on both | 273 | 273 |
 | Candidate-only failures | 5 | — |
 | Failures also on reference | 5 | 5 |
 
@@ -113,7 +113,7 @@ This is an active EF Core 10 conformance slice. The counts below describe differ
 
 ### Completion criteria
 
-The EF Core 10 milestone is complete when the inventory has no unclassified entries, every provider-applicable public API family has a behavioral contract or a documented reason it does not apply, and each claimed contract has sync and async coverage where both APIs exist. Native type coverage must be based on independent discovery, failures must be triaged against documented behavior and reference providers, and reports must distinguish pass, failure, unsupported capability, infrastructure error, and uncovered work. The current 281-case SQLite comparison does not meet these criteria.
+The EF Core 10 milestone is complete when the inventory has no unclassified entries, every provider-applicable public API family has a behavioral contract or a documented reason it does not apply, and each claimed contract has sync and async coverage where both APIs exist. Native type coverage must be based on independent discovery, failures must be triaged against documented behavior and reference providers, and reports must distinguish pass, failure, unsupported capability, infrastructure error, and uncovered work. The current 283-case SQLite comparison does not meet these criteria.
 
 ADO.NET type discovery preserves raw metadata and, when the provider returns CLR `Type` objects, their assembly-qualified identities. The JSON report also summarizes whether `DataTypes` was advertised, duplicate native type names, missing CLR mappings, and CLR type names that could not be resolved. Native type coverage is computed only when the inventory is independent of the EF model. When there is no independent inventory, `NativeTypeCoverage` is empty and the report states whether self-derived supplemental evidence was observed. With an independent inventory, explicit `[NativeTypeCoverage]` declarations link types to behavioral tests: exact native type names are `COVERED`, while different facets within the same family are `PARTIAL`.
 
