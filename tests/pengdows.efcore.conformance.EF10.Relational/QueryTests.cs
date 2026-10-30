@@ -769,6 +769,48 @@ public sealed class QueryTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-QUERY-NULL-COMPENSATION-SYNC", "System.Linq.Queryable.Where", "System.Linq.Queryable.Select", "System.Linq.Queryable.ToArray")]
+    public async Task NullableColumnComparison_AppliesNullCompensationSynchronously()
+    {
+        var batch = Guid.NewGuid().ToString("N");
+        await SeedAsync(new[]
+        {
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-null", Age = 20, OptionalRank = null },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-equal", Age = 20, OptionalRank = 20 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-different", Age = 20, OptionalRank = 21 }
+        });
+
+        await using var query = ProviderTestRuntime.CreateContext();
+        var actual = query.People
+            .Where(person => person.Name.StartsWith(batch) && person.OptionalRank != person.Age)
+            .Select(person => person.Name)
+            .ToArray();
+
+        Assert.Equal(new[] { $"{batch}-different", $"{batch}-null" }.Order(StringComparer.Ordinal), actual.Order(StringComparer.Ordinal));
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-NULL-COMPENSATION-ASYNC", "System.Linq.Queryable.Where", "System.Linq.Queryable.Select", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToArrayAsync")]
+    public async Task NullableColumnComparison_AppliesNullCompensationAsynchronously()
+    {
+        var batch = Guid.NewGuid().ToString("N");
+        await SeedAsync(new[]
+        {
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-null", Age = 20, OptionalRank = null },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-equal", Age = 20, OptionalRank = 20 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-different", Age = 20, OptionalRank = 21 }
+        });
+
+        await using var query = ProviderTestRuntime.CreateContext();
+        var actual = await query.People
+            .Where(person => person.Name.StartsWith(batch) && person.OptionalRank != person.Age)
+            .Select(person => person.Name)
+            .ToArrayAsync(TestContext.Current.CancellationToken);
+
+        Assert.Equal(new[] { $"{batch}-different", $"{batch}-null" }.Order(StringComparer.Ordinal), actual.Order(StringComparer.Ordinal));
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-QUERY-CANCELLATION", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync")]
     public async Task ToListAsync_ObservesCancellationBeforeQueryExecution()
     {
