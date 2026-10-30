@@ -130,7 +130,14 @@ public sealed record NativeTypeCoverageResult(
     string DatabaseTypeName,
     string Outcome,
     IReadOnlyList<string> ClrTypes,
-    IReadOnlyList<string> BehavioralContractIds);
+    IReadOnlyList<string> BehavioralContractIds)
+{
+    public string? ClrTypeName { get; init; }
+
+    public string? ProviderTypeId { get; init; }
+
+    public string? CreateFormat { get; init; }
+}
 
 public sealed record ConformanceResult(
     string ContractId,

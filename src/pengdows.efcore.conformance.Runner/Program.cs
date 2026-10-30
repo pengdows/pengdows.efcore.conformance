@@ -110,30 +110,42 @@ static IReadOnlyList<NativeTypeCoverageResult> BuildNativeTypeCoverage(TypeDisco
     }
 
     var observedTypes = report.Types.Concat(report.SupplementalTypes.Where(type => type.IsIndependentDiscovery))
-        .Select(type => type.DatabaseTypeName.Trim())
-        .Distinct(StringComparer.OrdinalIgnoreCase)
+        .GroupBy(type => string.Join("\u001f",
+            type.DatabaseTypeName.Trim(),
+            type.ProviderTypeId ?? string.Empty,
+            type.ClrTypeAssemblyQualifiedName ?? type.ClrTypeName ?? string.Empty,
+            GetMetadataString(type, "CreateFormat")), StringComparer.OrdinalIgnoreCase)
+        .Select(group => group.First())
         .ToArray();
     var results = new List<NativeTypeCoverageResult>();
     foreach (var observedType in observedTypes)
     {
         var matches = cases.Where(testCase => string.Equals(
-                testCase.DatabaseTypeName.Trim(), observedType, StringComparison.OrdinalIgnoreCase))
+                testCase.DatabaseTypeName.Trim(), observedType.DatabaseTypeName.Trim(), StringComparison.OrdinalIgnoreCase))
             .ToArray();
         var familyMatches = matches.Length > 0
             ? matches
             : cases.Where(testCase => string.Equals(
                     GetNativeTypeFamily(testCase.DatabaseTypeName),
-                    GetNativeTypeFamily(observedType),
+                    GetNativeTypeFamily(observedType.DatabaseTypeName),
                     StringComparison.OrdinalIgnoreCase))
                 .ToArray();
         results.Add(new NativeTypeCoverageResult(
-            observedType,
+            observedType.DatabaseTypeName.Trim(),
             matches.Length > 0 ? "COVERED" : familyMatches.Length > 0 ? "PARTIAL" : "UNCOVERED",
             familyMatches.Select(item => item.ClrTypeName).Distinct(StringComparer.Ordinal).Order(StringComparer.Ordinal).ToArray(),
-            familyMatches.Select(item => item.ContractId).Distinct(StringComparer.Ordinal).Order(StringComparer.Ordinal).ToArray()));
+            familyMatches.Select(item => item.ContractId).Distinct(StringComparer.Ordinal).Order(StringComparer.Ordinal).ToArray())
+        {
+            ClrTypeName = observedType.ClrTypeName,
+            ProviderTypeId = observedType.ProviderTypeId,
+            CreateFormat = GetMetadataString(observedType, "CreateFormat")
+        });
     }
 
-    var unmatchedCases = cases.Where(testCase => !observedTypes.Contains(testCase.DatabaseTypeName.Trim(), StringComparer.OrdinalIgnoreCase));
+    var observedTypeNames = observedTypes.Select(type => type.DatabaseTypeName.Trim())
+        .Distinct(StringComparer.OrdinalIgnoreCase)
+        .ToArray();
+    var unmatchedCases = cases.Where(testCase => !observedTypeNames.Contains(testCase.DatabaseTypeName.Trim(), StringComparer.OrdinalIgnoreCase));
     results.AddRange(unmatchedCases
         .GroupBy(testCase => testCase.DatabaseTypeName.Trim(), StringComparer.OrdinalIgnoreCase)
         .Select(group => new NativeTypeCoverageResult(
@@ -143,6 +155,11 @@ static IReadOnlyList<NativeTypeCoverageResult> BuildNativeTypeCoverage(TypeDisco
             group.Select(item => item.ContractId).Distinct(StringComparer.Ordinal).Order(StringComparer.Ordinal).ToArray())));
     return results.OrderBy(item => item.DatabaseTypeName, StringComparer.OrdinalIgnoreCase).ToArray();
 }
+
+static string? GetMetadataString(DatabaseTypeDefinition type, string key) =>
+    type.RawMetadata.TryGetValue(key, out var value)
+        ? Convert.ToString(value, System.Globalization.CultureInfo.InvariantCulture)
+        : null;
 
 static string GetNativeTypeFamily(string databaseTypeName)
 {
