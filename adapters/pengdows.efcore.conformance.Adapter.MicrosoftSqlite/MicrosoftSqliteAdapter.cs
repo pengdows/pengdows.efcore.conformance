@@ -23,7 +23,10 @@ public sealed class MicrosoftSqliteAdapter : IAdoNetProviderAdapter
             "primitive-collections",
             "external-connection"
         },
-        new HashSet<string>(StringComparer.Ordinal));
+        new HashSet<string>(StringComparer.Ordinal)
+        {
+            "ambient-transactions"
+        });
 
     public string Name => "Microsoft EF Core SQLite";
 

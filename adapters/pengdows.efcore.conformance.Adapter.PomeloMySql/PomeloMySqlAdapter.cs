@@ -14,6 +14,7 @@ public sealed class PomeloMySqlAdapter : IAdoNetProviderAdapter
         {
             "relational",
             "transactions",
+            "ambient-transactions",
             "savepoints",
             "migrations",
             "raw-sql",

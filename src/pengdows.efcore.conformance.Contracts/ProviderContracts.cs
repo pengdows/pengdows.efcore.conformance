@@ -40,6 +40,7 @@ public sealed record ProviderCapabilities(
     {
         "relational",
         "transactions",
+        "ambient-transactions",
         "savepoints",
         "migrations",
         "filtered-indexes",

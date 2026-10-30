@@ -25,7 +25,10 @@
     "UncoveredMemberFamilies": 131
   },
   "CoverageSelectors": {
-    "UnmatchedEfCoreSelectors": [],
+    "UnmatchedEfCoreSelectors": [
+      "Microsoft.EntityFrameworkCore.TransactionsDatabaseFacadeExtensions.EnlistTransaction",
+      "Microsoft.EntityFrameworkCore.TransactionsDatabaseFacadeExtensions.GetEnlistedTransaction"
+    ],
     "ExternalApiSelectors": [
       "System.Collections.Generic.IAsyncDisposable.DisposeAsync",
       "System.Collections.Generic.IAsyncEnumerator\u00601.MoveNextAsync",
@@ -16053,6 +16056,7 @@
       "Signature": "System.Int32 SaveChanges()",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-AMBIENT-TRANSACTION-SYNC",
         "EF10-BACKING-FIELD-SYNC",
         "EF10-COMPLEX-TYPE-SYNC",
         "EF10-COMPLEX-TYPE-UPDATE-SYNC",
@@ -16127,6 +16131,7 @@
       "Signature": "System.Int32 SaveChanges(System.Boolean acceptAllChangesOnSuccess)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-AMBIENT-TRANSACTION-SYNC",
         "EF10-BACKING-FIELD-SYNC",
         "EF10-COMPLEX-TYPE-SYNC",
         "EF10-COMPLEX-TYPE-UPDATE-SYNC",
@@ -16201,6 +16206,7 @@
       "Signature": "System.Threading.Tasks.Task\u003CSystem.Int32\u003E SaveChangesAsync(System.Threading.CancellationToken cancellationToken = null)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-AMBIENT-TRANSACTION-ASYNC",
         "EF10-BACKING-FIELD-ASYNC",
         "EF10-COMPLEX-TYPE-ASYNC",
         "EF10-COMPLEX-TYPE-UPDATE-ASYNC",
@@ -16278,6 +16284,7 @@
       "Signature": "System.Threading.Tasks.Task\u003CSystem.Int32\u003E SaveChangesAsync(System.Boolean acceptAllChangesOnSuccess, System.Threading.CancellationToken cancellationToken = null)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-AMBIENT-TRANSACTION-ASYNC",
         "EF10-BACKING-FIELD-ASYNC",
         "EF10-COMPLEX-TYPE-ASYNC",
         "EF10-COMPLEX-TYPE-UPDATE-ASYNC",
