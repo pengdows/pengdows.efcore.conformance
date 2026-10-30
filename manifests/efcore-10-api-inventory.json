@@ -19094,7 +19094,9 @@
       "Signature": "Microsoft.EntityFrameworkCore.ChangeTracking.LocalView\u003CTEntity\u003E Local get;",
       "ProviderApplicable": true,
       "BehavioralContracts": [
-        "EF10-DBSET-LOCAL"
+        "EF10-DBSET-LOCAL",
+        "EF10-DBSET-LOCAL-QUERY-ASYNC",
+        "EF10-DBSET-LOCAL-QUERY-SYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -52365,6 +52367,7 @@
         "EF10-COMPLEX-TYPE-ASYNC",
         "EF10-DB-FUNCTION-ATTRIBUTE-ASYNC",
         "EF10-DB-FUNCTION-NULLABLE-ASYNC",
+        "EF10-DBSET-LOCAL-QUERY-ASYNC",
         "EF10-JSON-MAPPING-ASYNC",
         "EF10-OWNED-ATTRIBUTE-ASYNC",
         "EF10-PERSIST-ADD-ASYNC",
@@ -52405,6 +52408,7 @@
         "EF10-COMPLEX-TYPE-ASYNC",
         "EF10-DB-FUNCTION-ATTRIBUTE-ASYNC",
         "EF10-DB-FUNCTION-NULLABLE-ASYNC",
+        "EF10-DBSET-LOCAL-QUERY-ASYNC",
         "EF10-JSON-MAPPING-ASYNC",
         "EF10-OWNED-ATTRIBUTE-ASYNC",
         "EF10-PERSIST-ADD-ASYNC",

@@ -92,6 +92,38 @@ public sealed class DbSetApiTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-DBSET-LOCAL-QUERY-SYNC", "Microsoft.EntityFrameworkCore.DbSet`1.Local", "System.Linq.Queryable.Single")]
+    public async Task Local_IncludesEntitiesMaterializedBySynchronousQueries()
+    {
+        var id = Guid.NewGuid();
+        await SeedAsync(id, "DbSet local sync query", 55);
+
+        await using var context = ProviderTestRuntime.CreateContext();
+        Assert.Empty(context.People.Local);
+
+        var person = context.People.Single(item => item.Id == id);
+
+        Assert.Contains(person, context.People.Local);
+        Assert.Same(person, context.People.Local.Single(item => item.Id == id));
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-DBSET-LOCAL-QUERY-ASYNC", "Microsoft.EntityFrameworkCore.DbSet`1.Local", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    public async Task Local_IncludesEntitiesMaterializedByAsynchronousQueries()
+    {
+        var id = Guid.NewGuid();
+        await SeedAsync(id, "DbSet local async query", 56);
+
+        await using var context = ProviderTestRuntime.CreateContext();
+        Assert.Empty(context.People.Local);
+
+        var person = await context.People.SingleAsync(item => item.Id == id, TestContext.Current.CancellationToken);
+
+        Assert.Contains(person, context.People.Local);
+        Assert.Same(person, context.People.Local.Single(item => item.Id == id));
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-DBSET-ATTACH-RANGE", "Microsoft.EntityFrameworkCore.DbSet`1.AttachRange", "Microsoft.EntityFrameworkCore.DbContext.Entry", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync")]
     public async Task AttachRange_TracksDetachedEntitiesAndPersistsChanges()
     {
