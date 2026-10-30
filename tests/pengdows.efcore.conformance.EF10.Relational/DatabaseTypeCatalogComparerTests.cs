@@ -3,6 +3,7 @@ using Xunit;
 
 namespace pengdows.efcore.conformance.EF10.Relational;
 
+[Trait("Category", "HarnessUnit")]
 public sealed class DatabaseTypeCatalogComparerTests
 {
     [Fact]

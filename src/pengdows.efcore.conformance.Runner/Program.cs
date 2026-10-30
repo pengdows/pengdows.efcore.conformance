@@ -301,6 +301,8 @@ async Task<int> RunTestsAsync(string[] arguments, string? configuredConnectionSt
     };
     startInfo.ArgumentList.Add("test");
     startInfo.ArgumentList.Add(project);
+    startInfo.ArgumentList.Add("--filter");
+    startInfo.ArgumentList.Add("Category!=HarnessUnit");
     startInfo.ArgumentList.Add("--logger");
     startInfo.ArgumentList.Add("trx;LogFileName=conformance.trx");
     startInfo.ArgumentList.Add("--results-directory");
