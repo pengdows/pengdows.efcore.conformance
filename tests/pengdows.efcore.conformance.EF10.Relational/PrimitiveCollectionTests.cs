@@ -219,4 +219,56 @@ public sealed class PrimitiveCollectionTests
 
         Assert.Equal(id, actualId);
     }
+
+    [Fact]
+    [BehavioralCoverage("EF10-PRIMITIVE-COLLECTION-INDEX-LENGTH-ASYNC", "System.Linq.Queryable.Where", "System.Linq.Queryable.Select", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    public async Task PrimitiveCollection_CanFilterByLengthAndProjectAnIndexedElementAsynchronously()
+    {
+        ProviderTestRuntime.RequireCapability("primitive-collections");
+        var id = Guid.NewGuid();
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.PrimitiveCollectionRecords.Add(new PrimitiveCollectionRecord
+            {
+                Id = id,
+                Values = [10, 20, 30, 40, 50]
+            });
+            await write.SaveChangesAsync(TestContext.Current.CancellationToken);
+        }
+
+        await using var query = ProviderTestRuntime.CreateContext();
+        var value = await query.PrimitiveCollectionRecords.AsNoTracking()
+            .Where(record => record.Id == id && record.Values.Count == 5)
+            .Select(record => record.Values[2])
+            .SingleAsync(TestContext.Current.CancellationToken);
+
+        Assert.Equal(30, value);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-PRIMITIVE-COLLECTION-INDEX-LENGTH-SYNC", "System.Linq.Queryable.Where", "System.Linq.Queryable.Select", "System.Linq.Queryable.Single")]
+    public async Task PrimitiveCollection_CanFilterByLengthAndProjectAnIndexedElementSynchronously()
+    {
+        ProviderTestRuntime.RequireCapability("primitive-collections");
+        var id = Guid.NewGuid();
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.PrimitiveCollectionRecords.Add(new PrimitiveCollectionRecord
+            {
+                Id = id,
+                Values = [10, 20, 30, 40, 50]
+            });
+            await write.SaveChangesAsync(TestContext.Current.CancellationToken);
+        }
+
+        await using var query = ProviderTestRuntime.CreateContext();
+        var value = query.PrimitiveCollectionRecords.AsNoTracking()
+            .Where(record => record.Id == id && record.Values.Count == 5)
+            .Select(record => record.Values[2])
+            .Single();
+
+        Assert.Equal(30, value);
+    }
 }
