@@ -25,7 +25,7 @@
     "PublicMembers": 16762,
     "AwaitingClassification": 0,
     "ExplicitlyExcluded": 5921,
-    "MemberEntriesInCoveredFamilies": 782,
+    "MemberEntriesInCoveredFamilies": 797,
     "UncoveredMemberFamilies": 0
   },
   "CoverageSelectors": {
@@ -16143,6 +16143,7 @@
         "EF10-PERSIST-UPDATE-SYNC",
         "EF10-PRIMITIVE-COLLECTION-SYNC",
         "EF10-PROPERTY-ACCESS-MODES-SYNC",
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-SYNC",
         "EF10-RELATIONSHIPS-ONE-TO-ONE-SYNC",
         "EF10-SAVE-EVENTS-FAILURE-SYNC",
         "EF10-SAVE-EVENTS-SUCCESS-SYNC",
@@ -16236,6 +16237,7 @@
         "EF10-PERSIST-UPDATE-SYNC",
         "EF10-PRIMITIVE-COLLECTION-SYNC",
         "EF10-PROPERTY-ACCESS-MODES-SYNC",
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-SYNC",
         "EF10-RELATIONSHIPS-ONE-TO-ONE-SYNC",
         "EF10-SAVE-EVENTS-FAILURE-SYNC",
         "EF10-SAVE-EVENTS-SUCCESS-SYNC",
@@ -16332,6 +16334,7 @@
         "EF10-PRIMITIVE-COLLECTION-ASYNC",
         "EF10-PROPERTY-ACCESS-MODES-ASYNC",
         "EF10-RELATIONSHIPS-FOREIGN-KEY",
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-ASYNC",
         "EF10-RELATIONSHIPS-ONE-TO-ONE-ASYNC",
         "EF10-SAVE-EVENTS-FAILURE-ASYNC",
         "EF10-SAVE-EVENTS-SUCCESS-ASYNC",
@@ -16427,6 +16430,7 @@
         "EF10-PRIMITIVE-COLLECTION-ASYNC",
         "EF10-PROPERTY-ACCESS-MODES-ASYNC",
         "EF10-RELATIONSHIPS-FOREIGN-KEY",
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-ASYNC",
         "EF10-RELATIONSHIPS-ONE-TO-ONE-ASYNC",
         "EF10-SAVE-EVENTS-FAILURE-ASYNC",
         "EF10-SAVE-EVENTS-SUCCESS-ASYNC",
@@ -19047,7 +19051,8 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-DBSET-ADD-RANGE-SYNC",
-        "EF10-PERSIST-ADD-RANGE-SYNC"
+        "EF10-PERSIST-ADD-RANGE-SYNC",
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-SYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -19062,7 +19067,8 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-DBSET-ADD-RANGE-ASYNC",
-        "EF10-PERSIST-ADD-RANGE-ASYNC"
+        "EF10-PERSIST-ADD-RANGE-ASYNC",
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -19121,7 +19127,8 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-DBSET-ADD-RANGE-SYNC",
-        "EF10-PERSIST-ADD-RANGE-SYNC"
+        "EF10-PERSIST-ADD-RANGE-SYNC",
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-SYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -19136,7 +19143,8 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-DBSET-ADD-RANGE-ASYNC",
-        "EF10-PERSIST-ADD-RANGE-ASYNC"
+        "EF10-PERSIST-ADD-RANGE-ASYNC",
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -55388,6 +55396,7 @@
         "EF10-RELATIONSHIPS-FILTERED-INCLUDE-ASYNC",
         "EF10-RELATIONSHIPS-FOREIGN-KEY",
         "EF10-RELATIONSHIPS-INCLUDE-ASYNC",
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-ASYNC",
         "EF10-RELATIONSHIPS-ONE-TO-ONE-ASYNC",
         "EF10-RELATIONSHIPS-SPLIT-QUERY-ASYNC",
         "EF10-TYPES-ADDITIONAL-INTEGER-BOUNDARIES-ASYNC",
@@ -55450,6 +55459,7 @@
         "EF10-RELATIONSHIPS-FILTERED-INCLUDE-ASYNC",
         "EF10-RELATIONSHIPS-FOREIGN-KEY",
         "EF10-RELATIONSHIPS-INCLUDE-ASYNC",
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-ASYNC",
         "EF10-RELATIONSHIPS-ONE-TO-ONE-ASYNC",
         "EF10-RELATIONSHIPS-SPLIT-QUERY-ASYNC",
         "EF10-TYPES-ADDITIONAL-INTEGER-BOUNDARIES-ASYNC",
@@ -56226,6 +56236,8 @@
         "EF10-RELATIONSHIPS-FILTERED-INCLUDE-SYNC",
         "EF10-RELATIONSHIPS-INCLUDE-ASYNC",
         "EF10-RELATIONSHIPS-INCLUDE-SYNC",
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-ASYNC",
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-SYNC",
         "EF10-RELATIONSHIPS-ONE-TO-ONE-ASYNC",
         "EF10-RELATIONSHIPS-ONE-TO-ONE-SYNC",
         "EF10-RELATIONSHIPS-SINGLE-QUERY-SYNC",
@@ -56288,6 +56300,8 @@
         "EF10-RELATIONSHIPS-FILTERED-INCLUDE-SYNC",
         "EF10-RELATIONSHIPS-INCLUDE-ASYNC",
         "EF10-RELATIONSHIPS-INCLUDE-SYNC",
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-ASYNC",
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-SYNC",
         "EF10-RELATIONSHIPS-ONE-TO-ONE-ASYNC",
         "EF10-RELATIONSHIPS-ONE-TO-ONE-SYNC",
         "EF10-RELATIONSHIPS-SINGLE-QUERY-SYNC",
@@ -70212,10 +70226,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "UsingEntity",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder UsingEntity(System.Type joinEntityType)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "These are EF Core fluent model-configuration APIs. Provider obligations concern the observable effect of the configured model, which is tested through schema, query, migration, and persistence behavior rather than each builder overload in isolation.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-ASYNC",
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.Builders.CollectionCollectionBuilder.UsingEntity"
     },
     {
@@ -70224,10 +70241,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "UsingEntity",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder UsingEntity(System.String joinEntityName)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "These are EF Core fluent model-configuration APIs. Provider obligations concern the observable effect of the configured model, which is tested through schema, query, migration, and persistence behavior rather than each builder overload in isolation.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-ASYNC",
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.Builders.CollectionCollectionBuilder.UsingEntity"
     },
     {
@@ -70236,10 +70256,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "UsingEntity",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder UsingEntity(System.String joinEntityName, System.Type joinEntityType)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "These are EF Core fluent model-configuration APIs. Provider obligations concern the observable effect of the configured model, which is tested through schema, query, migration, and persistence behavior rather than each builder overload in isolation.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-ASYNC",
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.Builders.CollectionCollectionBuilder.UsingEntity"
     },
     {
@@ -70248,10 +70271,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "UsingEntity",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder UsingEntity(System.Action\u003CMicrosoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder\u003E configureJoinEntityType)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "These are EF Core fluent model-configuration APIs. Provider obligations concern the observable effect of the configured model, which is tested through schema, query, migration, and persistence behavior rather than each builder overload in isolation.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-ASYNC",
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.Builders.CollectionCollectionBuilder.UsingEntity"
     },
     {
@@ -70260,10 +70286,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "UsingEntity",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder UsingEntity(System.Type joinEntityType, System.Action\u003CMicrosoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder\u003E configureJoinEntityType)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "These are EF Core fluent model-configuration APIs. Provider obligations concern the observable effect of the configured model, which is tested through schema, query, migration, and persistence behavior rather than each builder overload in isolation.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-ASYNC",
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.Builders.CollectionCollectionBuilder.UsingEntity"
     },
     {
@@ -70272,10 +70301,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "UsingEntity",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder UsingEntity(System.String joinEntityName, System.Action\u003CMicrosoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder\u003E configureJoinEntityType)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "These are EF Core fluent model-configuration APIs. Provider obligations concern the observable effect of the configured model, which is tested through schema, query, migration, and persistence behavior rather than each builder overload in isolation.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-ASYNC",
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.Builders.CollectionCollectionBuilder.UsingEntity"
     },
     {
@@ -70284,10 +70316,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "UsingEntity",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder UsingEntity(System.String joinEntityName, System.Type joinEntityType, System.Action\u003CMicrosoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder\u003E configureJoinEntityType)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "These are EF Core fluent model-configuration APIs. Provider obligations concern the observable effect of the configured model, which is tested through schema, query, migration, and persistence behavior rather than each builder overload in isolation.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-ASYNC",
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.Builders.CollectionCollectionBuilder.UsingEntity"
     },
     {
@@ -70296,10 +70331,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "UsingEntity",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder UsingEntity(System.Func\u003CMicrosoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder, Microsoft.EntityFrameworkCore.Metadata.Builders.ReferenceCollectionBuilder\u003E configureRight, System.Func\u003CMicrosoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder, Microsoft.EntityFrameworkCore.Metadata.Builders.ReferenceCollectionBuilder\u003E configureLeft)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "These are EF Core fluent model-configuration APIs. Provider obligations concern the observable effect of the configured model, which is tested through schema, query, migration, and persistence behavior rather than each builder overload in isolation.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-ASYNC",
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.Builders.CollectionCollectionBuilder.UsingEntity"
     },
     {
@@ -70308,10 +70346,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "UsingEntity",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder UsingEntity(System.Type joinEntityType, System.Func\u003CMicrosoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder, Microsoft.EntityFrameworkCore.Metadata.Builders.ReferenceCollectionBuilder\u003E configureRight, System.Func\u003CMicrosoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder, Microsoft.EntityFrameworkCore.Metadata.Builders.ReferenceCollectionBuilder\u003E configureLeft)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "These are EF Core fluent model-configuration APIs. Provider obligations concern the observable effect of the configured model, which is tested through schema, query, migration, and persistence behavior rather than each builder overload in isolation.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-ASYNC",
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.Builders.CollectionCollectionBuilder.UsingEntity"
     },
     {
@@ -70320,10 +70361,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "UsingEntity",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder UsingEntity(System.String joinEntityName, System.Func\u003CMicrosoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder, Microsoft.EntityFrameworkCore.Metadata.Builders.ReferenceCollectionBuilder\u003E configureRight, System.Func\u003CMicrosoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder, Microsoft.EntityFrameworkCore.Metadata.Builders.ReferenceCollectionBuilder\u003E configureLeft)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "These are EF Core fluent model-configuration APIs. Provider obligations concern the observable effect of the configured model, which is tested through schema, query, migration, and persistence behavior rather than each builder overload in isolation.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-ASYNC",
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.Builders.CollectionCollectionBuilder.UsingEntity"
     },
     {
@@ -70332,10 +70376,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "UsingEntity",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder UsingEntity(System.String joinEntityName, System.Type joinEntityType, System.Func\u003CMicrosoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder, Microsoft.EntityFrameworkCore.Metadata.Builders.ReferenceCollectionBuilder\u003E configureRight, System.Func\u003CMicrosoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder, Microsoft.EntityFrameworkCore.Metadata.Builders.ReferenceCollectionBuilder\u003E configureLeft)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "These are EF Core fluent model-configuration APIs. Provider obligations concern the observable effect of the configured model, which is tested through schema, query, migration, and persistence behavior rather than each builder overload in isolation.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-ASYNC",
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.Builders.CollectionCollectionBuilder.UsingEntity"
     },
     {
@@ -70344,10 +70391,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "UsingEntity",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder UsingEntity(System.Func\u003CMicrosoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder, Microsoft.EntityFrameworkCore.Metadata.Builders.ReferenceCollectionBuilder\u003E configureRight, System.Func\u003CMicrosoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder, Microsoft.EntityFrameworkCore.Metadata.Builders.ReferenceCollectionBuilder\u003E configureLeft, System.Action\u003CMicrosoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder\u003E configureJoinEntityType)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "These are EF Core fluent model-configuration APIs. Provider obligations concern the observable effect of the configured model, which is tested through schema, query, migration, and persistence behavior rather than each builder overload in isolation.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-ASYNC",
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.Builders.CollectionCollectionBuilder.UsingEntity"
     },
     {
@@ -70356,10 +70406,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "UsingEntity",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder UsingEntity(System.Type joinEntityType, System.Func\u003CMicrosoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder, Microsoft.EntityFrameworkCore.Metadata.Builders.ReferenceCollectionBuilder\u003E configureRight, System.Func\u003CMicrosoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder, Microsoft.EntityFrameworkCore.Metadata.Builders.ReferenceCollectionBuilder\u003E configureLeft, System.Action\u003CMicrosoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder\u003E configureJoinEntityType)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "These are EF Core fluent model-configuration APIs. Provider obligations concern the observable effect of the configured model, which is tested through schema, query, migration, and persistence behavior rather than each builder overload in isolation.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-ASYNC",
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.Builders.CollectionCollectionBuilder.UsingEntity"
     },
     {
@@ -70368,10 +70421,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "UsingEntity",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder UsingEntity(System.String joinEntityName, System.Func\u003CMicrosoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder, Microsoft.EntityFrameworkCore.Metadata.Builders.ReferenceCollectionBuilder\u003E configureRight, System.Func\u003CMicrosoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder, Microsoft.EntityFrameworkCore.Metadata.Builders.ReferenceCollectionBuilder\u003E configureLeft, System.Action\u003CMicrosoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder\u003E configureJoinEntityType)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "These are EF Core fluent model-configuration APIs. Provider obligations concern the observable effect of the configured model, which is tested through schema, query, migration, and persistence behavior rather than each builder overload in isolation.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-ASYNC",
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.Builders.CollectionCollectionBuilder.UsingEntity"
     },
     {
@@ -70380,10 +70436,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "UsingEntity",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder UsingEntity(System.String joinEntityName, System.Type joinEntityType, System.Func\u003CMicrosoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder, Microsoft.EntityFrameworkCore.Metadata.Builders.ReferenceCollectionBuilder\u003E configureRight, System.Func\u003CMicrosoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder, Microsoft.EntityFrameworkCore.Metadata.Builders.ReferenceCollectionBuilder\u003E configureLeft, System.Action\u003CMicrosoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder\u003E configureJoinEntityType)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "These are EF Core fluent model-configuration APIs. Provider obligations concern the observable effect of the configured model, which is tested through schema, query, migration, and persistence behavior rather than each builder overload in isolation.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-ASYNC",
+        "EF10-RELATIONSHIPS-MANY-TO-MANY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.Builders.CollectionCollectionBuilder.UsingEntity"
     },
     {

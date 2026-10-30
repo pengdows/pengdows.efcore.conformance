@@ -166,6 +166,76 @@ public sealed class RelationshipTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-RELATIONSHIPS-MANY-TO-MANY-SYNC", "Microsoft.EntityFrameworkCore.Metadata.Builders.CollectionCollectionBuilder.UsingEntity", "Microsoft.EntityFrameworkCore.DbSet`1.AddRange", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.Include", "System.Linq.Queryable.Single")]
+    public async Task ManyToManySkipNavigations_PersistAndLoadBothDirectionsSynchronously()
+    {
+        var algebraId = Guid.NewGuid();
+        var historyId = Guid.NewGuid();
+        var adaId = Guid.NewGuid();
+        var graceId = Guid.NewGuid();
+        var algebra = new Course { Id = algebraId, Title = "Algebra" };
+        var history = new Course { Id = historyId, Title = "History" };
+        var ada = new Learner { Id = adaId, Name = "Ada" };
+        var grace = new Learner { Id = graceId, Name = "Grace" };
+        algebra.Learners.Add(ada);
+        algebra.Learners.Add(grace);
+        history.Learners.Add(ada);
+
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.Courses.AddRange(algebra, history);
+            write.SaveChanges();
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        var loadedAlgebra = verify.Courses.Include(course => course.Learners).Single(course => course.Id == algebraId);
+        var loadedHistory = verify.Courses.Include(course => course.Learners).Single(course => course.Id == historyId);
+        var loadedAda = verify.Learners.Include(learner => learner.Courses).Single(learner => learner.Id == adaId);
+
+        Assert.Equal(new[] { "Ada", "Grace" }, loadedAlgebra.Learners.Select(learner => learner.Name).Order().ToArray());
+        Assert.Equal(new[] { "Ada" }, loadedHistory.Learners.Select(learner => learner.Name).ToArray());
+        Assert.Equal(new[] { "Algebra", "History" }, loadedAda.Courses.Select(course => course.Title).Order().ToArray());
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-RELATIONSHIPS-MANY-TO-MANY-ASYNC", "Microsoft.EntityFrameworkCore.Metadata.Builders.CollectionCollectionBuilder.UsingEntity", "Microsoft.EntityFrameworkCore.DbSet`1.AddRangeAsync", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.Include", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    public async Task ManyToManySkipNavigations_PersistAndLoadBothDirectionsAsynchronously()
+    {
+        var algebraId = Guid.NewGuid();
+        var historyId = Guid.NewGuid();
+        var adaId = Guid.NewGuid();
+        var graceId = Guid.NewGuid();
+        var algebra = new Course { Id = algebraId, Title = "Async Algebra" };
+        var history = new Course { Id = historyId, Title = "Async History" };
+        var ada = new Learner { Id = adaId, Name = "Async Ada" };
+        var grace = new Learner { Id = graceId, Name = "Async Grace" };
+        algebra.Learners.Add(ada);
+        algebra.Learners.Add(grace);
+        history.Learners.Add(ada);
+        var cancellationToken = TestContext.Current.CancellationToken;
+
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, cancellationToken);
+            await write.Courses.AddRangeAsync([algebra, history], cancellationToken);
+            await write.SaveChangesAsync(cancellationToken);
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        var loadedAlgebra = await verify.Courses.Include(course => course.Learners)
+            .SingleAsync(course => course.Id == algebraId, cancellationToken);
+        var loadedHistory = await verify.Courses.Include(course => course.Learners)
+            .SingleAsync(course => course.Id == historyId, cancellationToken);
+        var loadedAda = await verify.Learners.Include(learner => learner.Courses)
+            .SingleAsync(learner => learner.Id == adaId, cancellationToken);
+
+        Assert.Equal(new[] { "Async Ada", "Async Grace" }, loadedAlgebra.Learners.Select(learner => learner.Name).Order().ToArray());
+        Assert.Equal(new[] { "Async Ada" }, loadedHistory.Learners.Select(learner => learner.Name).ToArray());
+        Assert.Equal(new[] { "Async Algebra", "Async History" }, loadedAda.Courses.Select(course => course.Title).Order().ToArray());
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-RELATIONSHIPS-SELECTMANY-ASYNC", "System.Linq.Queryable.SelectMany", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync")]
     public async Task SelectMany_FlattensRelatedPostsAsynchronously()
     {

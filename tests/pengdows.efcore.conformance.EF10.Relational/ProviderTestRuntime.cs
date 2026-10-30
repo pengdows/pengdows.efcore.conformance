@@ -241,6 +241,10 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
 
     public DbSet<AccountSettings> AccountSettings => Set<AccountSettings>();
 
+    public DbSet<Course> Courses => Set<Course>();
+
+    public DbSet<Learner> Learners => Set<Learner>();
+
     public DbSet<ScalarRecord> ScalarRecords => Set<ScalarRecord>();
 
     public DbSet<NullableScalarRecord> NullableScalarRecords => Set<NullableScalarRecord>();
@@ -493,6 +497,23 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
             entity.HasKey(settings => settings.AccountId);
             entity.Property(settings => settings.AccountId).HasColumnName("accountid");
             entity.Property(settings => settings.Value).HasColumnName("value").IsRequired().HasMaxLength(160);
+        });
+        modelBuilder.Entity<Course>(entity =>
+        {
+            entity.ToTable("ef10conformancecourses");
+            entity.HasKey(course => course.Id);
+            entity.Property(course => course.Id).HasColumnName("id");
+            entity.Property(course => course.Title).HasColumnName("title").IsRequired().HasMaxLength(160);
+            entity.HasMany(course => course.Learners)
+                .WithMany(learner => learner.Courses)
+                .UsingEntity(join => join.ToTable("ef10conformancecourselearners"));
+        });
+        modelBuilder.Entity<Learner>(entity =>
+        {
+            entity.ToTable("ef10conformancelearners");
+            entity.HasKey(learner => learner.Id);
+            entity.Property(learner => learner.Id).HasColumnName("id");
+            entity.Property(learner => learner.Name).HasColumnName("name").IsRequired().HasMaxLength(160);
         });
         modelBuilder.Entity<Post>(entity =>
         {
@@ -857,6 +878,24 @@ internal sealed class AccountSettings
     public string Value { get; set; } = string.Empty;
 
     public Account Account { get; set; } = null!;
+}
+
+internal sealed class Course
+{
+    public Guid Id { get; set; }
+
+    public string Title { get; set; } = string.Empty;
+
+    public ICollection<Learner> Learners { get; set; } = new List<Learner>();
+}
+
+internal sealed class Learner
+{
+    public Guid Id { get; set; }
+
+    public string Name { get; set; } = string.Empty;
+
+    public ICollection<Course> Courses { get; set; } = new List<Course>();
 }
 
 internal sealed class Post
