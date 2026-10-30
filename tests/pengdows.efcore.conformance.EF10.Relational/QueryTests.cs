@@ -68,6 +68,58 @@ public sealed class QueryTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-QUERY-DESCENDING-PAGING-SYNC", "System.Linq.Queryable.OrderByDescending", "System.Linq.Queryable.ThenByDescending", "System.Linq.Queryable.Skip", "System.Linq.Queryable.Take", "System.Linq.Queryable.ToArray")]
+    public async Task DescendingOrdering_UsesTieBreakersAndPaginationSynchronously()
+    {
+        var batch = Guid.NewGuid().ToString("N");
+        await SeedAsync(new[]
+        {
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-Ada", Age = 30 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-Grace", Age = 30 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-Lin", Age = 20 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-Mary", Age = 40 }
+        });
+
+        await using var query = ProviderTestRuntime.CreateContext();
+        var actual = query.People
+            .Where(person => person.Name.StartsWith(batch))
+            .OrderByDescending(person => person.Age)
+            .ThenByDescending(person => person.Name)
+            .Skip(1)
+            .Take(2)
+            .Select(person => new PersonResult(person.Name, person.Age))
+            .ToArray();
+
+        Assert.Equal(new[] { new PersonResult($"{batch}-Grace", 30), new PersonResult($"{batch}-Ada", 30) }, actual);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-DESCENDING-PAGING-ASYNC", "System.Linq.Queryable.OrderByDescending", "System.Linq.Queryable.ThenByDescending", "System.Linq.Queryable.Skip", "System.Linq.Queryable.Take", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToArrayAsync")]
+    public async Task DescendingOrdering_UsesTieBreakersAndPaginationAsynchronously()
+    {
+        var batch = Guid.NewGuid().ToString("N");
+        await SeedAsync(new[]
+        {
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-Ada", Age = 30 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-Grace", Age = 30 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-Lin", Age = 20 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-Mary", Age = 40 }
+        });
+
+        await using var query = ProviderTestRuntime.CreateContext();
+        var actual = await query.People
+            .Where(person => person.Name.StartsWith(batch))
+            .OrderByDescending(person => person.Age)
+            .ThenByDescending(person => person.Name)
+            .Skip(1)
+            .Take(2)
+            .Select(person => new PersonResult(person.Name, person.Age))
+            .ToArrayAsync(TestContext.Current.CancellationToken);
+
+        Assert.Equal(new[] { new PersonResult($"{batch}-Grace", 30), new PersonResult($"{batch}-Ada", 30) }, actual);
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-LINQ-LEFTJOIN-ASYNC", "System.Linq.Queryable.LeftJoin", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync")]
     public async Task LeftJoin_ReturnsMatchingAndMissingRows()
     {
