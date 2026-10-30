@@ -17,11 +17,16 @@ public sealed class BulkOperationTests
 
         await using (var update = ProviderTestRuntime.CreateContext())
         {
+            var tracked = await update.People.SingleAsync(
+                person => person.Id == id,
+                TestContext.Current.CancellationToken);
             var affected = await update.People.Where(person => person.Id == id)
                 .ExecuteUpdateAsync(
                     setters => setters.SetProperty(person => person.Age, person => person.Age + 1),
                     TestContext.Current.CancellationToken);
             Assert.Equal(1, affected);
+            Assert.Equal(40, tracked.Age);
+            Assert.Equal(EntityState.Unchanged, update.Entry(tracked).State);
         }
 
         await using var verify = ProviderTestRuntime.CreateContext();
@@ -40,9 +45,12 @@ public sealed class BulkOperationTests
 
         await using (var update = ProviderTestRuntime.CreateContext())
         {
+            var tracked = update.People.Single(person => person.Id == id);
             var affected = update.People.Where(person => person.Id == id)
                 .ExecuteUpdate(setters => setters.SetProperty(person => person.Age, person => person.Age + 1));
             Assert.Equal(1, affected);
+            Assert.Equal(40, tracked.Age);
+            Assert.Equal(EntityState.Unchanged, update.Entry(tracked).State);
         }
 
         await using var verify = ProviderTestRuntime.CreateContext();
@@ -142,9 +150,14 @@ public sealed class BulkOperationTests
         ProviderTestRuntime.RequireCapability("execute-delete");
         var id = await SeedAsync();
 
-        await using var delete = ProviderTestRuntime.CreateContext();
-        Assert.Equal(1, await delete.People.Where(person => person.Id == id)
-            .ExecuteDeleteAsync(TestContext.Current.CancellationToken));
+        await using (var delete = ProviderTestRuntime.CreateContext())
+        {
+            var tracked = await delete.People.SingleAsync(person => person.Id == id, TestContext.Current.CancellationToken);
+            Assert.Equal(1, await delete.People.Where(person => person.Id == id)
+                .ExecuteDeleteAsync(TestContext.Current.CancellationToken));
+            Assert.Equal(EntityState.Unchanged, delete.Entry(tracked).State);
+            Assert.Equal(40, tracked.Age);
+        }
 
         await using var verify = ProviderTestRuntime.CreateContext();
         Assert.False(await verify.People.AnyAsync(person => person.Id == id, TestContext.Current.CancellationToken));
@@ -158,8 +171,13 @@ public sealed class BulkOperationTests
         ProviderTestRuntime.RequireCapability("execute-delete");
         var id = await SeedAsync();
 
-        await using var delete = ProviderTestRuntime.CreateContext();
-        Assert.Equal(1, delete.People.Where(person => person.Id == id).ExecuteDelete());
+        await using (var delete = ProviderTestRuntime.CreateContext())
+        {
+            var tracked = delete.People.Single(person => person.Id == id);
+            Assert.Equal(1, delete.People.Where(person => person.Id == id).ExecuteDelete());
+            Assert.Equal(EntityState.Unchanged, delete.Entry(tracked).State);
+            Assert.Equal(40, tracked.Age);
+        }
 
         await using var verify = ProviderTestRuntime.CreateContext();
         Assert.False(verify.People.Any(person => person.Id == id));
