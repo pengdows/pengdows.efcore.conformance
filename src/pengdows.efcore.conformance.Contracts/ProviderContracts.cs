@@ -82,7 +82,11 @@ public sealed record ProviderCapabilities(
         "migration-add-constraint-operations",
         "case-insensitive-collation",
         "migration-set-default",
-        "index-sort-metadata"
+        "index-sort-metadata",
+        "sequences",
+        "schemas",
+        "database-collation-migration",
+        "schema-qualified-functions"
     };
 
     public IReadOnlyList<string> UndeclaredFeatures => KnownFeatures

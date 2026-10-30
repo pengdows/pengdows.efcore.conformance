@@ -35,7 +35,11 @@ public sealed class MicrosoftSqliteAdapter : IAdoNetProviderAdapter, IParameteri
             "migration-check-constraint",
             "index-schema-metadata",
             "schema-comments",
-            "migration-add-constraint-operations"
+            "migration-add-constraint-operations",
+            "sequences",
+            "schemas",
+            "database-collation-migration",
+            "schema-qualified-functions"
         });
 
     public string Name => "Microsoft EF Core SQLite";

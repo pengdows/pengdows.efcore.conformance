@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 12,
+    "AwaitingClassification": 0,
     "ExplicitlyExcluded": 5423,
     "MemberEntriesInCoveredFamilies": 666,
-    "UncoveredMemberFamilies": 11
+    "UncoveredMemberFamilies": 9
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -18139,10 +18139,10 @@
       "MemberKind": "Property",
       "ApiMemberName": "Schema",
       "Signature": "System.String Schema get; set;",
-      "ProviderApplicable": null,
+      "ProviderApplicable": true,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "capability-gated",
+      "DispositionReason": "Schema-qualified function names depend on database namespace and function support. Exercise the configured function through LINQ only for providers declaring schema-qualified-functions support.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbFunctionAttribute.Schema"
     },
     {
@@ -151660,10 +151660,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "AlterDatabase",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.AlterOperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.AlterDatabaseOperation\u003E AlterDatabase(System.String collation = null, System.String oldCollation = null)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": true,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "capability-gated",
+      "DispositionReason": "Database-wide collation and other database options vary by database engine. Test migration effects only for providers declaring database-collation-migration support.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AlterDatabase"
     },
     {
@@ -151672,10 +151672,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "AlterSequence",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.AlterOperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.AlterSequenceOperation\u003E AlterSequence(System.String name, System.String schema = null, System.Int32 incrementBy = 1, System.Nullable\u003CSystem.Int64\u003E minValue = null, System.Nullable\u003CSystem.Int64\u003E maxValue = null, System.Boolean cyclic = false, System.Int32 oldIncrementBy = 1, System.Nullable\u003CSystem.Int64\u003E oldMinValue = null, System.Nullable\u003CSystem.Int64\u003E oldMaxValue = null, System.Boolean oldCyclic = false)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": true,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "capability-gated",
+      "DispositionReason": "Sequence alteration applies only where the database supports sequences. Test its observable migration effect for providers declaring the sequences capability.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AlterSequence"
     },
     {
@@ -151729,10 +151729,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "EnsureSchema",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.OperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.EnsureSchemaOperation\u003E EnsureSchema(System.String name)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": true,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "capability-gated",
+      "DispositionReason": "Schema creation is database-specific. Test it only where the provider declares schema support and verify the resulting namespace through public database behavior.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.EnsureSchema"
     },
     {
@@ -151741,10 +151741,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "CreateSequence",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.OperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.CreateSequenceOperation\u003E CreateSequence(System.String name, System.String schema = null, System.Int64 startValue = 1, System.Int32 incrementBy = 1, System.Nullable\u003CSystem.Int64\u003E minValue = null, System.Nullable\u003CSystem.Int64\u003E maxValue = null, System.Boolean cyclic = false)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": true,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "capability-gated",
+      "DispositionReason": "Database sequences are an optional native database feature. Test sequence creation and use only for providers declaring the sequences capability; current SQLite and MySQL profiles do not declare support.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.CreateSequence"
     },
     {
@@ -151753,10 +151753,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "CreateSequence",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.OperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.CreateSequenceOperation\u003E CreateSequence\u003CT\u003E(System.String name, System.String schema = null, System.Int64 startValue = 1, System.Int32 incrementBy = 1, System.Nullable\u003CSystem.Int64\u003E minValue = null, System.Nullable\u003CSystem.Int64\u003E maxValue = null, System.Boolean cyclic = false)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": true,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "capability-gated",
+      "DispositionReason": "Database sequences are an optional native database feature. Test sequence creation and use only for providers declaring the sequences capability; current SQLite and MySQL profiles do not declare support.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.CreateSequence"
     },
     {
@@ -151872,10 +151872,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "DropSchema",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.OperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.DropSchemaOperation\u003E DropSchema(System.String name)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": true,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "capability-gated",
+      "DispositionReason": "Schema removal is database-specific. Test it only where the provider declares schema support and verify resulting object availability through public database behavior.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropSchema"
     },
     {
@@ -151884,10 +151884,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "DropSequence",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.OperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.DropSequenceOperation\u003E DropSequence(System.String name, System.String schema = null)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": true,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "capability-gated",
+      "DispositionReason": "Sequence removal applies only where the database supports sequences. Test its observable migration effect for providers declaring the sequences capability.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropSequence"
     },
     {
@@ -151971,10 +151971,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "RenameSequence",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.OperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.RenameSequenceOperation\u003E RenameSequence(System.String name, System.String schema = null, System.String newName = null, System.String newSchema = null)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": true,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "capability-gated",
+      "DispositionReason": "Sequence rename applies only where the database supports sequences and sequence renames. Test resulting sequence behavior for providers declaring the relevant capability.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.RenameSequence"
     },
     {
@@ -151998,10 +151998,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "RestartSequence",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.OperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.RestartSequenceOperation\u003E RestartSequence(System.String name, System.Nullable\u003CSystem.Int64\u003E startValue = null, System.String schema = null)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": true,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "capability-gated",
+      "DispositionReason": "Sequence restart applies only where the database supports sequences. Test generated value behavior after restart for providers declaring the sequences capability.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.RestartSequence"
     },
     {
@@ -152451,10 +152451,10 @@
       "MemberKind": "Constructor",
       "ApiMemberName": ".ctor",
       "Signature": ".ctor(System.String activeProvider)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "ef-owned-no-provider-contract",
+      "DispositionReason": "This public constructor initializes EF Core\u0027s migration operation builder. Provider conformance is exercised by applying operations through DatabaseFacade migration APIs and verifying resulting database state.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder..ctor"
     },
     {
@@ -152478,10 +152478,10 @@
       "MemberKind": "Property",
       "ApiMemberName": "Operations",
       "Signature": "System.Collections.Generic.List\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.MigrationOperation\u003E Operations get;",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "ef-owned-no-provider-contract",
+      "DispositionReason": "This property exposes the in-memory operations accumulated by EF Core\u0027s migration builder. Inspecting that list would test EF Core\u0027s migration construction internals rather than provider-visible behavior.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.Operations"
     },
     {

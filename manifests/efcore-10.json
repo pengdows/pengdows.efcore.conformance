@@ -560,6 +560,61 @@
       "selectorPrefix": "Microsoft.EntityFrameworkCore.EF.IsDesignTime",
       "disposition": "ef-owned-no-provider-contract",
       "reason": "This flag marks EF Core design-time model construction and does not represent a runtime relational provider operation."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder..ctor",
+      "disposition": "ef-owned-no-provider-contract",
+      "reason": "This public constructor initializes EF Core's migration operation builder. Provider conformance is exercised by applying operations through DatabaseFacade migration APIs and verifying resulting database state."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.Operations",
+      "disposition": "ef-owned-no-provider-contract",
+      "reason": "This property exposes the in-memory operations accumulated by EF Core's migration builder. Inspecting that list would test EF Core's migration construction internals rather than provider-visible behavior."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.CreateSequence",
+      "disposition": "capability-gated",
+      "reason": "Database sequences are an optional native database feature. Test sequence creation and use only for providers declaring the sequences capability; current SQLite and MySQL profiles do not declare support."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AlterSequence",
+      "disposition": "capability-gated",
+      "reason": "Sequence alteration applies only where the database supports sequences. Test its observable migration effect for providers declaring the sequences capability."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropSequence",
+      "disposition": "capability-gated",
+      "reason": "Sequence removal applies only where the database supports sequences. Test its observable migration effect for providers declaring the sequences capability."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.RenameSequence",
+      "disposition": "capability-gated",
+      "reason": "Sequence rename applies only where the database supports sequences and sequence renames. Test resulting sequence behavior for providers declaring the relevant capability."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.RestartSequence",
+      "disposition": "capability-gated",
+      "reason": "Sequence restart applies only where the database supports sequences. Test generated value behavior after restart for providers declaring the sequences capability."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.EnsureSchema",
+      "disposition": "capability-gated",
+      "reason": "Schema creation is database-specific. Test it only where the provider declares schema support and verify the resulting namespace through public database behavior."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropSchema",
+      "disposition": "capability-gated",
+      "reason": "Schema removal is database-specific. Test it only where the provider declares schema support and verify resulting object availability through public database behavior."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AlterDatabase",
+      "disposition": "capability-gated",
+      "reason": "Database-wide collation and other database options vary by database engine. Test migration effects only for providers declaring database-collation-migration support."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.DbFunctionAttribute.Schema",
+      "disposition": "capability-gated",
+      "reason": "Schema-qualified function names depend on database namespace and function support. Exercise the configured function through LINQ only for providers declaring schema-qualified-functions support."
     }
   ]
 }
