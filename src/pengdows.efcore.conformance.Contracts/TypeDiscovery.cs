@@ -27,6 +27,154 @@ public sealed record DatabaseTypeDefinition(
     public string DiscoveryClassification => IsIndependentDiscovery ? "INDEPENDENT" : "SELF_DERIVED";
 }
 
+public sealed record DatabaseCatalogType(
+    string Schema,
+    string Name,
+    string DatabaseTypeName,
+    string Kind,
+    string Category,
+    bool IsArray,
+    bool IsDefined,
+    string? ElementTypeName,
+    string? BaseTypeName,
+    string? RelationName);
+
+public sealed record DatabaseTypeCatalogSnapshot(
+    string Source,
+    string Scope,
+    IReadOnlyList<DatabaseCatalogType> Types,
+    string? ScalarComparisonSchema = null);
+
+public sealed record DatabaseTypeCatalogComparison(
+    string Source,
+    string Scope,
+    int CatalogTypeCount,
+    IReadOnlyList<string> CatalogTypesMissingFromAdoNet,
+    IReadOnlyList<string> AdoNetTypesMissingFromCatalog,
+    IReadOnlyList<DatabaseCatalogType> Types)
+{
+    public int ExactNameMatchCount { get; init; }
+
+    public IReadOnlyList<DatabaseTypeNameMatch> NameMatches { get; init; } = Array.Empty<DatabaseTypeNameMatch>();
+
+    public IReadOnlyList<string> ExactNameComparisonLimitations { get; init; } = Array.Empty<string>();
+}
+
+public sealed record DatabaseTypeNameMatch(string CatalogTypeName, string AdoNetTypeName, string MatchKind);
+
+public static class DatabaseTypeCatalogComparer
+{
+    public static DatabaseTypeCatalogComparison Compare(
+        DatabaseTypeCatalogSnapshot catalog,
+        IReadOnlyList<DatabaseTypeDefinition> adoNetTypes)
+    {
+        var comparisonTypes = string.IsNullOrWhiteSpace(catalog.ScalarComparisonSchema)
+            ? catalog.Types
+            : catalog.Types.Where(type => string.Equals(
+                type.Schema, catalog.ScalarComparisonSchema, StringComparison.OrdinalIgnoreCase));
+        var catalogNames = comparisonTypes
+            .Select(type => type.DatabaseTypeName)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToArray();
+        var adoNetNames = adoNetTypes.Select(type => type.DatabaseTypeName)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToArray();
+        var exactMatches = catalogNames.Intersect(adoNetNames, StringComparer.OrdinalIgnoreCase)
+            .Select(name => new DatabaseTypeNameMatch(name, name, "EXACT"))
+            .ToList();
+        var unmatchedCatalogNames = catalogNames.Except(adoNetNames, StringComparer.OrdinalIgnoreCase).ToArray();
+        var unmatchedAdoNetNames = adoNetNames.Except(catalogNames, StringComparer.OrdinalIgnoreCase).ToArray();
+        var catalogAliases = comparisonTypes
+            .GroupBy(type => NormalizeName(type.DatabaseTypeName), StringComparer.OrdinalIgnoreCase)
+            .SelectMany(group => group.Select(type =>
+                (Name: type.DatabaseTypeName, Normalized: NormalizeName(type.DatabaseTypeName), IsArray: type.IsArray)))
+            .GroupBy(item => item.Normalized, StringComparer.OrdinalIgnoreCase)
+            .ToDictionary(group => group.Key, group => group.Select(item => item.Name).ToArray(), StringComparer.OrdinalIgnoreCase);
+        var adoNetAliases = adoNetNames
+            .Select(name => (Name: name, Normalized: NormalizeName(name)))
+            .GroupBy(item => item.Normalized, StringComparer.OrdinalIgnoreCase)
+            .ToDictionary(group => group.Key, group => group.Select(item => item.Name).ToArray(), StringComparer.OrdinalIgnoreCase);
+
+        foreach (var (normalized, catalogAliasNames) in catalogAliases)
+        {
+            if (adoNetAliases.TryGetValue(normalized, out var adoNetAliasNames) && adoNetAliasNames.Length == 1)
+            {
+                var catalogName = catalogAliasNames.FirstOrDefault(name => unmatchedCatalogNames.Contains(name, StringComparer.OrdinalIgnoreCase));
+                var adoNetName = adoNetAliasNames[0];
+                if (catalogName is not null && !string.Equals(catalogName, adoNetName, StringComparison.OrdinalIgnoreCase))
+                {
+                    exactMatches.Add(new DatabaseTypeNameMatch(catalogName, adoNetName, "NORMALIZED_ALIAS"));
+                }
+            }
+        }
+
+        var matchedCatalogNames = exactMatches.Select(match => match.CatalogTypeName)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var matchedAdoNetNames = exactMatches.Where(match => match.MatchKind != "EXACT").Select(match => match.AdoNetTypeName)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        return new DatabaseTypeCatalogComparison(
+            catalog.Source,
+            catalog.Scope,
+            catalogNames.Length,
+            unmatchedCatalogNames.Where(name => !matchedCatalogNames.Contains(name))
+                .Order(StringComparer.OrdinalIgnoreCase).ToArray(),
+            unmatchedAdoNetNames.Where(name => !matchedAdoNetNames.Contains(name))
+                .Order(StringComparer.OrdinalIgnoreCase).ToArray(),
+            catalog.Types)
+        {
+            ExactNameMatchCount = exactMatches.Count(match => match.MatchKind == "EXACT"),
+            NameMatches = exactMatches.OrderBy(match => match.CatalogTypeName, StringComparer.OrdinalIgnoreCase).ToArray(),
+            ExactNameComparisonLimitations =
+            [
+                "Name comparison is exact and case-insensitive; schema qualification, aliases, array syntax, and provider-specific type spellings can appear as differences.",
+                "The database catalog inventory includes pseudo-types, composites, domains, arrays, extension types, and system types; missing ADO.NET metadata is not automatically an EF mapping defect."
+            ]
+        };
+    }
+
+    private static string NormalizeName(string name)
+    {
+        var normalized = name.Trim().ToLowerInvariant();
+        var arraySuffix = string.Empty;
+        while (normalized.EndsWith("[]", StringComparison.Ordinal))
+        {
+            normalized = normalized[..^2];
+            arraySuffix += "[]";
+        }
+
+        if (normalized.StartsWith("pg_catalog.", StringComparison.Ordinal))
+        {
+            normalized = normalized["pg_catalog.".Length..];
+        }
+
+        normalized = normalized switch
+        {
+            "bool" => "boolean",
+            "int2" => "smallint",
+            "int4" => "integer",
+            "int8" => "bigint",
+            "float4" => "real",
+            "float8" => "double precision",
+            "varchar" => "character varying",
+            "bpchar" => "character",
+            "varbit" => "bit varying",
+            "timestamp" => "timestamp without time zone",
+            "timestamptz" => "timestamp with time zone",
+            "time" => "time without time zone",
+            "timetz" => "time with time zone",
+            _ => normalized
+        };
+
+        if (normalized.StartsWith('_'))
+        {
+            normalized = NormalizeName(normalized[1..]) + "[]";
+        }
+
+        return normalized + arraySuffix;
+    }
+}
+
 public sealed record TypeDiscoveryReport(
     string AdoNetAssemblyName,
     IReadOnlyList<string> MetadataCollections,
@@ -35,6 +183,8 @@ public sealed record TypeDiscoveryReport(
     IReadOnlyList<string> Diagnostics)
 {
     public IReadOnlyList<NativeTypeCoverageResult> NativeTypeCoverage { get; init; } = Array.Empty<NativeTypeCoverageResult>();
+
+    public DatabaseTypeCatalogComparison? CatalogComparison { get; init; }
 
     public bool HasIndependentTypeInventory => Types.Count > 0 || SupplementalTypes.Any(type => type.IsIndependentDiscovery);
 

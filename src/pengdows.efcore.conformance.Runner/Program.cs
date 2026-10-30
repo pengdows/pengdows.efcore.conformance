@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Data.Common;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -47,7 +48,7 @@ if (discoverTypes)
     }
 
     await using var connection = adoNetAdapter.CreateConnection(connectionString);
-    var typeReport = AdoNetTypeDiscovery.Discover(connection, adapter as ISupplementalTypeDiscovery);
+    var typeReport = DiscoverTypeReport(connection, adapter);
     if (args.Length == 5)
     {
         typeReport = typeReport with
@@ -168,6 +169,19 @@ static string? GetMetadataString(DatabaseTypeDefinition type, string key) =>
         ? Convert.ToString(value, System.Globalization.CultureInfo.InvariantCulture)
         : null;
 
+static TypeDiscoveryReport DiscoverTypeReport(DbConnection connection, IProviderAdapter adapter)
+{
+    var report = AdoNetTypeDiscovery.Discover(connection, adapter as ISupplementalTypeDiscovery);
+    return adapter is IDatabaseTypeCatalogDiscovery catalogDiscovery
+        ? report with
+        {
+            CatalogComparison = DatabaseTypeCatalogComparer.Compare(
+                catalogDiscovery.DiscoverDatabaseTypeCatalog(connection),
+                report.Types)
+        }
+        : report;
+}
+
 static string GetNativeTypeFamily(string databaseTypeName)
 {
     var trimmed = databaseTypeName.Trim();
@@ -268,7 +282,7 @@ async Task<int> RunTestsAsync(string[] arguments, string? configuredConnectionSt
         try
         {
             await using var discoveryConnection = discoveryAdapter.CreateConnection(cs);
-            nativeDiscoveryReport = AdoNetTypeDiscovery.Discover(discoveryConnection, runAdapter as ISupplementalTypeDiscovery);
+            nativeDiscoveryReport = DiscoverTypeReport(discoveryConnection, runAdapter);
         }
         catch (Exception exception)
         {

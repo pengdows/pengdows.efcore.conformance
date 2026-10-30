@@ -7,7 +7,7 @@ using pengdows.efcore.conformance;
 namespace pengdows.efcore.conformance.Adapter.Npgsql;
 
 /// <summary>EF Core 10 adapter for PostgreSQL using Npgsql.</summary>
-public sealed class NpgsqlAdapter : IAdoNetProviderAdapter, INativeTypeMappingProfile, INativeTypeTableCleanupAdapter, IParameterizedCollectionModeAdapter, IIndexMetadataAdapter, ICollationTestAdapter, ISchemaCommentMetadataAdapter
+public sealed class NpgsqlAdapter : IAdoNetProviderAdapter, INativeTypeMappingProfile, INativeTypeTableCleanupAdapter, IDatabaseTypeCatalogDiscovery, IParameterizedCollectionModeAdapter, IIndexMetadataAdapter, ICollationTestAdapter, ISchemaCommentMetadataAdapter
 {
     private static readonly IReadOnlyList<NativeTypeMapping> DeclaredNativeTypes =
     [
@@ -177,6 +177,52 @@ public sealed class NpgsqlAdapter : IAdoNetProviderAdapter, INativeTypeMappingPr
         context.Database.EnsureDeletedAsync(cancellationToken);
 
     public DbConnection CreateConnection(string connectionString) => new NpgsqlConnection(connectionString);
+
+    public DatabaseTypeCatalogSnapshot DiscoverDatabaseTypeCatalog(DbConnection openConnection)
+    {
+        using var command = openConnection.CreateCommand();
+        command.CommandText = """
+            SELECT namespace.nspname,
+                   type.typname,
+                   type.typname,
+                   type.typtype::text,
+                   type.typcategory::text,
+                   type.typcategory = 'A',
+                   type.typisdefined,
+                   CASE WHEN type.typelem <> 0 THEN format_type(type.typelem, NULL) END,
+                   CASE WHEN type.typbasetype <> 0 THEN format_type(type.typbasetype, NULL) END,
+                   CASE WHEN type.typrelid <> 0 THEN type.typrelid::regclass::text END
+            FROM pg_type AS type
+            JOIN pg_namespace AS namespace ON namespace.oid = type.typnamespace
+            WHERE type.typisdefined
+              AND namespace.nspname NOT LIKE 'pg_temp_%'
+              AND namespace.nspname NOT LIKE 'pg_toast_temp_%'
+            ORDER BY namespace.nspname, type.typname
+            """;
+
+        using var reader = command.ExecuteReader();
+        var types = new List<DatabaseCatalogType>();
+        while (reader.Read())
+        {
+            types.Add(new DatabaseCatalogType(
+                reader.GetString(0),
+                reader.GetString(1),
+                reader.GetString(2),
+                reader.GetString(3),
+                reader.GetString(4),
+                reader.GetBoolean(5),
+                reader.GetBoolean(6),
+                reader.IsDBNull(7) ? null : reader.GetString(7),
+                reader.IsDBNull(8) ? null : reader.GetString(8),
+                reader.IsDBNull(9) ? null : reader.GetString(9)));
+        }
+
+        return new DatabaseTypeCatalogSnapshot(
+            "PostgreSQL pg_type and pg_namespace catalogs",
+            "All defined database types except session temporary schemas; names use catalog identifiers and include system, information_schema, user, and extension schemas. Scalar-name comparison is scoped to pg_catalog types.",
+            types,
+            "pg_catalog");
+    }
 
     public async Task CleanupNativeTypeTablesAsync(
         string connectionString,

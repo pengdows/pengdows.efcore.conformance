@@ -84,6 +84,12 @@ public interface ISupplementalTypeDiscovery
     IReadOnlyList<DatabaseTypeDefinition> DiscoverSupplementalTypes(DbConnection openConnection);
 }
 
+/// <summary>Inventories native database types independently through public database catalog metadata.</summary>
+public interface IDatabaseTypeCatalogDiscovery : IProviderAdapter
+{
+    DatabaseTypeCatalogSnapshot DiscoverDatabaseTypeCatalog(DbConnection openConnection);
+}
+
 /// <summary>Declares applicability only; it cannot alter test expectations or assertions.</summary>
 public sealed record ProviderCapabilities(
     IReadOnlySet<string> SupportedFeatures,
