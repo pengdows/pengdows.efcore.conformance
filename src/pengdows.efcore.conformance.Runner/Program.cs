@@ -336,8 +336,10 @@ async Task<int> RunTestsAsync(string[] arguments, string? configuredConnectionSt
                 ? nativeMappings.NativeTypeMappings
                     .SelectMany(mapping => new[]
                     {
-                        (Mapping: mapping, Suffix: "SYNC"),
-                        (Mapping: mapping, Suffix: "ASYNC")
+                        (Mapping: mapping, TestName: "DiscoveredNativeType_RoundTripsSynchronously", ContractSuffix: "ROUNDTRIP-SYNC"),
+                        (Mapping: mapping, TestName: "DiscoveredNativeType_RoundTripsAsynchronously", ContractSuffix: "ROUNDTRIP-ASYNC"),
+                        (Mapping: mapping, TestName: "DiscoveredNativeType_UpdatesAndRoundTripsSynchronously", ContractSuffix: "UPDATE-SYNC"),
+                        (Mapping: mapping, TestName: "DiscoveredNativeType_UpdatesAndRoundTripsAsynchronously", ContractSuffix: "UPDATE-ASYNC")
                     })
                     .ToArray()
                 : [];
@@ -352,9 +354,8 @@ async Task<int> RunTestsAsync(string[] arguments, string? configuredConnectionSt
                     var mappings = testCases.Where(test => string.Equals(test.Mapping.DatabaseTypeName, type.DatabaseTypeName, StringComparison.OrdinalIgnoreCase) &&
                         (test.Mapping.ProviderTypeId is null || string.Equals(test.Mapping.ProviderTypeId, type.ProviderTypeId, StringComparison.OrdinalIgnoreCase)) &&
                         (test.Mapping.ClrType.FullName is null || type.ClrTypeName is null || string.Equals(test.Mapping.ClrType.FullName, type.ClrTypeName, StringComparison.Ordinal))).ToArray();
-                    var contracts = mappings.Select(test => $"EF10-NATIVE-TYPE-ROUNDTRIP-{test.Suffix}").Distinct(StringComparer.Ordinal).ToArray();
-                    var caseResults = results.Where(result => result.DisplayName.Contains("DiscoveredNativeType_RoundTripsSynchronously", StringComparison.Ordinal) ||
-                            result.DisplayName.Contains("DiscoveredNativeType_RoundTripsAsynchronously", StringComparison.Ordinal))
+                    var contracts = mappings.Select(test => $"EF10-NATIVE-TYPE-{test.ContractSuffix}").Distinct(StringComparer.Ordinal).ToArray();
+                    var caseResults = results.Where(result => mappings.Any(test => result.DisplayName.Contains(test.TestName, StringComparison.Ordinal)))
                         .Where(result => result.DisplayName.Contains($"databaseTypeName: \"{type.DatabaseTypeName}\"", StringComparison.OrdinalIgnoreCase))
                         .Where(result => mappings.Any(test => result.DisplayName.Contains(
                             $"clrTypeName: \"{test.Mapping.ClrType.FullName ?? test.Mapping.ClrType.Name}\"", StringComparison.Ordinal)))
