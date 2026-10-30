@@ -26,6 +26,12 @@ public sealed class QueryFilterTests
             .OrderBy(person => person.Name)
             .Select(person => person.Name)
             .ToListAsync(TestContext.Current.CancellationToken);
+        var withNamedFiltersDisabled = await context.People
+            .IgnoreQueryFilters(["SoftDelete", "Archive"])
+            .Where(person => person.Name.StartsWith(batch))
+            .OrderBy(person => person.Name)
+            .Select(person => person.Name)
+            .ToListAsync(TestContext.Current.CancellationToken);
         var withAllFiltersDisabled = await context.People
             .IgnoreQueryFilters()
             .Where(person => person.Name.StartsWith(batch))
@@ -35,6 +41,7 @@ public sealed class QueryFilterTests
 
         Assert.Equal(new[] { $"{batch}-active" }, visibleByDefault);
         Assert.Equal(new[] { $"{batch}-active", $"{batch}-deleted" }, withSoftDeleteDisabled);
+        Assert.Equal(new[] { $"{batch}-active", $"{batch}-archived", $"{batch}-both", $"{batch}-deleted" }, withNamedFiltersDisabled);
         Assert.Equal(new[] { $"{batch}-active", $"{batch}-archived", $"{batch}-both", $"{batch}-deleted" }, withAllFiltersDisabled);
     }
 
@@ -52,8 +59,15 @@ public sealed class QueryFilterTests
             .OrderBy(person => person.Name)
             .Select(person => person.Name)
             .ToList();
+        var withNamedFiltersDisabled = context.People
+            .IgnoreQueryFilters(["SoftDelete", "Archive"])
+            .Where(person => person.Name.StartsWith(batch))
+            .OrderBy(person => person.Name)
+            .Select(person => person.Name)
+            .ToList();
 
         Assert.Equal(new[] { $"{batch}-active", $"{batch}-deleted" }, withSoftDeleteDisabled);
+        Assert.Equal(new[] { $"{batch}-active", $"{batch}-archived", $"{batch}-both", $"{batch}-deleted" }, withNamedFiltersDisabled);
     }
 
     private static async Task SeedAsync(string batch)
