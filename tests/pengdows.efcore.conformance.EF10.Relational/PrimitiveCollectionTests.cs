@@ -369,4 +369,64 @@ public sealed class PrimitiveCollectionTests
 
         Assert.Equal(0, length);
     }
+
+    [Fact]
+    [BehavioralCoverage("EF10-PRIMITIVE-COLLECTION-NULL-VS-EMPTY-ASYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "System.Linq.Queryable.Select", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    public async Task PrimitiveCollection_PreservesNullSeparatelyFromEmptyAsynchronously()
+    {
+        ProviderTestRuntime.RequireCapability("primitive-collections");
+        var nullId = Guid.NewGuid();
+        var emptyId = Guid.NewGuid();
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.PrimitiveCollectionRecords.AddRange(
+                new PrimitiveCollectionRecord { Id = nullId, NullableValues = null },
+                new PrimitiveCollectionRecord { Id = emptyId, NullableValues = [] });
+            await write.SaveChangesAsync(TestContext.Current.CancellationToken);
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        var nullValues = await verify.PrimitiveCollectionRecords.AsNoTracking()
+            .Where(record => record.Id == nullId)
+            .Select(record => record.NullableValues)
+            .SingleAsync(TestContext.Current.CancellationToken);
+        var emptyValues = await verify.PrimitiveCollectionRecords.AsNoTracking()
+            .Where(record => record.Id == emptyId)
+            .Select(record => record.NullableValues)
+            .SingleAsync(TestContext.Current.CancellationToken);
+
+        Assert.Null(nullValues);
+        Assert.Empty(emptyValues!);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-PRIMITIVE-COLLECTION-NULL-VS-EMPTY-SYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "System.Linq.Queryable.Select", "System.Linq.Queryable.Single")]
+    public async Task PrimitiveCollection_PreservesNullSeparatelyFromEmptySynchronously()
+    {
+        ProviderTestRuntime.RequireCapability("primitive-collections");
+        var nullId = Guid.NewGuid();
+        var emptyId = Guid.NewGuid();
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.PrimitiveCollectionRecords.AddRange(
+                new PrimitiveCollectionRecord { Id = nullId, NullableValues = null },
+                new PrimitiveCollectionRecord { Id = emptyId, NullableValues = [] });
+            await write.SaveChangesAsync(TestContext.Current.CancellationToken);
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        var nullValues = verify.PrimitiveCollectionRecords.AsNoTracking()
+            .Where(record => record.Id == nullId)
+            .Select(record => record.NullableValues)
+            .Single();
+        var emptyValues = verify.PrimitiveCollectionRecords.AsNoTracking()
+            .Where(record => record.Id == emptyId)
+            .Select(record => record.NullableValues)
+            .Single();
+
+        Assert.Null(nullValues);
+        Assert.Empty(emptyValues!);
+    }
 }

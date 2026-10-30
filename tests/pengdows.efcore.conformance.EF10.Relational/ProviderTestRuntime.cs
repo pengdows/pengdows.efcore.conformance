@@ -717,6 +717,7 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
             entity.Property(record => record.Id).HasColumnName("id");
             entity.Property(record => record.Values).HasColumnName("values");
             entity.Property(record => record.OptionalValues).HasColumnName("optional_values");
+            entity.Property(record => record.NullableValues).HasColumnName("nullable_values");
         });
         modelBuilder.Entity<GeneratedKeyRecord>(entity =>
         {
@@ -1437,6 +1438,8 @@ internal sealed class PrimitiveCollectionRecord
     public List<int> Values { get; set; } = [];
 
     public List<int?> OptionalValues { get; set; } = [];
+
+    public List<int>? NullableValues { get; set; }
 }
 
 internal sealed class GeneratedKeyRecord
