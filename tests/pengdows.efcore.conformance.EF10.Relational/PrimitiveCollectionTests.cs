@@ -325,4 +325,48 @@ public sealed class PrimitiveCollectionTests
 
         Assert.Equal(id, actualId);
     }
+
+    [Fact]
+    [BehavioralCoverage("EF10-PRIMITIVE-COLLECTION-EMPTY-ASYNC", "System.Linq.Queryable.Where", "System.Linq.Queryable.Select", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    public async Task PrimitiveCollection_EmptyCollectionHasZeroLengthAndNoElementsAsynchronously()
+    {
+        ProviderTestRuntime.RequireCapability("primitive-collections");
+        var id = Guid.NewGuid();
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.PrimitiveCollectionRecords.Add(new PrimitiveCollectionRecord { Id = id, Values = [] });
+            await write.SaveChangesAsync(TestContext.Current.CancellationToken);
+        }
+
+        await using var query = ProviderTestRuntime.CreateContext();
+        var length = await query.PrimitiveCollectionRecords.AsNoTracking()
+            .Where(record => record.Id == id && !record.Values.Any())
+            .Select(record => record.Values.Count)
+            .SingleAsync(TestContext.Current.CancellationToken);
+
+        Assert.Equal(0, length);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-PRIMITIVE-COLLECTION-EMPTY-SYNC", "System.Linq.Queryable.Where", "System.Linq.Queryable.Select", "System.Linq.Queryable.Single")]
+    public async Task PrimitiveCollection_EmptyCollectionHasZeroLengthAndNoElementsSynchronously()
+    {
+        ProviderTestRuntime.RequireCapability("primitive-collections");
+        var id = Guid.NewGuid();
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.PrimitiveCollectionRecords.Add(new PrimitiveCollectionRecord { Id = id, Values = [] });
+            await write.SaveChangesAsync(TestContext.Current.CancellationToken);
+        }
+
+        await using var query = ProviderTestRuntime.CreateContext();
+        var length = query.PrimitiveCollectionRecords.AsNoTracking()
+            .Where(record => record.Id == id && !record.Values.Any())
+            .Select(record => record.Values.Count)
+            .Single();
+
+        Assert.Equal(0, length);
+    }
 }
