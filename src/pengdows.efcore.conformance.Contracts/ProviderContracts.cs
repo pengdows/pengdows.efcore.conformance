@@ -25,6 +25,15 @@ public interface IAdoNetProviderAdapter : IProviderAdapter
     DbConnection CreateConnection(string connectionString);
 }
 
+/// <summary>Optional provider configuration for relational query collection parameter modes.</summary>
+public interface IParameterizedCollectionModeAdapter : IProviderAdapter
+{
+    void ConfigureParameterizedCollectionMode(
+        DbContextOptionsBuilder options,
+        string connectionString,
+        ParameterTranslationMode mode);
+}
+
 /// <summary>Optional database-catalog discovery for types omitted from ADO.NET schema metadata.</summary>
 public interface ISupplementalTypeDiscovery
 {
@@ -49,7 +58,8 @@ public sealed record ProviderCapabilities(
         "execute-update",
         "execute-delete",
         "primitive-collections",
-        "external-connection"
+        "external-connection",
+        "parameterized-collection-modes"
     };
 
     public IReadOnlyList<string> UndeclaredFeatures => KnownFeatures

@@ -44,6 +44,26 @@ internal static class ProviderTestRuntime
         }
     }
 
+    public static ConformanceDbContext CreateContext(ParameterTranslationMode collectionMode)
+    {
+        RequireCapability("parameterized-collection-modes");
+        if (Adapter is not IParameterizedCollectionModeAdapter modeAdapter)
+        {
+            throw new UndeclaredCapabilityException("parameterized-collection-modes");
+        }
+
+        try
+        {
+            var options = new DbContextOptionsBuilder<ConformanceDbContext>();
+            modeAdapter.ConfigureParameterizedCollectionMode(options, ConnectionString, collectionMode);
+            return new ConformanceDbContext(options.Options);
+        }
+        catch (Exception exception) when (exception is not ConformanceInfrastructureException)
+        {
+            throw new ConformanceInfrastructureException("Provider parameterized collection mode configuration failed.", exception);
+        }
+    }
+
     public static async Task InitializeAsync(ConformanceDbContext context, CancellationToken cancellationToken)
     {
         try

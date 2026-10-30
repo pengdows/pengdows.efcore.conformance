@@ -7,7 +7,7 @@ using pengdows.efcore.conformance;
 namespace pengdows.efcore.conformance.Adapter.PengdowsSqlite;
 
 /// <summary>Sample adapter for exercising the suite against the pengdows ADO.NET SQLite provider.</summary>
-public sealed class PengdowsSqliteAdapter : IAdoNetProviderAdapter, ISupplementalTypeDiscovery
+public sealed class PengdowsSqliteAdapter : IAdoNetProviderAdapter, ISupplementalTypeDiscovery, IParameterizedCollectionModeAdapter
 {
     private static readonly ProviderCapabilities SupportedCapabilities = new(
         new HashSet<string>(StringComparer.Ordinal)
@@ -22,7 +22,8 @@ public sealed class PengdowsSqliteAdapter : IAdoNetProviderAdapter, ISupplementa
             "execute-update",
             "execute-delete",
             "primitive-collections",
-            "external-connection"
+            "external-connection",
+            "parameterized-collection-modes"
         },
         new HashSet<string>(StringComparer.Ordinal)
         {
@@ -37,6 +38,12 @@ public sealed class PengdowsSqliteAdapter : IAdoNetProviderAdapter, ISupplementa
 
     public void Configure(DbContextOptionsBuilder options, string connectionString) =>
         options.UseAdoNetSqlite(connectionString);
+
+    public void ConfigureParameterizedCollectionMode(
+        DbContextOptionsBuilder options,
+        string connectionString,
+        ParameterTranslationMode mode) =>
+        options.UseAdoNetSqlite(connectionString, adoNet => adoNet.UseParameterizedCollectionMode(mode));
 
     public Task InitializeDatabaseAsync(DbContext context, CancellationToken cancellationToken) =>
         context.Database.EnsureCreatedAsync(cancellationToken);

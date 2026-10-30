@@ -11,7 +11,7 @@ public sealed class AmbientTransactionTests
 {
     [Fact]
     [CapabilityRequirement("transactions")]
-    [BehavioralCoverage("EF10-AMBIENT-TRANSACTION-SYNC", "Microsoft.EntityFrameworkCore.TransactionsDatabaseFacadeExtensions.EnlistTransaction", "Microsoft.EntityFrameworkCore.TransactionsDatabaseFacadeExtensions.GetEnlistedTransaction", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges")]
+    [BehavioralCoverage("EF10-AMBIENT-TRANSACTION-SYNC", "System.Transactions.TransactionsDatabaseFacadeExtensions.EnlistTransaction", "System.Transactions.TransactionsDatabaseFacadeExtensions.GetEnlistedTransaction", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges")]
     public async Task EnlistTransaction_PersistsSynchronousChangesWhenAmbientScopeCompletes()
     {
         ProviderTestRuntime.RequireCapability("ambient-transactions");
@@ -47,7 +47,7 @@ public sealed class AmbientTransactionTests
 
     [Fact]
     [CapabilityRequirement("transactions")]
-    [BehavioralCoverage("EF10-AMBIENT-TRANSACTION-ASYNC", "Microsoft.EntityFrameworkCore.TransactionsDatabaseFacadeExtensions.EnlistTransaction", "Microsoft.EntityFrameworkCore.TransactionsDatabaseFacadeExtensions.GetEnlistedTransaction", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync")]
+    [BehavioralCoverage("EF10-AMBIENT-TRANSACTION-ASYNC", "System.Transactions.TransactionsDatabaseFacadeExtensions.EnlistTransaction", "System.Transactions.TransactionsDatabaseFacadeExtensions.GetEnlistedTransaction", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync")]
     public async Task EnlistTransaction_PersistsAsynchronousChangesWhenAmbientScopeCompletes()
     {
         ProviderTestRuntime.RequireCapability("ambient-transactions");

@@ -6,7 +6,7 @@ using pengdows.efcore.conformance;
 namespace pengdows.efcore.conformance.Adapter.MicrosoftSqlite;
 
 /// <summary>Reference adapter using Microsoft's EF Core SQLite provider.</summary>
-public sealed class MicrosoftSqliteAdapter : IAdoNetProviderAdapter
+public sealed class MicrosoftSqliteAdapter : IAdoNetProviderAdapter, IParameterizedCollectionModeAdapter
 {
     private static readonly ProviderCapabilities SupportedCapabilities = new(
         new HashSet<string>(StringComparer.Ordinal)
@@ -21,7 +21,8 @@ public sealed class MicrosoftSqliteAdapter : IAdoNetProviderAdapter
             "execute-update",
             "execute-delete",
             "primitive-collections",
-            "external-connection"
+            "external-connection",
+            "parameterized-collection-modes"
         },
         new HashSet<string>(StringComparer.Ordinal)
         {
@@ -35,6 +36,12 @@ public sealed class MicrosoftSqliteAdapter : IAdoNetProviderAdapter
     public ProviderCapabilities Capabilities => SupportedCapabilities;
 
     public void Configure(DbContextOptionsBuilder options, string connectionString) => options.UseSqlite(connectionString);
+
+    public void ConfigureParameterizedCollectionMode(
+        DbContextOptionsBuilder options,
+        string connectionString,
+        ParameterTranslationMode mode) =>
+        options.UseSqlite(connectionString, sqlite => sqlite.UseParameterizedCollectionMode(mode));
 
     public Task InitializeDatabaseAsync(DbContext context, CancellationToken cancellationToken) =>
         context.Database.EnsureCreatedAsync(cancellationToken);

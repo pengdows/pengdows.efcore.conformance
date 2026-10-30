@@ -8,7 +8,7 @@ namespace pengdows.efcore.conformance.EF10.Relational;
 public sealed class SaveChangesEventTests
 {
     [Fact]
-    [BehavioralCoverage("EF10-SAVE-EVENTS-SUCCESS-SYNC", "Microsoft.EntityFrameworkCore.DbContext.SavingChanges", "Microsoft.EntityFrameworkCore.DbContext.SavedChanges", "Microsoft.EntityFrameworkCore.SaveChangesEventArgs.AcceptAllChangesOnSuccess", "Microsoft.EntityFrameworkCore.SavingChangesEventArgs.AcceptAllChangesOnSuccess", "Microsoft.EntityFrameworkCore.SavedChangesEventArgs.AcceptAllChangesOnSuccess", "Microsoft.EntityFrameworkCore.SavedChangesEventArgs.EntitiesSavedCount", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges")]
+    [BehavioralCoverage("EF10-SAVE-EVENTS-SUCCESS-SYNC", "Microsoft.EntityFrameworkCore.DbContext.SavingChanges", "Microsoft.EntityFrameworkCore.DbContext.SavedChanges", "Microsoft.EntityFrameworkCore.SaveChangesEventArgs.AcceptAllChangesOnSuccess", "Microsoft.EntityFrameworkCore.SavedChangesEventArgs.EntitiesSavedCount", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges")]
     public async Task SaveChanges_RaisesEventsInOrderSynchronously()
     {
         await using var context = ProviderTestRuntime.CreateContext();
@@ -35,7 +35,7 @@ public sealed class SaveChangesEventTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-SAVE-EVENTS-SUCCESS-ASYNC", "Microsoft.EntityFrameworkCore.DbContext.SavingChanges", "Microsoft.EntityFrameworkCore.DbContext.SavedChanges", "Microsoft.EntityFrameworkCore.SaveChangesEventArgs.AcceptAllChangesOnSuccess", "Microsoft.EntityFrameworkCore.SavingChangesEventArgs.AcceptAllChangesOnSuccess", "Microsoft.EntityFrameworkCore.SavedChangesEventArgs.AcceptAllChangesOnSuccess", "Microsoft.EntityFrameworkCore.SavedChangesEventArgs.EntitiesSavedCount", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync")]
+    [BehavioralCoverage("EF10-SAVE-EVENTS-SUCCESS-ASYNC", "Microsoft.EntityFrameworkCore.DbContext.SavingChanges", "Microsoft.EntityFrameworkCore.DbContext.SavedChanges", "Microsoft.EntityFrameworkCore.SaveChangesEventArgs.AcceptAllChangesOnSuccess", "Microsoft.EntityFrameworkCore.SavedChangesEventArgs.EntitiesSavedCount", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync")]
     public async Task SaveChangesAsync_RaisesEventsInOrder()
     {
         await using var context = ProviderTestRuntime.CreateContext();
@@ -62,7 +62,7 @@ public sealed class SaveChangesEventTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-SAVE-EVENTS-FAILURE-SYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesFailed", "Microsoft.EntityFrameworkCore.SaveChangesFailedEventArgs.AcceptAllChangesOnSuccess", "Microsoft.EntityFrameworkCore.SaveChangesFailedEventArgs.Exception", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "Microsoft.EntityFrameworkCore.DbUpdateException")]
+    [BehavioralCoverage("EF10-SAVE-EVENTS-FAILURE-SYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesFailed", "Microsoft.EntityFrameworkCore.SaveChangesFailedEventArgs.Exception", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "Microsoft.EntityFrameworkCore.DbUpdateException")]
     public async Task SaveChanges_RaisesFailureEventSynchronously()
     {
         var id = Guid.NewGuid();
@@ -80,7 +80,7 @@ public sealed class SaveChangesEventTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-SAVE-EVENTS-FAILURE-ASYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesFailed", "Microsoft.EntityFrameworkCore.SaveChangesFailedEventArgs.AcceptAllChangesOnSuccess", "Microsoft.EntityFrameworkCore.SaveChangesFailedEventArgs.Exception", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.DbUpdateException")]
+    [BehavioralCoverage("EF10-SAVE-EVENTS-FAILURE-ASYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesFailed", "Microsoft.EntityFrameworkCore.SaveChangesFailedEventArgs.Exception", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.DbUpdateException")]
     public async Task SaveChangesAsync_RaisesFailureEvent()
     {
         var id = Guid.NewGuid();

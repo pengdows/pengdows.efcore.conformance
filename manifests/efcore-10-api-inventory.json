@@ -19,19 +19,13 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 127,
+    "AwaitingClassification": 109,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 618,
-    "UncoveredMemberFamilies": 93
+    "MemberEntriesInCoveredFamilies": 625,
+    "UncoveredMemberFamilies": 76
   },
   "CoverageSelectors": {
-    "UnmatchedEfCoreSelectors": [
-      "Microsoft.EntityFrameworkCore.SaveChangesFailedEventArgs.AcceptAllChangesOnSuccess",
-      "Microsoft.EntityFrameworkCore.SavedChangesEventArgs.AcceptAllChangesOnSuccess",
-      "Microsoft.EntityFrameworkCore.SavingChangesEventArgs.AcceptAllChangesOnSuccess",
-      "Microsoft.EntityFrameworkCore.TransactionsDatabaseFacadeExtensions.EnlistTransaction",
-      "Microsoft.EntityFrameworkCore.TransactionsDatabaseFacadeExtensions.GetEnlistedTransaction"
-    ],
+    "UnmatchedEfCoreSelectors": [],
     "ExternalApiSelectors": [
       "System.Collections.Generic.IAsyncDisposable.DisposeAsync",
       "System.Collections.Generic.IAsyncEnumerator\u00601.MoveNextAsync",
@@ -65,6 +59,7 @@
       "System.Linq.Queryable.Sum",
       "System.Linq.Queryable.Take",
       "System.Linq.Queryable.ThenBy",
+      "System.Linq.Queryable.ToArray",
       "System.Linq.Queryable.ToList",
       "System.Linq.Queryable.Where"
     ]
@@ -91,10 +86,10 @@
       "MemberKind": "Field",
       "ApiMemberName": "value__",
       "Signature": "System.Int32 value__",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "The public value__ field is compiler-generated enum storage, not a documented provider behavior or independent API contract.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.AutoTransactionBehavior.value__"
     },
     {
@@ -254,8 +249,8 @@
       "Signature": "System.Int32 value__",
       "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "ef-owned-no-provider-contract",
-      "DispositionReason": "Change tracking entry and collection APIs are owned by EF Core. Provider interaction is covered through tests that load, modify, and persist entities via public APIs.",
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "The public value__ field is compiler-generated enum storage, not a documented provider behavior or independent API contract.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.CascadeTiming.value__"
     },
     {
@@ -720,8 +715,8 @@
       "Signature": "System.Int32 value__",
       "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "ef-owned-no-provider-contract",
-      "DispositionReason": "Change tracking entry and collection APIs are owned by EF Core. Provider interaction is covered through tests that load, modify, and persist entities via public APIs.",
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "The public value__ field is compiler-generated enum storage, not a documented provider behavior or independent API contract.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTrackerDebugStringOptions.value__"
     },
     {
@@ -13922,8 +13917,8 @@
       "Signature": "System.Int32 value__",
       "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "ef-owned-no-provider-contract",
-      "DispositionReason": "Change tracking entry and collection APIs are owned by EF Core. Provider interaction is covered through tests that load, modify, and persist entities via public APIs.",
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "The public value__ field is compiler-generated enum storage, not a documented provider behavior or independent API contract.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.LoadOptions.value__"
     },
     {
@@ -15909,10 +15904,10 @@
       "MemberKind": "Field",
       "ApiMemberName": "value__",
       "Signature": "System.Int32 value__",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "The public value__ field is compiler-generated enum storage, not a documented provider behavior or independent API contract.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTrackingStrategy.value__"
     },
     {
@@ -19372,10 +19367,10 @@
       "MemberKind": "Field",
       "ApiMemberName": "value__",
       "Signature": "System.Int32 value__",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "The public value__ field is compiler-generated enum storage, not a documented provider behavior or independent API contract.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DeleteBehavior.value__"
     },
     {
@@ -24122,8 +24117,8 @@
       "Signature": "System.Int32 value__",
       "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "ef-owned-no-provider-contract",
-      "DispositionReason": "Diagnostic identifiers, event payloads, and logging helpers are owned by EF Core. Provider-observable interception behavior is covered through public SaveChanges tests where applicable.",
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "The public value__ field is compiler-generated enum storage, not a documented provider behavior or independent API contract.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Diagnostics.CommandSource.value__"
     },
     {
@@ -32561,8 +32556,8 @@
       "Signature": "System.Int32 value__",
       "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "ef-owned-no-provider-contract",
-      "DispositionReason": "Diagnostic identifiers, event payloads, and logging helpers are owned by EF Core. Provider-observable interception behavior is covered through public SaveChanges tests where applicable.",
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "The public value__ field is compiler-generated enum storage, not a documented provider behavior or independent API contract.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Diagnostics.DbCommandMethod.value__"
     },
     {
@@ -32921,8 +32916,8 @@
       "Signature": "System.Int32 value__",
       "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "ef-owned-no-provider-contract",
-      "DispositionReason": "Diagnostic identifiers, event payloads, and logging helpers are owned by EF Core. Provider-observable interception behavior is covered through public SaveChanges tests where applicable.",
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "The public value__ field is compiler-generated enum storage, not a documented provider behavior or independent API contract.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Diagnostics.DbContextLoggerOptions.value__"
     },
     {
@@ -53161,7 +53156,10 @@
       "Signature": "System.Threading.Tasks.Task\u003CTSource[]\u003E ToArrayAsync\u003CTSource\u003E(System.Linq.IQueryable\u003CTSource\u003E source, System.Threading.CancellationToken cancellationToken = null)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
-        "EF10-QUERY-ASYNC-MATERIALIZERS"
+        "EF10-QUERY-ASYNC-MATERIALIZERS",
+        "EF10-QUERY-COLLECTION-MODE-CONSTANTS-ASYNC",
+        "EF10-QUERY-COLLECTION-MODE-MULTIPLE-PARAMETERS-ASYNC",
+        "EF10-QUERY-COLLECTION-MODE-PARAMETERS-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -53607,10 +53605,10 @@
       "MemberKind": "Field",
       "ApiMemberName": "value__",
       "Signature": "System.Int32 value__",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "The public value__ field is compiler-generated enum storage, not a documented provider behavior or independent API contract.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityState.value__"
     },
     {
@@ -58604,7 +58602,7 @@
       "ProviderApplicable": false,
       "BehavioralContracts": [],
       "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "This public infrastructure namespace contains EF-owned model/runtime helpers and provider service extension points. The suite tests application-facing context, connection, factory, and interception behavior through their public results; it does not inspect provider services or EF implementation helpers.",
+      "DispositionReason": "The public value__ field is compiler-generated enum storage, not a documented provider behavior or independent API contract.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Infrastructure.MetadataDebugStringOptions.value__"
     },
     {
@@ -59957,10 +59955,17 @@
       "MemberKind": "Method",
       "ApiMemberName": "UseParameterizedCollectionMode",
       "Signature": "TBuilder UseParameterizedCollectionMode(Microsoft.EntityFrameworkCore.ParameterTranslationMode parameterizedCollectionMode)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "This public infrastructure namespace contains EF-owned model/runtime helpers and provider service extension points. The suite tests application-facing context, connection, factory, and interception behavior through their public results; it does not inspect provider services or EF implementation helpers.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-QUERY-COLLECTION-MODE-CONSTANTS-ASYNC",
+        "EF10-QUERY-COLLECTION-MODE-CONSTANTS-SYNC",
+        "EF10-QUERY-COLLECTION-MODE-MULTIPLE-PARAMETERS-ASYNC",
+        "EF10-QUERY-COLLECTION-MODE-MULTIPLE-PARAMETERS-SYNC",
+        "EF10-QUERY-COLLECTION-MODE-PARAMETERS-ASYNC",
+        "EF10-QUERY-COLLECTION-MODE-PARAMETERS-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Infrastructure.RelationalDbContextOptionsBuilder\u00602.UseParameterizedCollectionMode"
     },
     {
@@ -87508,7 +87513,7 @@
       "ProviderApplicable": false,
       "BehavioralContracts": [],
       "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "These are EF Core model metadata APIs. Provider conformance is checked through the configured model\u0027s observable schema, query, migration, and persistence behavior instead of direct metadata inspection.",
+      "DispositionReason": "The public value__ field is compiler-generated enum storage, not a documented provider behavior or independent API contract.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.ConfigurationSource.value__"
     },
     {
@@ -143980,7 +143985,7 @@
       "ProviderApplicable": false,
       "BehavioralContracts": [],
       "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "These are EF Core model metadata APIs. Provider conformance is checked through the configured model\u0027s observable schema, query, migration, and persistence behavior instead of direct metadata inspection.",
+      "DispositionReason": "The public value__ field is compiler-generated enum storage, not a documented provider behavior or independent API contract.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.PropertySaveBehavior.value__"
     },
     {
@@ -149320,7 +149325,7 @@
       "ProviderApplicable": false,
       "BehavioralContracts": [],
       "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "These are EF Core model metadata APIs. Provider conformance is checked through the configured model\u0027s observable schema, query, migration, and persistence behavior instead of direct metadata inspection.",
+      "DispositionReason": "The public value__ field is compiler-generated enum storage, not a documented provider behavior or independent API contract.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.StoreObjectType.value__"
     },
     {
@@ -149488,7 +149493,7 @@
       "ProviderApplicable": false,
       "BehavioralContracts": [],
       "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "These are EF Core model metadata APIs. Provider conformance is checked through the configured model\u0027s observable schema, query, migration, and persistence behavior instead of direct metadata inspection.",
+      "DispositionReason": "The public value__ field is compiler-generated enum storage, not a documented provider behavior or independent API contract.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Metadata.ValueGenerated.value__"
     },
     {
@@ -151285,10 +151290,10 @@
       "MemberKind": "Field",
       "ApiMemberName": "value__",
       "Signature": "System.Int32 value__",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "The public value__ field is compiler-generated enum storage, not a documented provider behavior or independent API contract.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.LockReleaseBehavior.value__"
     },
     {
@@ -153019,10 +153024,10 @@
       "MemberKind": "Field",
       "ApiMemberName": "value__",
       "Signature": "System.Int32 value__",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "The public value__ field is compiler-generated enum storage, not a documented provider behavior or independent API contract.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationsSqlGenerationOptions.value__"
     },
     {
@@ -156172,10 +156177,10 @@
       "MemberKind": "Field",
       "ApiMemberName": "value__",
       "Signature": "System.Int32 value__",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "The public value__ field is compiler-generated enum storage, not a documented provider behavior or independent API contract.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.ReferentialAction.value__"
     },
     {
@@ -157081,10 +157086,15 @@
       "MemberKind": "Type",
       "ApiMemberName": null,
       "Signature": "enum Microsoft.EntityFrameworkCore.ParameterTranslationMode",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-QUERY-COLLECTION-MODE-CONSTANTS-ASYNC",
+        "EF10-QUERY-COLLECTION-MODE-CONSTANTS-SYNC",
+        "EF10-QUERY-COLLECTION-MODE-PARAMETERS-ASYNC",
+        "EF10-QUERY-COLLECTION-MODE-PARAMETERS-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ParameterTranslationMode"
     },
     {
@@ -157093,10 +157103,10 @@
       "MemberKind": "Field",
       "ApiMemberName": "value__",
       "Signature": "System.Int32 value__",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "The public value__ field is compiler-generated enum storage, not a documented provider behavior or independent API contract.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ParameterTranslationMode.value__"
     },
     {
@@ -157105,10 +157115,13 @@
       "MemberKind": "Field",
       "ApiMemberName": "MultipleParameters",
       "Signature": "Microsoft.EntityFrameworkCore.ParameterTranslationMode MultipleParameters = 0",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-QUERY-COLLECTION-MODE-MULTIPLE-PARAMETERS-ASYNC",
+        "EF10-QUERY-COLLECTION-MODE-MULTIPLE-PARAMETERS-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ParameterTranslationMode.MultipleParameters"
     },
     {
@@ -157117,10 +157130,13 @@
       "MemberKind": "Field",
       "ApiMemberName": "Constant",
       "Signature": "Microsoft.EntityFrameworkCore.ParameterTranslationMode Constant = 1",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-QUERY-COLLECTION-MODE-CONSTANTS-ASYNC",
+        "EF10-QUERY-COLLECTION-MODE-CONSTANTS-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ParameterTranslationMode.Constant"
     },
     {
@@ -157129,10 +157145,13 @@
       "MemberKind": "Field",
       "ApiMemberName": "Parameter",
       "Signature": "Microsoft.EntityFrameworkCore.ParameterTranslationMode Parameter = 2",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-QUERY-COLLECTION-MODE-PARAMETERS-ASYNC",
+        "EF10-QUERY-COLLECTION-MODE-PARAMETERS-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ParameterTranslationMode.Parameter"
     },
     {
@@ -157276,10 +157295,10 @@
       "MemberKind": "Field",
       "ApiMemberName": "value__",
       "Signature": "System.Int32 value__",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "The public value__ field is compiler-generated enum storage, not a documented provider behavior or independent API contract.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.PropertyAccessMode.value__"
     },
     {
@@ -174313,7 +174332,7 @@
       "ProviderApplicable": false,
       "BehavioralContracts": [],
       "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "These are public query provider service and expression APIs. The suite does not invoke provider services directly; it verifies translation and results through public IQueryable operations.",
+      "DispositionReason": "The public value__ field is compiler-generated enum storage, not a documented provider behavior or independent API contract.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Query.ResultCardinality.value__"
     },
     {
@@ -182173,10 +182192,10 @@
       "MemberKind": "Field",
       "ApiMemberName": "value__",
       "Signature": "System.Int32 value__",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "The public value__ field is compiler-generated enum storage, not a documented provider behavior or independent API contract.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.QuerySplittingBehavior.value__"
     },
     {
@@ -182230,10 +182249,10 @@
       "MemberKind": "Field",
       "ApiMemberName": "value__",
       "Signature": "System.Int32 value__",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "The public value__ field is compiler-generated enum storage, not a documented provider behavior or independent API contract.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.QueryTrackingBehavior.value__"
     },
     {
@@ -205656,7 +205675,7 @@
       "ProviderApplicable": false,
       "BehavioralContracts": [],
       "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "These are public storage and type-mapping service APIs used by provider implementations. Their observable mapping behavior is exercised through persistence and type-fidelity tests rather than direct service calls.",
+      "DispositionReason": "The public value__ field is compiler-generated enum storage, not a documented provider behavior or independent API contract.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Storage.StoreTypePostfix.value__"
     },
     {
@@ -215301,7 +215320,7 @@
       "ProviderApplicable": false,
       "BehavioralContracts": [],
       "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "These are public update pipeline service APIs used by provider implementations. Persistence behavior is tested through DbContext SaveChanges and other public application operations.",
+      "DispositionReason": "The public value__ field is compiler-generated enum storage, not a documented provider behavior or independent API contract.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Update.ResultSetMapping.value__"
     },
     {
@@ -217581,10 +217600,10 @@
       "MemberKind": "Field",
       "ApiMemberName": "value__",
       "Signature": "System.Int32 value__",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "The public value__ field is compiler-generated enum storage, not a documented provider behavior or independent API contract.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.WarningBehavior.value__"
     },
     {
@@ -217908,10 +217927,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "EnlistTransaction",
       "Signature": "System.Void EnlistTransaction(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade, System.Transactions.Transaction transaction)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-AMBIENT-TRANSACTION-ASYNC",
+        "EF10-AMBIENT-TRANSACTION-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "System.Transactions.TransactionsDatabaseFacadeExtensions.EnlistTransaction"
     },
     {
@@ -217920,10 +217942,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "GetEnlistedTransaction",
       "Signature": "System.Transactions.Transaction GetEnlistedTransaction(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-AMBIENT-TRANSACTION-ASYNC",
+        "EF10-AMBIENT-TRANSACTION-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "System.Transactions.TransactionsDatabaseFacadeExtensions.GetEnlistedTransaction"
     }
   ]

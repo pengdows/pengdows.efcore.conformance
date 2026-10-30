@@ -135,6 +135,11 @@ static string EntryDisposition(MemberInfo member, bool hasBehavioralCoverage, Ap
         return disposition;
     }
 
+    if (IsEnumStorageField(member))
+    {
+        return "not-applicable-with-rationale";
+    }
+
     if (hasBehavioralCoverage)
     {
         return "behavior-tested-family";
@@ -167,8 +172,16 @@ static string? EntryDispositionReason(MemberInfo member, bool hasBehavioralCover
         return "A behavioral test exercises this public API member family through EF Core public operations.";
     }
 
+    if (IsEnumStorageField(member))
+    {
+        return "The public value__ field is compiler-generated enum storage, not a documented provider behavior or independent API contract.";
+    }
+
     return FindDispositionRule(member, rules)?.Reason;
 }
+
+static bool IsEnumStorageField(MemberInfo member) =>
+    member is FieldInfo { Name: "value__", DeclaringType.IsEnum: true };
 
 static string ResolveContractPath(string inventoryOutputPath)
 {

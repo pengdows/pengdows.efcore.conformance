@@ -7,7 +7,7 @@ using pengdows.efcore.conformance;
 namespace pengdows.efcore.conformance.Adapter.PomeloMySql;
 
 /// <summary>Optional EF Core 10 adapter for MySQL-compatible servers using Pomelo.</summary>
-public sealed class PomeloMySqlAdapter : IAdoNetProviderAdapter
+public sealed class PomeloMySqlAdapter : IAdoNetProviderAdapter, IParameterizedCollectionModeAdapter
 {
     private static readonly ProviderCapabilities DeclaredCapabilities = new(
         new HashSet<string>(StringComparer.Ordinal)
@@ -20,7 +20,8 @@ public sealed class PomeloMySqlAdapter : IAdoNetProviderAdapter
             "raw-sql",
             "execute-update",
             "execute-delete",
-            "external-connection"
+            "external-connection",
+            "parameterized-collection-modes"
         },
         new HashSet<string>(StringComparer.Ordinal)
         {
@@ -38,6 +39,15 @@ public sealed class PomeloMySqlAdapter : IAdoNetProviderAdapter
 
     public void Configure(DbContextOptionsBuilder options, string connectionString) =>
         options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 4, 0)));
+
+    public void ConfigureParameterizedCollectionMode(
+        DbContextOptionsBuilder options,
+        string connectionString,
+        ParameterTranslationMode mode) =>
+        options.UseMySql(
+            connectionString,
+            new MySqlServerVersion(new Version(8, 4, 0)),
+            mysql => mysql.UseParameterizedCollectionMode(mode));
 
     public Task InitializeDatabaseAsync(DbContext context, CancellationToken cancellationToken) =>
         context.Database.EnsureCreatedAsync(cancellationToken);
