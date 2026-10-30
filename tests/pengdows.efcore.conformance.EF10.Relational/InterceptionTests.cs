@@ -127,6 +127,38 @@ public sealed class InterceptionTests
         Assert.Equal(new[] { "creating", "created", "initializing", "initialized" }, interceptor.Callbacks);
     }
 
+    [Fact]
+    [BehavioralCoverage("EF10-INTERCEPTION-CONNECTION-SYNC", "Microsoft.EntityFrameworkCore.DbContextOptionsBuilder.AddInterceptors", "Microsoft.EntityFrameworkCore.Diagnostics.DbConnectionInterceptor.ConnectionOpening", "Microsoft.EntityFrameworkCore.Diagnostics.DbConnectionInterceptor.ConnectionOpened", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.OpenConnection", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.CloseConnection")]
+    public async Task OpenConnection_InvokesSynchronousConnectionInterceptorCallbacks()
+    {
+        var interceptor = new RecordingConnectionInterceptor();
+
+        await using var context = ProviderTestRuntime.CreateContext(options => options.AddInterceptors(interceptor));
+        context.Database.OpenConnection();
+        context.Database.CloseConnection();
+
+        Assert.Equal(1, interceptor.ConnectionOpeningCalls);
+        Assert.Equal(1, interceptor.ConnectionOpenedCalls);
+        Assert.Equal(0, interceptor.ConnectionOpeningAsyncCalls);
+        Assert.Equal(0, interceptor.ConnectionOpenedAsyncCalls);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-INTERCEPTION-CONNECTION-ASYNC", "Microsoft.EntityFrameworkCore.DbContextOptionsBuilder.AddInterceptors", "Microsoft.EntityFrameworkCore.Diagnostics.DbConnectionInterceptor.ConnectionOpeningAsync", "Microsoft.EntityFrameworkCore.Diagnostics.DbConnectionInterceptor.ConnectionOpenedAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.OpenConnectionAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.CloseConnectionAsync")]
+    public async Task OpenConnectionAsync_InvokesAsynchronousConnectionInterceptorCallbacks()
+    {
+        var interceptor = new RecordingConnectionInterceptor();
+
+        await using var context = ProviderTestRuntime.CreateContext(options => options.AddInterceptors(interceptor));
+        await context.Database.OpenConnectionAsync(TestContext.Current.CancellationToken);
+        await context.Database.CloseConnectionAsync();
+
+        Assert.Equal(0, interceptor.ConnectionOpeningCalls);
+        Assert.Equal(0, interceptor.ConnectionOpenedCalls);
+        Assert.Equal(1, interceptor.ConnectionOpeningAsyncCalls);
+        Assert.Equal(1, interceptor.ConnectionOpenedAsyncCalls);
+    }
+
     private static Person CreatePerson(string prefix) => new()
     {
         Id = Guid.NewGuid(),
@@ -222,6 +254,48 @@ public sealed class InterceptionTests
         {
             Callbacks.Add("initialized");
             return entity;
+        }
+    }
+
+    private sealed class RecordingConnectionInterceptor : DbConnectionInterceptor
+    {
+        public int ConnectionOpeningCalls { get; private set; }
+
+        public int ConnectionOpenedCalls { get; private set; }
+
+        public int ConnectionOpeningAsyncCalls { get; private set; }
+
+        public int ConnectionOpenedAsyncCalls { get; private set; }
+
+        public override InterceptionResult ConnectionOpening(
+            DbConnection connection,
+            ConnectionEventData eventData,
+            InterceptionResult result)
+        {
+            ConnectionOpeningCalls++;
+            return result;
+        }
+
+        public override void ConnectionOpened(DbConnection connection, ConnectionEndEventData eventData) =>
+            ConnectionOpenedCalls++;
+
+        public override ValueTask<InterceptionResult> ConnectionOpeningAsync(
+            DbConnection connection,
+            ConnectionEventData eventData,
+            InterceptionResult result,
+            CancellationToken cancellationToken = default)
+        {
+            ConnectionOpeningAsyncCalls++;
+            return ValueTask.FromResult(result);
+        }
+
+        public override Task ConnectionOpenedAsync(
+            DbConnection connection,
+            ConnectionEndEventData eventData,
+            CancellationToken cancellationToken = default)
+        {
+            ConnectionOpenedAsyncCalls++;
+            return Task.CompletedTask;
         }
     }
 
