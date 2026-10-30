@@ -55325,7 +55325,8 @@
       "Signature": "System.Threading.Tasks.Task\u003CTSource\u003E LastAsync\u003CTSource\u003E(System.Linq.IQueryable\u003CTSource\u003E source, System.Threading.CancellationToken cancellationToken = null)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
-        "EF10-QUERY-LAST-ASYNC"
+        "EF10-QUERY-LAST-ASYNC",
+        "EF10-QUERY-LAST-EMPTY-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -55339,7 +55340,8 @@
       "Signature": "System.Threading.Tasks.Task\u003CTSource\u003E LastAsync\u003CTSource\u003E(System.Linq.IQueryable\u003CTSource\u003E source, System.Linq.Expressions.Expression\u003CSystem.Func\u003CTSource, System.Boolean\u003E\u003E predicate, System.Threading.CancellationToken cancellationToken = null)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
-        "EF10-QUERY-LAST-ASYNC"
+        "EF10-QUERY-LAST-ASYNC",
+        "EF10-QUERY-LAST-EMPTY-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -55410,6 +55412,7 @@
         "EF10-PROPERTY-ACCESS-MODES-ASYNC",
         "EF10-QUERY-IGNORE-AUTO-INCLUDES-ASYNC",
         "EF10-QUERY-SINGLE-ASYNC",
+        "EF10-QUERY-SINGLE-EMPTY-ASYNC",
         "EF10-QUERY-SINGLE-MULTIPLE-ASYNC",
         "EF10-RAW-SQL-FROM-ASYNC",
         "EF10-RAW-SQL-FROM-RAW-ASYNC",
@@ -55473,6 +55476,7 @@
         "EF10-PROPERTY-ACCESS-MODES-ASYNC",
         "EF10-QUERY-IGNORE-AUTO-INCLUDES-ASYNC",
         "EF10-QUERY-SINGLE-ASYNC",
+        "EF10-QUERY-SINGLE-EMPTY-ASYNC",
         "EF10-QUERY-SINGLE-MULTIPLE-ASYNC",
         "EF10-RAW-SQL-FROM-ASYNC",
         "EF10-RAW-SQL-FROM-RAW-ASYNC",

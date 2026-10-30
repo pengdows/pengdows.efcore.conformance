@@ -116,6 +116,30 @@ public sealed class QueryTerminalOperatorTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-QUERY-SINGLE-EMPTY-SYNC", "System.Linq.Queryable.Single")]
+    public async Task Single_ThrowsForEmptyResultSynchronously()
+    {
+        var missingName = Guid.NewGuid().ToString("N");
+        await using var context = ProviderTestRuntime.CreateContext();
+        await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
+
+        Assert.Throws<InvalidOperationException>(() => context.People.Single(person => person.Name == missingName));
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-SINGLE-EMPTY-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    public async Task SingleAsync_ThrowsForEmptyResult()
+    {
+        var missingName = Guid.NewGuid().ToString("N");
+        await using var context = ProviderTestRuntime.CreateContext();
+        await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
+
+        await Assert.ThrowsAsync<InvalidOperationException>(() => context.People.SingleAsync(
+            person => person.Name == missingName,
+            TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-QUERY-SINGLE-MULTIPLE-SYNC", "System.Linq.Queryable.Single")]
     public async Task Single_ThrowsForMultipleMatchingEntitiesSynchronously()
     {
@@ -215,6 +239,34 @@ public sealed class QueryTerminalOperatorTests
             .LastAsync(TestContext.Current.CancellationToken);
 
         Assert.Equal(expected.Id, actual.Id);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-LAST-EMPTY-SYNC", "System.Linq.Queryable.Last")]
+    public async Task Last_ThrowsForEmptyResultSynchronously()
+    {
+        var missingName = Guid.NewGuid().ToString("N");
+        await using var context = ProviderTestRuntime.CreateContext();
+        await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
+
+        Assert.Throws<InvalidOperationException>(() => context.People
+            .Where(person => person.Name == missingName)
+            .OrderBy(person => person.Age)
+            .Last());
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-LAST-EMPTY-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.LastAsync")]
+    public async Task LastAsync_ThrowsForEmptyResult()
+    {
+        var missingName = Guid.NewGuid().ToString("N");
+        await using var context = ProviderTestRuntime.CreateContext();
+        await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
+
+        await Assert.ThrowsAsync<InvalidOperationException>(() => context.People
+            .Where(person => person.Name == missingName)
+            .OrderBy(person => person.Age)
+            .LastAsync(TestContext.Current.CancellationToken));
     }
 
     [Fact]
