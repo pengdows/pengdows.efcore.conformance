@@ -56,6 +56,7 @@
       "System.Linq.Queryable.FirstOrDefault",
       "System.Linq.Queryable.GroupBy",
       "System.Linq.Queryable.GroupJoin",
+      "System.Linq.Queryable.Index",
       "System.Linq.Queryable.Intersect",
       "System.Linq.Queryable.Join",
       "System.Linq.Queryable.Last",

@@ -322,6 +322,53 @@ public sealed class QueryTerminalOperatorTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-QUERY-ELEMENTAT-INDEX-FROM-END", "System.Linq.Queryable.ElementAt")]
+    public async Task ElementAt_WithIndexFromEndReturnsTheExpectedEntity()
+    {
+        var (batch, _, _, expected) = await SeedThreePeopleAsync();
+        await using var context = ProviderTestRuntime.CreateContext();
+
+        var actual = context.People.Where(person => person.Name.StartsWith(batch))
+            .OrderBy(person => person.Age)
+            .ElementAt(^1);
+
+        Assert.Equal(expected.Id, actual.Id);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-TAKE-RANGE", "System.Linq.Queryable.Take")]
+    public async Task Take_WithRangeReturnsOnlyTheSelectedOrderedSlice()
+    {
+        var (batch, _, middle, _) = await SeedThreePeopleAsync();
+        await using var context = ProviderTestRuntime.CreateContext();
+
+        var actual = context.People.Where(person => person.Name.StartsWith(batch))
+            .OrderBy(person => person.Age)
+            .Take(1..^1)
+            .Select(person => person.Id)
+            .ToArray();
+
+        Assert.Equal(new[] { middle.Id }, actual);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-INDEX", "System.Linq.Queryable.Index")]
+    public async Task Index_ProjectsZeroBasedPositionsAfterFilteringAndOrdering()
+    {
+        var (batch, first, middle, last) = await SeedThreePeopleAsync();
+        await using var context = ProviderTestRuntime.CreateContext();
+
+        var actual = context.People.Where(person => person.Name.StartsWith(batch))
+            .OrderBy(person => person.Age)
+            .Index()
+            .Select(item => new { item.Index, item.Item.Id })
+            .ToArray();
+
+        Assert.Equal(new[] { 0, 1, 2 }, actual.Select(item => item.Index));
+        Assert.Equal(new[] { first.Id, middle.Id, last.Id }, actual.Select(item => item.Id));
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-QUERY-ELEMENTAT-NEGATIVE-SYNC", "System.Linq.Queryable.ElementAt")]
     public async Task ElementAt_ThrowsForNegativeIndexSynchronously()
     {
