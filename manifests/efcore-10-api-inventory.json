@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 109,
+    "AwaitingClassification": 108,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 625,
-    "UncoveredMemberFamilies": 76
+    "MemberEntriesInCoveredFamilies": 626,
+    "UncoveredMemberFamilies": 75
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -18270,10 +18270,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "Random",
       "Signature": "System.Double Random(Microsoft.EntityFrameworkCore.DbFunctions _)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DB-FUNCTION-RANDOM-ASYNC",
+        "EF10-DB-FUNCTION-RANDOM-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbFunctionsExtensions.Random"
     },
     {
@@ -53156,6 +53159,7 @@
       "Signature": "System.Threading.Tasks.Task\u003CTSource[]\u003E ToArrayAsync\u003CTSource\u003E(System.Linq.IQueryable\u003CTSource\u003E source, System.Threading.CancellationToken cancellationToken = null)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-DB-FUNCTION-RANDOM-ASYNC",
         "EF10-QUERY-ASYNC-MATERIALIZERS",
         "EF10-QUERY-COLLECTION-MODE-CONSTANTS-ASYNC",
         "EF10-QUERY-COLLECTION-MODE-MULTIPLE-PARAMETERS-ASYNC",
