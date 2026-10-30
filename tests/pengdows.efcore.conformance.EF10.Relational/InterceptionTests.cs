@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using System.Data.Common;
 using pengdows.efcore.conformance;
 using Xunit;
 
@@ -26,7 +27,7 @@ public sealed class InterceptionTests
         Assert.Equal(1, interceptor.SavingChangesCalls);
         Assert.Equal(1, interceptor.SavedChangesCalls);
         Assert.Equal(0, interceptor.SavingChangesAsyncCalls);
-        Assert.Equal(0, interceptor.SavingChangesAsyncCalls);
+        Assert.Equal(0, interceptor.SavedChangesAsyncCalls);
         Assert.Equal(1, interceptor.LastSavedChangesResult);
 
         await using var verify = ProviderTestRuntime.CreateContext();
@@ -58,12 +59,106 @@ public sealed class InterceptionTests
         Assert.True(await verify.People.AnyAsync(item => item.Id == person.Id, TestContext.Current.CancellationToken));
     }
 
+    [Fact]
+    [BehavioralCoverage("EF10-INTERCEPTION-COMMAND-SYNC", "Microsoft.EntityFrameworkCore.DbContextOptionsBuilder.AddInterceptors", "Microsoft.EntityFrameworkCore.Diagnostics.DbCommandInterceptor.ReaderExecuting", "Microsoft.EntityFrameworkCore.Diagnostics.DbCommandInterceptor.ReaderExecuted", "System.Linq.Queryable.Single")]
+    public async Task Query_InvokesSynchronousCommandInterceptorCallbacks()
+    {
+        var person = CreatePerson("Sync command interceptor");
+        await SeedAsync(person);
+        var interceptor = new RecordingCommandInterceptor();
+
+        await using var context = ProviderTestRuntime.CreateContext(options => options.AddInterceptors(interceptor));
+        var actual = context.People.AsNoTracking().Single(item => item.Id == person.Id);
+
+        Assert.Equal(person.Name, actual.Name);
+        Assert.Equal(1, interceptor.ReaderExecutingCalls);
+        Assert.Equal(1, interceptor.ReaderExecutedCalls);
+        Assert.Equal(0, interceptor.ReaderExecutingAsyncCalls);
+        Assert.Equal(0, interceptor.ReaderExecutedAsyncCalls);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-INTERCEPTION-COMMAND-ASYNC", "Microsoft.EntityFrameworkCore.DbContextOptionsBuilder.AddInterceptors", "Microsoft.EntityFrameworkCore.Diagnostics.DbCommandInterceptor.ReaderExecutingAsync", "Microsoft.EntityFrameworkCore.Diagnostics.DbCommandInterceptor.ReaderExecutedAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    public async Task Query_InvokesAsynchronousCommandInterceptorCallbacks()
+    {
+        var person = CreatePerson("Async command interceptor");
+        await SeedAsync(person);
+        var interceptor = new RecordingCommandInterceptor();
+
+        await using var context = ProviderTestRuntime.CreateContext(options => options.AddInterceptors(interceptor));
+        var actual = await context.People.AsNoTracking()
+            .SingleAsync(item => item.Id == person.Id, TestContext.Current.CancellationToken);
+
+        Assert.Equal(person.Name, actual.Name);
+        Assert.Equal(0, interceptor.ReaderExecutingCalls);
+        Assert.Equal(0, interceptor.ReaderExecutedCalls);
+        Assert.Equal(1, interceptor.ReaderExecutingAsyncCalls);
+        Assert.Equal(1, interceptor.ReaderExecutedAsyncCalls);
+    }
+
     private static Person CreatePerson(string prefix) => new()
     {
         Id = Guid.NewGuid(),
         Name = $"{prefix} {Guid.NewGuid():N}",
         Age = 39
     };
+
+    private static async Task SeedAsync(Person person)
+    {
+        await using var context = ProviderTestRuntime.CreateContext();
+        await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
+        context.People.Add(person);
+        await context.SaveChangesAsync(TestContext.Current.CancellationToken);
+    }
+
+    private sealed class RecordingCommandInterceptor : DbCommandInterceptor
+    {
+        public int ReaderExecutingCalls { get; private set; }
+
+        public int ReaderExecutedCalls { get; private set; }
+
+        public int ReaderExecutingAsyncCalls { get; private set; }
+
+        public int ReaderExecutedAsyncCalls { get; private set; }
+
+        public override InterceptionResult<DbDataReader> ReaderExecuting(
+            DbCommand command,
+            CommandEventData eventData,
+            InterceptionResult<DbDataReader> result)
+        {
+            ReaderExecutingCalls++;
+            return result;
+        }
+
+        public override DbDataReader ReaderExecuted(
+            DbCommand command,
+            CommandExecutedEventData eventData,
+            DbDataReader result)
+        {
+            ReaderExecutedCalls++;
+            return result;
+        }
+
+        public override ValueTask<InterceptionResult<DbDataReader>> ReaderExecutingAsync(
+            DbCommand command,
+            CommandEventData eventData,
+            InterceptionResult<DbDataReader> result,
+            CancellationToken cancellationToken = default)
+        {
+            ReaderExecutingAsyncCalls++;
+            return ValueTask.FromResult(result);
+        }
+
+        public override ValueTask<DbDataReader> ReaderExecutedAsync(
+            DbCommand command,
+            CommandExecutedEventData eventData,
+            DbDataReader result,
+            CancellationToken cancellationToken = default)
+        {
+            ReaderExecutedAsyncCalls++;
+            return ValueTask.FromResult(result);
+        }
+    }
 
     private sealed class RecordingSaveChangesInterceptor : SaveChangesInterceptor
     {
