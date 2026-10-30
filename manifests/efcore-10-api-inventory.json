@@ -16082,6 +16082,9 @@
         "EF10-DATABASE-SEEDING-SYNC",
         "EF10-DB-FUNCTION-ATTRIBUTE-SYNC",
         "EF10-DB-FUNCTION-NULLABLE-SYNC",
+        "EF10-DBSET-ADD-RANGE-SYNC",
+        "EF10-DBSET-REMOVE-RANGE",
+        "EF10-DBSET-UPDATE-RANGE",
         "EF10-DELETE-BEHAVIOR-CASCADE-SYNC",
         "EF10-DELETE-BEHAVIOR-CLIENT-SYNC",
         "EF10-DELETE-BEHAVIOR-RESTRICT-SYNC",
@@ -16143,7 +16146,9 @@
         "EF10-TYPES-DECIMAL-CONVERSION-SYNC",
         "EF10-TYPES-NULLABLE-ROUNDTRIP-SYNC",
         "EF10-TYPES-PRECISION-ATTRIBUTE-SYNC",
-        "EF10-TYPES-ROUNDTRIP-SYNC"
+        "EF10-TYPES-ROUNDTRIP-SYNC",
+        "EF10-TYPES-TEMPORAL-BOUNDARIES",
+        "EF10-TYPES-TEMPORAL-ROUNDTRIP"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -16166,6 +16171,9 @@
         "EF10-DATABASE-SEEDING-SYNC",
         "EF10-DB-FUNCTION-ATTRIBUTE-SYNC",
         "EF10-DB-FUNCTION-NULLABLE-SYNC",
+        "EF10-DBSET-ADD-RANGE-SYNC",
+        "EF10-DBSET-REMOVE-RANGE",
+        "EF10-DBSET-UPDATE-RANGE",
         "EF10-DELETE-BEHAVIOR-CASCADE-SYNC",
         "EF10-DELETE-BEHAVIOR-CLIENT-SYNC",
         "EF10-DELETE-BEHAVIOR-RESTRICT-SYNC",
@@ -16227,7 +16235,9 @@
         "EF10-TYPES-DECIMAL-CONVERSION-SYNC",
         "EF10-TYPES-NULLABLE-ROUNDTRIP-SYNC",
         "EF10-TYPES-PRECISION-ATTRIBUTE-SYNC",
-        "EF10-TYPES-ROUNDTRIP-SYNC"
+        "EF10-TYPES-ROUNDTRIP-SYNC",
+        "EF10-TYPES-TEMPORAL-BOUNDARIES",
+        "EF10-TYPES-TEMPORAL-ROUNDTRIP"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -16251,6 +16261,7 @@
         "EF10-DATABASE-SEEDING-ASYNC",
         "EF10-DB-FUNCTION-ATTRIBUTE-ASYNC",
         "EF10-DB-FUNCTION-NULLABLE-ASYNC",
+        "EF10-DBSET-ADD-RANGE-ASYNC",
         "EF10-DBSET-ATTACH-RANGE",
         "EF10-DELETE-BEHAVIOR-CASCADE-ASYNC",
         "EF10-DELETE-BEHAVIOR-CLIENT-ASYNC",
@@ -16315,7 +16326,9 @@
         "EF10-TYPES-DECIMAL-CONVERSION-ASYNC",
         "EF10-TYPES-NULLABLE-ROUNDTRIP-ASYNC",
         "EF10-TYPES-PRECISION-ATTRIBUTE-ASYNC",
-        "EF10-TYPES-ROUNDTRIP-ASYNC"
+        "EF10-TYPES-ROUNDTRIP-ASYNC",
+        "EF10-TYPES-TEMPORAL-BOUNDARIES",
+        "EF10-TYPES-TEMPORAL-ROUNDTRIP"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -16339,6 +16352,7 @@
         "EF10-DATABASE-SEEDING-ASYNC",
         "EF10-DB-FUNCTION-ATTRIBUTE-ASYNC",
         "EF10-DB-FUNCTION-NULLABLE-ASYNC",
+        "EF10-DBSET-ADD-RANGE-ASYNC",
         "EF10-DBSET-ATTACH-RANGE",
         "EF10-DELETE-BEHAVIOR-CASCADE-ASYNC",
         "EF10-DELETE-BEHAVIOR-CLIENT-ASYNC",
@@ -16403,7 +16417,9 @@
         "EF10-TYPES-DECIMAL-CONVERSION-ASYNC",
         "EF10-TYPES-NULLABLE-ROUNDTRIP-ASYNC",
         "EF10-TYPES-PRECISION-ATTRIBUTE-ASYNC",
-        "EF10-TYPES-ROUNDTRIP-ASYNC"
+        "EF10-TYPES-ROUNDTRIP-ASYNC",
+        "EF10-TYPES-TEMPORAL-BOUNDARIES",
+        "EF10-TYPES-TEMPORAL-ROUNDTRIP"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -18993,6 +19009,7 @@
       "Signature": "System.Void AddRange(TEntity[] entities)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-DBSET-ADD-RANGE-SYNC",
         "EF10-PERSIST-ADD-RANGE-SYNC"
       ],
       "Disposition": "behavior-tested-family",
@@ -19007,6 +19024,7 @@
       "Signature": "System.Threading.Tasks.Task AddRangeAsync(TEntity[] entities)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-DBSET-ADD-RANGE-ASYNC",
         "EF10-PERSIST-ADD-RANGE-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
@@ -19035,6 +19053,7 @@
       "Signature": "System.Void RemoveRange(TEntity[] entities)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-DBSET-REMOVE-RANGE",
         "EF10-PERSIST-REMOVE-RANGE"
       ],
       "Disposition": "behavior-tested-family",
@@ -19049,6 +19068,7 @@
       "Signature": "System.Void UpdateRange(TEntity[] entities)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-DBSET-UPDATE-RANGE",
         "EF10-PERSIST-UPDATE-RANGE"
       ],
       "Disposition": "behavior-tested-family",
@@ -19063,6 +19083,7 @@
       "Signature": "System.Void AddRange(System.Collections.Generic.IEnumerable\u003CTEntity\u003E entities)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-DBSET-ADD-RANGE-SYNC",
         "EF10-PERSIST-ADD-RANGE-SYNC"
       ],
       "Disposition": "behavior-tested-family",
@@ -19077,6 +19098,7 @@
       "Signature": "System.Threading.Tasks.Task AddRangeAsync(System.Collections.Generic.IEnumerable\u003CTEntity\u003E entities, System.Threading.CancellationToken cancellationToken = null)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-DBSET-ADD-RANGE-ASYNC",
         "EF10-PERSIST-ADD-RANGE-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
@@ -19105,6 +19127,7 @@
       "Signature": "System.Void RemoveRange(System.Collections.Generic.IEnumerable\u003CTEntity\u003E entities)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-DBSET-REMOVE-RANGE",
         "EF10-PERSIST-REMOVE-RANGE"
       ],
       "Disposition": "behavior-tested-family",
@@ -19119,6 +19142,7 @@
       "Signature": "System.Void UpdateRange(System.Collections.Generic.IEnumerable\u003CTEntity\u003E entities)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-DBSET-UPDATE-RANGE",
         "EF10-PERSIST-UPDATE-RANGE"
       ],
       "Disposition": "behavior-tested-family",
@@ -55081,6 +55105,7 @@
       "Signature": "System.Threading.Tasks.Task\u003CSystem.Int32\u003E CountAsync\u003CTSource\u003E(System.Linq.IQueryable\u003CTSource\u003E source, System.Threading.CancellationToken cancellationToken = null)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-DBSET-ADD-RANGE-ASYNC",
         "EF10-QUERY-AGGREGATES-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
@@ -55095,6 +55120,7 @@
       "Signature": "System.Threading.Tasks.Task\u003CSystem.Int32\u003E CountAsync\u003CTSource\u003E(System.Linq.IQueryable\u003CTSource\u003E source, System.Linq.Expressions.Expression\u003CSystem.Func\u003CTSource, System.Boolean\u003E\u003E predicate, System.Threading.CancellationToken cancellationToken = null)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-DBSET-ADD-RANGE-ASYNC",
         "EF10-QUERY-AGGREGATES-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
@@ -55322,7 +55348,9 @@
         "EF10-TYPES-BOUNDARIES-ASYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC",
         "EF10-TYPES-DECIMAL-CONVERSION-ASYNC",
-        "EF10-TYPES-NULLABLE-ROUNDTRIP-ASYNC"
+        "EF10-TYPES-NULLABLE-ROUNDTRIP-ASYNC",
+        "EF10-TYPES-TEMPORAL-BOUNDARIES",
+        "EF10-TYPES-TEMPORAL-ROUNDTRIP"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -55378,7 +55406,9 @@
         "EF10-TYPES-BOUNDARIES-ASYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC",
         "EF10-TYPES-DECIMAL-CONVERSION-ASYNC",
-        "EF10-TYPES-NULLABLE-ROUNDTRIP-ASYNC"
+        "EF10-TYPES-NULLABLE-ROUNDTRIP-ASYNC",
+        "EF10-TYPES-TEMPORAL-BOUNDARIES",
+        "EF10-TYPES-TEMPORAL-ROUNDTRIP"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",

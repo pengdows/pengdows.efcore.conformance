@@ -156,6 +156,108 @@ public sealed class DbSetApiTests
             .SingleAsync(TestContext.Current.CancellationToken));
     }
 
+    [Fact]
+    [BehavioralCoverage("EF10-DBSET-ADD-RANGE-SYNC", "Microsoft.EntityFrameworkCore.DbSet`1.AddRange", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "System.Linq.Queryable.Count")]
+    public async Task AddRange_PersistsEveryEntitySynchronously()
+    {
+        var batch = Guid.NewGuid().ToString("N");
+        var people = new[]
+        {
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-one", Age = 61 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-two", Age = 62 }
+        };
+
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.People.AddRange(people);
+            Assert.Equal(2, write.SaveChanges());
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.Equal(2, verify.People.Count(person => person.Name.StartsWith(batch)));
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-DBSET-ADD-RANGE-ASYNC", "Microsoft.EntityFrameworkCore.DbSet`1.AddRangeAsync", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.CountAsync")]
+    public async Task AddRangeAsync_PersistsEveryEntity()
+    {
+        var batch = Guid.NewGuid().ToString("N");
+        var people = new[]
+        {
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-one", Age = 63 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-two", Age = 64 }
+        };
+
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            await write.People.AddRangeAsync(people, TestContext.Current.CancellationToken);
+            Assert.Equal(2, await write.SaveChangesAsync(TestContext.Current.CancellationToken));
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.Equal(2, await verify.People.CountAsync(
+            person => person.Name.StartsWith(batch),
+            TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-DBSET-UPDATE-RANGE", "Microsoft.EntityFrameworkCore.DbSet`1.UpdateRange", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "System.Linq.Queryable.ToArray")]
+    public async Task UpdateRange_PersistsModifiedValuesForEveryEntity()
+    {
+        var existing = new[]
+        {
+            new Person { Id = Guid.NewGuid(), Name = "DbSet update range one", Age = 65 },
+            new Person { Id = Guid.NewGuid(), Name = "DbSet update range two", Age = 66 }
+        };
+        await SeedAsync(existing);
+        var detached = existing.Select(person => new Person
+        {
+            Id = person.Id,
+            Name = $"{person.Name} updated",
+            Age = person.Age + 10
+        }).ToArray();
+
+        await using (var update = ProviderTestRuntime.CreateContext())
+        {
+            update.People.UpdateRange(detached);
+            Assert.All(detached, person => Assert.Equal(EntityState.Modified, update.Entry(person).State));
+            Assert.Equal(2, update.SaveChanges());
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        var actual = verify.People.AsNoTracking()
+            .Where(person => detached.Select(item => item.Id).Contains(person.Id))
+            .OrderBy(person => person.Age)
+            .ToArray();
+        Assert.Equal(detached.Select(person => person.Name).Order(StringComparer.Ordinal), actual.Select(person => person.Name));
+        Assert.Equal(new[] { 75, 76 }, actual.Select(person => person.Age));
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-DBSET-REMOVE-RANGE", "Microsoft.EntityFrameworkCore.DbSet`1.RemoveRange", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "System.Linq.Queryable.Count")]
+    public async Task RemoveRange_DeletesEveryEntity()
+    {
+        var existing = new[]
+        {
+            new Person { Id = Guid.NewGuid(), Name = "DbSet remove range one", Age = 67 },
+            new Person { Id = Guid.NewGuid(), Name = "DbSet remove range two", Age = 68 }
+        };
+        await SeedAsync(existing);
+
+        await using (var remove = ProviderTestRuntime.CreateContext())
+        {
+            var tracked = existing.Select(person => new Person { Id = person.Id }).ToArray();
+            remove.People.AttachRange(tracked);
+            remove.People.RemoveRange(tracked);
+            Assert.Equal(2, remove.SaveChanges());
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.Equal(0, verify.People.Count(person => existing.Select(item => item.Id).Contains(person.Id)));
+    }
+
     private static async Task SeedAsync(Guid id, string name, int age)
     {
         await using var context = ProviderTestRuntime.CreateContext();
