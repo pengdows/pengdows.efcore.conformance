@@ -21,7 +21,7 @@
     "PublicMembers": 16076,
     "AwaitingClassification": 204,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 613,
+    "MemberEntriesInCoveredFamilies": 615,
     "UncoveredMemberFamilies": 131
   },
   "CoverageSelectors": {
@@ -16058,6 +16058,7 @@
         "EF10-COMPLEX-TYPE-UPDATE-SYNC",
         "EF10-CONCURRENCY-RESOLVE-SYNC",
         "EF10-CONCURRENCY-SAVE-SYNC",
+        "EF10-DATABASE-SEEDING-SYNC",
         "EF10-DB-FUNCTION-ATTRIBUTE-SYNC",
         "EF10-DB-FUNCTION-NULLABLE-SYNC",
         "EF10-DELETE-BEHAVIOR-CASCADE-SYNC",
@@ -16131,6 +16132,7 @@
         "EF10-COMPLEX-TYPE-UPDATE-SYNC",
         "EF10-CONCURRENCY-RESOLVE-SYNC",
         "EF10-CONCURRENCY-SAVE-SYNC",
+        "EF10-DATABASE-SEEDING-SYNC",
         "EF10-DB-FUNCTION-ATTRIBUTE-SYNC",
         "EF10-DB-FUNCTION-NULLABLE-SYNC",
         "EF10-DELETE-BEHAVIOR-CASCADE-SYNC",
@@ -16204,6 +16206,7 @@
         "EF10-COMPLEX-TYPE-UPDATE-ASYNC",
         "EF10-CONCURRENCY-RESOLVE-ASYNC",
         "EF10-CONCURRENCY-SAVE-ASYNC",
+        "EF10-DATABASE-SEEDING-ASYNC",
         "EF10-DB-FUNCTION-ATTRIBUTE-ASYNC",
         "EF10-DB-FUNCTION-NULLABLE-ASYNC",
         "EF10-DBSET-ATTACH-RANGE",
@@ -16280,6 +16283,7 @@
         "EF10-COMPLEX-TYPE-UPDATE-ASYNC",
         "EF10-CONCURRENCY-RESOLVE-ASYNC",
         "EF10-CONCURRENCY-SAVE-ASYNC",
+        "EF10-DATABASE-SEEDING-ASYNC",
         "EF10-DB-FUNCTION-ATTRIBUTE-ASYNC",
         "EF10-DB-FUNCTION-NULLABLE-ASYNC",
         "EF10-DBSET-ATTACH-RANGE",
@@ -17510,10 +17514,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "UseSeeding",
       "Signature": "Microsoft.EntityFrameworkCore.DbContextOptionsBuilder UseSeeding(System.Action\u003CMicrosoft.EntityFrameworkCore.DbContext, System.Boolean\u003E seed)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "ef-owned-no-provider-contract",
-      "DispositionReason": "Generic options builder behavior is owned by EF Core. Provider configuration is supplied through the adapter and its resulting runtime behavior is tested.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DATABASE-SEEDING-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbContextOptionsBuilder.UseSeeding"
     },
     {
@@ -17522,10 +17528,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "UseAsyncSeeding",
       "Signature": "Microsoft.EntityFrameworkCore.DbContextOptionsBuilder UseAsyncSeeding(System.Func\u003CMicrosoft.EntityFrameworkCore.DbContext, System.Boolean, System.Threading.CancellationToken, System.Threading.Tasks.Task\u003E seedAsync)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "ef-owned-no-provider-contract",
-      "DispositionReason": "Generic options builder behavior is owned by EF Core. Provider configuration is supplied through the adapter and its resulting runtime behavior is tested.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DATABASE-SEEDING-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbContextOptionsBuilder.UseAsyncSeeding"
     },
     {
@@ -55437,7 +55445,8 @@
       "Signature": "System.Boolean EnsureCreated()",
       "ProviderApplicable": true,
       "BehavioralContracts": [
-        "EF10-DATABASE-LIFECYCLE-SYNC"
+        "EF10-DATABASE-LIFECYCLE-SYNC",
+        "EF10-DATABASE-SEEDING-SYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -55451,7 +55460,8 @@
       "Signature": "System.Threading.Tasks.Task\u003CSystem.Boolean\u003E EnsureCreatedAsync(System.Threading.CancellationToken cancellationToken = null)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
-        "EF10-DATABASE-LIFECYCLE-ASYNC"
+        "EF10-DATABASE-LIFECYCLE-ASYNC",
+        "EF10-DATABASE-SEEDING-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
