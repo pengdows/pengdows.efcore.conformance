@@ -181,6 +181,54 @@ public sealed class RelationshipTests
         Assert.Equal(blog.Id, trackedPost.Blog!.Id);
     }
 
+    [Fact]
+    [BehavioralCoverage("EF10-RELATIONSHIPS-COLLECTION-QUERY-ASYNC", "Microsoft.EntityFrameworkCore.ChangeTracking.CollectionEntry.Query", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.LoadAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.CountAsync")]
+    public async Task CollectionEntryQueryAsync_LoadsOnlyMatchingRelatedRows()
+    {
+        var blog = await CreateBlogAsync();
+
+        await using (var context = ProviderTestRuntime.CreateContext())
+        {
+            var trackedBlog = await context.Blogs.SingleAsync(
+                item => item.Id == blog.Id,
+                TestContext.Current.CancellationToken);
+            var posts = context.Entry(trackedBlog).Collection(item => item.Posts);
+
+            await posts.Query()
+                .Where(post => post.Title == "First")
+                .LoadAsync(TestContext.Current.CancellationToken);
+
+            Assert.Equal(new[] { "First" }, trackedBlog.Posts.Select(post => post.Title).ToArray());
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.Equal(2, await verify.Set<Post>().CountAsync(
+            post => post.BlogId == blog.Id,
+            TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-RELATIONSHIPS-COLLECTION-QUERY-SYNC", "Microsoft.EntityFrameworkCore.ChangeTracking.CollectionEntry.Query", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.Load", "System.Linq.Queryable.Count")]
+    public async Task CollectionEntryQuery_LoadsOnlyMatchingRelatedRowsSynchronously()
+    {
+        var blog = await CreateBlogAsync();
+
+        await using (var context = ProviderTestRuntime.CreateContext())
+        {
+            var trackedBlog = context.Blogs.Single(item => item.Id == blog.Id);
+            var posts = context.Entry(trackedBlog).Collection(item => item.Posts);
+
+            posts.Query()
+                .Where(post => post.Title == "First")
+                .Load();
+
+            Assert.Equal(new[] { "First" }, trackedBlog.Posts.Select(post => post.Title).ToArray());
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.Equal(2, verify.Set<Post>().Count(post => post.BlogId == blog.Id));
+    }
+
     private static async Task<Blog> CreateBlogAsync()
     {
         var blog = new Blog

@@ -25,7 +25,7 @@
     "PublicMembers": 16762,
     "AwaitingClassification": 0,
     "ExplicitlyExcluded": 5921,
-    "MemberEntriesInCoveredFamilies": 781,
+    "MemberEntriesInCoveredFamilies": 782,
     "UncoveredMemberFamilies": 0
   },
   "CoverageSelectors": {
@@ -861,10 +861,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "Query",
       "Signature": "System.Linq.IQueryable Query()",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "ef-owned-no-provider-contract",
-      "DispositionReason": "Change tracking entry and collection APIs are owned by EF Core. Provider interaction is covered through tests that load, modify, and persist entities via public APIs.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-RELATIONSHIPS-COLLECTION-QUERY-ASYNC",
+        "EF10-RELATIONSHIPS-COLLECTION-QUERY-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTracking.CollectionEntry.Query"
     },
     {
@@ -55127,7 +55130,8 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-DBSET-ADD-RANGE-ASYNC",
-        "EF10-QUERY-AGGREGATES-ASYNC"
+        "EF10-QUERY-AGGREGATES-ASYNC",
+        "EF10-RELATIONSHIPS-COLLECTION-QUERY-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -55142,7 +55146,8 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-DBSET-ADD-RANGE-ASYNC",
-        "EF10-QUERY-AGGREGATES-ASYNC"
+        "EF10-QUERY-AGGREGATES-ASYNC",
+        "EF10-RELATIONSHIPS-COLLECTION-QUERY-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -56393,7 +56398,8 @@
       "Signature": "System.Void Load\u003CTSource\u003E(System.Linq.IQueryable\u003CTSource\u003E source)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
-        "EF10-QUERY-LOAD-SYNC"
+        "EF10-QUERY-LOAD-SYNC",
+        "EF10-RELATIONSHIPS-COLLECTION-QUERY-SYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -56407,7 +56413,8 @@
       "Signature": "System.Threading.Tasks.Task LoadAsync\u003CTSource\u003E(System.Linq.IQueryable\u003CTSource\u003E source, System.Threading.CancellationToken cancellationToken = null)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
-        "EF10-QUERY-LOAD-ASYNC"
+        "EF10-QUERY-LOAD-ASYNC",
+        "EF10-RELATIONSHIPS-COLLECTION-QUERY-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
