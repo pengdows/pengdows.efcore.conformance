@@ -81,7 +81,8 @@
       "System.Linq.Queryable.Union",
       "System.Linq.Queryable.Where",
       "System.String.Contains(System.String)",
-      "System.String.EndsWith(System.String)"
+      "System.String.EndsWith(System.String)",
+      "System.String.StartsWith(System.String)"
     ]
   },
   "Entries": [
@@ -56190,6 +56191,7 @@
         "EF10-QUERY-SELECT-MANY-ASYNC",
         "EF10-QUERY-STRING-CONTAINS-ASYNC",
         "EF10-QUERY-STRING-ENDS-WITH-ASYNC",
+        "EF10-QUERY-STRING-STARTS-WITH-WILDCARDS-ASYNC",
         "EF10-QUERY-UNION-ASYNC"
       ],
       "Disposition": "behavior-tested-family",

@@ -400,6 +400,52 @@ public sealed class QueryTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-QUERY-STRING-STARTS-WITH-WILDCARDS-SYNC", "System.String.StartsWith(System.String)", "System.Linq.Queryable.Where", "System.Linq.Queryable.ToArray")]
+    public async Task StringStartsWith_TreatsSqlWildcardCharactersLiterallySynchronously()
+    {
+        var batch = Guid.NewGuid().ToString("N");
+        var prefix = $"pfx%_{batch}";
+        var expected = $"{prefix}-literal-prefix";
+        await SeedAsync(new[]
+        {
+            new Person { Id = Guid.NewGuid(), Name = expected, Age = 1 },
+            new Person { Id = Guid.NewGuid(), Name = $"pfxZZ{batch}-would-match-unescaped-like", Age = 2 },
+            new Person { Id = Guid.NewGuid(), Name = $"other-{batch}-unrelated", Age = 3 }
+        });
+
+        await using var query = ProviderTestRuntime.CreateContext();
+        var actual = query.People
+            .Where(person => person.Name.StartsWith(prefix))
+            .Select(person => person.Name)
+            .ToArray();
+
+        Assert.Equal(new[] { expected }, actual);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-STRING-STARTS-WITH-WILDCARDS-ASYNC", "System.String.StartsWith(System.String)", "System.Linq.Queryable.Where", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToArrayAsync")]
+    public async Task StringStartsWith_TreatsSqlWildcardCharactersLiterallyAsynchronously()
+    {
+        var batch = Guid.NewGuid().ToString("N");
+        var prefix = $"pfx%_{batch}";
+        var expected = $"{prefix}-literal-prefix";
+        await SeedAsync(new[]
+        {
+            new Person { Id = Guid.NewGuid(), Name = expected, Age = 1 },
+            new Person { Id = Guid.NewGuid(), Name = $"pfxZZ{batch}-would-match-unescaped-like", Age = 2 },
+            new Person { Id = Guid.NewGuid(), Name = $"other-{batch}-unrelated", Age = 3 }
+        });
+
+        await using var query = ProviderTestRuntime.CreateContext();
+        var actual = await query.People
+            .Where(person => person.Name.StartsWith(prefix))
+            .Select(person => person.Name)
+            .ToArrayAsync(TestContext.Current.CancellationToken);
+
+        Assert.Equal(new[] { expected }, actual);
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-QUERY-STRING-CONTAINS-SYNC", "System.String.Contains(System.String)", "System.Linq.Queryable.Where", "System.Linq.Queryable.ToArray")]
     public async Task StringContains_FiltersByParameterizedSubstringSynchronously()
     {
