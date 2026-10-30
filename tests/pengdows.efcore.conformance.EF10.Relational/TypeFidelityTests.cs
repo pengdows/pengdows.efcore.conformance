@@ -20,6 +20,21 @@ public sealed class TypeFidelityTests
         -99999999999999.9999m
     };
 
+    public static TheoryData<decimal> DecimalStringConversionValues => new()
+    {
+        0m,
+        0.0001m,
+        -0.0001m,
+        1m,
+        -1m,
+        123456789.1234m,
+        -123456789.1234m,
+        99999999999999.9999m,
+        -99999999999999.9999m,
+        decimal.MinValue,
+        decimal.MaxValue
+    };
+
     [Fact]
     [BehavioralCoverage("EF10-TYPES-ROUNDTRIP-ASYNC", "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder.HasPrecision", "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder`1.HasConversion", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync")]
     [NativeTypeCoverage("DATE", typeof(DateOnly), "EF10-TYPES-ROUNDTRIP-ASYNC")]
@@ -434,7 +449,7 @@ public sealed class TypeFidelityTests
     }
 
     [Theory]
-    [MemberData(nameof(DecimalBoundaryValues))]
+    [MemberData(nameof(DecimalStringConversionValues))]
     [BehavioralCoverage("EF10-TYPES-DECIMAL-CONVERSION-ASYNC", "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder`1.HasConversion", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
     [NativeTypeCoverage("TEXT", typeof(decimal), "EF10-TYPES-DECIMAL-CONVERSION-ASYNC")]
     public async Task DecimalStringConversion_PreservesBoundaryValuesAsynchronously(decimal amount)
@@ -461,7 +476,7 @@ public sealed class TypeFidelityTests
     }
 
     [Theory]
-    [MemberData(nameof(DecimalBoundaryValues))]
+    [MemberData(nameof(DecimalStringConversionValues))]
     [BehavioralCoverage("EF10-TYPES-DECIMAL-CONVERSION-SYNC", "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder`1.HasConversion", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "System.Linq.Queryable.Single")]
     [NativeTypeCoverage("TEXT", typeof(decimal), "EF10-TYPES-DECIMAL-CONVERSION-SYNC")]
     public async Task DecimalStringConversion_PreservesBoundaryValuesSynchronously(decimal amount)
