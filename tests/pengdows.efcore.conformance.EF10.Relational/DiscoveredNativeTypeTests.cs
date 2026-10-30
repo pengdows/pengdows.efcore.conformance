@@ -320,11 +320,11 @@ public sealed class DiscoveredNativeTypeTests
                     ? expectedBitArrays.Length == actualBitArrays.Length && expectedBitArrays.Zip(actualBitArrays)
                         .All(pair => pair.First.Cast<bool>().SequenceEqual(pair.Second.Cast<bool>()))
             : expected is string[] expectedJsonValues && actual is string[] actualJsonValues &&
-              mapping.DatabaseTypeName.Contains("json", StringComparison.OrdinalIgnoreCase)
+              IsJsonStoreType(mapping.DatabaseTypeName)
                 ? expectedJsonValues.Length == actualJsonValues.Length &&
                   expectedJsonValues.Zip(actualJsonValues).All(pair => JsonNode.DeepEquals(JsonNode.Parse(pair.First), JsonNode.Parse(pair.Second)))
             : expected is string expectedText && actual is string actualText &&
-              mapping.DatabaseTypeName.Contains("json", StringComparison.OrdinalIgnoreCase)
+              IsJsonStoreType(mapping.DatabaseTypeName)
                 ? JsonNode.DeepEquals(JsonNode.Parse(expectedText), JsonNode.Parse(actualText))
                 : StructuralComparisons.StructuralEqualityComparer.Equals(expected, actual);
         Assert.True(
@@ -335,6 +335,12 @@ public sealed class DiscoveredNativeTypeTests
     private static string FormatValue(object? value) => value is IEnumerable sequence and not string
         ? $"[{string.Join(", ", sequence.Cast<object?>().Select(item => item?.ToString() ?? "null"))}]"
         : value?.ToString() ?? "null";
+
+    private static bool IsJsonStoreType(string storeType) =>
+        storeType.Equals("json", StringComparison.OrdinalIgnoreCase) ||
+        storeType.Equals("jsonb", StringComparison.OrdinalIgnoreCase) ||
+        storeType.Equals("json[]", StringComparison.OrdinalIgnoreCase) ||
+        storeType.Equals("jsonb[]", StringComparison.OrdinalIgnoreCase);
 
     private static bool TimeWithTimeZoneValuesEqual(object expected, object? actual)
     {
@@ -369,6 +375,7 @@ internal static class NativeTypeSampleFactory
             return CreateArray(type.GetElementType()!, mapping, alternate: false);
         }
 
+        if (type == typeof(string) && mapping.DatabaseTypeName.Equals("jsonpath", StringComparison.OrdinalIgnoreCase)) return "$.\"value\"";
         if (type == typeof(string) && mapping.DatabaseTypeName.Contains("json", StringComparison.OrdinalIgnoreCase))
         {
             return "{\"value\":1}";
@@ -422,6 +429,7 @@ internal static class NativeTypeSampleFactory
         if (type == typeof(BitArray)) return new BitArray(mapping.DatabaseTypeName.Equals("bit", StringComparison.OrdinalIgnoreCase) ? [false] : [false, true, false]);
         if (type == typeof(byte[])) return new byte[] { 0x52 };
         if (type.IsArray) return CreateArray(type.GetElementType()!, mapping, alternate: true);
+        if (type == typeof(string) && mapping.DatabaseTypeName.Equals("jsonpath", StringComparison.OrdinalIgnoreCase)) return "$.\"other\"";
         if (type == typeof(string) && mapping.DatabaseTypeName.Contains("json", StringComparison.OrdinalIgnoreCase)) return "{\"value\":2}";
         if (type == typeof(string) && mapping.DatabaseTypeName.Equals("xml", StringComparison.OrdinalIgnoreCase)) return "<v>2</v>";
         if (type == typeof(bool)) return false;
@@ -516,9 +524,11 @@ internal static class NativeTypeSampleFactory
         else if (elementType == typeof(float)) values = alternate ? [-5.5f, 0f] : [1.25f, -1.5f];
         else if (elementType == typeof(double)) values = alternate ? [-5.5d, 0d] : [1.25d, -1.5d];
         else if (elementType == typeof(decimal)) values = alternate ? [-5.5m, 0m] : [1.25m, -1.5m];
-        else if (elementType == typeof(string)) values = mapping.DatabaseTypeName.Contains("json", StringComparison.OrdinalIgnoreCase)
-            ? alternate ? ["{\"value\":2}", "[]"] : ["{\"value\":1}", "[]"]
-            : mapping.DatabaseTypeName.Contains("xml", StringComparison.OrdinalIgnoreCase)
+        else if (elementType == typeof(string)) values = mapping.DatabaseTypeName.Contains("jsonpath", StringComparison.OrdinalIgnoreCase)
+            ? alternate ? ["$.\"other\"", "$.\"value\""] : ["$.\"value\"", "$.\"other\""]
+            : mapping.DatabaseTypeName.Contains("json", StringComparison.OrdinalIgnoreCase)
+                ? alternate ? ["{\"value\":2}", "[]"] : ["{\"value\":1}", "[]"]
+                : mapping.DatabaseTypeName.Contains("xml", StringComparison.OrdinalIgnoreCase)
                 ? alternate ? ["<v>2</v>", "<v>3</v>"] : ["<v>1</v>", "<v>3</v>"]
                 : alternate ? ["C", "D"] : ["A", "B"];
         else if (elementType == typeof(char)) values = alternate ? ['R', 'S'] : ['Q', 'T'];
