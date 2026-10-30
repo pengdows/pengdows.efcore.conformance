@@ -25,7 +25,7 @@ public sealed class PengdowsMySqlAdapter : IAdoNetProviderAdapter, INativeTypeMa
         new("MEDIUMINT", typeof(uint), "mediumint unsigned"),
         new("BIGINT", typeof(long)),
         new("BIGINT", typeof(ulong), "bigint unsigned"),
-        new("DECIMAL", typeof(decimal)),
+        new("DECIMAL", typeof(decimal), "decimal(65,30)"),
         new("DOUBLE", typeof(double)),
         new("FLOAT", typeof(float)),
         new("VARCHAR", typeof(string), "varchar(255)"),

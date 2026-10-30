@@ -7,8 +7,26 @@ using pengdows.efcore.conformance;
 namespace pengdows.efcore.conformance.Adapter.DuckDb;
 
 /// <summary>Reference adapter for the independent DuckDB.EFCore provider.</summary>
-public sealed class DuckDbReferenceAdapter : IAdoNetProviderAdapter
+public sealed class DuckDbReferenceAdapter : IAdoNetProviderAdapter, INativeTypeMappingProfile, INativeTypeTableCleanupAdapter
 {
+    private static readonly IReadOnlyList<NativeTypeMapping> DeclaredNativeTypes =
+    [
+        new("BOOLEAN", typeof(bool)),
+        new("SMALLINT", typeof(short)),
+        new("INTEGER", typeof(int)),
+        new("BIGINT", typeof(long)),
+        new("REAL", typeof(float)),
+        new("DOUBLE", typeof(double)),
+        new("DECIMAL", typeof(decimal), "DECIMAL(38,4)"),
+        new("VARCHAR", typeof(string)),
+        new("BLOB", typeof(byte[])),
+        new("DATE", typeof(DateOnly)),
+        new("TIME", typeof(TimeOnly)),
+        new("TIMESTAMP", typeof(DateTime)),
+        new("TIMESTAMP WITH TIME ZONE", typeof(DateTimeOffset)),
+        new("INTERVAL", typeof(TimeSpan)),
+        new("UUID", typeof(Guid))
+    ];
     private static readonly ProviderCapabilities DeclaredCapabilities = new(
         new HashSet<string>(StringComparer.Ordinal)
         {
@@ -29,6 +47,8 @@ public sealed class DuckDbReferenceAdapter : IAdoNetProviderAdapter
 
     public ProviderCapabilities Capabilities => DeclaredCapabilities;
 
+    public IReadOnlyList<NativeTypeMapping> NativeTypeMappings => DeclaredNativeTypes;
+
     public void Configure(DbContextOptionsBuilder options, string connectionString) => options.UseDuckDB(connectionString);
 
     public Task InitializeDatabaseAsync(DbContext context, CancellationToken cancellationToken) => context.Database.EnsureCreatedAsync(cancellationToken);
@@ -45,6 +65,15 @@ public sealed class DuckDbReferenceAdapter : IAdoNetProviderAdapter
         }
 
         return Task.CompletedTask;
+    }
+
+    public async Task CleanupNativeTypeTablesAsync(string connectionString, IReadOnlyList<string> tableNames, CancellationToken cancellationToken)
+    {
+        await using var connection = new DuckDBConnection(connectionString);
+        await connection.OpenAsync(cancellationToken);
+        await using var command = connection.CreateCommand();
+        command.CommandText = string.Join(";", tableNames.Select(name => $"DROP TABLE IF EXISTS \"{name}\""));
+        await command.ExecuteNonQueryAsync(cancellationToken);
     }
 
     public DbConnection CreateConnection(string connectionString) => new DuckDBConnection(connectionString);

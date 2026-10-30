@@ -1,0 +1,343 @@
+using System.Data.Common;
+using System.Collections;
+using Microsoft.EntityFrameworkCore;
+using Npgsql;
+using pengdows.efcore.adonet.postgresql;
+using pengdows.efcore.conformance;
+
+namespace pengdows.efcore.conformance.Adapter.PengdowsPostgreSql;
+
+/// <summary>Candidate adapter for the pengdows ADO.NET PostgreSQL EF provider, over Npgsql.</summary>
+public sealed class PengdowsPostgreSqlAdapter : IAdoNetProviderAdapter, INativeTypeMappingProfile, INativeTypeTableCleanupAdapter, IDatabaseTypeCatalogDiscovery, IParameterizedCollectionModeAdapter, IIndexMetadataAdapter, ICollationTestAdapter, ISchemaCommentMetadataAdapter
+{
+    private static readonly IReadOnlyList<NativeTypeMapping> DeclaredNativeTypes =
+    [
+        new("boolean", typeof(bool)),
+        new("smallint", typeof(short)),
+        new("integer", typeof(int)),
+        new("bigint", typeof(long)),
+        new("numeric", typeof(decimal)),
+        new("money", typeof(decimal), "money"),
+        new("real", typeof(float)),
+        new("double precision", typeof(double)),
+        new("character varying", typeof(string)),
+        new("character", typeof(string)),
+        new("text", typeof(string)),
+        new("bytea", typeof(byte[])),
+        new("date", typeof(DateOnly)),
+        new("time without time zone", typeof(TimeOnly)),
+        new("timestamp without time zone", typeof(DateTime)),
+        new("timestamp with time zone", typeof(DateTime), "timestamp with time zone"),
+        new("timestamp with time zone", typeof(DateTimeOffset)),
+        new("interval", typeof(TimeSpan)),
+        new("uuid", typeof(Guid)),
+        new("oid", typeof(uint)),
+        new("xid", typeof(uint)),
+        new("cid", typeof(uint)),
+        new("xid8", typeof(ulong)),
+        new("oidvector", typeof(uint[])),
+        new("int2vector", typeof(short[])),
+        new("regtype", typeof(uint)),
+        new("regconfig", typeof(uint)),
+        new("oidvector[]", typeof(uint[][])),
+        new("int2vector[]", typeof(short[][])),
+        new("regtype[]", typeof(uint[])),
+        new("regconfig[]", typeof(uint[])),
+        new("tid", typeof(NpgsqlTypes.NpgsqlTid)),
+        new("point", typeof(NpgsqlTypes.NpgsqlPoint)),
+        new("lseg", typeof(NpgsqlTypes.NpgsqlLSeg)),
+        new("path", typeof(NpgsqlTypes.NpgsqlPath)),
+        new("box", typeof(NpgsqlTypes.NpgsqlBox)),
+        new("polygon", typeof(NpgsqlTypes.NpgsqlPolygon)),
+        new("line", typeof(NpgsqlTypes.NpgsqlLine)),
+        new("circle", typeof(NpgsqlTypes.NpgsqlCircle)),
+        new("pg_lsn", typeof(NpgsqlTypes.NpgsqlLogSequenceNumber)),
+        new("tsvector", typeof(NpgsqlTypes.NpgsqlTsVector)),
+        new("tsquery", typeof(NpgsqlTypes.NpgsqlTsQuery)),
+        new("tid[]", typeof(NpgsqlTypes.NpgsqlTid[])),
+        new("point[]", typeof(NpgsqlTypes.NpgsqlPoint[])),
+        new("lseg[]", typeof(NpgsqlTypes.NpgsqlLSeg[])),
+        new("path[]", typeof(NpgsqlTypes.NpgsqlPath[])),
+        new("box[]", typeof(NpgsqlTypes.NpgsqlBox[])),
+        new("polygon[]", typeof(NpgsqlTypes.NpgsqlPolygon[])),
+        new("line[]", typeof(NpgsqlTypes.NpgsqlLine[])),
+        new("circle[]", typeof(NpgsqlTypes.NpgsqlCircle[])),
+        new("pg_lsn[]", typeof(NpgsqlTypes.NpgsqlLogSequenceNumber[])),
+        new("tsvector[]", typeof(NpgsqlTypes.NpgsqlTsVector[])),
+        new("tsquery[]", typeof(NpgsqlTypes.NpgsqlTsQuery[])),
+        new("oid[]", typeof(uint[])),
+        new("xid[]", typeof(uint[])),
+        new("cid[]", typeof(uint[])),
+        new("xid8[]", typeof(ulong[])),
+        new("char", typeof(char)),
+        new("name", typeof(string)),
+        new("time with time zone", typeof(DateTimeOffset)),
+        new("jsonpath", typeof(string)),
+        new("inet", typeof(System.Net.IPAddress)),
+        new("cidr", typeof(System.Net.IPNetwork)),
+        new("macaddr", typeof(System.Net.NetworkInformation.PhysicalAddress)),
+        new("macaddr8", typeof(System.Net.NetworkInformation.PhysicalAddress)),
+        new("int4range", typeof(NpgsqlTypes.NpgsqlRange<int>)),
+        new("int8range", typeof(NpgsqlTypes.NpgsqlRange<long>)),
+        new("numrange", typeof(NpgsqlTypes.NpgsqlRange<decimal>)),
+        new("daterange", typeof(NpgsqlTypes.NpgsqlRange<DateOnly>)),
+        new("tsrange", typeof(NpgsqlTypes.NpgsqlRange<DateTime>)),
+        new("tstzrange", typeof(NpgsqlTypes.NpgsqlRange<DateTime>)),
+        new("int4range[]", typeof(NpgsqlTypes.NpgsqlRange<int>[])),
+        new("int8range[]", typeof(NpgsqlTypes.NpgsqlRange<long>[])),
+        new("numrange[]", typeof(NpgsqlTypes.NpgsqlRange<decimal>[])),
+        new("daterange[]", typeof(NpgsqlTypes.NpgsqlRange<DateOnly>[])),
+        new("tsrange[]", typeof(NpgsqlTypes.NpgsqlRange<DateTime>[])),
+        new("tstzrange[]", typeof(NpgsqlTypes.NpgsqlRange<DateTime>[])),
+        new("int4multirange", typeof(NpgsqlTypes.NpgsqlRange<int>[])),
+        new("int8multirange", typeof(NpgsqlTypes.NpgsqlRange<long>[])),
+        new("nummultirange", typeof(NpgsqlTypes.NpgsqlRange<decimal>[])),
+        new("datemultirange", typeof(NpgsqlTypes.NpgsqlRange<DateOnly>[])),
+        new("tsmultirange", typeof(NpgsqlTypes.NpgsqlRange<DateTime>[])),
+        new("tstzmultirange", typeof(NpgsqlTypes.NpgsqlRange<DateTime>[])),
+        new("boolean[]", typeof(bool[])),
+        new("smallint[]", typeof(short[])),
+        new("bigint[]", typeof(long[])),
+        new("real[]", typeof(float[])),
+        new("double precision[]", typeof(double[])),
+        new("numeric[]", typeof(decimal[])),
+        new("text[]", typeof(string[])),
+        new("character varying[]", typeof(string[])),
+        new("character[]", typeof(string[])),
+        new("date[]", typeof(DateOnly[])),
+        new("time without time zone[]", typeof(TimeOnly[])),
+        new("timestamp without time zone[]", typeof(DateTime[])),
+        new("timestamp with time zone[]", typeof(DateTime[])),
+        new("time with time zone[]", typeof(DateTimeOffset[])),
+        new("interval[]", typeof(TimeSpan[])),
+        new("uuid[]", typeof(Guid[])),
+        new("inet[]", typeof(System.Net.IPAddress[])),
+        new("cidr[]", typeof(System.Net.IPNetwork[])),
+        new("macaddr[]", typeof(System.Net.NetworkInformation.PhysicalAddress[])),
+        new("macaddr8[]", typeof(System.Net.NetworkInformation.PhysicalAddress[])),
+        new("money[]", typeof(decimal[])),
+        new("json[]", typeof(string[])),
+        new("jsonb[]", typeof(string[])),
+        new("jsonpath[]", typeof(string[])),
+        new("xml[]", typeof(string[])),
+        new("char[]", typeof(char[])),
+        new("name[]", typeof(string[])),
+        new("bit", typeof(BitArray)),
+        new("bit varying", typeof(BitArray)),
+        new("bit[]", typeof(BitArray[])),
+        new("bit varying[]", typeof(BitArray[])),
+        new("bytea[]", typeof(byte[][])),
+        new("json", typeof(string)),
+        new("jsonb", typeof(string)),
+        new("xml", typeof(string), "xml"),
+        new("integer[]", typeof(int[]))
+    ];
+
+    private static readonly ProviderCapabilities DeclaredCapabilities = new(
+        new HashSet<string>(StringComparer.Ordinal)
+        {
+            "relational", "transactions", "ambient-transactions", "savepoints", "migrations",
+            "filtered-indexes", "json-mapping", "raw-sql", "execute-update", "execute-delete",
+            "primitive-collections", "external-connection", "parameterized-collection-modes",
+            "least-greatest-functions", "migration-rename-index", "migration-check-constraint",
+            "index-schema-metadata", "migration-add-constraint-operations", "migration-set-default",
+            "index-sort-metadata", "sequences", "schemas", "schema-qualified-functions", "case-insensitive-collation", "schema-comments", "native-type-fidelity"
+        },
+        new HashSet<string>(StringComparer.Ordinal)
+        {
+            "database-collation-migration"
+        });
+
+    public string Name => "pengdows.efcore.adonet PostgreSQL";
+
+    public string CaseInsensitiveCollation => "ef10conformance_ci";
+
+    public string Version => typeof(pengdows.efcore.adonet.postgresql.PostgreSqlDialect).Assembly.GetName().Version?.ToString() ?? "unknown";
+
+    public ProviderCapabilities Capabilities => DeclaredCapabilities;
+
+    public IReadOnlyList<NativeTypeMapping> NativeTypeMappings => DeclaredNativeTypes;
+
+    public void Configure(DbContextOptionsBuilder options, string connectionString) => options.UseAdoNetPostgreSql(connectionString);
+
+    public void ConfigureParameterizedCollectionMode(
+        DbContextOptionsBuilder options,
+        string connectionString,
+        ParameterTranslationMode mode) =>
+        options.UseAdoNetPostgreSql(connectionString, provider => provider.UseParameterizedCollectionMode(mode));
+
+    public async Task InitializeDatabaseAsync(DbContext context, CancellationToken cancellationToken)
+    {
+        await context.Database.EnsureCreatedAsync(cancellationToken);
+        await context.Database.ExecuteSqlRawAsync(
+            "CREATE COLLATION IF NOT EXISTS ef10conformance_ci (provider = icu, locale = 'und-u-ks-level2', deterministic = false)",
+            cancellationToken);
+    }
+
+    public async Task CleanupDatabaseAsync(DbContext context, CancellationToken cancellationToken)
+    {
+        try
+        {
+            await context.Database.EnsureDeletedAsync(cancellationToken);
+        }
+        catch (Exception exception) when (IsAdministrativeDisconnect(exception))
+        {
+            // PostgreSQL closes the current database connection when EnsureDeleted drops
+            // that database. Confirm the outcome through the maintenance database before
+            // treating that disconnect as successful cleanup.
+            var target = new NpgsqlConnectionStringBuilder(context.Database.GetConnectionString());
+            var databaseName = target.Database ?? throw new InvalidOperationException(
+                "A database name is required to verify PostgreSQL cleanup.");
+            target.Database = "postgres";
+            await using var connection = new NpgsqlConnection(target.ConnectionString);
+            await connection.OpenAsync(cancellationToken);
+            await using var command = connection.CreateCommand();
+            command.CommandText = "SELECT EXISTS (SELECT 1 FROM pg_database WHERE datname = @database_name)";
+            command.Parameters.AddWithValue("database_name", databaseName);
+            if (await command.ExecuteScalarAsync(cancellationToken) is true)
+            {
+                throw;
+            }
+        }
+    }
+
+    private static bool IsAdministrativeDisconnect(Exception exception) =>
+        exception is PostgresException { SqlState: "57P01" } ||
+        exception.InnerException is not null && IsAdministrativeDisconnect(exception.InnerException);
+
+    public DbConnection CreateConnection(string connectionString) => new NpgsqlConnection(connectionString);
+
+    public DatabaseTypeCatalogSnapshot DiscoverDatabaseTypeCatalog(DbConnection openConnection)
+    {
+        using var command = openConnection.CreateCommand();
+        command.CommandText = """
+            SELECT namespace.nspname,
+                   type.typname,
+                   type.typname,
+                   type.typtype::text,
+                   type.typcategory::text,
+                   type.typcategory = 'A',
+                   type.typisdefined,
+                   CASE WHEN type.typelem <> 0 THEN format_type(type.typelem, NULL) END,
+                   CASE WHEN type.typbasetype <> 0 THEN format_type(type.typbasetype, NULL) END,
+                   CASE WHEN type.typrelid <> 0 THEN type.typrelid::regclass::text END
+            FROM pg_type AS type
+            JOIN pg_namespace AS namespace ON namespace.oid = type.typnamespace
+            WHERE type.typisdefined
+              AND namespace.nspname NOT LIKE 'pg_temp_%'
+              AND namespace.nspname NOT LIKE 'pg_toast_temp_%'
+            ORDER BY namespace.nspname, type.typname
+            """;
+
+        using var reader = command.ExecuteReader();
+        var types = new List<DatabaseCatalogType>();
+        while (reader.Read())
+        {
+            types.Add(new DatabaseCatalogType(
+                reader.GetString(0),
+                reader.GetString(1),
+                reader.GetString(2),
+                reader.GetString(3),
+                reader.GetString(4),
+                reader.GetBoolean(5),
+                reader.GetBoolean(6),
+                reader.IsDBNull(7) ? null : reader.GetString(7),
+                reader.IsDBNull(8) ? null : reader.GetString(8),
+                reader.IsDBNull(9) ? null : reader.GetString(9)));
+        }
+
+        return new DatabaseTypeCatalogSnapshot(
+            "PostgreSQL pg_type and pg_namespace catalogs",
+            "All defined database types except session temporary schemas; names use catalog identifiers and include system, information_schema, user, and extension schemas. Scalar-name comparison is scoped to pg_catalog types.",
+            types,
+            "pg_catalog");
+    }
+
+    public async Task CleanupNativeTypeTablesAsync(
+        string connectionString,
+        IReadOnlyList<string> tableNames,
+        CancellationToken cancellationToken)
+    {
+        await using var connection = new NpgsqlConnection(connectionString);
+        await connection.OpenAsync(cancellationToken);
+        await using var command = connection.CreateCommand();
+        command.CommandText = string.Join(";", tableNames.Select(name => $"DROP TABLE IF EXISTS {QuoteTestTable(name)}"));
+        await command.ExecuteNonQueryAsync(cancellationToken);
+    }
+
+    private static string QuoteTestTable(string name)
+    {
+        if (name.Length == 0 || name.Any(character => !(char.IsAsciiLetterOrDigit(character) || character == '_')))
+            throw new ArgumentException("Native type test table names must contain only ASCII letters, digits, and underscores.", nameof(name));
+        return $"\"{name}\"";
+    }
+
+    public IReadOnlyList<IndexColumnMetadata> GetIndexColumns(DbConnection openConnection, string tableName, string indexName)
+    {
+        using var command = openConnection.CreateCommand();
+        command.CommandText = """
+            SELECT a.attname, k.ordinality, (i.indoption[k.ordinality - 1] & 1) = 1
+            FROM pg_index i
+            JOIN pg_class tbl ON tbl.oid = i.indrelid
+            JOIN pg_class idx ON idx.oid = i.indexrelid
+            CROSS JOIN LATERAL unnest(i.indkey) WITH ORDINALITY AS k(attnum, ordinality)
+            JOIN pg_attribute a ON a.attrelid = tbl.oid AND a.attnum = k.attnum
+            WHERE tbl.relname = @tableName AND idx.relname = @indexName
+            ORDER BY k.ordinality
+            """;
+        AddParameter(command, "tableName", tableName);
+        AddParameter(command, "indexName", indexName);
+        using var reader = command.ExecuteReader();
+        var columns = new List<IndexColumnMetadata>();
+        while (reader.Read())
+        {
+            columns.Add(new IndexColumnMetadata(reader.GetString(0), reader.GetInt32(1), reader.GetBoolean(2)));
+        }
+
+        return columns;
+    }
+
+    public string? GetTableComment(DbConnection openConnection, string tableName) => ReadOptionalComment(
+        openConnection,
+        """
+        SELECT obj_description(table_relation.oid, 'pg_class')
+        FROM pg_class AS table_relation
+        JOIN pg_namespace AS schema_namespace ON schema_namespace.oid = table_relation.relnamespace
+        WHERE schema_namespace.nspname = current_schema() AND table_relation.relname = @tableName
+        """,
+        ("tableName", tableName));
+
+    public string? GetColumnComment(DbConnection openConnection, string tableName, string columnName) => ReadOptionalComment(
+        openConnection,
+        """
+        SELECT col_description(table_relation.oid, table_column.attnum)
+        FROM pg_class AS table_relation
+        JOIN pg_namespace AS schema_namespace ON schema_namespace.oid = table_relation.relnamespace
+        JOIN pg_attribute AS table_column ON table_column.attrelid = table_relation.oid
+        WHERE schema_namespace.nspname = current_schema()
+          AND table_relation.relname = @tableName AND table_column.attname = @columnName
+        """,
+        ("tableName", tableName),
+        ("columnName", columnName));
+
+    private static void AddParameter(DbCommand command, string name, object value)
+    {
+        var parameter = command.CreateParameter();
+        parameter.ParameterName = name;
+        parameter.Value = value;
+        command.Parameters.Add(parameter);
+    }
+
+    private static string? ReadOptionalComment(DbConnection openConnection, string sql, params (string Name, string Value)[] values)
+    {
+        using var command = openConnection.CreateCommand();
+        command.CommandText = sql;
+        foreach (var (name, value) in values)
+        {
+            AddParameter(command, name, value);
+        }
+
+        var result = command.ExecuteScalar();
+        return result is null or DBNull ? null : Convert.ToString(result, System.Globalization.CultureInfo.InvariantCulture);
+    }
+}

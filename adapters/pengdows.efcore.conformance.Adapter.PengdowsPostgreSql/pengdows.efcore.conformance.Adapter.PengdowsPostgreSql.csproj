@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>pengdows.efcore.conformance.Adapter.PengdowsPostgreSql</AssemblyName>
+    <RootNamespace>pengdows.efcore.conformance.Adapter.PengdowsPostgreSql</RootNamespace>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+    <ProjectReference Include="../../../pengdows.efcore.adonet/src/pengdows.efcore.adonet.postgresql/pengdows.efcore.adonet.postgresql.csproj" />
+    <ProjectReference Include="../../src/pengdows.efcore.conformance.Contracts/pengdows.efcore.conformance.Contracts.csproj" />
+  </ItemGroup>
+</Project>

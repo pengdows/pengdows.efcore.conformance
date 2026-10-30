@@ -7,17 +7,36 @@ using pengdows.efcore.conformance;
 namespace pengdows.efcore.conformance.Adapter.PengdowsDuckDb;
 
 /// <summary>Candidate adapter for the pengdows ADO.NET DuckDB EF provider.</summary>
-public sealed class PengdowsDuckDbAdapter : IAdoNetProviderAdapter, IParameterizedCollectionModeAdapter
+public sealed class PengdowsDuckDbAdapter : IAdoNetProviderAdapter, INativeTypeMappingProfile, INativeTypeTableCleanupAdapter, IParameterizedCollectionModeAdapter
 {
+    private static readonly IReadOnlyList<NativeTypeMapping> DeclaredNativeTypes =
+    [
+        new("BOOLEAN", typeof(bool)),
+        new("SMALLINT", typeof(short)),
+        new("INTEGER", typeof(int)),
+        new("BIGINT", typeof(long)),
+        new("REAL", typeof(float)),
+        new("DOUBLE", typeof(double)),
+        new("DECIMAL", typeof(decimal), "DECIMAL(38,4)"),
+        new("VARCHAR", typeof(string)),
+        new("BLOB", typeof(byte[])),
+        new("DATE", typeof(DateOnly)),
+        new("TIME", typeof(TimeOnly)),
+        new("TIMESTAMP", typeof(DateTime)),
+        new("TIMESTAMP WITH TIME ZONE", typeof(DateTimeOffset)),
+        new("INTERVAL", typeof(TimeSpan)),
+        new("UUID", typeof(Guid))
+    ];
+
     private static readonly ProviderCapabilities DeclaredCapabilities = new(
         new HashSet<string>(StringComparer.Ordinal)
         {
-            "relational", "transactions", "savepoints", "migrations", "raw-sql", "execute-update",
+            "relational", "transactions", "migrations", "raw-sql", "execute-update",
             "execute-delete", "external-connection", "parameterized-collection-modes", "native-type-fidelity"
         },
         new HashSet<string>(StringComparer.Ordinal)
         {
-            "ambient-transactions", "filtered-indexes", "json-mapping", "primitive-collections",
+            "ambient-transactions", "savepoints", "filtered-indexes", "json-mapping", "primitive-collections",
             "least-greatest-functions", "migration-rename-index", "migration-check-constraint",
             "index-schema-metadata", "schema-comments", "migration-add-constraint-operations",
             "case-insensitive-collation", "migration-set-default", "index-sort-metadata", "sequences",
@@ -29,6 +48,8 @@ public sealed class PengdowsDuckDbAdapter : IAdoNetProviderAdapter, IParameteriz
     public string Version => typeof(DuckDbDbContextOptionsBuilderExtensions).Assembly.GetName().Version?.ToString() ?? "unknown";
 
     public ProviderCapabilities Capabilities => DeclaredCapabilities;
+
+    public IReadOnlyList<NativeTypeMapping> NativeTypeMappings => DeclaredNativeTypes;
 
     public void Configure(DbContextOptionsBuilder options, string connectionString) => options.UseAdoNetDuckDb(connectionString);
 
@@ -49,6 +70,15 @@ public sealed class PengdowsDuckDbAdapter : IAdoNetProviderAdapter, IParameteriz
         }
 
         return Task.CompletedTask;
+    }
+
+    public async Task CleanupNativeTypeTablesAsync(string connectionString, IReadOnlyList<string> tableNames, CancellationToken cancellationToken)
+    {
+        await using var connection = new DuckDBConnection(connectionString);
+        await connection.OpenAsync(cancellationToken);
+        await using var command = connection.CreateCommand();
+        command.CommandText = string.Join(";", tableNames.Select(name => $"DROP TABLE IF EXISTS \"{name}\""));
+        await command.ExecuteNonQueryAsync(cancellationToken);
     }
 
     public DbConnection CreateConnection(string connectionString) => new DuckDBConnection(connectionString);

@@ -1,0 +1,6 @@
+{
+  "name": "DuckDB.EFCoreProvider (skuirrels) reference",
+  "adapterAssembly": "../adapters/pengdows.efcore.conformance.Adapter.SkuirrelsDuckDb/bin/Debug/net10.0/pengdows.efcore.conformance.Adapter.SkuirrelsDuckDb.dll",
+  "adapterType": "pengdows.efcore.conformance.Adapter.SkuirrelsDuckDb.SkuirrelsDuckDbReferenceAdapter",
+  "connectionString": "Data Source=${EFCORE_CONFORMANCE_DUCKDB_PATH}"
+}
