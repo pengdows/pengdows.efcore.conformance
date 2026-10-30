@@ -127,7 +127,8 @@ public static class DatabaseTypeCatalogComparer
             NameMatches = exactMatches.OrderBy(match => match.CatalogTypeName, StringComparer.OrdinalIgnoreCase).ToArray(),
             ExactNameComparisonLimitations =
             [
-                "Name comparison is exact and case-insensitive; schema qualification, aliases, array syntax, and provider-specific type spellings can appear as differences.",
+                "Exact-name matches use case-insensitive comparison; PostgreSQL aliases and array names are normalized when they map unambiguously.",
+                "Catalog comparison can be scoped to a schema; types outside that schema remain in the full snapshot but do not affect name totals.",
                 "The database catalog inventory includes pseudo-types, composites, domains, arrays, extension types, and system types; missing ADO.NET metadata is not automatically an EF mapping defect."
             ]
         };

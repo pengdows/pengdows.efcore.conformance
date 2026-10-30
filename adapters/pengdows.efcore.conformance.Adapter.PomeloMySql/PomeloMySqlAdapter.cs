@@ -7,7 +7,7 @@ using pengdows.efcore.conformance;
 namespace pengdows.efcore.conformance.Adapter.PomeloMySql;
 
 /// <summary>Optional EF Core 10 adapter for MySQL-compatible servers using Pomelo.</summary>
-public sealed class PomeloMySqlAdapter : IAdoNetProviderAdapter, INativeTypeMappingProfile, INativeTypeTableCleanupAdapter, IParameterizedCollectionModeAdapter, ICollationTestAdapter, IIndexMetadataAdapter, ISchemaCommentMetadataAdapter
+public sealed class PomeloMySqlAdapter : IAdoNetProviderAdapter, INativeTypeMappingProfile, INativeTypeTableCleanupAdapter, IDatabaseTypeCatalogDiscovery, IParameterizedCollectionModeAdapter, ICollationTestAdapter, IIndexMetadataAdapter, ISchemaCommentMetadataAdapter
 {
     private static readonly IReadOnlyList<NativeTypeMapping> DeclaredNativeTypes =
     [
@@ -112,6 +112,52 @@ public sealed class PomeloMySqlAdapter : IAdoNetProviderAdapter, INativeTypeMapp
         context.Database.EnsureDeletedAsync(cancellationToken);
 
     public DbConnection CreateConnection(string connectionString) => new MySqlConnection(connectionString);
+
+    public DatabaseTypeCatalogSnapshot DiscoverDatabaseTypeCatalog(DbConnection openConnection)
+    {
+        using var command = openConnection.CreateCommand();
+        command.CommandText = """
+            SELECT TABLE_SCHEMA,
+                   CONCAT(TABLE_NAME, '.', COLUMN_NAME),
+                   DATA_TYPE,
+                   COLUMN_TYPE,
+                   CASE WHEN DATA_TYPE IN ('tinyint', 'smallint', 'mediumint', 'int', 'integer', 'bigint', 'decimal', 'numeric', 'float', 'double', 'real', 'bit') THEN 'numeric'
+                        WHEN DATA_TYPE IN ('date', 'time', 'datetime', 'timestamp', 'year') THEN 'temporal'
+                        WHEN DATA_TYPE IN ('char', 'varchar', 'tinytext', 'text', 'mediumtext', 'longtext', 'enum', 'set') THEN 'character'
+                        WHEN DATA_TYPE IN ('binary', 'varbinary', 'tinyblob', 'blob', 'mediumblob', 'longblob') THEN 'binary'
+                        ELSE 'other' END,
+                   FALSE,
+                   TRUE,
+                   NULL,
+                   NULL,
+                   TABLE_NAME
+            FROM information_schema.COLUMNS
+            WHERE TABLE_SCHEMA IN ('mysql', 'information_schema', 'performance_schema', 'sys')
+            ORDER BY TABLE_SCHEMA, TABLE_NAME, ORDINAL_POSITION
+            """;
+
+        using var reader = command.ExecuteReader();
+        var types = new List<DatabaseCatalogType>();
+        while (reader.Read())
+        {
+            types.Add(new DatabaseCatalogType(
+                reader.GetString(0),
+                reader.GetString(1),
+                reader.GetString(2),
+                reader.GetString(3),
+                reader.GetString(4),
+                reader.GetBoolean(5),
+                reader.GetBoolean(6),
+                null,
+                null,
+                reader.GetString(9)));
+        }
+
+        return new DatabaseTypeCatalogSnapshot(
+            "MySQL information_schema.COLUMNS over system schemas",
+            "Distinct native type families used by mysql, information_schema, performance_schema, and sys catalog columns. This is a catalog-backed observed inventory, not a list of every type accepted by the server.",
+            types);
+    }
 
     public async Task CleanupNativeTypeTablesAsync(
         string connectionString,

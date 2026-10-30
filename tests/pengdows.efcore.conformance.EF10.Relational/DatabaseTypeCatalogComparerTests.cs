@@ -41,7 +41,7 @@ public sealed class DatabaseTypeCatalogComparerTests
     }
 
     [Fact]
-    public void Compare_DoesNotTreatDuplicateCatalogAliasesAsOneCertainMatch()
+    public void Compare_UsesConfiguredSchemaForMatchingAndRetainsOtherSchemas()
     {
         var catalog = new DatabaseTypeCatalogSnapshot(
             "PostgreSQL catalog",
@@ -54,9 +54,11 @@ public sealed class DatabaseTypeCatalogComparerTests
 
         var result = DatabaseTypeCatalogComparer.Compare(catalog, [AdoType("integer")]);
 
+        Assert.Equal(1, result.CatalogTypeCount);
         Assert.Empty(result.CatalogTypesMissingFromAdoNet);
         Assert.Empty(result.AdoNetTypesMissingFromCatalog);
         Assert.Single(result.NameMatches);
+        Assert.Equal(2, result.Types.Count);
     }
 
     private static DatabaseCatalogType CatalogType(
