@@ -9,6 +9,38 @@ namespace pengdows.efcore.conformance.EF10.Relational;
 public sealed class ParameterizedCollectionModeTests
 {
     [Fact]
+    [BehavioralCoverage("EF10-QUERY-MULTIPLE-PARAMETERS-METHOD-SYNC", "Microsoft.EntityFrameworkCore.EFExtensions.MultipleParameters", "Microsoft.EntityFrameworkCore.EFExtensions+<G>$E875929AFAAB9F9D41CDDE4E1FF47548.MultipleParameters", "Microsoft.EntityFrameworkCore.EFExtensions+<G>$E875929AFAAB9F9D41CDDE4E1FF47548+<M>$B9DED21D8FA4468F26592C2A680520F7.<Extension>$", "System.Linq.Queryable.Where", "System.Linq.Queryable.OrderBy", "System.Linq.Queryable.Select", "System.Linq.Queryable.ToArray")]
+    public async Task MultipleParameters_TranslatesCapturedCollectionsAndReturnsExpectedRowsSynchronously()
+    {
+        var ids = await SeedAsync();
+        await using var context = ProviderTestRuntime.CreateContext();
+
+        var actual = context.People
+            .Where(person => EF.MultipleParameters(ids).Contains(person.Id))
+            .OrderBy(person => person.Age)
+            .Select(person => person.Name)
+            .ToArray();
+
+        Assert.Equal(new[] { "Collection young", "Collection old" }, actual);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-MULTIPLE-PARAMETERS-METHOD-ASYNC", "Microsoft.EntityFrameworkCore.EFExtensions.MultipleParameters", "Microsoft.EntityFrameworkCore.EFExtensions+<G>$E875929AFAAB9F9D41CDDE4E1FF47548.MultipleParameters", "Microsoft.EntityFrameworkCore.EFExtensions+<G>$E875929AFAAB9F9D41CDDE4E1FF47548+<M>$B9DED21D8FA4468F26592C2A680520F7.<Extension>$", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToArrayAsync", "System.Linq.Queryable.Where", "System.Linq.Queryable.OrderBy", "System.Linq.Queryable.Select")]
+    public async Task MultipleParameters_TranslatesCapturedCollectionsAndReturnsExpectedRowsAsynchronously()
+    {
+        var ids = await SeedAsync();
+        await using var context = ProviderTestRuntime.CreateContext();
+
+        var actual = await context.People
+            .Where(person => EF.MultipleParameters(ids).Contains(person.Id))
+            .OrderBy(person => person.Age)
+            .Select(person => person.Name)
+            .ToArrayAsync(TestContext.Current.CancellationToken);
+
+        Assert.Equal(new[] { "Collection young", "Collection old" }, actual);
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-QUERY-COLLECTION-MODE-MULTIPLE-PARAMETERS-SYNC", "Microsoft.EntityFrameworkCore.ParameterTranslationMode.MultipleParameters", "Microsoft.EntityFrameworkCore.Infrastructure.RelationalDbContextOptionsBuilder`2.UseParameterizedCollectionMode", "System.Linq.Queryable.Where", "System.Linq.Queryable.OrderBy", "System.Linq.Queryable.Select", "System.Linq.Queryable.ToArray")]
     public async Task TranslateParameterizedCollectionsToMultipleParameters_ReturnsMatchingRowsSynchronously()
     {

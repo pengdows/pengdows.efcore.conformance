@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 63,
+    "AwaitingClassification": 60,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 632,
-    "UncoveredMemberFamilies": 59
+    "MemberEntriesInCoveredFamilies": 635,
+    "UncoveredMemberFamilies": 56
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -52033,10 +52033,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "MultipleParameters",
       "Signature": "TSource MultipleParameters\u003CTSource\u003E(TSource argument) where TSource : System.Collections.IEnumerable",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-QUERY-MULTIPLE-PARAMETERS-METHOD-ASYNC",
+        "EF10-QUERY-MULTIPLE-PARAMETERS-METHOD-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EFExtensions.MultipleParameters"
     },
     {
@@ -52069,10 +52072,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "MultipleParameters",
       "Signature": "TSource MultipleParameters\u003CTSource\u003E(TSource argument) where TSource : System.Collections.IEnumerable",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-QUERY-MULTIPLE-PARAMETERS-METHOD-ASYNC",
+        "EF10-QUERY-MULTIPLE-PARAMETERS-METHOD-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EFExtensions\u002B\u003CG\u003E$E875929AFAAB9F9D41CDDE4E1FF47548.MultipleParameters"
     },
     {
@@ -52105,10 +52111,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "\u003CExtension\u003E$",
       "Signature": "System.Void \u003CExtension\u003E$(Microsoft.EntityFrameworkCore.EF )",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-QUERY-MULTIPLE-PARAMETERS-METHOD-ASYNC",
+        "EF10-QUERY-MULTIPLE-PARAMETERS-METHOD-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EFExtensions\u002B\u003CG\u003E$E875929AFAAB9F9D41CDDE4E1FF47548\u002B\u003CM\u003E$B9DED21D8FA4468F26592C2A680520F7.\u003CExtension\u003E$"
     },
     {
@@ -53171,7 +53180,8 @@
         "EF10-QUERY-ASYNC-MATERIALIZERS",
         "EF10-QUERY-COLLECTION-MODE-CONSTANTS-ASYNC",
         "EF10-QUERY-COLLECTION-MODE-MULTIPLE-PARAMETERS-ASYNC",
-        "EF10-QUERY-COLLECTION-MODE-PARAMETERS-ASYNC"
+        "EF10-QUERY-COLLECTION-MODE-PARAMETERS-ASYNC",
+        "EF10-QUERY-MULTIPLE-PARAMETERS-METHOD-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
