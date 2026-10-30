@@ -24,7 +24,8 @@ public sealed class PengdowsSqliteAdapter : IAdoNetProviderAdapter, ISupplementa
             "primitive-collections",
             "external-connection",
             "parameterized-collection-modes",
-            "case-insensitive-collation"
+            "case-insensitive-collation",
+            "migration-set-default"
         },
         new HashSet<string>(StringComparer.Ordinal)
         {

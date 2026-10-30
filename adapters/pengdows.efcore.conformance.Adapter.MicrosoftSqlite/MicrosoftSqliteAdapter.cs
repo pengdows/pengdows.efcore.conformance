@@ -23,7 +23,8 @@ public sealed class MicrosoftSqliteAdapter : IAdoNetProviderAdapter, IParameteri
             "primitive-collections",
             "external-connection",
             "parameterized-collection-modes",
-            "case-insensitive-collation"
+            "case-insensitive-collation",
+            "migration-set-default"
         },
         new HashSet<string>(StringComparer.Ordinal)
         {

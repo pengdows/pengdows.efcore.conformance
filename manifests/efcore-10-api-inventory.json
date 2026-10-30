@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 16,
+    "AwaitingClassification": 15,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 662,
-    "UncoveredMemberFamilies": 15
+    "MemberEntriesInCoveredFamilies": 663,
+    "UncoveredMemberFamilies": 14
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -16084,6 +16084,7 @@
         "EF10-INHERITANCE-TPT-SYNC",
         "EF10-INTERCEPTION-SAVE-SYNC",
         "EF10-JSON-MAPPING-SYNC",
+        "EF10-MIGRATIONS-SET-DEFAULT-SYNC",
         "EF10-MODEL-ATTRIBUTES-SYNC",
         "EF10-OWNED-ATTRIBUTE-SYNC",
         "EF10-PERSIST-ACCEPT-CHANGES-SYNC",
@@ -16160,6 +16161,7 @@
         "EF10-INHERITANCE-TPT-SYNC",
         "EF10-INTERCEPTION-SAVE-SYNC",
         "EF10-JSON-MAPPING-SYNC",
+        "EF10-MIGRATIONS-SET-DEFAULT-SYNC",
         "EF10-MODEL-ATTRIBUTES-SYNC",
         "EF10-OWNED-ATTRIBUTE-SYNC",
         "EF10-PERSIST-ACCEPT-CHANGES-SYNC",
@@ -16237,6 +16239,7 @@
         "EF10-INHERITANCE-TPT-ASYNC",
         "EF10-INTERCEPTION-SAVE-ASYNC",
         "EF10-JSON-MAPPING-ASYNC",
+        "EF10-MIGRATIONS-SET-DEFAULT-ASYNC",
         "EF10-MODEL-ATTRIBUTES-ASYNC",
         "EF10-OWNED-ATTRIBUTE-ASYNC",
         "EF10-PERSIST-ACCEPT-CHANGES-ASYNC",
@@ -16316,6 +16319,7 @@
         "EF10-INHERITANCE-TPT-ASYNC",
         "EF10-INTERCEPTION-SAVE-ASYNC",
         "EF10-JSON-MAPPING-ASYNC",
+        "EF10-MIGRATIONS-SET-DEFAULT-ASYNC",
         "EF10-MODEL-ATTRIBUTES-ASYNC",
         "EF10-OWNED-ATTRIBUTE-ASYNC",
         "EF10-PERSIST-ACCEPT-CHANGES-ASYNC",
@@ -52419,6 +52423,7 @@
         "EF10-DB-FUNCTION-NULLABLE-ASYNC",
         "EF10-DBSET-LOCAL-QUERY-ASYNC",
         "EF10-JSON-MAPPING-ASYNC",
+        "EF10-MIGRATIONS-SET-DEFAULT-ASYNC",
         "EF10-OWNED-ATTRIBUTE-ASYNC",
         "EF10-PERSIST-ADD-ASYNC",
         "EF10-PERSIST-CONTEXT-ADD-ASYNC",
@@ -52463,6 +52468,7 @@
         "EF10-DB-FUNCTION-NULLABLE-ASYNC",
         "EF10-DBSET-LOCAL-QUERY-ASYNC",
         "EF10-JSON-MAPPING-ASYNC",
+        "EF10-MIGRATIONS-SET-DEFAULT-ASYNC",
         "EF10-OWNED-ATTRIBUTE-ASYNC",
         "EF10-PERSIST-ADD-ASYNC",
         "EF10-PERSIST-CONTEXT-ADD-ASYNC",
@@ -151785,7 +151791,9 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-MIGRATIONS-APPLY-ASYNC",
-        "EF10-MIGRATIONS-APPLY-SYNC"
+        "EF10-MIGRATIONS-APPLY-SYNC",
+        "EF10-MIGRATIONS-SET-DEFAULT-ASYNC",
+        "EF10-MIGRATIONS-SET-DEFAULT-SYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -154161,7 +154169,9 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-MIGRATIONS-APPLY-ASYNC",
-        "EF10-MIGRATIONS-APPLY-SYNC"
+        "EF10-MIGRATIONS-APPLY-SYNC",
+        "EF10-MIGRATIONS-SET-DEFAULT-ASYNC",
+        "EF10-MIGRATIONS-SET-DEFAULT-SYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -154176,7 +154186,9 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-MIGRATIONS-APPLY-ASYNC",
-        "EF10-MIGRATIONS-APPLY-SYNC"
+        "EF10-MIGRATIONS-APPLY-SYNC",
+        "EF10-MIGRATIONS-SET-DEFAULT-ASYNC",
+        "EF10-MIGRATIONS-SET-DEFAULT-SYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -156348,10 +156360,13 @@
       "MemberKind": "Field",
       "ApiMemberName": "SetDefault",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.ReferentialAction SetDefault = 4",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-SET-DEFAULT-ASYNC",
+        "EF10-MIGRATIONS-SET-DEFAULT-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.ReferentialAction.SetDefault"
     },
     {
@@ -183459,7 +183474,8 @@
       "Signature": "System.Void Migrate(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
-        "EF10-MIGRATIONS-APPLY-SYNC"
+        "EF10-MIGRATIONS-APPLY-SYNC",
+        "EF10-MIGRATIONS-SET-DEFAULT-SYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -183473,7 +183489,8 @@
       "Signature": "System.Void Migrate(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade, System.String targetMigration)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
-        "EF10-MIGRATIONS-APPLY-SYNC"
+        "EF10-MIGRATIONS-APPLY-SYNC",
+        "EF10-MIGRATIONS-SET-DEFAULT-SYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -183487,7 +183504,8 @@
       "Signature": "System.Threading.Tasks.Task MigrateAsync(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade, System.Threading.CancellationToken cancellationToken = null)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
-        "EF10-MIGRATIONS-APPLY-ASYNC"
+        "EF10-MIGRATIONS-APPLY-ASYNC",
+        "EF10-MIGRATIONS-SET-DEFAULT-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -183501,7 +183519,8 @@
       "Signature": "System.Threading.Tasks.Task MigrateAsync(Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade databaseFacade, System.String targetMigration, System.Threading.CancellationToken cancellationToken = null)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
-        "EF10-MIGRATIONS-APPLY-ASYNC"
+        "EF10-MIGRATIONS-APPLY-ASYNC",
+        "EF10-MIGRATIONS-SET-DEFAULT-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",

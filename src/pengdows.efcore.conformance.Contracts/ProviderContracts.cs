@@ -72,7 +72,8 @@ public sealed record ProviderCapabilities(
         "index-schema-metadata",
         "schema-comments",
         "migration-add-constraint-operations",
-        "case-insensitive-collation"
+        "case-insensitive-collation",
+        "migration-set-default"
     };
 
     public IReadOnlyList<string> UndeclaredFeatures => KnownFeatures
