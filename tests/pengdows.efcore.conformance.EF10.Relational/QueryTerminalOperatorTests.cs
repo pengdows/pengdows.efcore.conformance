@@ -166,6 +166,30 @@ public sealed class QueryTerminalOperatorTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-QUERY-SINGLE-OR-DEFAULT-MULTIPLE-SYNC", "System.Linq.Queryable.SingleOrDefault")]
+    public async Task SingleOrDefault_ThrowsWhenMultipleRowsMatchSynchronously()
+    {
+        var (batch, _, _, _) = await SeedThreePeopleAsync();
+        await using var context = ProviderTestRuntime.CreateContext();
+
+        Assert.Throws<InvalidOperationException>(() => context.People
+            .Where(person => person.Name.StartsWith(batch))
+            .SingleOrDefault());
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-SINGLE-OR-DEFAULT-MULTIPLE-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleOrDefaultAsync")]
+    public async Task SingleOrDefaultAsync_ThrowsWhenMultipleRowsMatch()
+    {
+        var (batch, _, _, _) = await SeedThreePeopleAsync();
+        await using var context = ProviderTestRuntime.CreateContext();
+
+        await Assert.ThrowsAsync<InvalidOperationException>(() => context.People
+            .Where(person => person.Name.StartsWith(batch))
+            .SingleOrDefaultAsync(TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-QUERY-LAST-SYNC", "System.Linq.Queryable.Last")]
     public async Task Last_ReturnsLastEntityInExplicitOrderSynchronously()
     {
