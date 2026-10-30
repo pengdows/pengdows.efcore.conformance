@@ -20,7 +20,8 @@ public sealed class DesignTimeMigrationCodeGenerationTests
         "Microsoft.EntityFrameworkCore.Migrations.Design.IMigrationsCodeGeneratorSelector.Select",
         "Microsoft.EntityFrameworkCore.Migrations.Design.IMigrationsCodeGenerator.GenerateMigration",
         "Microsoft.EntityFrameworkCore.Migrations.Design.IMigrationsCodeGenerator.GenerateMetadata",
-        "Microsoft.EntityFrameworkCore.Migrations.Design.IMigrationsCodeGenerator.GenerateSnapshot")]
+        "Microsoft.EntityFrameworkCore.Migrations.Design.IMigrationsCodeGenerator.GenerateSnapshot",
+        "Microsoft.EntityFrameworkCore.Migrations.Design.IMigrationsScaffolder.ScaffoldMigration")]
     public void CSharpMigrationCodeGenerator_EmitsDeclaredOperation()
     {
         var services = new ServiceCollection();
@@ -63,6 +64,8 @@ public sealed class DesignTimeMigrationCodeGenerationTests
             typeof(ConformanceDbContext),
             "ConformanceContextModelSnapshot",
             designModel);
+        var scaffoldedMigration = serviceProvider.GetRequiredService<IMigrationsScaffolder>()
+            .ScaffoldMigration("ConformanceInitial", "Example.Migrations", language: "C#", dryRun: true);
 
         Assert.Equal(".cs", generator.FileExtension);
         Assert.Contains("AddColumn<int>", generated, StringComparison.Ordinal);
@@ -72,5 +75,7 @@ public sealed class DesignTimeMigrationCodeGenerationTests
         Assert.Contains("AddPersonAge", metadata, StringComparison.Ordinal);
         Assert.Contains("ConformanceContextModelSnapshot", snapshot, StringComparison.Ordinal);
         Assert.Contains("ef10conformancepeople", snapshot, StringComparison.Ordinal);
+        Assert.Contains("CreateTable", scaffoldedMigration.MigrationCode, StringComparison.Ordinal);
+        Assert.Contains("ef10conformancepeople", scaffoldedMigration.MigrationCode, StringComparison.Ordinal);
     }
 }

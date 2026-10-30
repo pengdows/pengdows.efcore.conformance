@@ -23,10 +23,10 @@
     "TotalEntries": 18795,
     "PublicTypes": 2033,
     "PublicMembers": 16762,
-    "AwaitingClassification": 97,
+    "AwaitingClassification": 96,
     "ExplicitlyExcluded": 5921,
-    "MemberEntriesInCoveredFamilies": 687,
-    "UncoveredMemberFamilies": 86
+    "MemberEntriesInCoveredFamilies": 688,
+    "UncoveredMemberFamilies": 85
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -154663,10 +154663,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "ScaffoldMigration",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Design.ScaffoldedMigration ScaffoldMigration(System.String migrationName, System.String rootNamespace, System.String subNamespace = null, System.String language = null, System.Boolean dryRun = false)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-MIGRATION-CODE-GENERATION"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.IMigrationsScaffolder.ScaffoldMigration"
     },
     {
