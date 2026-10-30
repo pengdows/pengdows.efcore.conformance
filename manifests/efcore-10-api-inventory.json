@@ -23,10 +23,10 @@
     "TotalEntries": 18795,
     "PublicTypes": 2033,
     "PublicMembers": 16762,
-    "AwaitingClassification": 101,
+    "AwaitingClassification": 97,
     "ExplicitlyExcluded": 5921,
-    "MemberEntriesInCoveredFamilies": 683,
-    "UncoveredMemberFamilies": 90
+    "MemberEntriesInCoveredFamilies": 687,
+    "UncoveredMemberFamilies": 86
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -154571,10 +154571,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "GenerateMetadata",
       "Signature": "System.String GenerateMetadata(System.String migrationNamespace, System.Type contextType, System.String migrationName, System.String migrationId, Microsoft.EntityFrameworkCore.Metadata.IModel targetModel)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-MIGRATION-CODE-GENERATION"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.IMigrationsCodeGenerator.GenerateMetadata"
     },
     {
@@ -154583,10 +154585,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "GenerateMigration",
       "Signature": "System.String GenerateMigration(System.String migrationNamespace, System.String migrationName, System.Collections.Generic.IReadOnlyList\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.MigrationOperation\u003E upOperations, System.Collections.Generic.IReadOnlyList\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.MigrationOperation\u003E downOperations)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-MIGRATION-CODE-GENERATION"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.IMigrationsCodeGenerator.GenerateMigration"
     },
     {
@@ -154595,10 +154599,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "GenerateSnapshot",
       "Signature": "System.String GenerateSnapshot(System.String modelSnapshotNamespace, System.Type contextType, System.String modelSnapshotName, Microsoft.EntityFrameworkCore.Metadata.IModel model)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-MIGRATION-CODE-GENERATION"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.IMigrationsCodeGenerator.GenerateSnapshot"
     },
     {
@@ -154631,10 +154637,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "Select",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Design.IMigrationsCodeGenerator Select(System.String language)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-MIGRATION-CODE-GENERATION"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.IMigrationsCodeGeneratorSelector.Select"
     },
     {
