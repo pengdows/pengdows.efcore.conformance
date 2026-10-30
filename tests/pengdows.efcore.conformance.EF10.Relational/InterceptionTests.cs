@@ -219,6 +219,54 @@ public sealed class InterceptionTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-INTERCEPTION-COMMAND-PARAMETER-SYNC", "Microsoft.EntityFrameworkCore.Diagnostics.DbCommandInterceptor.ReaderExecuting", "System.Data.Common.DbParameter.Value", "System.Linq.Queryable.ToList")]
+    public async Task Query_UsesSynchronousCommandInterceptorParameterChanges()
+    {
+        var originalValue = Random.Shared.Next(100_000, 1_000_000_000);
+        var replacementValue = originalValue + 1;
+        var person = CreatePerson("Sync parameter interceptor");
+        person.Age = replacementValue;
+        await SeedAsync(person);
+        var interceptor = new ParameterRewritingCommandInterceptor(originalValue, replacementValue);
+
+        await using var context = ProviderTestRuntime.CreateContext(options => options.AddInterceptors(interceptor));
+        var results = context.People.Where(item => item.Age == EF.Parameter(originalValue)).ToList();
+
+        Assert.Collection(results, result =>
+        {
+            Assert.Equal(person.Id, result.Id);
+            Assert.Equal(replacementValue, result.Age);
+        });
+        Assert.Equal(1, interceptor.ParametersChanged);
+        Assert.Equal(0, interceptor.AsyncParametersChanged);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-INTERCEPTION-COMMAND-PARAMETER-ASYNC", "Microsoft.EntityFrameworkCore.Diagnostics.DbCommandInterceptor.ReaderExecutingAsync", "System.Data.Common.DbParameter.Value", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync")]
+    public async Task Query_UsesAsynchronousCommandInterceptorParameterChanges()
+    {
+        var originalValue = Random.Shared.Next(100_000, 1_000_000_000);
+        var replacementValue = originalValue + 1;
+        var person = CreatePerson("Async parameter interceptor");
+        person.Age = replacementValue;
+        await SeedAsync(person);
+        var interceptor = new ParameterRewritingCommandInterceptor(originalValue, replacementValue);
+
+        await using var context = ProviderTestRuntime.CreateContext(options => options.AddInterceptors(interceptor));
+        var results = await context.People
+            .Where(item => item.Age == EF.Parameter(originalValue))
+            .ToListAsync(TestContext.Current.CancellationToken);
+
+        Assert.Collection(results, result =>
+        {
+            Assert.Equal(person.Id, result.Id);
+            Assert.Equal(replacementValue, result.Age);
+        });
+        Assert.Equal(0, interceptor.ParametersChanged);
+        Assert.Equal(1, interceptor.AsyncParametersChanged);
+    }
+
+    [Fact]
     [CapabilityRequirement("transactions")]
     [BehavioralCoverage("EF10-INTERCEPTION-TRANSACTION-SYNC", "Microsoft.EntityFrameworkCore.DbContextOptionsBuilder.AddInterceptors", "Microsoft.EntityFrameworkCore.Diagnostics.DbTransactionInterceptor.TransactionStarted", "Microsoft.EntityFrameworkCore.Diagnostics.DbTransactionInterceptor.TransactionCommitted", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.BeginTransaction", "Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction.Commit")]
     public async Task Transaction_InvokesSynchronousInterceptorCallbacks()
@@ -511,6 +559,48 @@ public sealed class InterceptionTests
         await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
         context.People.Add(person);
         await context.SaveChangesAsync(TestContext.Current.CancellationToken);
+    }
+
+    private sealed class ParameterRewritingCommandInterceptor(int originalValue, int replacementValue) : DbCommandInterceptor
+    {
+        public int ParametersChanged { get; private set; }
+
+        public int AsyncParametersChanged { get; private set; }
+
+        public override InterceptionResult<DbDataReader> ReaderExecuting(
+            DbCommand command,
+            CommandEventData eventData,
+            InterceptionResult<DbDataReader> result)
+        {
+            ParametersChanged += Rewrite(command);
+            return result;
+        }
+
+        public override ValueTask<InterceptionResult<DbDataReader>> ReaderExecutingAsync(
+            DbCommand command,
+            CommandEventData eventData,
+            InterceptionResult<DbDataReader> result,
+            CancellationToken cancellationToken = default)
+        {
+            AsyncParametersChanged += Rewrite(command);
+            return ValueTask.FromResult(result);
+        }
+
+        private int Rewrite(DbCommand command)
+        {
+            var changed = 0;
+            foreach (DbParameter parameter in command.Parameters)
+            {
+                if (parameter.Value is not null and not DBNull &&
+                    Convert.ToInt32(parameter.Value, System.Globalization.CultureInfo.InvariantCulture) == originalValue)
+                {
+                    parameter.Value = replacementValue;
+                    changed++;
+                }
+            }
+
+            return changed;
+        }
     }
 
     private sealed class RecordingCommandInterceptor : DbCommandInterceptor

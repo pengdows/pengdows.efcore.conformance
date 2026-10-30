@@ -35,6 +35,7 @@
       "System.Collections.Generic.IAsyncEnumerator\u00601.MoveNextAsync",
       "System.Data.Common.DbCommand.ExecuteReader",
       "System.Data.Common.DbDataReader.Read",
+      "System.Data.Common.DbParameter.Value",
       "System.Linq.Enumerable.ToList",
       "System.Linq.IQueryable.GetEnumerator",
       "System.Linq.Queryable.All",
@@ -35083,6 +35084,7 @@
       "Signature": "Microsoft.EntityFrameworkCore.Diagnostics.InterceptionResult\u003CSystem.Data.Common.DbDataReader\u003E ReaderExecuting(System.Data.Common.DbCommand command, Microsoft.EntityFrameworkCore.Diagnostics.CommandEventData eventData, Microsoft.EntityFrameworkCore.Diagnostics.InterceptionResult\u003CSystem.Data.Common.DbDataReader\u003E result)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-INTERCEPTION-COMMAND-PARAMETER-SYNC",
         "EF10-INTERCEPTION-COMMAND-SYNC"
       ],
       "Disposition": "behavior-tested-family",
@@ -35123,7 +35125,8 @@
       "Signature": "System.Threading.Tasks.ValueTask\u003CMicrosoft.EntityFrameworkCore.Diagnostics.InterceptionResult\u003CSystem.Data.Common.DbDataReader\u003E\u003E ReaderExecutingAsync(System.Data.Common.DbCommand command, Microsoft.EntityFrameworkCore.Diagnostics.CommandEventData eventData, Microsoft.EntityFrameworkCore.Diagnostics.InterceptionResult\u003CSystem.Data.Common.DbDataReader\u003E result, System.Threading.CancellationToken cancellationToken = null)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
-        "EF10-INTERCEPTION-COMMAND-ASYNC"
+        "EF10-INTERCEPTION-COMMAND-ASYNC",
+        "EF10-INTERCEPTION-COMMAND-PARAMETER-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -56002,6 +56005,7 @@
         "EF10-INHERITANCE-TPC-ASYNC",
         "EF10-INHERITANCE-TPH-ASYNC",
         "EF10-INHERITANCE-TPT-ASYNC",
+        "EF10-INTERCEPTION-COMMAND-PARAMETER-ASYNC",
         "EF10-LINQ-LEFTJOIN-ASYNC",
         "EF10-LINQ-RIGHTJOIN-ASYNC",
         "EF10-PRIMITIVE-COLLECTION-ASYNC",
