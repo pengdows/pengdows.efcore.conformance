@@ -1,3 +1,4 @@
+using System.Data;
 using System.Data.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -141,6 +142,55 @@ public sealed class TransactionTests
             .SingleAsync(person => person.Id == id, cancellationToken);
         Assert.Equal("Committed async", persisted.Name);
         Assert.Equal(21, persisted.Age);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-TRANSACTION-ISOLATION-SYNC", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.BeginTransaction", "System.Data.Common.DbTransaction.IsolationLevel", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges")]
+    public async Task BeginTransaction_UsesRequestedSerializableIsolationSynchronously()
+    {
+        ProviderTestRuntime.RequireCapability("transactions");
+        var id = Guid.NewGuid();
+
+        await using (var context = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
+            using var transaction = context.Database.BeginTransaction(IsolationLevel.Serializable);
+            Assert.Equal(IsolationLevel.Serializable, transaction.GetDbTransaction().IsolationLevel);
+            context.People.Add(new Person { Id = id, Name = "Serializable transaction", Age = 24 });
+            Assert.Equal(1, context.SaveChanges());
+            transaction.Commit();
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.Equal("Serializable transaction", await verify.People.AsNoTracking()
+            .Where(person => person.Id == id)
+            .Select(person => person.Name)
+            .SingleAsync(TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-TRANSACTION-ISOLATION-ASYNC", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.BeginTransactionAsync", "System.Data.Common.DbTransaction.IsolationLevel", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync")]
+    public async Task BeginTransactionAsync_UsesRequestedSerializableIsolation()
+    {
+        ProviderTestRuntime.RequireCapability("transactions");
+        var id = Guid.NewGuid();
+        var cancellationToken = TestContext.Current.CancellationToken;
+
+        await using (var context = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(context, cancellationToken);
+            await using var transaction = await context.Database.BeginTransactionAsync(IsolationLevel.Serializable, cancellationToken);
+            Assert.Equal(IsolationLevel.Serializable, transaction.GetDbTransaction().IsolationLevel);
+            context.People.Add(new Person { Id = id, Name = "Serializable async transaction", Age = 25 });
+            Assert.Equal(1, await context.SaveChangesAsync(cancellationToken));
+            await transaction.CommitAsync(cancellationToken);
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.Equal("Serializable async transaction", await verify.People.AsNoTracking()
+            .Where(person => person.Id == id)
+            .Select(person => person.Name)
+            .SingleAsync(cancellationToken));
     }
 
     [Fact]
