@@ -9,4 +9,6 @@
   <Folder Name="/src/" />
   <Project Path="adapters/pengdows.efcore.conformance.Adapter.MicrosoftSqlite/pengdows.efcore.conformance.Adapter.MicrosoftSqlite.csproj" />
   <Project Path="adapters/pengdows.efcore.conformance.Adapter.PomeloMySql/pengdows.efcore.conformance.Adapter.PomeloMySql.csproj" />
+  <Project Path="adapters/pengdows.efcore.conformance.Adapter.SqlServer/pengdows.efcore.conformance.Adapter.SqlServer.csproj" />
+  <Project Path="adapters/pengdows.efcore.conformance.Adapter.DuckDb/pengdows.efcore.conformance.Adapter.DuckDb.csproj" />
 </Solution>

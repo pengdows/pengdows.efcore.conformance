@@ -1,0 +1,6 @@
+{
+  "name": "DuckDB.EFCore reference",
+  "adapterAssembly": "../adapters/pengdows.efcore.conformance.Adapter.DuckDb/bin/Debug/net10.0/pengdows.efcore.conformance.Adapter.DuckDb.dll",
+  "adapterType": "pengdows.efcore.conformance.Adapter.DuckDb.DuckDbReferenceAdapter",
+  "connectionString": "Data Source=${EFCORE_CONFORMANCE_DUCKDB_PATH}"
+}

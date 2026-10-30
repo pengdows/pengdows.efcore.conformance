@@ -1,0 +1,6 @@
+{
+  "name": "pengdows ADO.NET DuckDB candidate",
+  "adapterAssembly": "../adapters/pengdows.efcore.conformance.Adapter.PengdowsDuckDb/bin/Debug/net10.0/pengdows.efcore.conformance.Adapter.PengdowsDuckDb.dll",
+  "adapterType": "pengdows.efcore.conformance.Adapter.PengdowsDuckDb.PengdowsDuckDbAdapter",
+  "connectionString": "Data Source=${EFCORE_CONFORMANCE_DUCKDB_PATH}"
+}

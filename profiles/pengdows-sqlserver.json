@@ -1,0 +1,6 @@
+{
+  "name": "pengdows ADO.NET SQL Server candidate",
+  "adapterAssembly": "../adapters/pengdows.efcore.conformance.Adapter.PengdowsSqlServer/bin/Debug/net10.0/pengdows.efcore.conformance.Adapter.PengdowsSqlServer.dll",
+  "adapterType": "pengdows.efcore.conformance.Adapter.PengdowsSqlServer.PengdowsSqlServerAdapter",
+  "connectionString": "Server=${EFCORE_CONFORMANCE_SQLSERVER_HOST},${EFCORE_CONFORMANCE_SQLSERVER_PORT};Database=${EFCORE_CONFORMANCE_SQLSERVER_DATABASE};User ID=${EFCORE_CONFORMANCE_SQLSERVER_USER};Password=${EFCORE_CONFORMANCE_SQLSERVER_PASSWORD};Encrypt=False;TrustServerCertificate=True"
+}

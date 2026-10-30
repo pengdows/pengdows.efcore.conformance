@@ -344,7 +344,10 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
             entity.Property(record => record.Id).HasColumnName("id");
             entity.Property(record => record.Value).HasColumnName("value").IsRequired().HasMaxLength(160);
             entity.Property(record => record.IsActive).HasColumnName("isactive");
-            entity.HasIndex(record => record.Value).IsUnique().HasFilter("isactive = 1");
+            if (ProviderTestRuntime.Adapter.Capabilities.Supports("filtered-indexes"))
+            {
+                entity.HasIndex(record => record.Value).IsUnique().HasFilter("isactive = 1");
+            }
         });
         modelBuilder.Entity<KeylessPersonRow>(entity =>
         {

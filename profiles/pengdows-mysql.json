@@ -1,0 +1,6 @@
+{
+  "name": "pengdows ADO.NET MySQL candidate",
+  "adapterAssembly": "../adapters/pengdows.efcore.conformance.Adapter.PengdowsMySql/bin/Debug/net10.0/pengdows.efcore.conformance.Adapter.PengdowsMySql.dll",
+  "adapterType": "pengdows.efcore.conformance.Adapter.PengdowsMySql.PengdowsMySqlAdapter",
+  "connectionString": "Server=${EFCORE_CONFORMANCE_MYSQL_HOST};Port=${EFCORE_CONFORMANCE_MYSQL_PORT};Database=${EFCORE_CONFORMANCE_MYSQL_DATABASE};User ID=${EFCORE_CONFORMANCE_MYSQL_USER};Password=${EFCORE_CONFORMANCE_MYSQL_PASSWORD};AllowPublicKeyRetrieval=True;SslMode=None"
+}

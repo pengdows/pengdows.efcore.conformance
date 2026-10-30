@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>pengdows.efcore.conformance.Adapter.PengdowsDuckDb</AssemblyName>
+    <RootNamespace>pengdows.efcore.conformance.Adapter.PengdowsDuckDb</RootNamespace>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="DuckDB.NET.Data.Full" />
+    <ProjectReference Include="../../src/pengdows.efcore.conformance.Contracts/pengdows.efcore.conformance.Contracts.csproj" />
+    <ProjectReference Include="../../../pengdows.efcore.adonet/src/pengdows.efcore.adonet.duckdb/pengdows.efcore.adonet.duckdb.csproj" />
+  </ItemGroup>
+</Project>

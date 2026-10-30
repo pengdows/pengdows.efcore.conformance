@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>pengdows.efcore.conformance.Adapter.SqlServer</AssemblyName>
+    <RootNamespace>pengdows.efcore.conformance.Adapter.SqlServer</RootNamespace>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
+    <PackageReference Include="System.Security.Cryptography.Pkcs" />
+    <ProjectReference Include="../../src/pengdows.efcore.conformance.Contracts/pengdows.efcore.conformance.Contracts.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,6 @@
+{
+  "name": "Microsoft EF Core SQL Server reference",
+  "adapterAssembly": "../adapters/pengdows.efcore.conformance.Adapter.SqlServer/bin/Debug/net10.0/pengdows.efcore.conformance.Adapter.SqlServer.dll",
+  "adapterType": "pengdows.efcore.conformance.Adapter.SqlServer.MicrosoftSqlServerAdapter",
+  "connectionString": "Server=${EFCORE_CONFORMANCE_SQLSERVER_HOST},${EFCORE_CONFORMANCE_SQLSERVER_PORT};Database=${EFCORE_CONFORMANCE_SQLSERVER_DATABASE};User ID=${EFCORE_CONFORMANCE_SQLSERVER_USER};Password=${EFCORE_CONFORMANCE_SQLSERVER_PASSWORD};Encrypt=False;TrustServerCertificate=True"
+}
