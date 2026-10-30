@@ -43,11 +43,14 @@
       "System.Linq.Queryable.Average",
       "System.Linq.Queryable.Contains",
       "System.Linq.Queryable.Count",
+      "System.Linq.Queryable.Distinct",
       "System.Linq.Queryable.ElementAt",
       "System.Linq.Queryable.ElementAtOrDefault",
+      "System.Linq.Queryable.Except",
       "System.Linq.Queryable.First",
       "System.Linq.Queryable.FirstOrDefault",
       "System.Linq.Queryable.GroupBy",
+      "System.Linq.Queryable.Intersect",
       "System.Linq.Queryable.Join",
       "System.Linq.Queryable.Last",
       "System.Linq.Queryable.LastOrDefault",
@@ -68,6 +71,7 @@
       "System.Linq.Queryable.ThenBy",
       "System.Linq.Queryable.ToArray",
       "System.Linq.Queryable.ToList",
+      "System.Linq.Queryable.Union",
       "System.Linq.Queryable.Where"
     ]
   },
@@ -56116,7 +56120,11 @@
         "EF10-QUERY-COLLECTION-MODE-CONSTANTS-ASYNC",
         "EF10-QUERY-COLLECTION-MODE-MULTIPLE-PARAMETERS-ASYNC",
         "EF10-QUERY-COLLECTION-MODE-PARAMETERS-ASYNC",
-        "EF10-QUERY-MULTIPLE-PARAMETERS-METHOD-ASYNC"
+        "EF10-QUERY-DISTINCT-ASYNC",
+        "EF10-QUERY-EXCEPT-ASYNC",
+        "EF10-QUERY-INTERSECT-ASYNC",
+        "EF10-QUERY-MULTIPLE-PARAMETERS-METHOD-ASYNC",
+        "EF10-QUERY-UNION-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
