@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.ComponentModel;
 using System.Data.Common;
@@ -95,6 +96,63 @@ internal static class ProviderTestRuntime
         }
     }
 
+    public static async Task<NativeTypeTableLease> CreateNativeTypeTableAsync(
+        NativeTypeProbeDefinition probe,
+        string tableSuffix,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            await using var schemaContext = CreateContext();
+            await Adapter.InitializeDatabaseAsync(schemaContext, cancellationToken);
+        }
+        catch (Exception exception) when (exception is not ConformanceInfrastructureException)
+        {
+            throw new ConformanceInfrastructureException("Provider database initialization failed.", exception);
+        }
+
+        // Database provisioning uses the public EF schema API; the test never inspects the generated script.
+        await using var nativeContext = CreateNativeTypeContext(probe, tableSuffix);
+        var createScript = nativeContext.Database.GenerateCreateScript();
+        try
+        {
+            await nativeContext.Database.ExecuteSqlRawAsync(createScript, cancellationToken);
+        }
+        catch
+        {
+            try
+            {
+                await CleanupNativeTypeTablesAsync(probe, tableSuffix, CancellationToken.None);
+            }
+            catch
+            {
+                // Preserve the creation failure; cleanup is best-effort when creation stopped partway through.
+            }
+
+            throw;
+        }
+
+        return new NativeTypeTableLease(probe, tableSuffix);
+    }
+
+    public static Task CleanupNativeTypeTablesAsync(
+        NativeTypeProbeDefinition probe,
+        string tableSuffix,
+        CancellationToken cancellationToken)
+    {
+        if (Adapter is not INativeTypeTableCleanupAdapter cleanupAdapter)
+        {
+            throw new ConformanceInfrastructureException(
+                $"Provider '{Adapter.Name}' exposes native type mappings without native test table cleanup.",
+                new InvalidOperationException("The adapter does not implement INativeTypeTableCleanupAdapter."));
+        }
+
+        return cleanupAdapter.CleanupNativeTypeTablesAsync(
+            ConnectionString,
+            [$"{probe.NullableTableName}_{tableSuffix}", $"{probe.TableName}_{tableSuffix}"],
+            cancellationToken);
+    }
+
     public static void RequireCapability(string feature)
     {
         var capabilities = Adapter.Capabilities;
@@ -109,6 +167,21 @@ internal static class ProviderTestRuntime
         }
 
         throw new UndeclaredCapabilityException(feature);
+    }
+
+    public static NativeTypeConformanceDbContext CreateNativeTypeContext(NativeTypeProbeDefinition probe, string tableSuffix)
+    {
+        try
+        {
+            var options = new DbContextOptionsBuilder<NativeTypeConformanceDbContext>();
+            Adapter.Configure(options, ConnectionString);
+            options.ReplaceService<IModelCacheKeyFactory, ConformanceModelCacheKeyFactory>();
+            return new NativeTypeConformanceDbContext(options.Options, probe, tableSuffix);
+        }
+        catch (Exception exception) when (exception is not ConformanceInfrastructureException)
+        {
+            throw new ConformanceInfrastructureException("Provider adapter configuration failed.", exception);
+        }
     }
 
     private static IReadOnlyList<NativeTypeProbeDefinition> BuildNativeTypeProbes()
@@ -594,32 +667,67 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
             entity.Property(record => record.Enabled).HasColumnName("enabled").HasDefaultValue(true).HasSentinel(false);
             entity.Property(record => record.Label).HasColumnName("label").HasMaxLength(160).HasDefaultValue("database default");
         });
-        foreach (var probe in ProviderTestRuntime.NativeTypeProbes)
-        {
-            var entity = modelBuilder.SharedTypeEntity<Dictionary<string, object>>(probe.EntityTypeName);
-            entity.ToTable(probe.TableName);
-            entity.IndexerProperty<Guid>("id").HasColumnName("id");
-            entity.HasKey("id");
-            entity.IndexerProperty(probe.Mapping.ClrType, "value")
-                .HasColumnName("value")
-                .HasColumnType(probe.Mapping.StoreTypeName ?? probe.Mapping.DatabaseTypeName);
-
-            var nullableClrType = probe.Mapping.ClrType.IsValueType && Nullable.GetUnderlyingType(probe.Mapping.ClrType) is null
-                ? typeof(Nullable<>).MakeGenericType(probe.Mapping.ClrType)
-                : probe.Mapping.ClrType;
-            var nullableEntity = modelBuilder.SharedTypeEntity<Dictionary<string, object>>(probe.NullableEntityTypeName);
-            nullableEntity.ToTable(probe.NullableTableName);
-            nullableEntity.IndexerProperty<Guid>("id").HasColumnName("id");
-            nullableEntity.HasKey("id");
-            nullableEntity.IndexerProperty(nullableClrType, "value")
-                .HasColumnName("value")
-                .HasColumnType(probe.Mapping.StoreTypeName ?? probe.Mapping.DatabaseTypeName)
-                .IsRequired(false);
-        }
         modelBuilder.Entity<AttributeConfiguredRecord>();
     }
 
+}
 
+internal interface INativeTypeModelContext
+{
+    NativeTypeProbeDefinition Probe { get; }
+
+    string TableSuffix { get; }
+}
+
+internal sealed class NativeTypeConformanceDbContext(
+    DbContextOptions<NativeTypeConformanceDbContext> options,
+    NativeTypeProbeDefinition probe,
+    string tableSuffix) : DbContext(options), INativeTypeModelContext
+{
+    public NativeTypeProbeDefinition Probe { get; } = probe;
+
+    public string TableSuffix { get; } = tableSuffix;
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        var entity = modelBuilder.SharedTypeEntity<Dictionary<string, object>>(Probe.EntityTypeName);
+        entity.ToTable($"{Probe.TableName}_{TableSuffix}");
+        entity.IndexerProperty<Guid>("id").HasColumnName("id");
+        entity.HasKey("id");
+        entity.IndexerProperty(Probe.Mapping.ClrType, "value")
+            .HasColumnName("value")
+            .HasColumnType(Probe.Mapping.StoreTypeName ?? Probe.Mapping.DatabaseTypeName);
+
+        var nullableClrType = Probe.Mapping.ClrType.IsValueType && Nullable.GetUnderlyingType(Probe.Mapping.ClrType) is null
+            ? typeof(Nullable<>).MakeGenericType(Probe.Mapping.ClrType)
+            : Probe.Mapping.ClrType;
+        var nullableEntity = modelBuilder.SharedTypeEntity<Dictionary<string, object>>(Probe.NullableEntityTypeName);
+        nullableEntity.ToTable($"{Probe.NullableTableName}_{TableSuffix}");
+        nullableEntity.IndexerProperty<Guid>("id").HasColumnName("id");
+        nullableEntity.HasKey("id");
+        nullableEntity.IndexerProperty(nullableClrType, "value")
+            .HasColumnName("value")
+            .HasColumnType(Probe.Mapping.StoreTypeName ?? Probe.Mapping.DatabaseTypeName)
+            .IsRequired(false);
+    }
+}
+
+internal sealed class NativeTypeTableLease(NativeTypeProbeDefinition probe, string tableSuffix) : IAsyncDisposable
+{
+    public NativeTypeConformanceDbContext CreateContext() => ProviderTestRuntime.CreateNativeTypeContext(probe, tableSuffix);
+
+    public async ValueTask DisposeAsync()
+    {
+        await ProviderTestRuntime.CleanupNativeTypeTablesAsync(probe, tableSuffix, CancellationToken.None);
+    }
+}
+
+/// <summary>Allows each discovered native type test to validate its own model without masking unrelated mappings.</summary>
+internal sealed class ConformanceModelCacheKeyFactory : IModelCacheKeyFactory
+{
+    public object Create(DbContext context, bool designTime) => context is INativeTypeModelContext nativeContext
+        ? (context.GetType(), nativeContext.Probe.Index, nativeContext.TableSuffix, designTime)
+        : (context.GetType(), designTime);
 }
 
 internal sealed class Person

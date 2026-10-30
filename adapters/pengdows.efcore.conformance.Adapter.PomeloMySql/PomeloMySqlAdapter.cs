@@ -7,7 +7,7 @@ using pengdows.efcore.conformance;
 namespace pengdows.efcore.conformance.Adapter.PomeloMySql;
 
 /// <summary>Optional EF Core 10 adapter for MySQL-compatible servers using Pomelo.</summary>
-public sealed class PomeloMySqlAdapter : IAdoNetProviderAdapter, INativeTypeMappingProfile, IParameterizedCollectionModeAdapter, ICollationTestAdapter, IIndexMetadataAdapter, ISchemaCommentMetadataAdapter
+public sealed class PomeloMySqlAdapter : IAdoNetProviderAdapter, INativeTypeMappingProfile, INativeTypeTableCleanupAdapter, IParameterizedCollectionModeAdapter, ICollationTestAdapter, IIndexMetadataAdapter, ISchemaCommentMetadataAdapter
 {
     private static readonly IReadOnlyList<NativeTypeMapping> DeclaredNativeTypes =
     [
@@ -112,6 +112,25 @@ public sealed class PomeloMySqlAdapter : IAdoNetProviderAdapter, INativeTypeMapp
         context.Database.EnsureDeletedAsync(cancellationToken);
 
     public DbConnection CreateConnection(string connectionString) => new MySqlConnection(connectionString);
+
+    public async Task CleanupNativeTypeTablesAsync(
+        string connectionString,
+        IReadOnlyList<string> tableNames,
+        CancellationToken cancellationToken)
+    {
+        await using var connection = new MySqlConnection(connectionString);
+        await connection.OpenAsync(cancellationToken);
+        await using var command = connection.CreateCommand();
+        command.CommandText = string.Join(";", tableNames.Select(name => $"DROP TABLE IF EXISTS {QuoteTestTable(name)}"));
+        await command.ExecuteNonQueryAsync(cancellationToken);
+    }
+
+    private static string QuoteTestTable(string name)
+    {
+        if (name.Length == 0 || name.Any(character => !(char.IsAsciiLetterOrDigit(character) || character == '_')))
+            throw new ArgumentException("Native type test table names must contain only ASCII letters, digits, and underscores.", nameof(name));
+        return $"`{name}`";
+    }
 
     public IReadOnlyList<IndexColumnMetadata> GetIndexColumns(DbConnection openConnection, string tableName, string indexName)
     {

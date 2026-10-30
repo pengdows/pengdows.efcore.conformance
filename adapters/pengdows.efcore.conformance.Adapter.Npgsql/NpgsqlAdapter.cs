@@ -7,7 +7,7 @@ using pengdows.efcore.conformance;
 namespace pengdows.efcore.conformance.Adapter.Npgsql;
 
 /// <summary>EF Core 10 adapter for PostgreSQL using Npgsql.</summary>
-public sealed class NpgsqlAdapter : IAdoNetProviderAdapter, INativeTypeMappingProfile, IParameterizedCollectionModeAdapter, IIndexMetadataAdapter, ICollationTestAdapter, ISchemaCommentMetadataAdapter
+public sealed class NpgsqlAdapter : IAdoNetProviderAdapter, INativeTypeMappingProfile, INativeTypeTableCleanupAdapter, IParameterizedCollectionModeAdapter, IIndexMetadataAdapter, ICollationTestAdapter, ISchemaCommentMetadataAdapter
 {
     private static readonly IReadOnlyList<NativeTypeMapping> DeclaredNativeTypes =
     [
@@ -34,6 +34,14 @@ public sealed class NpgsqlAdapter : IAdoNetProviderAdapter, INativeTypeMappingPr
         new("xid", typeof(uint)),
         new("cid", typeof(uint)),
         new("xid8", typeof(ulong)),
+        new("oidvector", typeof(uint[])),
+        new("int2vector", typeof(short[])),
+        new("regtype", typeof(uint)),
+        new("regconfig", typeof(uint)),
+        new("oidvector[]", typeof(uint[][])),
+        new("int2vector[]", typeof(short[][])),
+        new("regtype[]", typeof(uint[])),
+        new("regconfig[]", typeof(uint[])),
         new("tid", typeof(NpgsqlTypes.NpgsqlTid)),
         new("point", typeof(NpgsqlTypes.NpgsqlPoint)),
         new("lseg", typeof(NpgsqlTypes.NpgsqlLSeg)),
@@ -169,6 +177,25 @@ public sealed class NpgsqlAdapter : IAdoNetProviderAdapter, INativeTypeMappingPr
         context.Database.EnsureDeletedAsync(cancellationToken);
 
     public DbConnection CreateConnection(string connectionString) => new NpgsqlConnection(connectionString);
+
+    public async Task CleanupNativeTypeTablesAsync(
+        string connectionString,
+        IReadOnlyList<string> tableNames,
+        CancellationToken cancellationToken)
+    {
+        await using var connection = new NpgsqlConnection(connectionString);
+        await connection.OpenAsync(cancellationToken);
+        await using var command = connection.CreateCommand();
+        command.CommandText = string.Join(";", tableNames.Select(name => $"DROP TABLE IF EXISTS {QuoteTestTable(name)}"));
+        await command.ExecuteNonQueryAsync(cancellationToken);
+    }
+
+    private static string QuoteTestTable(string name)
+    {
+        if (name.Length == 0 || name.Any(character => !(char.IsAsciiLetterOrDigit(character) || character == '_')))
+            throw new ArgumentException("Native type test table names must contain only ASCII letters, digits, and underscores.", nameof(name));
+        return $"\"{name}\"";
+    }
 
     public IReadOnlyList<IndexColumnMetadata> GetIndexColumns(DbConnection openConnection, string tableName, string indexName)
     {

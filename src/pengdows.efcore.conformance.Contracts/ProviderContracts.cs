@@ -31,6 +31,15 @@ public interface INativeTypeMappingProfile : IProviderAdapter
     IReadOnlyList<NativeTypeMapping> NativeTypeMappings { get; }
 }
 
+/// <summary>Removes isolated native-type test tables after black-box persistence scenarios finish.</summary>
+public interface INativeTypeTableCleanupAdapter : IProviderAdapter
+{
+    Task CleanupNativeTypeTablesAsync(
+        string connectionString,
+        IReadOnlyList<string> tableNames,
+        CancellationToken cancellationToken);
+}
+
 /// <summary>A provider-claimed native store type and CLR mapping; it cannot customize samples or assertions.</summary>
 public sealed record NativeTypeMapping(
     string DatabaseTypeName,

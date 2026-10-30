@@ -59,16 +59,17 @@ public sealed class DiscoveredNativeTypeTests
         ProviderTestRuntime.RequireCapability("native-type-fidelity");
         var probe = GetProbe(probeIndex, databaseTypeName, clrTypeName);
         var id = Guid.NewGuid();
+        var tableSuffix = id.ToString("N")[..12];
+        await using var nativeTable = await ProviderTestRuntime.CreateNativeTypeTableAsync(probe, tableSuffix, TestContext.Current.CancellationToken);
         var expected = NativeTypeSampleFactory.Create(probe.Mapping);
 
-        await using (var write = ProviderTestRuntime.CreateContext())
+        await using (var write = nativeTable.CreateContext())
         {
-            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
             write.Set<Dictionary<string, object>>(probe.EntityTypeName).Add(CreateRow(id, expected));
             Assert.Equal(1, await write.SaveChangesAsync(TestContext.Current.CancellationToken));
         }
 
-        await using var verify = ProviderTestRuntime.CreateContext();
+        await using var verify = nativeTable.CreateContext();
         var actual = await verify.Set<Dictionary<string, object>>(probe.EntityTypeName)
             .AsNoTracking()
             .SingleAsync(row => EF.Property<Guid>(row, "id") == id, TestContext.Current.CancellationToken);
@@ -83,16 +84,17 @@ public sealed class DiscoveredNativeTypeTests
         ProviderTestRuntime.RequireCapability("native-type-fidelity");
         var probe = GetProbe(probeIndex, databaseTypeName, clrTypeName);
         var id = Guid.NewGuid();
+        var tableSuffix = id.ToString("N")[..12];
+        await using var nativeTable = await ProviderTestRuntime.CreateNativeTypeTableAsync(probe, tableSuffix, TestContext.Current.CancellationToken);
         var expected = NativeTypeSampleFactory.Create(probe.Mapping);
 
-        await using (var write = ProviderTestRuntime.CreateContext())
+        await using (var write = nativeTable.CreateContext())
         {
-            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
             write.Set<Dictionary<string, object>>(probe.EntityTypeName).Add(CreateRow(id, expected));
             Assert.Equal(1, write.SaveChanges());
         }
 
-        await using var verify = ProviderTestRuntime.CreateContext();
+        await using var verify = nativeTable.CreateContext();
         var actual = verify.Set<Dictionary<string, object>>(probe.EntityTypeName)
             .AsNoTracking()
             .Single(row => EF.Property<Guid>(row, "id") == id);
@@ -107,16 +109,17 @@ public sealed class DiscoveredNativeTypeTests
         ProviderTestRuntime.RequireCapability("native-type-fidelity");
         var probe = GetProbe(probeIndex, databaseTypeName, clrTypeName);
         var id = Guid.NewGuid();
+        var tableSuffix = id.ToString("N")[..12];
+        await using var nativeTable = await ProviderTestRuntime.CreateNativeTypeTableAsync(probe, tableSuffix, TestContext.Current.CancellationToken);
         var expected = NativeTypeSampleFactory.CreateAlternate(probe.Mapping);
 
-        await using (var insert = ProviderTestRuntime.CreateContext())
+        await using (var insert = nativeTable.CreateContext())
         {
-            await ProviderTestRuntime.InitializeAsync(insert, TestContext.Current.CancellationToken);
             insert.Set<Dictionary<string, object>>(probe.EntityTypeName).Add(CreateRow(id, NativeTypeSampleFactory.Create(probe.Mapping)));
             Assert.Equal(1, await insert.SaveChangesAsync(TestContext.Current.CancellationToken));
         }
 
-        await using (var update = ProviderTestRuntime.CreateContext())
+        await using (var update = nativeTable.CreateContext())
         {
             var row = await update.Set<Dictionary<string, object>>(probe.EntityTypeName)
                 .SingleAsync(item => EF.Property<Guid>(item, "id") == id, TestContext.Current.CancellationToken);
@@ -124,7 +127,7 @@ public sealed class DiscoveredNativeTypeTests
             Assert.Equal(1, await update.SaveChangesAsync(TestContext.Current.CancellationToken));
         }
 
-        await using var verify = ProviderTestRuntime.CreateContext();
+        await using var verify = nativeTable.CreateContext();
         var actual = await verify.Set<Dictionary<string, object>>(probe.EntityTypeName)
             .AsNoTracking()
             .SingleAsync(row => EF.Property<Guid>(row, "id") == id, TestContext.Current.CancellationToken);
@@ -139,16 +142,17 @@ public sealed class DiscoveredNativeTypeTests
         ProviderTestRuntime.RequireCapability("native-type-fidelity");
         var probe = GetProbe(probeIndex, databaseTypeName, clrTypeName);
         var id = Guid.NewGuid();
+        var tableSuffix = id.ToString("N")[..12];
+        await using var nativeTable = await ProviderTestRuntime.CreateNativeTypeTableAsync(probe, tableSuffix, TestContext.Current.CancellationToken);
         var expected = NativeTypeSampleFactory.CreateAlternate(probe.Mapping);
 
-        await using (var insert = ProviderTestRuntime.CreateContext())
+        await using (var insert = nativeTable.CreateContext())
         {
-            await ProviderTestRuntime.InitializeAsync(insert, TestContext.Current.CancellationToken);
             insert.Set<Dictionary<string, object>>(probe.EntityTypeName).Add(CreateRow(id, NativeTypeSampleFactory.Create(probe.Mapping)));
             Assert.Equal(1, insert.SaveChanges());
         }
 
-        await using (var update = ProviderTestRuntime.CreateContext())
+        await using (var update = nativeTable.CreateContext())
         {
             var row = update.Set<Dictionary<string, object>>(probe.EntityTypeName)
                 .Single(item => EF.Property<Guid>(item, "id") == id);
@@ -156,7 +160,7 @@ public sealed class DiscoveredNativeTypeTests
             Assert.Equal(1, update.SaveChanges());
         }
 
-        await using var verify = ProviderTestRuntime.CreateContext();
+        await using var verify = nativeTable.CreateContext();
         var actual = verify.Set<Dictionary<string, object>>(probe.EntityTypeName)
             .AsNoTracking()
             .Single(row => EF.Property<Guid>(row, "id") == id);
@@ -171,15 +175,16 @@ public sealed class DiscoveredNativeTypeTests
         ProviderTestRuntime.RequireCapability("native-type-fidelity");
         var probe = GetProbe(probeIndex, databaseTypeName, clrTypeName);
         var id = Guid.NewGuid();
+        var tableSuffix = id.ToString("N")[..12];
+        await using var nativeTable = await ProviderTestRuntime.CreateNativeTypeTableAsync(probe, tableSuffix, TestContext.Current.CancellationToken);
 
-        await using (var write = ProviderTestRuntime.CreateContext())
+        await using (var write = nativeTable.CreateContext())
         {
-            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
             write.Set<Dictionary<string, object>>(probe.NullableEntityTypeName).Add(CreateRow(id, null!));
             Assert.Equal(1, await write.SaveChangesAsync(TestContext.Current.CancellationToken));
         }
 
-        await using var verify = ProviderTestRuntime.CreateContext();
+        await using var verify = nativeTable.CreateContext();
         var actual = await verify.Set<Dictionary<string, object>>(probe.NullableEntityTypeName)
             .AsNoTracking()
             .SingleAsync(row => EF.Property<Guid>(row, "id") == id, TestContext.Current.CancellationToken);
@@ -194,15 +199,16 @@ public sealed class DiscoveredNativeTypeTests
         ProviderTestRuntime.RequireCapability("native-type-fidelity");
         var probe = GetProbe(probeIndex, databaseTypeName, clrTypeName);
         var id = Guid.NewGuid();
+        var tableSuffix = id.ToString("N")[..12];
+        await using var nativeTable = await ProviderTestRuntime.CreateNativeTypeTableAsync(probe, tableSuffix, TestContext.Current.CancellationToken);
 
-        await using (var write = ProviderTestRuntime.CreateContext())
+        await using (var write = nativeTable.CreateContext())
         {
-            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
             write.Set<Dictionary<string, object>>(probe.NullableEntityTypeName).Add(CreateRow(id, null!));
             Assert.Equal(1, write.SaveChanges());
         }
 
-        await using var verify = ProviderTestRuntime.CreateContext();
+        await using var verify = nativeTable.CreateContext();
         var actual = verify.Set<Dictionary<string, object>>(probe.NullableEntityTypeName)
             .AsNoTracking()
             .Single(row => EF.Property<Guid>(row, "id") == id);
@@ -218,16 +224,17 @@ public sealed class DiscoveredNativeTypeTests
         var probe = GetProbe(probeIndex, databaseTypeName, clrTypeName);
         AssertEqualityApplicable(probe.Mapping);
         var id = Guid.NewGuid();
+        var tableSuffix = id.ToString("N")[..12];
+        await using var nativeTable = await ProviderTestRuntime.CreateNativeTypeTableAsync(probe, tableSuffix, TestContext.Current.CancellationToken);
         var expected = NativeTypeSampleFactory.Create(probe.Mapping);
 
-        await using (var write = ProviderTestRuntime.CreateContext())
+        await using (var write = nativeTable.CreateContext())
         {
-            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
             write.Set<Dictionary<string, object>>(probe.EntityTypeName).Add(CreateRow(id, expected));
             Assert.Equal(1, await write.SaveChangesAsync(TestContext.Current.CancellationToken));
         }
 
-        await using var query = ProviderTestRuntime.CreateContext();
+        await using var query = nativeTable.CreateContext();
         var row = await query.Set<Dictionary<string, object>>(probe.EntityTypeName)
             .Where(BuildValuePredicate(probe.Mapping.ClrType, expected))
             .Where(item => EF.Property<Guid>(item, "id") == id)
@@ -245,16 +252,17 @@ public sealed class DiscoveredNativeTypeTests
         var probe = GetProbe(probeIndex, databaseTypeName, clrTypeName);
         AssertEqualityApplicable(probe.Mapping);
         var id = Guid.NewGuid();
+        var tableSuffix = id.ToString("N")[..12];
+        await using var nativeTable = await ProviderTestRuntime.CreateNativeTypeTableAsync(probe, tableSuffix, TestContext.Current.CancellationToken);
         var expected = NativeTypeSampleFactory.Create(probe.Mapping);
 
-        await using (var write = ProviderTestRuntime.CreateContext())
+        await using (var write = nativeTable.CreateContext())
         {
-            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
             write.Set<Dictionary<string, object>>(probe.EntityTypeName).Add(CreateRow(id, expected));
             Assert.Equal(1, write.SaveChanges());
         }
 
-        await using var query = ProviderTestRuntime.CreateContext();
+        await using var query = nativeTable.CreateContext();
         var row = query.Set<Dictionary<string, object>>(probe.EntityTypeName)
             .Where(BuildValuePredicate(probe.Mapping.ClrType, expected))
             .Where(item => EF.Property<Guid>(item, "id") == id)
@@ -392,13 +400,11 @@ internal static class NativeTypeSampleFactory
         if (type == typeof(byte)) return byte.MaxValue;
         if (type == typeof(short)) return short.MinValue;
         if (type == typeof(ushort)) return ushort.MaxValue;
-        if (type == typeof(uint)) return mapping.DatabaseTypeName is "oid" or "xid" or "cid" ? 12345u : uint.MaxValue;
+        if (type == typeof(uint)) return mapping.DatabaseTypeName is "oid" or "xid" or "cid" or "regtype" or "regconfig" ||
+            mapping.DatabaseTypeName.Equals("MEDIUMINT", StringComparison.OrdinalIgnoreCase) ? 12345u : uint.MaxValue;
         if (type == typeof(int)) return mapping.DatabaseTypeName.Equals("YEAR", StringComparison.OrdinalIgnoreCase)
             ? 2024
             : mapping.DatabaseTypeName.Equals("MEDIUMINT", StringComparison.OrdinalIgnoreCase) ? -12345 : int.MinValue;
-        if (type == typeof(uint)) return mapping.DatabaseTypeName.Equals("MEDIUMINT", StringComparison.OrdinalIgnoreCase)
-            ? 12345u
-            : uint.MaxValue;
         if (type == typeof(long)) return long.MinValue;
         if (type == typeof(ulong)) return mapping.DatabaseTypeName.Equals("xid8", StringComparison.OrdinalIgnoreCase) ? 1234567890123ul : ulong.MaxValue;
         if (type == typeof(decimal)) return mapping.DatabaseTypeName.Equals("money", StringComparison.OrdinalIgnoreCase) ? 12345.67m : 123456789.1234m;
@@ -442,11 +448,12 @@ internal static class NativeTypeSampleFactory
         if (type == typeof(byte)) return (byte)0;
         if (type == typeof(short)) return short.MaxValue;
         if (type == typeof(ushort)) return (ushort)0;
-        if (type == typeof(uint)) return mapping.DatabaseTypeName is "oid" or "xid" or "cid" ? 12346u : 0u;
+        if (type == typeof(uint)) return mapping.DatabaseTypeName is "oid" or "xid" or "cid" or "regtype" or "regconfig"
+            ? 12346u
+            : mapping.DatabaseTypeName.Equals("MEDIUMINT", StringComparison.OrdinalIgnoreCase) ? 23456u : 0u;
         if (type == typeof(int)) return mapping.DatabaseTypeName.Equals("YEAR", StringComparison.OrdinalIgnoreCase)
             ? 2023
             : mapping.DatabaseTypeName.Equals("MEDIUMINT", StringComparison.OrdinalIgnoreCase) ? 12345 : int.MaxValue;
-        if (type == typeof(uint)) return 0u;
         if (type == typeof(long)) return long.MaxValue;
         if (type == typeof(ulong)) return mapping.DatabaseTypeName.Equals("xid8", StringComparison.OrdinalIgnoreCase) ? 987654321ul : 0ul;
         if (type == typeof(decimal)) return mapping.DatabaseTypeName.Equals("money", StringComparison.OrdinalIgnoreCase) ? -987.65m : -987654321.4321m;
@@ -591,6 +598,12 @@ internal static class NativeTypeSampleFactory
     {
         object[] values;
         if (IsNpgsqlRange(elementType)) values = [CreateRange(elementType, mapping, alternate)];
+        else if (elementType == typeof(byte[])) values = alternate
+            ? [new byte[] { 0x52 }, new byte[] { 0x53 }]
+            : [new byte[] { 0x4a }, new byte[] { 0x4b }];
+        else if (elementType.IsArray) values = alternate
+            ? [CreateArray(elementType.GetElementType()!, mapping, true), CreateArray(elementType.GetElementType()!, mapping, false)]
+            : [CreateArray(elementType.GetElementType()!, mapping, false), CreateArray(elementType.GetElementType()!, mapping, true)];
         else if (TryCreateNpgsqlValue(elementType, alternate: false, out var providerSample) &&
                  TryCreateNpgsqlValue(elementType, alternate: true, out var providerAlternate))
             values = alternate ? [providerAlternate, providerSample] : [providerSample, providerAlternate];
@@ -619,9 +632,6 @@ internal static class NativeTypeSampleFactory
             : alternate
                 ? [new BitArray([false, true, false]), new BitArray([true, false])]
                 : [new BitArray([true, false, true]), new BitArray([false, true])];
-        else if (elementType == typeof(byte[])) values = alternate
-            ? [new byte[] { 0x52 }, new byte[] { 0x53 }]
-            : [new byte[] { 0x4a }, new byte[] { 0x4b }];
         else if (elementType == typeof(Guid)) values = alternate
             ? [Guid.Parse("84c5903f-330f-42d1-92f4-94ab241b1b32"), Guid.Empty]
             : [Guid.Parse("5d37ddf5-fab9-4e5b-95fb-b5259a5e3d31"), Guid.Empty];
