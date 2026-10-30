@@ -327,6 +327,77 @@ public sealed class Ef10MigrationCheckConstraintMigration : Migration
     }
 }
 
+[DbContext(typeof(ConformanceDbContext))]
+[Migration("20261029000108_EF10MigrationAddConstraints")]
+public sealed class Ef10MigrationAddConstraintsMigration : Migration
+{
+    protected override void Up(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.CreateTable(
+            name: "ef10conformance_migrationconstraints",
+            columns: table => new
+            {
+                id = table.Column<int>(type: null, nullable: false),
+                probeid = table.Column<Guid>(type: null, nullable: false),
+                code = table.Column<string>(type: null, nullable: false)
+            });
+        migrationBuilder.AddPrimaryKey(
+            name: "PK_ef10conformance_migrationconstraints",
+            table: "ef10conformance_migrationconstraints",
+            column: "id");
+        migrationBuilder.AddUniqueConstraint(
+            name: "AK_ef10conformance_migrationconstraints_code",
+            table: "ef10conformance_migrationconstraints",
+            column: "code");
+        migrationBuilder.AddForeignKey(
+            name: "FK_ef10conformance_migrationconstraints_probe",
+            table: "ef10conformance_migrationconstraints",
+            column: "probeid",
+            principalTable: "ef10conformance_migrationprobe_renamed",
+            principalColumn: "id",
+            onDelete: ReferentialAction.Cascade);
+    }
+
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.DropForeignKey(
+            name: "FK_ef10conformance_migrationconstraints_probe",
+            table: "ef10conformance_migrationconstraints");
+        migrationBuilder.DropUniqueConstraint(
+            name: "AK_ef10conformance_migrationconstraints_code",
+            table: "ef10conformance_migrationconstraints");
+        migrationBuilder.DropPrimaryKey(
+            name: "PK_ef10conformance_migrationconstraints",
+            table: "ef10conformance_migrationconstraints");
+        migrationBuilder.DropTable(name: "ef10conformance_migrationconstraints");
+    }
+
+    protected override void BuildTargetModel(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<MigrationConstraintRow>(entity =>
+        {
+            entity.ToTable("ef10conformance_migrationconstraints");
+            entity.HasKey(row => row.Id);
+            entity.HasAlternateKey(row => row.Code);
+            entity.Property(row => row.Id).HasColumnName("id");
+            entity.Property(row => row.ProbeId).HasColumnName("probeid");
+            entity.Property(row => row.Code).HasColumnName("code");
+            entity.HasOne<MigrationProbeRow>().WithMany().HasForeignKey(row => row.ProbeId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+        modelBuilder.HasAnnotation("ProductVersion", "10.0.14");
+    }
+}
+
+public sealed class MigrationConstraintRow
+{
+    public int Id { get; set; }
+
+    public Guid ProbeId { get; set; }
+
+    public string Code { get; set; } = string.Empty;
+}
+
 public sealed class MigrationSqlOperationRow
 {
     public int Id { get; set; }

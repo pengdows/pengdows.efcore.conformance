@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 35,
+    "AwaitingClassification": 26,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 643,
-    "UncoveredMemberFamilies": 31
+    "MemberEntriesInCoveredFamilies": 652,
+    "UncoveredMemberFamilies": 25
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -151534,10 +151534,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "AddForeignKey",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.OperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.AddForeignKeyOperation\u003E AddForeignKey(System.String name, System.String table, System.String column, System.String principalTable, System.String schema = null, System.String principalSchema = null, System.String principalColumn = null, Microsoft.EntityFrameworkCore.Migrations.ReferentialAction onUpdate = NoAction, Microsoft.EntityFrameworkCore.Migrations.ReferentialAction onDelete = NoAction)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-ADD-CONSTRAINTS-ASYNC",
+        "EF10-MIGRATIONS-ADD-CONSTRAINTS-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AddForeignKey"
     },
     {
@@ -151546,10 +151549,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "AddForeignKey",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.OperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.AddForeignKeyOperation\u003E AddForeignKey(System.String name, System.String table, System.String[] columns, System.String principalTable, System.String schema = null, System.String principalSchema = null, System.String[] principalColumns = null, Microsoft.EntityFrameworkCore.Migrations.ReferentialAction onUpdate = NoAction, Microsoft.EntityFrameworkCore.Migrations.ReferentialAction onDelete = NoAction)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-ADD-CONSTRAINTS-ASYNC",
+        "EF10-MIGRATIONS-ADD-CONSTRAINTS-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AddForeignKey"
     },
     {
@@ -151558,10 +151564,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "AddPrimaryKey",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.OperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.AddPrimaryKeyOperation\u003E AddPrimaryKey(System.String name, System.String table, System.String column, System.String schema = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-ADD-CONSTRAINTS-ASYNC",
+        "EF10-MIGRATIONS-ADD-CONSTRAINTS-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AddPrimaryKey"
     },
     {
@@ -151570,10 +151579,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "AddPrimaryKey",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.OperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.AddPrimaryKeyOperation\u003E AddPrimaryKey(System.String name, System.String table, System.String[] columns, System.String schema = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-ADD-CONSTRAINTS-ASYNC",
+        "EF10-MIGRATIONS-ADD-CONSTRAINTS-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AddPrimaryKey"
     },
     {
@@ -151582,10 +151594,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "AddUniqueConstraint",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.OperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.AddUniqueConstraintOperation\u003E AddUniqueConstraint(System.String name, System.String table, System.String column, System.String schema = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-ADD-CONSTRAINTS-ASYNC",
+        "EF10-MIGRATIONS-ADD-CONSTRAINTS-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AddUniqueConstraint"
     },
     {
@@ -151594,10 +151609,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "AddUniqueConstraint",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.OperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.AddUniqueConstraintOperation\u003E AddUniqueConstraint(System.String name, System.String table, System.String[] columns, System.String schema = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-ADD-CONSTRAINTS-ASYNC",
+        "EF10-MIGRATIONS-ADD-CONSTRAINTS-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AddUniqueConstraint"
     },
     {
@@ -151777,10 +151795,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "DropForeignKey",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.OperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.DropForeignKeyOperation\u003E DropForeignKey(System.String name, System.String table, System.String schema = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-ADD-CONSTRAINTS-ASYNC",
+        "EF10-MIGRATIONS-ADD-CONSTRAINTS-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropForeignKey"
     },
     {
@@ -151804,10 +151825,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "DropPrimaryKey",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.OperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.DropPrimaryKeyOperation\u003E DropPrimaryKey(System.String name, System.String table, System.String schema = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-ADD-CONSTRAINTS-ASYNC",
+        "EF10-MIGRATIONS-ADD-CONSTRAINTS-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropPrimaryKey"
     },
     {
@@ -151870,10 +151894,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "DropUniqueConstraint",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.OperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.DropUniqueConstraintOperation\u003E DropUniqueConstraint(System.String name, System.String table, System.String schema = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-ADD-CONSTRAINTS-ASYNC",
+        "EF10-MIGRATIONS-ADD-CONSTRAINTS-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropUniqueConstraint"
     },
     {

@@ -32,7 +32,8 @@ public sealed class PengdowsSqliteAdapter : IAdoNetProviderAdapter, ISupplementa
             "migration-rename-index",
             "migration-check-constraint",
             "index-schema-metadata",
-            "schema-comments"
+            "schema-comments",
+            "migration-add-constraint-operations"
         });
 
     public string Name => "pengdows.efcore.adonet SQLite";

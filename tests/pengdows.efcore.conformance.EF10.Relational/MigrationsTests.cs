@@ -23,7 +23,7 @@ public sealed class MigrationsTests
             await using (var migrate = ProviderTestRuntime.CreateContext())
             {
                 await migrate.Database.EnsureDeletedAsync(cancellationToken);
-                var migrationIds = new[] { "20261029000101_EF10Probe", "20261029000102_EF10MigrationOperations", "20261029000103_EF10MigrationChanges", "20261029000104_EF10MigrationRenameTable", "20261029000105_EF10MigrationSqlOperation", "20261029000106_EF10MigrationIndexRename", "20261029000107_EF10MigrationCheckConstraint" };
+                var migrationIds = new[] { "20261029000101_EF10Probe", "20261029000102_EF10MigrationOperations", "20261029000103_EF10MigrationChanges", "20261029000104_EF10MigrationRenameTable", "20261029000105_EF10MigrationSqlOperation", "20261029000106_EF10MigrationIndexRename", "20261029000107_EF10MigrationCheckConstraint", "20261029000108_EF10MigrationAddConstraints" };
                 Assert.Equal(migrationIds, migrate.Database.GetMigrations());
                 var portableMigrations = migrationIds.Take(5).ToArray();
                 await migrate.Database.MigrateAsync(portableMigrations[^1], cancellationToken);
@@ -123,7 +123,7 @@ public sealed class MigrationsTests
             await using (var migrate = ProviderTestRuntime.CreateContext())
             {
                 await migrate.Database.EnsureDeletedAsync(TestContext.Current.CancellationToken);
-                var migrationIds = new[] { "20261029000101_EF10Probe", "20261029000102_EF10MigrationOperations", "20261029000103_EF10MigrationChanges", "20261029000104_EF10MigrationRenameTable", "20261029000105_EF10MigrationSqlOperation", "20261029000106_EF10MigrationIndexRename", "20261029000107_EF10MigrationCheckConstraint" };
+                var migrationIds = new[] { "20261029000101_EF10Probe", "20261029000102_EF10MigrationOperations", "20261029000103_EF10MigrationChanges", "20261029000104_EF10MigrationRenameTable", "20261029000105_EF10MigrationSqlOperation", "20261029000106_EF10MigrationIndexRename", "20261029000107_EF10MigrationCheckConstraint", "20261029000108_EF10MigrationAddConstraints" };
                 Assert.Equal(migrationIds, migrate.Database.GetMigrations());
                 var portableMigrations = migrationIds.Take(5).ToArray();
                 migrate.Database.Migrate(portableMigrations[^1]);
@@ -216,7 +216,7 @@ public sealed class MigrationsTests
             await using (var migrate = ProviderTestRuntime.CreateContext())
             {
                 await migrate.Database.EnsureDeletedAsync(cancellationToken);
-                await migrate.Database.MigrateAsync(cancellationToken: cancellationToken);
+                await migrate.Database.MigrateAsync("20261029000107_EF10MigrationCheckConstraint", cancellationToken);
                 await Assert.ThrowsAnyAsync<DbException>(() => migrate.Database.ExecuteSqlInterpolatedAsync(
                     $"UPDATE ef10conformance_migrationprobe_renamed SET value = {-1} WHERE id = {id}", cancellationToken));
             }
@@ -251,7 +251,7 @@ public sealed class MigrationsTests
             await using (var migrate = ProviderTestRuntime.CreateContext())
             {
                 await migrate.Database.EnsureDeletedAsync(TestContext.Current.CancellationToken);
-                migrate.Database.Migrate();
+                migrate.Database.Migrate("20261029000107_EF10MigrationCheckConstraint");
                 Assert.ThrowsAny<DbException>(() => migrate.Database.ExecuteSqlInterpolated(
                     $"UPDATE ef10conformance_migrationprobe_renamed SET value = {-1} WHERE id = {id}"));
             }
@@ -265,6 +265,108 @@ public sealed class MigrationsTests
                 Assert.Equal(1, rollback.Database.ExecuteSqlInterpolated(
                     $"UPDATE ef10conformance_migrationprobe_renamed SET value = {-1} WHERE id = {id}"));
             }
+        }
+        finally
+        {
+            await using var cleanup = ProviderTestRuntime.CreateContext();
+            await cleanup.Database.EnsureDeletedAsync(CancellationToken.None);
+        }
+    }
+
+    [Fact]
+    [CapabilityRequirement("migration-add-constraint-operations")]
+    [BehavioralCoverage(
+        "EF10-MIGRATIONS-ADD-CONSTRAINTS-ASYNC",
+        "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AddPrimaryKey",
+        "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AddUniqueConstraint",
+        "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AddForeignKey",
+        "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropPrimaryKey",
+        "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropUniqueConstraint",
+        "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropForeignKey")]
+    public async Task AddConstraintMigration_EnforcesKeysAndRelationshipsAsynchronously()
+    {
+        ProviderTestRuntime.RequireCapability("migration-add-constraint-operations");
+        var cancellationToken = TestContext.Current.CancellationToken;
+        var principalId = Guid.NewGuid();
+        try
+        {
+            await using (var migrate = ProviderTestRuntime.CreateContext())
+            {
+                await migrate.Database.EnsureDeletedAsync(cancellationToken);
+                await migrate.Database.MigrateAsync(cancellationToken: cancellationToken);
+                Assert.Equal(1, await migrate.Database.ExecuteSqlInterpolatedAsync(
+                    $"INSERT INTO ef10conformance_migrationprobe_renamed (id, value, description) VALUES ({principalId}, {777}, {"cascade principal"})",
+                    cancellationToken));
+                Assert.Equal(1, await migrate.Database.ExecuteSqlInterpolatedAsync(
+                    $"INSERT INTO ef10conformance_migrationconstraints (id, probeid, code) VALUES ({1}, {principalId}, {"first"})",
+                    cancellationToken));
+                await Assert.ThrowsAnyAsync<DbException>(() => migrate.Database.ExecuteSqlInterpolatedAsync(
+                    $"INSERT INTO ef10conformance_migrationconstraints (id, probeid, code) VALUES ({2}, {principalId}, {"first"})",
+                    cancellationToken));
+                await Assert.ThrowsAnyAsync<DbException>(() => migrate.Database.ExecuteSqlInterpolatedAsync(
+                    $"INSERT INTO ef10conformance_migrationconstraints (id, probeid, code) VALUES ({3}, {Guid.NewGuid()}, {"orphan"})",
+                    cancellationToken));
+                Assert.Equal(1, await migrate.Database.ExecuteSqlInterpolatedAsync(
+                    $"DELETE FROM ef10conformance_migrationprobe_renamed WHERE id = {principalId}",
+                    cancellationToken));
+                Assert.Equal(0, await migrate.Database.SqlQuery<int>(
+                    $"SELECT COUNT(*) AS Value FROM ef10conformance_migrationconstraints WHERE id = {1}")
+                    .SingleAsync(cancellationToken));
+            }
+
+            await using var rollback = ProviderTestRuntime.CreateContext();
+            await rollback.Database.MigrateAsync("20261029000107_EF10MigrationCheckConstraint", cancellationToken);
+            Assert.Equal(314159, await rollback.Database.SqlQuery<int>(
+                $"SELECT value AS Value FROM ef10conformance_migrationprobe_renamed WHERE id = {Guid.Parse("3a34d6d8-aef0-42af-a248-28a2d82a6520")}")
+                .SingleAsync(cancellationToken));
+        }
+        finally
+        {
+            await using var cleanup = ProviderTestRuntime.CreateContext();
+            await cleanup.Database.EnsureDeletedAsync(CancellationToken.None);
+        }
+    }
+
+    [Fact]
+    [CapabilityRequirement("migration-add-constraint-operations")]
+    [BehavioralCoverage(
+        "EF10-MIGRATIONS-ADD-CONSTRAINTS-SYNC",
+        "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AddPrimaryKey",
+        "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AddUniqueConstraint",
+        "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AddForeignKey",
+        "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropPrimaryKey",
+        "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropUniqueConstraint",
+        "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropForeignKey")]
+    public async Task AddConstraintMigration_EnforcesKeysAndRelationshipsSynchronously()
+    {
+        ProviderTestRuntime.RequireCapability("migration-add-constraint-operations");
+        var principalId = Guid.NewGuid();
+        try
+        {
+            await using (var migrate = ProviderTestRuntime.CreateContext())
+            {
+                await migrate.Database.EnsureDeletedAsync(TestContext.Current.CancellationToken);
+                migrate.Database.Migrate();
+                Assert.Equal(1, migrate.Database.ExecuteSqlInterpolated(
+                    $"INSERT INTO ef10conformance_migrationprobe_renamed (id, value, description) VALUES ({principalId}, {777}, {"cascade principal"})"));
+                Assert.Equal(1, migrate.Database.ExecuteSqlInterpolated(
+                    $"INSERT INTO ef10conformance_migrationconstraints (id, probeid, code) VALUES ({1}, {principalId}, {"first"})"));
+                Assert.ThrowsAny<DbException>(() => migrate.Database.ExecuteSqlInterpolated(
+                    $"INSERT INTO ef10conformance_migrationconstraints (id, probeid, code) VALUES ({2}, {principalId}, {"first"})"));
+                Assert.ThrowsAny<DbException>(() => migrate.Database.ExecuteSqlInterpolated(
+                    $"INSERT INTO ef10conformance_migrationconstraints (id, probeid, code) VALUES ({3}, {Guid.NewGuid()}, {"orphan"})"));
+                Assert.Equal(1, migrate.Database.ExecuteSqlInterpolated(
+                    $"DELETE FROM ef10conformance_migrationprobe_renamed WHERE id = {principalId}"));
+                Assert.Equal(0, migrate.Database.SqlQuery<int>(
+                    $"SELECT COUNT(*) AS Value FROM ef10conformance_migrationconstraints WHERE id = {1}")
+                    .Single());
+            }
+
+            await using var rollback = ProviderTestRuntime.CreateContext();
+            rollback.Database.Migrate("20261029000107_EF10MigrationCheckConstraint");
+            Assert.Equal(314159, rollback.Database.SqlQuery<int>(
+                $"SELECT value AS Value FROM ef10conformance_migrationprobe_renamed WHERE id = {Guid.Parse("3a34d6d8-aef0-42af-a248-28a2d82a6520")}")
+                .Single());
         }
         finally
         {

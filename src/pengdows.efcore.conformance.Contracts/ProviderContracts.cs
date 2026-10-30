@@ -64,7 +64,8 @@ public sealed record ProviderCapabilities(
         "migration-rename-index",
         "migration-check-constraint",
         "index-schema-metadata",
-        "schema-comments"
+        "schema-comments",
+        "migration-add-constraint-operations"
     };
 
     public IReadOnlyList<string> UndeclaredFeatures => KnownFeatures
