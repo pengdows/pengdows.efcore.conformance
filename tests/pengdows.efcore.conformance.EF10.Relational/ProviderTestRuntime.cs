@@ -237,6 +237,10 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
 
     public DbSet<Blog> Blogs => Set<Blog>();
 
+    public DbSet<Account> Accounts => Set<Account>();
+
+    public DbSet<AccountSettings> AccountSettings => Set<AccountSettings>();
+
     public DbSet<ScalarRecord> ScalarRecords => Set<ScalarRecord>();
 
     public DbSet<NullableScalarRecord> NullableScalarRecords => Set<NullableScalarRecord>();
@@ -471,6 +475,24 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
             entity.Property(blog => blog.Id).HasColumnName("id");
             entity.Property(blog => blog.Name).HasColumnName("name").IsRequired().HasMaxLength(160);
             entity.HasMany(blog => blog.Posts).WithOne(post => post.Blog).HasForeignKey(post => post.BlogId);
+        });
+        modelBuilder.Entity<Account>(entity =>
+        {
+            entity.ToTable("ef10conformanceaccounts");
+            entity.HasKey(account => account.Id);
+            entity.Property(account => account.Id).HasColumnName("id");
+            entity.Property(account => account.Name).HasColumnName("name").IsRequired().HasMaxLength(160);
+            entity.HasOne(account => account.Settings)
+                .WithOne(settings => settings.Account)
+                .HasForeignKey<AccountSettings>(settings => settings.AccountId)
+                .IsRequired();
+        });
+        modelBuilder.Entity<AccountSettings>(entity =>
+        {
+            entity.ToTable("ef10conformanceaccountsettings");
+            entity.HasKey(settings => settings.AccountId);
+            entity.Property(settings => settings.AccountId).HasColumnName("accountid");
+            entity.Property(settings => settings.Value).HasColumnName("value").IsRequired().HasMaxLength(160);
         });
         modelBuilder.Entity<Post>(entity =>
         {
@@ -817,6 +839,24 @@ internal sealed class Blog
     public string Name { get; set; } = string.Empty;
 
     public ICollection<Post> Posts { get; set; } = new List<Post>();
+}
+
+internal sealed class Account
+{
+    public Guid Id { get; set; }
+
+    public string Name { get; set; } = string.Empty;
+
+    public AccountSettings? Settings { get; set; }
+}
+
+internal sealed class AccountSettings
+{
+    public Guid AccountId { get; set; }
+
+    public string Value { get; set; } = string.Empty;
+
+    public Account Account { get; set; } = null!;
 }
 
 internal sealed class Post

@@ -104,6 +104,68 @@ public sealed class RelationshipTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-RELATIONSHIPS-ONE-TO-ONE-SYNC", "Microsoft.EntityFrameworkCore.DbSet`1.Add", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.Include", "System.Linq.Queryable.Single")]
+    public async Task OneToOneOptionalNavigation_PersistsAndLoadsSynchronously()
+    {
+        var configuredId = Guid.NewGuid();
+        var emptyId = Guid.NewGuid();
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.Accounts.AddRange(
+                new Account
+                {
+                    Id = configuredId,
+                    Name = "Configured account",
+                    Settings = new AccountSettings { Value = "dark mode" }
+                },
+                new Account { Id = emptyId, Name = "Unconfigured account" });
+            Assert.Equal(3, write.SaveChanges());
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        var configured = verify.Accounts.Include(account => account.Settings).Single(account => account.Id == configuredId);
+        var empty = verify.Accounts.Include(account => account.Settings).Single(account => account.Id == emptyId);
+        Assert.Equal("dark mode", configured.Settings!.Value);
+        Assert.Same(configured, configured.Settings.Account);
+        Assert.Null(empty.Settings);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-RELATIONSHIPS-ONE-TO-ONE-ASYNC", "Microsoft.EntityFrameworkCore.DbSet`1.AddAsync", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.Include", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    public async Task OneToOneOptionalNavigation_PersistsAndLoadsAsynchronously()
+    {
+        var configuredId = Guid.NewGuid();
+        var emptyId = Guid.NewGuid();
+        var cancellationToken = TestContext.Current.CancellationToken;
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, cancellationToken);
+            await write.Accounts.AddRangeAsync(
+                [
+                    new Account
+                    {
+                        Id = configuredId,
+                        Name = "Configured async account",
+                        Settings = new AccountSettings { Value = "high contrast" }
+                    },
+                    new Account { Id = emptyId, Name = "Unconfigured async account" }
+                ],
+                cancellationToken);
+            Assert.Equal(3, await write.SaveChangesAsync(cancellationToken));
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        var configured = await verify.Accounts.Include(account => account.Settings)
+            .SingleAsync(account => account.Id == configuredId, cancellationToken);
+        var empty = await verify.Accounts.Include(account => account.Settings)
+            .SingleAsync(account => account.Id == emptyId, cancellationToken);
+        Assert.Equal("high contrast", configured.Settings!.Value);
+        Assert.Same(configured, configured.Settings.Account);
+        Assert.Null(empty.Settings);
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-RELATIONSHIPS-SELECTMANY-ASYNC", "System.Linq.Queryable.SelectMany", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync")]
     public async Task SelectMany_FlattensRelatedPostsAsynchronously()
     {
