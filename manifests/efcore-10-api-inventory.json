@@ -55072,7 +55072,8 @@
         "EF10-PERSIST-CONTEXT-REMOVE",
         "EF10-PERSIST-CONTEXT-REMOVE-RANGE",
         "EF10-PERSIST-DELETE-ASYNC",
-        "EF10-PERSIST-REMOVE-RANGE"
+        "EF10-PERSIST-REMOVE-RANGE",
+        "EF10-QUERY-ANY-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -55092,7 +55093,8 @@
         "EF10-PERSIST-CONTEXT-REMOVE",
         "EF10-PERSIST-CONTEXT-REMOVE-RANGE",
         "EF10-PERSIST-DELETE-ASYNC",
-        "EF10-PERSIST-REMOVE-RANGE"
+        "EF10-PERSIST-REMOVE-RANGE",
+        "EF10-QUERY-ANY-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",

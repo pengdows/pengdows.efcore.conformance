@@ -88,6 +88,40 @@ public sealed class QuerySetOperatorTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-QUERY-ANY-SYNC", "System.Linq.Queryable.Any")]
+    public async Task Any_ReportsWhetherMatchingRowsExistSynchronously()
+    {
+        var batch = Guid.NewGuid().ToString("N");
+        await SeedAsync(batch);
+
+        await using var context = ProviderTestRuntime.CreateContext();
+        var missingName = Guid.NewGuid().ToString("N");
+        Assert.True(context.People.Any(person => person.Name.StartsWith(batch) && person.Age == 20));
+        Assert.False(context.People.Any(person => person.Name.StartsWith(batch) && person.Age == 40));
+        Assert.False(context.People.Any(person => person.Name == missingName));
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-ANY-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.AnyAsync")]
+    public async Task AnyAsync_ReportsWhetherMatchingRowsExist()
+    {
+        var batch = Guid.NewGuid().ToString("N");
+        await SeedAsync(batch);
+
+        await using var context = ProviderTestRuntime.CreateContext();
+        var missingName = Guid.NewGuid().ToString("N");
+        Assert.True(await context.People.AnyAsync(
+            person => person.Name.StartsWith(batch) && person.Age == 20,
+            TestContext.Current.CancellationToken));
+        Assert.False(await context.People.AnyAsync(
+            person => person.Name.StartsWith(batch) && person.Age == 40,
+            TestContext.Current.CancellationToken));
+        Assert.False(await context.People.AnyAsync(
+            person => person.Name == missingName,
+            TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-QUERY-DISTINCT-SYNC", "System.Linq.Queryable.Distinct", "System.Linq.Queryable.OrderBy", "System.Linq.Queryable.ToArray")]
     public async Task Distinct_ReturnsUniqueValuesSynchronously()
     {
