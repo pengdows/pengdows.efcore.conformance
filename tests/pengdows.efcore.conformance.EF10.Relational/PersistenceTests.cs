@@ -416,6 +416,67 @@ public sealed class PersistenceTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-PERSIST-BATCH-FAILURE-ATOMIC-ASYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.DbUpdateException", "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync")]
+    public async Task SaveChangesAsync_FailedBatchDoesNotPersistOtherAddedEntities()
+    {
+        var duplicateId = Guid.NewGuid();
+        var validId = Guid.NewGuid();
+        await SeedAsync(duplicateId, "Existing batch row", 71);
+        var duplicate = new Person { Id = duplicateId, Name = "Duplicate batch row", Age = 72 };
+        var otherwiseValid = new Person { Id = validId, Name = "Otherwise valid batch row", Age = 73 };
+
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            write.People.AddRange(duplicate, otherwiseValid);
+
+            await Assert.ThrowsAsync<DbUpdateException>(() =>
+                write.SaveChangesAsync(TestContext.Current.CancellationToken));
+
+            Assert.Equal(2, write.ChangeTracker.Entries<Person>().Count());
+            Assert.All(write.ChangeTracker.Entries<Person>(), entry => Assert.Equal(EntityState.Added, entry.State));
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        var persisted = await verify.People.AsNoTracking()
+            .Where(person => person.Id == duplicateId || person.Id == validId)
+            .ToListAsync(TestContext.Current.CancellationToken);
+        var original = Assert.Single(persisted);
+        Assert.Equal(duplicateId, original.Id);
+        Assert.Equal("Existing batch row", original.Name);
+        Assert.Equal(71, original.Age);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-PERSIST-BATCH-FAILURE-ATOMIC-SYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "Microsoft.EntityFrameworkCore.DbUpdateException", "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker", "System.Linq.Queryable.ToList")]
+    public async Task SaveChanges_FailedBatchDoesNotPersistOtherAddedEntitiesSynchronously()
+    {
+        var duplicateId = Guid.NewGuid();
+        var validId = Guid.NewGuid();
+        await SeedAsync(duplicateId, "Existing sync batch row", 81);
+        var duplicate = new Person { Id = duplicateId, Name = "Duplicate sync batch row", Age = 82 };
+        var otherwiseValid = new Person { Id = validId, Name = "Otherwise valid sync batch row", Age = 83 };
+
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            write.People.AddRange(duplicate, otherwiseValid);
+
+            Assert.Throws<DbUpdateException>(() => write.SaveChanges());
+
+            Assert.Equal(2, write.ChangeTracker.Entries<Person>().Count());
+            Assert.All(write.ChangeTracker.Entries<Person>(), entry => Assert.Equal(EntityState.Added, entry.State));
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        var persisted = verify.People.AsNoTracking()
+            .Where(person => person.Id == duplicateId || person.Id == validId)
+            .ToList();
+        var original = Assert.Single(persisted);
+        Assert.Equal(duplicateId, original.Id);
+        Assert.Equal("Existing sync batch row", original.Name);
+        Assert.Equal(81, original.Age);
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-PERSIST-ADD-RANGE-SYNC", "Microsoft.EntityFrameworkCore.DbSet`1.AddRange", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "System.Linq.Queryable.Any")]
     public async Task AddRange_PersistsEveryEntitySynchronously()
     {
