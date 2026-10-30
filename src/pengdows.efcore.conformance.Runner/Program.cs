@@ -52,7 +52,7 @@ if (discoverTypes)
     {
         typeReport = typeReport with
         {
-            NativeTypeCoverage = BuildNativeTypeCoverage(typeReport, Path.GetFullPath(args[4]))
+            NativeTypeCoverage = BuildNativeTypeCoverage(typeReport, Path.GetFullPath(args[4]), adapter.Name)
         };
     }
 
@@ -83,7 +83,10 @@ Console.WriteLine(JsonSerializer.Serialize(new AdapterLoadReport(
     "Adapter configuration completed; no conformance scenarios were executed."), new JsonSerializerOptions { WriteIndented = true }));
 return 0;
 
-static IReadOnlyList<NativeTypeCoverageResult> BuildNativeTypeCoverage(TypeDiscoveryReport report, string testAssemblyPath)
+static IReadOnlyList<NativeTypeCoverageResult> BuildNativeTypeCoverage(
+    TypeDiscoveryReport report,
+    string testAssemblyPath,
+    string providerName)
 {
     if (!report.HasIndependentTypeInventory)
     {
@@ -91,7 +94,7 @@ static IReadOnlyList<NativeTypeCoverageResult> BuildNativeTypeCoverage(TypeDisco
     }
 
     var assembly = Assembly.LoadFrom(testAssemblyPath);
-    var cases = new List<(string DatabaseTypeName, string ClrTypeName, string ContractId)>();
+    var cases = new List<(string DatabaseTypeName, string ClrTypeName, string ContractId, string? ProviderName)>();
     foreach (var type in assembly.GetTypes())
     {
         foreach (var method in type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly))
@@ -100,10 +103,14 @@ static IReadOnlyList<NativeTypeCoverageResult> BuildNativeTypeCoverage(TypeDisco
                          .Where(attribute => attribute.AttributeType.FullName == typeof(NativeTypeCoverageAttribute).FullName))
             {
                 var args = attribute.ConstructorArguments;
-                if (args.Count == 3 && args[0].Value is string databaseTypeName &&
+                if (args.Count is 3 or 4 && args[0].Value is string databaseTypeName &&
                     args[1].Value is Type clrType && args[2].Value is string contractId)
                 {
-                    cases.Add((databaseTypeName, clrType.FullName ?? clrType.Name, contractId));
+                    var declaredProviderName = args.Count == 4 && args[3].Value is string provider ? provider : null;
+                    if (declaredProviderName is null || string.Equals(declaredProviderName, providerName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        cases.Add((databaseTypeName, clrType.FullName ?? clrType.Name, contractId, declaredProviderName));
+                    }
                 }
             }
         }

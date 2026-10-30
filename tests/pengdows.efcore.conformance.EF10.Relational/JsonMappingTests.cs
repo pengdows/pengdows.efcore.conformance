@@ -10,6 +10,7 @@ public sealed class JsonMappingTests
 {
     [Fact]
     [BehavioralCoverage("EF10-JSON-MAPPING-ASYNC", "Microsoft.EntityFrameworkCore.RelationalOwnedNavigationBuilderExtensions.ToJson", "Microsoft.EntityFrameworkCore.Metadata.Builders.OwnedNavigationBuilder.OwnsOne", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync", "System.Linq.Queryable.Where")]
+    [NativeTypeCoverage("JSONB", typeof(JsonProfile), "EF10-JSON-MAPPING-ASYNC", "Npgsql EF Core PostgreSQL")]
     public async Task OwnedToJson_PersistsAndQueriesNestedValuesAsynchronously()
     {
         ProviderTestRuntime.RequireCapability("json-mapping");
@@ -33,6 +34,7 @@ public sealed class JsonMappingTests
 
     [Fact]
     [BehavioralCoverage("EF10-JSON-MAPPING-SYNC", "Microsoft.EntityFrameworkCore.RelationalOwnedNavigationBuilderExtensions.ToJson", "Microsoft.EntityFrameworkCore.Metadata.Builders.OwnedNavigationBuilder.OwnsOne", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "System.Linq.Queryable.Single", "System.Linq.Queryable.Where")]
+    [NativeTypeCoverage("JSONB", typeof(JsonProfile), "EF10-JSON-MAPPING-SYNC", "Npgsql EF Core PostgreSQL")]
     public async Task OwnedToJson_PersistsAndQueriesNestedValuesSynchronously()
     {
         ProviderTestRuntime.RequireCapability("json-mapping");

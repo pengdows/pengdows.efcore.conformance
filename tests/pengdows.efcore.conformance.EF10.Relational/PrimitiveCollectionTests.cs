@@ -10,6 +10,7 @@ public sealed class PrimitiveCollectionTests
 {
     [Fact]
     [BehavioralCoverage("EF10-PRIMITIVE-COLLECTION-ASYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync", "System.Linq.Queryable.Where")]
+    [NativeTypeCoverage("INTEGER[]", typeof(int[]), "EF10-PRIMITIVE-COLLECTION-ASYNC", "Npgsql EF Core PostgreSQL")]
     public async Task PrimitiveCollection_RoundTripsAndSupportsContainsQueryAsynchronously()
     {
         ProviderTestRuntime.RequireCapability("primitive-collections");
@@ -34,6 +35,7 @@ public sealed class PrimitiveCollectionTests
 
     [Fact]
     [BehavioralCoverage("EF10-PRIMITIVE-COLLECTION-SYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "System.Linq.Queryable.Single", "System.Linq.Queryable.Where")]
+    [NativeTypeCoverage("INTEGER[]", typeof(int[]), "EF10-PRIMITIVE-COLLECTION-SYNC", "Npgsql EF Core PostgreSQL")]
     public async Task PrimitiveCollection_RoundTripsAndSupportsContainsQuerySynchronously()
     {
         ProviderTestRuntime.RequireCapability("primitive-collections");

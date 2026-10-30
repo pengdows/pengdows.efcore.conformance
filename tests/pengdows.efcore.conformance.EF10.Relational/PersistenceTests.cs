@@ -143,6 +143,8 @@ public sealed class PersistenceTests
     [NativeTypeCoverage("VARCHAR(160)", typeof(string), "EF10-PERSIST-INSERT-ASYNC")]
     [NativeTypeCoverage("INTEGER", typeof(int), "EF10-PERSIST-INSERT-ASYNC")]
     [NativeTypeCoverage("TEXT", typeof(Guid), "EF10-PERSIST-INSERT-ASYNC")]
+    [NativeTypeCoverage("CHARACTER VARYING", typeof(string), "EF10-PERSIST-INSERT-ASYNC", "Npgsql EF Core PostgreSQL")]
+    [NativeTypeCoverage("UUID", typeof(Guid), "EF10-PERSIST-INSERT-ASYNC", "Npgsql EF Core PostgreSQL")]
     public async Task SaveChanges_PersistsEntityForFreshContext()
     {
         var id = Guid.NewGuid();
@@ -170,6 +172,8 @@ public sealed class PersistenceTests
     [NativeTypeCoverage("VARCHAR(160)", typeof(string), "EF10-PERSIST-INSERT-SYNC")]
     [NativeTypeCoverage("INTEGER", typeof(int), "EF10-PERSIST-INSERT-SYNC")]
     [NativeTypeCoverage("TEXT", typeof(Guid), "EF10-PERSIST-INSERT-SYNC")]
+    [NativeTypeCoverage("CHARACTER VARYING", typeof(string), "EF10-PERSIST-INSERT-SYNC", "Npgsql EF Core PostgreSQL")]
+    [NativeTypeCoverage("UUID", typeof(Guid), "EF10-PERSIST-INSERT-SYNC", "Npgsql EF Core PostgreSQL")]
     public async Task SaveChanges_PersistsEntityForFreshContextSynchronously()
     {
         var id = Guid.NewGuid();

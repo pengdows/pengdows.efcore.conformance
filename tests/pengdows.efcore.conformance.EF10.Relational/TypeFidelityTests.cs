@@ -28,6 +28,10 @@ public sealed class TypeFidelityTests
     [NativeTypeCoverage("BLOB", typeof(byte[]), "EF10-TYPES-ROUNDTRIP-ASYNC")]
     [NativeTypeCoverage("TEXT", typeof(TestMood), "EF10-TYPES-ROUNDTRIP-ASYNC")]
     [NativeTypeCoverage("VARCHAR(8)", typeof(TestMood), "EF10-TYPES-ROUNDTRIP-ASYNC")]
+    [NativeTypeCoverage("UUID", typeof(Guid), "EF10-TYPES-ROUNDTRIP-ASYNC", "Npgsql EF Core PostgreSQL")]
+    [NativeTypeCoverage("NUMERIC", typeof(decimal), "EF10-TYPES-ROUNDTRIP-ASYNC", "Npgsql EF Core PostgreSQL")]
+    [NativeTypeCoverage("TIME WITHOUT TIME ZONE", typeof(TimeOnly), "EF10-TYPES-ROUNDTRIP-ASYNC", "Npgsql EF Core PostgreSQL")]
+    [NativeTypeCoverage("BYTEA", typeof(byte[]), "EF10-TYPES-ROUNDTRIP-ASYNC", "Npgsql EF Core PostgreSQL")]
     public async Task CommonClrValues_RoundTripThroughFreshContext()
     {
         var expected = CreateValue(123456789.1234m);
@@ -63,6 +67,10 @@ public sealed class TypeFidelityTests
     [NativeTypeCoverage("BLOB", typeof(byte[]), "EF10-TYPES-ROUNDTRIP-SYNC")]
     [NativeTypeCoverage("TEXT", typeof(TestMood), "EF10-TYPES-ROUNDTRIP-SYNC")]
     [NativeTypeCoverage("VARCHAR(8)", typeof(TestMood), "EF10-TYPES-ROUNDTRIP-SYNC")]
+    [NativeTypeCoverage("UUID", typeof(Guid), "EF10-TYPES-ROUNDTRIP-SYNC", "Npgsql EF Core PostgreSQL")]
+    [NativeTypeCoverage("NUMERIC", typeof(decimal), "EF10-TYPES-ROUNDTRIP-SYNC", "Npgsql EF Core PostgreSQL")]
+    [NativeTypeCoverage("TIME WITHOUT TIME ZONE", typeof(TimeOnly), "EF10-TYPES-ROUNDTRIP-SYNC", "Npgsql EF Core PostgreSQL")]
+    [NativeTypeCoverage("BYTEA", typeof(byte[]), "EF10-TYPES-ROUNDTRIP-SYNC", "Npgsql EF Core PostgreSQL")]
     public async Task CommonClrValues_RoundTripThroughFreshContextSynchronously()
     {
         var expected = CreateValue(123456789.1234m);
@@ -96,6 +104,10 @@ public sealed class TypeFidelityTests
     [NativeTypeCoverage("BOOLEAN", typeof(bool), "EF10-TYPES-BOUNDARIES-ASYNC")]
     [NativeTypeCoverage("BLOB", typeof(byte[]), "EF10-TYPES-BOUNDARIES-ASYNC")]
     [NativeTypeCoverage("TEXT", typeof(TestMood), "EF10-TYPES-BOUNDARIES-ASYNC")]
+    [NativeTypeCoverage("UUID", typeof(Guid), "EF10-TYPES-BOUNDARIES-ASYNC", "Npgsql EF Core PostgreSQL")]
+    [NativeTypeCoverage("NUMERIC", typeof(decimal), "EF10-TYPES-BOUNDARIES-ASYNC", "Npgsql EF Core PostgreSQL")]
+    [NativeTypeCoverage("TIME WITHOUT TIME ZONE", typeof(TimeOnly), "EF10-TYPES-BOUNDARIES-ASYNC", "Npgsql EF Core PostgreSQL")]
+    [NativeTypeCoverage("BYTEA", typeof(byte[]), "EF10-TYPES-BOUNDARIES-ASYNC", "Npgsql EF Core PostgreSQL")]
     public async Task CommonClrBoundaryValues_RoundTripThroughFreshContextAsynchronously()
     {
         var expected = new ScalarRecord
@@ -139,6 +151,10 @@ public sealed class TypeFidelityTests
     [NativeTypeCoverage("BOOLEAN", typeof(bool), "EF10-TYPES-BOUNDARIES-SYNC")]
     [NativeTypeCoverage("BLOB", typeof(byte[]), "EF10-TYPES-BOUNDARIES-SYNC")]
     [NativeTypeCoverage("TEXT", typeof(TestMood), "EF10-TYPES-BOUNDARIES-SYNC")]
+    [NativeTypeCoverage("UUID", typeof(Guid), "EF10-TYPES-BOUNDARIES-SYNC", "Npgsql EF Core PostgreSQL")]
+    [NativeTypeCoverage("NUMERIC", typeof(decimal), "EF10-TYPES-BOUNDARIES-SYNC", "Npgsql EF Core PostgreSQL")]
+    [NativeTypeCoverage("TIME WITHOUT TIME ZONE", typeof(TimeOnly), "EF10-TYPES-BOUNDARIES-SYNC", "Npgsql EF Core PostgreSQL")]
+    [NativeTypeCoverage("BYTEA", typeof(byte[]), "EF10-TYPES-BOUNDARIES-SYNC", "Npgsql EF Core PostgreSQL")]
     public async Task CommonClrBoundaryValues_RoundTripThroughFreshContextSynchronously()
     {
         var expected = new ScalarRecord
@@ -183,6 +199,11 @@ public sealed class TypeFidelityTests
     [NativeTypeCoverage("DOUBLE PRECISION", typeof(double), "EF10-TYPES-ADDITIONAL-SCALARS-ASYNC")]
     [NativeTypeCoverage("VARCHAR(1)", typeof(char), "EF10-TYPES-ADDITIONAL-SCALARS-ASYNC")]
     [NativeTypeCoverage("INTERVAL", typeof(TimeSpan), "EF10-TYPES-ADDITIONAL-SCALARS-ASYNC")]
+    [NativeTypeCoverage("SMALLINT", typeof(short), "EF10-TYPES-ADDITIONAL-SCALARS-ASYNC", "Npgsql EF Core PostgreSQL")]
+    [NativeTypeCoverage("BIGINT", typeof(long), "EF10-TYPES-ADDITIONAL-SCALARS-ASYNC", "Npgsql EF Core PostgreSQL")]
+    [NativeTypeCoverage("DOUBLE PRECISION", typeof(double), "EF10-TYPES-ADDITIONAL-SCALARS-ASYNC", "Npgsql EF Core PostgreSQL")]
+    [NativeTypeCoverage("CHARACTER", typeof(char), "EF10-TYPES-ADDITIONAL-SCALARS-ASYNC", "Npgsql EF Core PostgreSQL")]
+    [NativeTypeCoverage("INTERVAL", typeof(TimeSpan), "EF10-TYPES-ADDITIONAL-SCALARS-ASYNC", "Npgsql EF Core PostgreSQL")]
     public async Task AdditionalClrScalars_RoundTripThroughFreshContextAsynchronously()
     {
         var expected = CreateAdditionalValues();
@@ -208,6 +229,11 @@ public sealed class TypeFidelityTests
     [NativeTypeCoverage("DOUBLE PRECISION", typeof(double), "EF10-TYPES-ADDITIONAL-SCALARS-SYNC")]
     [NativeTypeCoverage("VARCHAR(1)", typeof(char), "EF10-TYPES-ADDITIONAL-SCALARS-SYNC")]
     [NativeTypeCoverage("INTERVAL", typeof(TimeSpan), "EF10-TYPES-ADDITIONAL-SCALARS-SYNC")]
+    [NativeTypeCoverage("SMALLINT", typeof(short), "EF10-TYPES-ADDITIONAL-SCALARS-SYNC", "Npgsql EF Core PostgreSQL")]
+    [NativeTypeCoverage("BIGINT", typeof(long), "EF10-TYPES-ADDITIONAL-SCALARS-SYNC", "Npgsql EF Core PostgreSQL")]
+    [NativeTypeCoverage("DOUBLE PRECISION", typeof(double), "EF10-TYPES-ADDITIONAL-SCALARS-SYNC", "Npgsql EF Core PostgreSQL")]
+    [NativeTypeCoverage("CHARACTER", typeof(char), "EF10-TYPES-ADDITIONAL-SCALARS-SYNC", "Npgsql EF Core PostgreSQL")]
+    [NativeTypeCoverage("INTERVAL", typeof(TimeSpan), "EF10-TYPES-ADDITIONAL-SCALARS-SYNC", "Npgsql EF Core PostgreSQL")]
     public async Task AdditionalClrScalars_RoundTripThroughFreshContextSynchronously()
     {
         var expected = CreateAdditionalValues();

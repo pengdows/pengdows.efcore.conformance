@@ -163,13 +163,20 @@ public sealed class UndeclaredCapabilityException(string feature)
 }
 
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
-public sealed class NativeTypeCoverageAttribute(string databaseTypeName, Type clrType, string behavioralContractId) : Attribute
+public sealed class NativeTypeCoverageAttribute(
+    string databaseTypeName,
+    Type clrType,
+    string behavioralContractId,
+    string? providerName = null) : Attribute
 {
     public string DatabaseTypeName { get; } = databaseTypeName;
 
     public Type ClrType { get; } = clrType;
 
     public string BehavioralContractId { get; } = behavioralContractId;
+
+    /// <summary>Optional provider display name when the native type spelling is provider-specific.</summary>
+    public string? ProviderName { get; } = providerName;
 }
 
 public sealed record NativeTypeCoverageResult(
