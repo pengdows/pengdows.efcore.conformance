@@ -1,7 +1,8 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
+using System.Data;
 using System.Data.Common;
 using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using pengdows.efcore.conformance;
 using Xunit;
 
@@ -177,7 +178,7 @@ public sealed class InterceptionTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-INTERCEPTION-CONNECTION-SYNC", "Microsoft.EntityFrameworkCore.DbContextOptionsBuilder.AddInterceptors", "Microsoft.EntityFrameworkCore.Diagnostics.DbConnectionInterceptor.ConnectionOpening", "Microsoft.EntityFrameworkCore.Diagnostics.DbConnectionInterceptor.ConnectionOpened", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.OpenConnection", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.CloseConnection")]
+    [BehavioralCoverage("EF10-INTERCEPTION-CONNECTION-SYNC", "Microsoft.EntityFrameworkCore.DbContextOptionsBuilder.AddInterceptors", "Microsoft.EntityFrameworkCore.Diagnostics.DbConnectionInterceptor.ConnectionOpening", "Microsoft.EntityFrameworkCore.Diagnostics.DbConnectionInterceptor.ConnectionOpened", "Microsoft.EntityFrameworkCore.Diagnostics.DbConnectionInterceptor.ConnectionClosing", "Microsoft.EntityFrameworkCore.Diagnostics.DbConnectionInterceptor.ConnectionClosed", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.OpenConnection", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.CloseConnection")]
     public async Task OpenConnection_InvokesSynchronousConnectionInterceptorCallbacks()
     {
         var interceptor = new RecordingConnectionInterceptor();
@@ -186,14 +187,19 @@ public sealed class InterceptionTests
         context.Database.OpenConnection();
         context.Database.CloseConnection();
 
+        Assert.Equal(ConnectionState.Closed, context.Database.GetDbConnection().State);
         Assert.Equal(1, interceptor.ConnectionOpeningCalls);
         Assert.Equal(1, interceptor.ConnectionOpenedCalls);
+        Assert.Equal(1, interceptor.ConnectionClosingCalls);
+        Assert.Equal(1, interceptor.ConnectionClosedCalls);
         Assert.Equal(0, interceptor.ConnectionOpeningAsyncCalls);
         Assert.Equal(0, interceptor.ConnectionOpenedAsyncCalls);
+        Assert.Equal(0, interceptor.ConnectionClosingAsyncCalls);
+        Assert.Equal(0, interceptor.ConnectionClosedAsyncCalls);
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-INTERCEPTION-CONNECTION-ASYNC", "Microsoft.EntityFrameworkCore.DbContextOptionsBuilder.AddInterceptors", "Microsoft.EntityFrameworkCore.Diagnostics.DbConnectionInterceptor.ConnectionOpeningAsync", "Microsoft.EntityFrameworkCore.Diagnostics.DbConnectionInterceptor.ConnectionOpenedAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.OpenConnectionAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.CloseConnectionAsync")]
+    [BehavioralCoverage("EF10-INTERCEPTION-CONNECTION-ASYNC", "Microsoft.EntityFrameworkCore.DbContextOptionsBuilder.AddInterceptors", "Microsoft.EntityFrameworkCore.Diagnostics.DbConnectionInterceptor.ConnectionOpeningAsync", "Microsoft.EntityFrameworkCore.Diagnostics.DbConnectionInterceptor.ConnectionOpenedAsync", "Microsoft.EntityFrameworkCore.Diagnostics.DbConnectionInterceptor.ConnectionClosingAsync", "Microsoft.EntityFrameworkCore.Diagnostics.DbConnectionInterceptor.ConnectionClosedAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.OpenConnectionAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.CloseConnectionAsync")]
     public async Task OpenConnectionAsync_InvokesAsynchronousConnectionInterceptorCallbacks()
     {
         var interceptor = new RecordingConnectionInterceptor();
@@ -202,10 +208,15 @@ public sealed class InterceptionTests
         await context.Database.OpenConnectionAsync(TestContext.Current.CancellationToken);
         await context.Database.CloseConnectionAsync();
 
+        Assert.Equal(ConnectionState.Closed, context.Database.GetDbConnection().State);
         Assert.Equal(0, interceptor.ConnectionOpeningCalls);
         Assert.Equal(0, interceptor.ConnectionOpenedCalls);
+        Assert.Equal(0, interceptor.ConnectionClosingCalls);
+        Assert.Equal(0, interceptor.ConnectionClosedCalls);
         Assert.Equal(1, interceptor.ConnectionOpeningAsyncCalls);
         Assert.Equal(1, interceptor.ConnectionOpenedAsyncCalls);
+        Assert.Equal(1, interceptor.ConnectionClosingAsyncCalls);
+        Assert.Equal(1, interceptor.ConnectionClosedAsyncCalls);
     }
 
     [Fact]
@@ -851,6 +862,14 @@ public sealed class InterceptionTests
 
         public int ConnectionOpenedAsyncCalls { get; private set; }
 
+        public int ConnectionClosingCalls { get; private set; }
+
+        public int ConnectionClosedCalls { get; private set; }
+
+        public int ConnectionClosingAsyncCalls { get; private set; }
+
+        public int ConnectionClosedAsyncCalls { get; private set; }
+
         public override InterceptionResult ConnectionOpening(
             DbConnection connection,
             ConnectionEventData eventData,
@@ -862,6 +881,18 @@ public sealed class InterceptionTests
 
         public override void ConnectionOpened(DbConnection connection, ConnectionEndEventData eventData) =>
             ConnectionOpenedCalls++;
+
+        public override InterceptionResult ConnectionClosing(
+            DbConnection connection,
+            ConnectionEventData eventData,
+            InterceptionResult result)
+        {
+            ConnectionClosingCalls++;
+            return result;
+        }
+
+        public override void ConnectionClosed(DbConnection connection, ConnectionEndEventData eventData) =>
+            ConnectionClosedCalls++;
 
         public override ValueTask<InterceptionResult> ConnectionOpeningAsync(
             DbConnection connection,
@@ -879,6 +910,23 @@ public sealed class InterceptionTests
             CancellationToken cancellationToken = default)
         {
             ConnectionOpenedAsyncCalls++;
+            return Task.CompletedTask;
+        }
+
+        public override ValueTask<InterceptionResult> ConnectionClosingAsync(
+            DbConnection connection,
+            ConnectionEventData eventData,
+            InterceptionResult result)
+        {
+            ConnectionClosingAsyncCalls++;
+            return ValueTask.FromResult(result);
+        }
+
+        public override Task ConnectionClosedAsync(
+            DbConnection connection,
+            ConnectionEndEventData eventData)
+        {
+            ConnectionClosedAsyncCalls++;
             return Task.CompletedTask;
         }
     }

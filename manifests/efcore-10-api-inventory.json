@@ -25,7 +25,7 @@
     "PublicMembers": 16762,
     "AwaitingClassification": 0,
     "ExplicitlyExcluded": 5921,
-    "MemberEntriesInCoveredFamilies": 768,
+    "MemberEntriesInCoveredFamilies": 772,
     "UncoveredMemberFamilies": 0
   },
   "CoverageSelectors": {
@@ -35488,10 +35488,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "ConnectionClosing",
       "Signature": "Microsoft.EntityFrameworkCore.Diagnostics.InterceptionResult ConnectionClosing(System.Data.Common.DbConnection connection, Microsoft.EntityFrameworkCore.Diagnostics.ConnectionEventData eventData, Microsoft.EntityFrameworkCore.Diagnostics.InterceptionResult result)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "ef-owned-no-provider-contract",
-      "DispositionReason": "Diagnostic identifiers, event payloads, and logging helpers are owned by EF Core. Provider-observable interception behavior is covered through public SaveChanges tests where applicable.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-INTERCEPTION-CONNECTION-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Diagnostics.DbConnectionInterceptor.ConnectionClosing"
     },
     {
@@ -35500,10 +35502,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "ConnectionClosingAsync",
       "Signature": "System.Threading.Tasks.ValueTask\u003CMicrosoft.EntityFrameworkCore.Diagnostics.InterceptionResult\u003E ConnectionClosingAsync(System.Data.Common.DbConnection connection, Microsoft.EntityFrameworkCore.Diagnostics.ConnectionEventData eventData, Microsoft.EntityFrameworkCore.Diagnostics.InterceptionResult result)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "ef-owned-no-provider-contract",
-      "DispositionReason": "Diagnostic identifiers, event payloads, and logging helpers are owned by EF Core. Provider-observable interception behavior is covered through public SaveChanges tests where applicable.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-INTERCEPTION-CONNECTION-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Diagnostics.DbConnectionInterceptor.ConnectionClosingAsync"
     },
     {
@@ -35512,10 +35516,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "ConnectionClosed",
       "Signature": "System.Void ConnectionClosed(System.Data.Common.DbConnection connection, Microsoft.EntityFrameworkCore.Diagnostics.ConnectionEndEventData eventData)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "ef-owned-no-provider-contract",
-      "DispositionReason": "Diagnostic identifiers, event payloads, and logging helpers are owned by EF Core. Provider-observable interception behavior is covered through public SaveChanges tests where applicable.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-INTERCEPTION-CONNECTION-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Diagnostics.DbConnectionInterceptor.ConnectionClosed"
     },
     {
@@ -35524,10 +35530,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "ConnectionClosedAsync",
       "Signature": "System.Threading.Tasks.Task ConnectionClosedAsync(System.Data.Common.DbConnection connection, Microsoft.EntityFrameworkCore.Diagnostics.ConnectionEndEventData eventData)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "ef-owned-no-provider-contract",
-      "DispositionReason": "Diagnostic identifiers, event payloads, and logging helpers are owned by EF Core. Provider-observable interception behavior is covered through public SaveChanges tests where applicable.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-INTERCEPTION-CONNECTION-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Diagnostics.DbConnectionInterceptor.ConnectionClosedAsync"
     },
     {
