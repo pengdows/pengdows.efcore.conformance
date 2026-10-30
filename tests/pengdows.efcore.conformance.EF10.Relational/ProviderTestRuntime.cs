@@ -134,7 +134,9 @@ internal static class ProviderTestRuntime
             index,
             mapping,
             $"ef10_native_type_{index}",
-            $"ef10conformance_nativetype_{index}")).ToArray();
+            $"ef10conformance_nativetype_{index}",
+            $"ef10_native_type_nullable_{index}",
+            $"ef10conformance_nativetype_nullable_{index}")).ToArray();
     }
 
     private static IProviderAdapter LoadAdapter()
@@ -601,6 +603,18 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
             entity.IndexerProperty(probe.Mapping.ClrType, "value")
                 .HasColumnName("value")
                 .HasColumnType(probe.Mapping.StoreTypeName ?? probe.Mapping.DatabaseTypeName);
+
+            var nullableClrType = probe.Mapping.ClrType.IsValueType && Nullable.GetUnderlyingType(probe.Mapping.ClrType) is null
+                ? typeof(Nullable<>).MakeGenericType(probe.Mapping.ClrType)
+                : probe.Mapping.ClrType;
+            var nullableEntity = modelBuilder.SharedTypeEntity<Dictionary<string, object>>(probe.NullableEntityTypeName);
+            nullableEntity.ToTable(probe.NullableTableName);
+            nullableEntity.IndexerProperty<Guid>("id").HasColumnName("id");
+            nullableEntity.HasKey("id");
+            nullableEntity.IndexerProperty(nullableClrType, "value")
+                .HasColumnName("value")
+                .HasColumnType(probe.Mapping.StoreTypeName ?? probe.Mapping.DatabaseTypeName)
+                .IsRequired(false);
         }
         modelBuilder.Entity<AttributeConfiguredRecord>();
     }
@@ -1205,4 +1219,6 @@ internal sealed record NativeTypeProbeDefinition(
     int Index,
     NativeTypeMapping Mapping,
     string EntityTypeName,
-    string TableName);
+    string TableName,
+    string NullableEntityTypeName,
+    string NullableTableName);

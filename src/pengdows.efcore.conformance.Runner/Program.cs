@@ -339,7 +339,9 @@ async Task<int> RunTestsAsync(string[] arguments, string? configuredConnectionSt
                         (Mapping: mapping, TestName: "DiscoveredNativeType_RoundTripsSynchronously", ContractSuffix: "ROUNDTRIP-SYNC"),
                         (Mapping: mapping, TestName: "DiscoveredNativeType_RoundTripsAsynchronously", ContractSuffix: "ROUNDTRIP-ASYNC"),
                         (Mapping: mapping, TestName: "DiscoveredNativeType_UpdatesAndRoundTripsSynchronously", ContractSuffix: "UPDATE-SYNC"),
-                        (Mapping: mapping, TestName: "DiscoveredNativeType_UpdatesAndRoundTripsAsynchronously", ContractSuffix: "UPDATE-ASYNC")
+                        (Mapping: mapping, TestName: "DiscoveredNativeType_UpdatesAndRoundTripsAsynchronously", ContractSuffix: "UPDATE-ASYNC"),
+                        (Mapping: mapping, TestName: "DiscoveredNativeType_PreservesNullSynchronously", ContractSuffix: "NULL-SYNC"),
+                        (Mapping: mapping, TestName: "DiscoveredNativeType_PreservesNullAsynchronously", ContractSuffix: "NULL-ASYNC")
                     })
                     .ToArray()
                 : [];

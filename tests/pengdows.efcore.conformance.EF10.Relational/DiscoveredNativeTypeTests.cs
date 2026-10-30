@@ -141,6 +141,52 @@ public sealed class DiscoveredNativeTypeTests
         AssertValueEqual(expected, actual["value"], probe.Mapping);
     }
 
+    [Theory]
+    [MemberData(nameof(DiscoveredMappings))]
+    [BehavioralCoverage("EF10-NATIVE-TYPE-NULL-ASYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    public async Task DiscoveredNativeType_PreservesNullAsynchronously(int probeIndex, string databaseTypeName, string clrTypeName)
+    {
+        ProviderTestRuntime.RequireCapability("native-type-fidelity");
+        var probe = GetProbe(probeIndex, databaseTypeName, clrTypeName);
+        var id = Guid.NewGuid();
+
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.Set<Dictionary<string, object>>(probe.NullableEntityTypeName).Add(CreateRow(id, null!));
+            Assert.Equal(1, await write.SaveChangesAsync(TestContext.Current.CancellationToken));
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        var actual = await verify.Set<Dictionary<string, object>>(probe.NullableEntityTypeName)
+            .AsNoTracking()
+            .SingleAsync(row => EF.Property<Guid>(row, "id") == id, TestContext.Current.CancellationToken);
+        Assert.Null(actual["value"]);
+    }
+
+    [Theory]
+    [MemberData(nameof(DiscoveredMappings))]
+    [BehavioralCoverage("EF10-NATIVE-TYPE-NULL-SYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "System.Linq.Queryable.Single")]
+    public async Task DiscoveredNativeType_PreservesNullSynchronously(int probeIndex, string databaseTypeName, string clrTypeName)
+    {
+        ProviderTestRuntime.RequireCapability("native-type-fidelity");
+        var probe = GetProbe(probeIndex, databaseTypeName, clrTypeName);
+        var id = Guid.NewGuid();
+
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.Set<Dictionary<string, object>>(probe.NullableEntityTypeName).Add(CreateRow(id, null!));
+            Assert.Equal(1, write.SaveChanges());
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        var actual = verify.Set<Dictionary<string, object>>(probe.NullableEntityTypeName)
+            .AsNoTracking()
+            .Single(row => EF.Property<Guid>(row, "id") == id);
+        Assert.Null(actual["value"]);
+    }
+
     private static NativeTypeProbeDefinition GetProbe(int index, string databaseTypeName, string clrTypeName)
     {
         var probe = ProviderTestRuntime.NativeTypeProbes.SingleOrDefault(item => item.Index == index);
