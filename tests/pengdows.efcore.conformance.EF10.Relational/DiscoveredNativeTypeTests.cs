@@ -308,13 +308,39 @@ public sealed class DiscoveredNativeTypeTests
 
     private static void AssertValueEqual(object expected, object? actual, NativeTypeMapping mapping)
     {
-        var equal = expected is string expectedText && actual is string actualText &&
-                    mapping.DatabaseTypeName.Contains("json", StringComparison.OrdinalIgnoreCase)
-            ? JsonNode.DeepEquals(JsonNode.Parse(expectedText), JsonNode.Parse(actualText))
-            : StructuralComparisons.StructuralEqualityComparer.Equals(expected, actual);
+        var equal = mapping.DatabaseTypeName.Equals("time with time zone", StringComparison.OrdinalIgnoreCase) ||
+                    mapping.DatabaseTypeName.Equals("time with time zone[]", StringComparison.OrdinalIgnoreCase)
+            ? TimeWithTimeZoneValuesEqual(expected, actual)
+            : expected is string expectedText && actual is string actualText &&
+              mapping.DatabaseTypeName.Contains("json", StringComparison.OrdinalIgnoreCase)
+                ? JsonNode.DeepEquals(JsonNode.Parse(expectedText), JsonNode.Parse(actualText))
+                : StructuralComparisons.StructuralEqualityComparer.Equals(expected, actual);
         Assert.True(
             equal,
-            $"Native type '{mapping.DatabaseTypeName}' mapped from CLR type '{mapping.ClrType.FullName}' did not round-trip the declared sample value.");
+            $"Native type '{mapping.DatabaseTypeName}' mapped from CLR type '{mapping.ClrType.FullName}' did not round-trip the declared sample value. Expected: {FormatValue(expected)}; actual: {FormatValue(actual)}.");
+    }
+
+    private static string FormatValue(object? value) => value is IEnumerable sequence and not string
+        ? $"[{string.Join(", ", sequence.Cast<object?>().Select(item => item?.ToString() ?? "null"))}]"
+        : value?.ToString() ?? "null";
+
+    private static bool TimeWithTimeZoneValuesEqual(object expected, object? actual)
+    {
+        static bool SameTimeAndOffset(DateTimeOffset left, DateTimeOffset right) =>
+            left.TimeOfDay == right.TimeOfDay && left.Offset == right.Offset;
+
+        if (expected is DateTimeOffset expectedValue && actual is DateTimeOffset actualValue)
+        {
+            return SameTimeAndOffset(expectedValue, actualValue);
+        }
+
+        if (expected is DateTimeOffset[] expectedValues && actual is DateTimeOffset[] actualValues)
+        {
+            return expectedValues.Length == actualValues.Length &&
+                   expectedValues.Zip(actualValues).All(pair => SameTimeAndOffset(pair.First, pair.Second));
+        }
+
+        return false;
     }
 }
 
@@ -327,7 +353,7 @@ internal static class NativeTypeSampleFactory
         if (type == typeof(byte[])) return new byte[] { 0x4a };
         if (type.IsArray)
         {
-            return CreateArray(type.GetElementType()!, mapping);
+            return CreateArray(type.GetElementType()!, mapping, alternate: false);
         }
 
         if (type == typeof(string) && mapping.DatabaseTypeName.Contains("json", StringComparison.OrdinalIgnoreCase))
@@ -363,7 +389,9 @@ internal static class NativeTypeSampleFactory
             : mapping.DatabaseTypeName.Equals("timestamp with time zone", StringComparison.OrdinalIgnoreCase)
                 ? new DateTime(2024, 2, 29, 13, 14, 15, DateTimeKind.Utc)
                 : new DateTime(2024, 2, 29, 13, 14, 15, DateTimeKind.Unspecified);
-        if (type == typeof(DateTimeOffset)) return new DateTimeOffset(2024, 2, 29, 13, 14, 15, TimeSpan.Zero);
+        if (type == typeof(DateTimeOffset)) return mapping.DatabaseTypeName.Equals("time with time zone", StringComparison.OrdinalIgnoreCase)
+            ? new DateTimeOffset(1, 1, 1, 13, 14, 15, TimeSpan.Zero)
+            : new DateTimeOffset(2024, 2, 29, 13, 14, 15, TimeSpan.Zero);
         if (type == typeof(IPAddress)) return IPAddress.Parse("192.0.2.1");
         if (type == typeof(IPNetwork)) return IPNetwork.Parse("192.0.2.0/24");
         if (type == typeof(PhysicalAddress)) return PhysicalAddress.Parse(mapping.DatabaseTypeName.Equals("macaddr8", StringComparison.OrdinalIgnoreCase) ? "0011223344556677" : "001122334455");
@@ -378,8 +406,7 @@ internal static class NativeTypeSampleFactory
         var type = Nullable.GetUnderlyingType(mapping.ClrType) ?? mapping.ClrType;
         if (IsNpgsqlRange(type)) return CreateRange(type, mapping, alternate: true);
         if (type == typeof(byte[])) return new byte[] { 0x52 };
-        if (type == typeof(int[])) return new[] { 5, 0, 1 };
-        if (type.IsArray) return CreateArray(type.GetElementType()!, mapping);
+        if (type.IsArray) return CreateArray(type.GetElementType()!, mapping, alternate: true);
         if (type == typeof(string) && mapping.DatabaseTypeName.Contains("json", StringComparison.OrdinalIgnoreCase)) return "{\"value\":2}";
         if (type == typeof(string) && mapping.DatabaseTypeName.Equals("xml", StringComparison.OrdinalIgnoreCase)) return "<v>2</v>";
         if (type == typeof(bool)) return false;
@@ -406,7 +433,9 @@ internal static class NativeTypeSampleFactory
             : mapping.DatabaseTypeName.Equals("timestamp with time zone", StringComparison.OrdinalIgnoreCase)
                 ? new DateTime(2023, 1, 2, 9, 8, 7, DateTimeKind.Utc)
                 : new DateTime(2023, 1, 2, 9, 8, 7, DateTimeKind.Unspecified);
-        if (type == typeof(DateTimeOffset)) return new DateTimeOffset(2023, 1, 2, 9, 8, 7, TimeSpan.Zero);
+        if (type == typeof(DateTimeOffset)) return mapping.DatabaseTypeName.Equals("time with time zone", StringComparison.OrdinalIgnoreCase)
+            ? new DateTimeOffset(1, 1, 1, 9, 8, 7, TimeSpan.Zero)
+            : new DateTimeOffset(2023, 1, 2, 9, 8, 7, TimeSpan.Zero);
         if (type == typeof(IPAddress)) return IPAddress.Parse("2001:db8::1");
         if (type == typeof(IPNetwork)) return IPNetwork.Parse("198.51.100.0/24");
         if (type == typeof(PhysicalAddress)) return PhysicalAddress.Parse(mapping.DatabaseTypeName.Equals("macaddr8", StringComparison.OrdinalIgnoreCase) ? "8899AABBCCDDEEFF" : "8899AABBCCDD");
@@ -446,7 +475,7 @@ internal static class NativeTypeSampleFactory
         }
         else if (elementType == typeof(DateTime))
         {
-            var isTimeZoneRange = mapping.DatabaseTypeName.Equals("tstzrange", StringComparison.OrdinalIgnoreCase);
+            var isTimeZoneRange = mapping.DatabaseTypeName.StartsWith("tstz", StringComparison.OrdinalIgnoreCase);
             var kind = isTimeZoneRange ? DateTimeKind.Utc : DateTimeKind.Unspecified;
             lower = alternate ? new DateTime(2023, 1, 1, 0, 0, 0, kind) : new DateTime(2024, 1, 1, 0, 0, 0, kind);
             upper = alternate ? new DateTime(2023, 12, 31, 0, 0, 0, kind) : new DateTime(2024, 12, 31, 0, 0, 0, kind);
@@ -460,15 +489,63 @@ internal static class NativeTypeSampleFactory
                ?? throw new InvalidOperationException($"Could not construct a sample for range type '{rangeType.FullName}'.");
     }
 
-    private static Array CreateArray(Type elementType, NativeTypeMapping mapping)
+    private static Array CreateArray(Type elementType, NativeTypeMapping mapping, bool alternate)
     {
-        var values = elementType == typeof(int)
-            ? new object[] { 1, 0, 5 }
-            : elementType == typeof(string)
-                ? mapping.DatabaseTypeName.Contains("json", StringComparison.OrdinalIgnoreCase)
-                    ? new object[] { "{\"value\":1}", "[]" }
-                    : new object[] { "A", "B" }
-                : throw new InvalidOperationException($"No centrally defined representative array is available for CLR type '{elementType.FullName}[]'.");
+        object[] values;
+        if (IsNpgsqlRange(elementType)) values = [CreateRange(elementType, mapping, alternate)];
+        else if (elementType == typeof(bool)) values = alternate ? [false, true] : [true, false];
+        else if (elementType == typeof(short)) values = alternate ? [(short)5, (short)0] : [(short)1, (short)-1];
+        else if (elementType == typeof(int)) values = alternate ? [5, 0, 1] : [1, 0, 5];
+        else if (elementType == typeof(long)) values = alternate ? [5L, 0L] : [1L, -1L];
+        else if (elementType == typeof(float)) values = alternate ? [-5.5f, 0f] : [1.25f, -1.5f];
+        else if (elementType == typeof(double)) values = alternate ? [-5.5d, 0d] : [1.25d, -1.5d];
+        else if (elementType == typeof(decimal)) values = alternate ? [-5.5m, 0m] : [1.25m, -1.5m];
+        else if (elementType == typeof(string)) values = mapping.DatabaseTypeName.Contains("json", StringComparison.OrdinalIgnoreCase)
+            ? alternate ? ["{\"value\":2}", "[]"] : ["{\"value\":1}", "[]"]
+            : alternate ? ["C", "D"] : ["A", "B"];
+        else if (elementType == typeof(Guid)) values = alternate
+            ? [Guid.Parse("84c5903f-330f-42d1-92f4-94ab241b1b32"), Guid.Empty]
+            : [Guid.Parse("5d37ddf5-fab9-4e5b-95fb-b5259a5e3d31"), Guid.Empty];
+        else if (elementType == typeof(DateOnly)) values = alternate
+            ? [new DateOnly(2023, 1, 2), new DateOnly(2023, 1, 3)]
+            : [new DateOnly(2024, 2, 29), new DateOnly(2024, 3, 1)];
+        else if (elementType == typeof(TimeOnly)) values = alternate
+            ? [new TimeOnly(9, 8, 7), new TimeOnly(10, 8, 7)]
+            : [new TimeOnly(13, 14, 15), new TimeOnly(14, 14, 15)];
+        else if (elementType == typeof(DateTime))
+        {
+            var kind = mapping.DatabaseTypeName.Contains("with time zone", StringComparison.OrdinalIgnoreCase)
+                ? DateTimeKind.Utc
+                : DateTimeKind.Unspecified;
+            values = alternate
+                ? [new DateTime(2023, 1, 2, 9, 8, 7, kind), new DateTime(2023, 1, 3, 9, 8, 7, kind)]
+                : [new DateTime(2024, 2, 29, 13, 14, 15, kind), new DateTime(2024, 3, 1, 13, 14, 15, kind)];
+        }
+        else if (elementType == typeof(DateTimeOffset)) values = alternate
+            ? [new DateTimeOffset(1, 1, 1, 9, 8, 7, TimeSpan.Zero), new DateTimeOffset(1, 1, 1, 10, 8, 7, TimeSpan.Zero)]
+            : [new DateTimeOffset(1, 1, 1, 13, 14, 15, TimeSpan.Zero), new DateTimeOffset(1, 1, 1, 14, 14, 15, TimeSpan.Zero)];
+        else if (elementType == typeof(TimeSpan)) values = alternate
+            ? [TimeSpan.FromHours(3), TimeSpan.FromHours(4)]
+            : [TimeSpan.FromHours(1), TimeSpan.FromHours(2)];
+        else if (elementType == typeof(IPAddress)) values = alternate
+            ? [IPAddress.Parse("2001:db8::1"), IPAddress.Parse("2001:db8::2")]
+            : [IPAddress.Parse("192.0.2.1"), IPAddress.Parse("192.0.2.2")];
+        else if (elementType == typeof(IPNetwork)) values = alternate
+            ? [IPNetwork.Parse("198.51.100.0/24"), IPNetwork.Parse("198.51.101.0/24")]
+            : [IPNetwork.Parse("192.0.2.0/24"), IPNetwork.Parse("192.0.3.0/24")];
+        else if (elementType == typeof(PhysicalAddress))
+        {
+            var isMacAddress8 = mapping.DatabaseTypeName.Contains("macaddr8", StringComparison.OrdinalIgnoreCase);
+            values = alternate
+                ? isMacAddress8
+                    ? [PhysicalAddress.Parse("8899AABBCCDDEEFF"), PhysicalAddress.Parse("8899AABBCCDDEEFE")]
+                    : [PhysicalAddress.Parse("8899AABBCCDD"), PhysicalAddress.Parse("8899AABBCCDE")]
+                : isMacAddress8
+                    ? [PhysicalAddress.Parse("0011223344556677"), PhysicalAddress.Parse("0011223344556678")]
+                    : [PhysicalAddress.Parse("001122334455"), PhysicalAddress.Parse("001122334456")];
+        }
+        else throw new InvalidOperationException($"No centrally defined representative array is available for CLR type '{elementType.FullName}[]'.");
+
         var array = Array.CreateInstance(elementType, values.Length);
         for (var index = 0; index < values.Length; index++) array.SetValue(values[index], index);
         return array;
