@@ -6,7 +6,7 @@ using pengdows.efcore.conformance;
 namespace pengdows.efcore.conformance.Adapter.MicrosoftSqlite;
 
 /// <summary>Reference adapter using Microsoft's EF Core SQLite provider.</summary>
-public sealed class MicrosoftSqliteAdapter : IAdoNetProviderAdapter, IParameterizedCollectionModeAdapter
+public sealed class MicrosoftSqliteAdapter : IAdoNetProviderAdapter, IParameterizedCollectionModeAdapter, ICollationTestAdapter
 {
     private static readonly ProviderCapabilities SupportedCapabilities = new(
         new HashSet<string>(StringComparer.Ordinal)
@@ -22,7 +22,8 @@ public sealed class MicrosoftSqliteAdapter : IAdoNetProviderAdapter, IParameteri
             "execute-delete",
             "primitive-collections",
             "external-connection",
-            "parameterized-collection-modes"
+            "parameterized-collection-modes",
+            "case-insensitive-collation"
         },
         new HashSet<string>(StringComparer.Ordinal)
         {
@@ -36,6 +37,8 @@ public sealed class MicrosoftSqliteAdapter : IAdoNetProviderAdapter, IParameteri
         });
 
     public string Name => "Microsoft EF Core SQLite";
+
+    public string CaseInsensitiveCollation => "NOCASE";
 
     public string Version => typeof(SqliteConnection).Assembly.GetName().Version?.ToString() ?? "unknown";
 

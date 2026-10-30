@@ -7,7 +7,7 @@ using pengdows.efcore.conformance;
 namespace pengdows.efcore.conformance.Adapter.PengdowsSqlite;
 
 /// <summary>Sample adapter for exercising the suite against the pengdows ADO.NET SQLite provider.</summary>
-public sealed class PengdowsSqliteAdapter : IAdoNetProviderAdapter, ISupplementalTypeDiscovery, IParameterizedCollectionModeAdapter
+public sealed class PengdowsSqliteAdapter : IAdoNetProviderAdapter, ISupplementalTypeDiscovery, IParameterizedCollectionModeAdapter, ICollationTestAdapter
 {
     private static readonly ProviderCapabilities SupportedCapabilities = new(
         new HashSet<string>(StringComparer.Ordinal)
@@ -23,7 +23,8 @@ public sealed class PengdowsSqliteAdapter : IAdoNetProviderAdapter, ISupplementa
             "execute-delete",
             "primitive-collections",
             "external-connection",
-            "parameterized-collection-modes"
+            "parameterized-collection-modes",
+            "case-insensitive-collation"
         },
         new HashSet<string>(StringComparer.Ordinal)
         {
@@ -37,6 +38,8 @@ public sealed class PengdowsSqliteAdapter : IAdoNetProviderAdapter, ISupplementa
         });
 
     public string Name => "pengdows.efcore.adonet SQLite";
+
+    public string CaseInsensitiveCollation => "NOCASE";
 
     public string Version => typeof(pengdows.efcore.adonet.sqlite.SqliteDbContextOptionsBuilderExtensions).Assembly.GetName().Version?.ToString() ?? "unknown";
 

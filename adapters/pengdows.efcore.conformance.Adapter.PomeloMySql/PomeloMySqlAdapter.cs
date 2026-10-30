@@ -7,7 +7,7 @@ using pengdows.efcore.conformance;
 namespace pengdows.efcore.conformance.Adapter.PomeloMySql;
 
 /// <summary>Optional EF Core 10 adapter for MySQL-compatible servers using Pomelo.</summary>
-public sealed class PomeloMySqlAdapter : IAdoNetProviderAdapter, IParameterizedCollectionModeAdapter
+public sealed class PomeloMySqlAdapter : IAdoNetProviderAdapter, IParameterizedCollectionModeAdapter, ICollationTestAdapter
 {
     private static readonly ProviderCapabilities DeclaredCapabilities = new(
         new HashSet<string>(StringComparer.Ordinal)
@@ -22,6 +22,7 @@ public sealed class PomeloMySqlAdapter : IAdoNetProviderAdapter, IParameterizedC
             "index-schema-metadata",
             "schema-comments",
             "migration-add-constraint-operations",
+            "case-insensitive-collation",
             "raw-sql",
             "execute-update",
             "execute-delete",
@@ -37,6 +38,8 @@ public sealed class PomeloMySqlAdapter : IAdoNetProviderAdapter, IParameterizedC
         });
 
     public string Name => "Pomelo EF Core MySQL";
+
+    public string CaseInsensitiveCollation => "utf8mb4_0900_ai_ci";
 
     public string Version => typeof(Microsoft.EntityFrameworkCore.MySqlDbContextOptionsBuilderExtensions)
         .Assembly.GetName().Version?.ToString() ?? "unknown";

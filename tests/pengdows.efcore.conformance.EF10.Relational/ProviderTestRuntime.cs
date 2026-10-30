@@ -23,6 +23,12 @@ internal static class ProviderTestRuntime
 
     public static string ConnectionString => RequiredEnvironmentVariable("PENGDOWS_EFCORE_CONFORMANCE_CONNECTION_STRING");
 
+    public static string CaseInsensitiveCollation => Adapter is ICollationTestAdapter collationAdapter
+        ? collationAdapter.CaseInsensitiveCollation
+        : throw new ConformanceInfrastructureException(
+            $"Provider '{Adapter.Name}' declares case-insensitive collation support without a collation profile.",
+            new InvalidOperationException("The adapter does not implement ICollationTestAdapter."));
+
     public static DbConnection CreateConnection() => Adapter is IAdoNetProviderAdapter adoNetAdapter
         ? adoNetAdapter.CreateConnection(ConnectionString)
         : throw new ConformanceInfrastructureException(

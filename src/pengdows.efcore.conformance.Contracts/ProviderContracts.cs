@@ -34,6 +34,12 @@ public interface IParameterizedCollectionModeAdapter : IProviderAdapter
         ParameterTranslationMode mode);
 }
 
+/// <summary>Names a database collation used by shared case-insensitive query scenarios.</summary>
+public interface ICollationTestAdapter : IProviderAdapter
+{
+    string CaseInsensitiveCollation { get; }
+}
+
 /// <summary>Optional database-catalog discovery for types omitted from ADO.NET schema metadata.</summary>
 public interface ISupplementalTypeDiscovery
 {
@@ -65,7 +71,8 @@ public sealed record ProviderCapabilities(
         "migration-check-constraint",
         "index-schema-metadata",
         "schema-comments",
-        "migration-add-constraint-operations"
+        "migration-add-constraint-operations",
+        "case-insensitive-collation"
     };
 
     public IReadOnlyList<string> UndeclaredFeatures => KnownFeatures

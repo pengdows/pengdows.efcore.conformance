@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 24,
+    "AwaitingClassification": 23,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 654,
-    "UncoveredMemberFamilies": 23
+    "MemberEntriesInCoveredFamilies": 655,
+    "UncoveredMemberFamilies": 22
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -52412,6 +52412,7 @@
       "Signature": "System.Threading.Tasks.Task\u003CTSource\u003E SingleAsync\u003CTSource\u003E(System.Linq.IQueryable\u003CTSource\u003E source, System.Threading.CancellationToken cancellationToken = null)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-COLLATE-ASYNC",
         "EF10-COMPLEX-TYPE-ASYNC",
         "EF10-DB-FUNCTION-ATTRIBUTE-ASYNC",
         "EF10-DB-FUNCTION-LEAST-GREATEST-ASYNC",
@@ -52455,6 +52456,7 @@
       "Signature": "System.Threading.Tasks.Task\u003CTSource\u003E SingleAsync\u003CTSource\u003E(System.Linq.IQueryable\u003CTSource\u003E source, System.Linq.Expressions.Expression\u003CSystem.Func\u003CTSource, System.Boolean\u003E\u003E predicate, System.Threading.CancellationToken cancellationToken = null)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-COLLATE-ASYNC",
         "EF10-COMPLEX-TYPE-ASYNC",
         "EF10-DB-FUNCTION-ATTRIBUTE-ASYNC",
         "EF10-DB-FUNCTION-LEAST-GREATEST-ASYNC",
@@ -183951,10 +183953,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "Collate",
       "Signature": "TProperty Collate\u003CTProperty\u003E(Microsoft.EntityFrameworkCore.DbFunctions _, TProperty operand, System.String collation)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COLLATE-ASYNC",
+        "EF10-COLLATE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalDbFunctionsExtensions.Collate"
     },
     {
