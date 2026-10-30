@@ -77,6 +77,49 @@ public sealed class TransactionTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-TRANSACTION-DISPOSE-ROLLBACK-SYNC", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.BeginTransaction", "Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction.Dispose", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges")]
+    public async Task DisposingUncommittedTransaction_RollsBackSynchronously()
+    {
+        ProviderTestRuntime.RequireCapability("transactions");
+        var id = Guid.NewGuid();
+
+        await using (var context = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
+            var transaction = context.Database.BeginTransaction();
+            context.People.Add(new Person { Id = id, Name = "Disposed transaction", Age = 22 });
+            Assert.Equal(1, context.SaveChanges());
+            transaction.Dispose();
+            Assert.Null(context.Database.CurrentTransaction);
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.False(await verify.People.AnyAsync(person => person.Id == id, TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-TRANSACTION-DISPOSE-ROLLBACK-ASYNC", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.BeginTransactionAsync", "Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction.DisposeAsync", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync")]
+    public async Task DisposingUncommittedTransaction_RollsBackAsynchronously()
+    {
+        ProviderTestRuntime.RequireCapability("transactions");
+        var id = Guid.NewGuid();
+        var cancellationToken = TestContext.Current.CancellationToken;
+
+        await using (var context = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(context, cancellationToken);
+            var transaction = await context.Database.BeginTransactionAsync(cancellationToken);
+            context.People.Add(new Person { Id = id, Name = "Disposed async transaction", Age = 23 });
+            Assert.Equal(1, await context.SaveChangesAsync(cancellationToken));
+            await transaction.DisposeAsync();
+            Assert.Null(context.Database.CurrentTransaction);
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.False(await verify.People.AnyAsync(person => person.Id == id, cancellationToken));
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-TRANSACTION-COMMIT-ASYNC", "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.BeginTransactionAsync", "Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction.CommitAsync", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync")]
     public async Task TransactionCommit_PersistsSavedChangesAsynchronously()
     {

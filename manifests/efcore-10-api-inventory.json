@@ -29,7 +29,10 @@
     "UncoveredMemberFamilies": 0
   },
   "CoverageSelectors": {
-    "UnmatchedEfCoreSelectors": [],
+    "UnmatchedEfCoreSelectors": [
+      "Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction.Dispose",
+      "Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction.DisposeAsync"
+    ],
     "ExternalApiSelectors": [
       "System.Collections.Generic.IAsyncDisposable.DisposeAsync",
       "System.Collections.Generic.IAsyncEnumerator\u00601.MoveNextAsync",
@@ -16154,6 +16157,7 @@
         "EF10-TRACKING-SNAPSHOT-STRATEGY-SYNC",
         "EF10-TRACKING-UPDATE-DETACHED-SYNC",
         "EF10-TRANSACTION-COMMIT-SYNC",
+        "EF10-TRANSACTION-DISPOSE-ROLLBACK-SYNC",
         "EF10-TRANSACTION-EXTERNAL-SYNC",
         "EF10-TRANSACTION-FACADE-COMMIT-ROLLBACK-SYNC",
         "EF10-TRANSACTION-ROLLBACK-SYNC",
@@ -16245,6 +16249,7 @@
         "EF10-TRACKING-SNAPSHOT-STRATEGY-SYNC",
         "EF10-TRACKING-UPDATE-DETACHED-SYNC",
         "EF10-TRANSACTION-COMMIT-SYNC",
+        "EF10-TRANSACTION-DISPOSE-ROLLBACK-SYNC",
         "EF10-TRANSACTION-EXTERNAL-SYNC",
         "EF10-TRANSACTION-FACADE-COMMIT-ROLLBACK-SYNC",
         "EF10-TRANSACTION-ROLLBACK-SYNC",
@@ -16338,6 +16343,7 @@
         "EF10-TRACKING-TRACK-GRAPH",
         "EF10-TRACKING-UPDATE-DETACHED-ASYNC",
         "EF10-TRANSACTION-COMMIT-ASYNC",
+        "EF10-TRANSACTION-DISPOSE-ROLLBACK-ASYNC",
         "EF10-TRANSACTION-EXTERNAL-ASYNC",
         "EF10-TRANSACTION-FACADE-COMMIT-ROLLBACK-ASYNC",
         "EF10-TRANSACTION-ROLLBACK-ASYNC",
@@ -16431,6 +16437,7 @@
         "EF10-TRACKING-TRACK-GRAPH",
         "EF10-TRACKING-UPDATE-DETACHED-ASYNC",
         "EF10-TRANSACTION-COMMIT-ASYNC",
+        "EF10-TRANSACTION-DISPOSE-ROLLBACK-ASYNC",
         "EF10-TRANSACTION-EXTERNAL-ASYNC",
         "EF10-TRANSACTION-FACADE-COMMIT-ROLLBACK-ASYNC",
         "EF10-TRANSACTION-ROLLBACK-ASYNC",
@@ -190918,7 +190925,8 @@
       "BehavioralContracts": [
         "EF10-INTERCEPTION-TRANSACTION-ROLLBACK-SYNC",
         "EF10-INTERCEPTION-TRANSACTION-SYNC",
-        "EF10-TRANSACTION-COMMIT-SYNC"
+        "EF10-TRANSACTION-COMMIT-SYNC",
+        "EF10-TRANSACTION-DISPOSE-ROLLBACK-SYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -190934,6 +190942,7 @@
       "BehavioralContracts": [
         "EF10-INTERCEPTION-TRANSACTION-ASYNC",
         "EF10-INTERCEPTION-TRANSACTION-ROLLBACK-ASYNC",
+        "EF10-TRANSACTION-DISPOSE-ROLLBACK-ASYNC",
         "EF10-TRANSACTION-ROLLBACK-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
