@@ -167,6 +167,8 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
 
     public DbSet<GeneratedKeyRecord> GeneratedKeyRecords => Set<GeneratedKeyRecord>();
 
+    public DbSet<DefaultValueRecord> DefaultValueRecords => Set<DefaultValueRecord>();
+
     public DbSet<AttributeConfiguredRecord> AttributeConfiguredRecords => Set<AttributeConfiguredRecord>();
 
     public DbSet<CommentedRecord> CommentedRecords => Set<CommentedRecord>();
@@ -551,6 +553,15 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
             entity.HasKey(record => record.Id);
             entity.Property(record => record.Id).HasColumnName("id").ValueGeneratedOnAdd();
             entity.Property(record => record.Name).HasColumnName("name").IsRequired().HasMaxLength(160);
+        });
+        modelBuilder.Entity<DefaultValueRecord>(entity =>
+        {
+            entity.ToTable("ef10conformancedefaultvalues");
+            entity.HasKey(record => record.Id);
+            entity.Property(record => record.Id).HasColumnName("id");
+            entity.Property(record => record.RetryCount).HasColumnName("retry_count").HasDefaultValue(3);
+            entity.Property(record => record.Enabled).HasColumnName("enabled").HasDefaultValue(true);
+            entity.Property(record => record.Label).HasColumnName("label").HasMaxLength(160).HasDefaultValue("database default");
         });
         modelBuilder.Entity<AttributeConfiguredRecord>();
     }
@@ -1138,4 +1149,15 @@ internal sealed class GeneratedKeyRecord
     public int Id { get; set; }
 
     public string Name { get; set; } = string.Empty;
+}
+
+internal sealed class DefaultValueRecord
+{
+    public Guid Id { get; set; }
+
+    public int RetryCount { get; set; }
+
+    public bool Enabled { get; set; }
+
+    public string Label { get; set; } = null!;
 }

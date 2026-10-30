@@ -60,4 +60,50 @@ public sealed class GeneratedValuesTests
             .ToList();
         Assert.Equal(records.Select(record => record.Name).Order(), stored.Select(record => record.Name).Order());
     }
+
+    [Fact]
+    [BehavioralCoverage("EF10-GENERATED-DEFAULT-VALUES-ASYNC", "Microsoft.EntityFrameworkCore.RelationalPropertyBuilderExtensions.HasDefaultValue", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    public async Task DatabaseDefaultValues_AreReturnedAfterAsynchronousInsert()
+    {
+        var expected = new DefaultValueRecord { Id = Guid.NewGuid() };
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.DefaultValueRecords.Add(expected);
+            Assert.Equal(1, await write.SaveChangesAsync(TestContext.Current.CancellationToken));
+            Assert.Equal(3, expected.RetryCount);
+            Assert.True(expected.Enabled);
+            Assert.Equal("database default", expected.Label);
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        var actual = await verify.DefaultValueRecords.AsNoTracking().SingleAsync(
+            record => record.Id == expected.Id,
+            TestContext.Current.CancellationToken);
+        Assert.Equal(3, actual.RetryCount);
+        Assert.True(actual.Enabled);
+        Assert.Equal("database default", actual.Label);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-GENERATED-DEFAULT-VALUES-SYNC", "Microsoft.EntityFrameworkCore.RelationalPropertyBuilderExtensions.HasDefaultValue", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "System.Linq.Queryable.Single")]
+    public async Task DatabaseDefaultValues_AreReturnedAfterSynchronousInsert()
+    {
+        var expected = new DefaultValueRecord { Id = Guid.NewGuid() };
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.DefaultValueRecords.Add(expected);
+            Assert.Equal(1, write.SaveChanges());
+            Assert.Equal(3, expected.RetryCount);
+            Assert.True(expected.Enabled);
+            Assert.Equal("database default", expected.Label);
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        var actual = verify.DefaultValueRecords.AsNoTracking().Single(record => record.Id == expected.Id);
+        Assert.Equal(3, actual.RetryCount);
+        Assert.True(actual.Enabled);
+        Assert.Equal("database default", actual.Label);
+    }
 }

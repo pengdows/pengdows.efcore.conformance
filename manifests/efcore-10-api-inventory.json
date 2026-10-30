@@ -21,7 +21,7 @@
     "PublicMembers": 16076,
     "AwaitingClassification": 0,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 676,
+    "MemberEntriesInCoveredFamilies": 681,
     "UncoveredMemberFamilies": 0
   },
   "CoverageSelectors": {
@@ -16083,6 +16083,7 @@
         "EF10-ENTITY-TYPE-CONFIGURATION-GENERIC-SYNC",
         "EF10-ENTITY-TYPE-CONFIGURATION-SYNC",
         "EF10-FILTERED-INDEX-SYNC",
+        "EF10-GENERATED-DEFAULT-VALUES-SYNC",
         "EF10-GENERATED-KEYS-SYNC",
         "EF10-INDEX-ATTRIBUTE-UNIQUE-SYNC",
         "EF10-INHERITANCE-TPC-SYNC",
@@ -16161,6 +16162,7 @@
         "EF10-ENTITY-TYPE-CONFIGURATION-GENERIC-SYNC",
         "EF10-ENTITY-TYPE-CONFIGURATION-SYNC",
         "EF10-FILTERED-INDEX-SYNC",
+        "EF10-GENERATED-DEFAULT-VALUES-SYNC",
         "EF10-GENERATED-KEYS-SYNC",
         "EF10-INDEX-ATTRIBUTE-UNIQUE-SYNC",
         "EF10-INHERITANCE-TPC-SYNC",
@@ -16240,6 +16242,7 @@
         "EF10-ENTITY-TYPE-CONFIGURATION-ASYNC",
         "EF10-ENTITY-TYPE-CONFIGURATION-GENERIC-ASYNC",
         "EF10-FILTERED-INDEX-ASYNC",
+        "EF10-GENERATED-DEFAULT-VALUES-ASYNC",
         "EF10-GENERATED-KEYS-ASYNC",
         "EF10-INDEX-ATTRIBUTE-UNIQUE-ASYNC",
         "EF10-INHERITANCE-TPC-ASYNC",
@@ -16321,6 +16324,7 @@
         "EF10-ENTITY-TYPE-CONFIGURATION-ASYNC",
         "EF10-ENTITY-TYPE-CONFIGURATION-GENERIC-ASYNC",
         "EF10-FILTERED-INDEX-ASYNC",
+        "EF10-GENERATED-DEFAULT-VALUES-ASYNC",
         "EF10-GENERATED-KEYS-ASYNC",
         "EF10-INDEX-ATTRIBUTE-UNIQUE-ASYNC",
         "EF10-INHERITANCE-TPC-ASYNC",
@@ -52435,6 +52439,7 @@
         "EF10-DB-FUNCTION-NULLABLE-ASYNC",
         "EF10-DB-FUNCTION-SCHEMA-ASYNC",
         "EF10-DBSET-LOCAL-QUERY-ASYNC",
+        "EF10-GENERATED-DEFAULT-VALUES-ASYNC",
         "EF10-JSON-MAPPING-ASYNC",
         "EF10-MIGRATIONS-SET-DEFAULT-ASYNC",
         "EF10-OWNED-ATTRIBUTE-ASYNC",
@@ -52482,6 +52487,7 @@
         "EF10-DB-FUNCTION-NULLABLE-ASYNC",
         "EF10-DB-FUNCTION-SCHEMA-ASYNC",
         "EF10-DBSET-LOCAL-QUERY-ASYNC",
+        "EF10-GENERATED-DEFAULT-VALUES-ASYNC",
         "EF10-JSON-MAPPING-ASYNC",
         "EF10-MIGRATIONS-SET-DEFAULT-ASYNC",
         "EF10-OWNED-ATTRIBUTE-ASYNC",
@@ -190304,10 +190310,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasDefaultValue",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder HasDefaultValue(Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder propertyBuilder)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "These EF Core relational fluent APIs configure property metadata. Provider effects are evaluated through public queries, schema creation, migrations, and persistence.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-GENERATED-DEFAULT-VALUES-ASYNC",
+        "EF10-GENERATED-DEFAULT-VALUES-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalPropertyBuilderExtensions.HasDefaultValue"
     },
     {
@@ -190316,10 +190325,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasDefaultValue",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder HasDefaultValue(Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder propertyBuilder, System.Object value)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "These EF Core relational fluent APIs configure property metadata. Provider effects are evaluated through public queries, schema creation, migrations, and persistence.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-GENERATED-DEFAULT-VALUES-ASYNC",
+        "EF10-GENERATED-DEFAULT-VALUES-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalPropertyBuilderExtensions.HasDefaultValue"
     },
     {
@@ -190328,10 +190340,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasDefaultValue",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder\u003CTProperty\u003E HasDefaultValue\u003CTProperty\u003E(Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder\u003CTProperty\u003E propertyBuilder)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "These EF Core relational fluent APIs configure property metadata. Provider effects are evaluated through public queries, schema creation, migrations, and persistence.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-GENERATED-DEFAULT-VALUES-ASYNC",
+        "EF10-GENERATED-DEFAULT-VALUES-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalPropertyBuilderExtensions.HasDefaultValue"
     },
     {
@@ -190340,10 +190355,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasDefaultValue",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder\u003CTProperty\u003E HasDefaultValue\u003CTProperty\u003E(Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder\u003CTProperty\u003E propertyBuilder, System.Object value)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "These EF Core relational fluent APIs configure property metadata. Provider effects are evaluated through public queries, schema creation, migrations, and persistence.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-GENERATED-DEFAULT-VALUES-ASYNC",
+        "EF10-GENERATED-DEFAULT-VALUES-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalPropertyBuilderExtensions.HasDefaultValue"
     },
     {
@@ -190352,10 +190370,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "HasDefaultValue",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionPropertyBuilder HasDefaultValue(Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionPropertyBuilder propertyBuilder, System.Object value, System.Boolean fromDataAnnotation = false)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "These EF Core relational fluent APIs configure property metadata. Provider effects are evaluated through public queries, schema creation, migrations, and persistence.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-GENERATED-DEFAULT-VALUES-ASYNC",
+        "EF10-GENERATED-DEFAULT-VALUES-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalPropertyBuilderExtensions.HasDefaultValue"
     },
     {
