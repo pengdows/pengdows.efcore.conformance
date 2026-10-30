@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 23,
+    "AwaitingClassification": 18,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 655,
-    "UncoveredMemberFamilies": 22
+    "MemberEntriesInCoveredFamilies": 660,
+    "UncoveredMemberFamilies": 17
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -151440,10 +151440,13 @@
       "MemberKind": "Property",
       "ApiMemberName": "ActiveProvider",
       "Signature": "System.String ActiveProvider get; set;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-ADD-CONSTRAINTS-ASYNC",
+        "EF10-MIGRATIONS-ADD-CONSTRAINTS-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Migration.ActiveProvider"
     },
     {
@@ -151452,10 +151455,13 @@
       "MemberKind": "Field",
       "ApiMemberName": "InitialDatabase",
       "Signature": "System.String InitialDatabase = \u00220\u0022",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-ADD-CONSTRAINTS-ASYNC",
+        "EF10-MIGRATIONS-ADD-CONSTRAINTS-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Migration.InitialDatabase"
     },
     {
@@ -151626,10 +151632,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "AlterColumn",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.AlterOperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.AlterColumnOperation\u003E AlterColumn\u003CT\u003E(System.String name, System.String table, System.String type = null, System.Nullable\u003CSystem.Boolean\u003E unicode = null, System.Nullable\u003CSystem.Int32\u003E maxLength = null, System.Boolean rowVersion = false, System.String schema = null, System.Boolean nullable = false, System.Object defaultValue = null, System.String defaultValueSql = null, System.String computedColumnSql = null, System.Type oldClrType = null, System.String oldType = null, System.Nullable\u003CSystem.Boolean\u003E oldUnicode = null, System.Nullable\u003CSystem.Int32\u003E oldMaxLength = null, System.Boolean oldRowVersion = false, System.Boolean oldNullable = false, System.Object oldDefaultValue = null, System.String oldDefaultValueSql = null, System.String oldComputedColumnSql = null, System.Nullable\u003CSystem.Boolean\u003E fixedLength = null, System.Nullable\u003CSystem.Boolean\u003E oldFixedLength = null, System.String comment = null, System.String oldComment = null, System.String collation = null, System.String oldCollation = null, System.Nullable\u003CSystem.Int32\u003E precision = null, System.Nullable\u003CSystem.Int32\u003E oldPrecision = null, System.Nullable\u003CSystem.Int32\u003E scale = null, System.Nullable\u003CSystem.Int32\u003E oldScale = null, System.Nullable\u003CSystem.Boolean\u003E stored = null, System.Nullable\u003CSystem.Boolean\u003E oldStored = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-ADD-CONSTRAINTS-ASYNC",
+        "EF10-MIGRATIONS-ADD-CONSTRAINTS-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AlterColumn"
     },
     {
@@ -152439,10 +152448,13 @@
       "MemberKind": "Property",
       "ApiMemberName": "ActiveProvider",
       "Signature": "System.String ActiveProvider get;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-ADD-CONSTRAINTS-ASYNC",
+        "EF10-MIGRATIONS-ADD-CONSTRAINTS-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.ActiveProvider"
     },
     {
@@ -156303,10 +156315,13 @@
       "MemberKind": "Field",
       "ApiMemberName": "Cascade",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.ReferentialAction Cascade = 2",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-ADD-CONSTRAINTS-ASYNC",
+        "EF10-MIGRATIONS-ADD-CONSTRAINTS-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.ReferentialAction.Cascade"
     },
     {

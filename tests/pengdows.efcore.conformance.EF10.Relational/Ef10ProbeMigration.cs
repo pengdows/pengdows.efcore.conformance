@@ -333,6 +333,11 @@ public sealed class Ef10MigrationAddConstraintsMigration : Migration
 {
     protected override void Up(MigrationBuilder migrationBuilder)
     {
+        if (string.IsNullOrWhiteSpace(ActiveProvider) || string.IsNullOrWhiteSpace(migrationBuilder.ActiveProvider))
+        {
+            throw new InvalidOperationException("EF Core must populate the active provider while applying a migration.");
+        }
+
         migrationBuilder.CreateTable(
             name: "ef10conformance_migrationconstraints",
             columns: table => new
@@ -363,10 +368,22 @@ public sealed class Ef10MigrationAddConstraintsMigration : Migration
         migrationBuilder.AlterTable(
             name: "ef10conformance_migrationconstraints",
             comment: "EF10 migration constraints table");
+        migrationBuilder.AlterColumn<long>(
+            name: "value",
+            table: "ef10conformance_migrationprobe_renamed",
+            nullable: false,
+            oldClrType: typeof(int),
+            oldNullable: false);
     }
 
     protected override void Down(MigrationBuilder migrationBuilder)
     {
+        migrationBuilder.AlterColumn<int>(
+            name: "value",
+            table: "ef10conformance_migrationprobe_renamed",
+            nullable: false,
+            oldClrType: typeof(long),
+            oldNullable: false);
         migrationBuilder.AlterTable(
             name: "ef10conformance_migrationconstraints",
             oldComment: "EF10 migration constraints table");
@@ -395,8 +412,16 @@ public sealed class Ef10MigrationAddConstraintsMigration : Migration
             entity.Property(row => row.Id).HasColumnName("id");
             entity.Property(row => row.ProbeId).HasColumnName("probeid");
             entity.Property(row => row.Code).HasColumnName("code");
-            entity.HasOne<MigrationProbeRow>().WithMany().HasForeignKey(row => row.ProbeId)
+            entity.HasOne<MigrationProbeLongRow>().WithMany().HasForeignKey(row => row.ProbeId)
                 .OnDelete(DeleteBehavior.Cascade);
+        });
+        modelBuilder.Entity<MigrationProbeLongRow>(entity =>
+        {
+            entity.ToTable("ef10conformance_migrationprobe_renamed");
+            entity.HasKey(row => row.Id);
+            entity.Property(row => row.Id).HasColumnName("id");
+            entity.Property(row => row.Value).HasColumnName("value").HasColumnType("bigint");
+            entity.Property(row => row.Description).HasColumnName("description");
         });
         modelBuilder.HasAnnotation("ProductVersion", "10.0.14");
     }
@@ -409,6 +434,15 @@ public sealed class MigrationConstraintRow
     public Guid ProbeId { get; set; }
 
     public string Code { get; set; } = string.Empty;
+}
+
+public sealed class MigrationProbeLongRow
+{
+    public Guid Id { get; set; }
+
+    public long Value { get; set; }
+
+    public string? Description { get; set; }
 }
 
 public sealed class MigrationSqlOperationRow
