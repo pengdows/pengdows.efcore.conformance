@@ -19,13 +19,16 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 130,
+    "AwaitingClassification": 127,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 615,
-    "UncoveredMemberFamilies": 96
+    "MemberEntriesInCoveredFamilies": 618,
+    "UncoveredMemberFamilies": 93
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [
+      "Microsoft.EntityFrameworkCore.SaveChangesFailedEventArgs.AcceptAllChangesOnSuccess",
+      "Microsoft.EntityFrameworkCore.SavedChangesEventArgs.AcceptAllChangesOnSuccess",
+      "Microsoft.EntityFrameworkCore.SavingChangesEventArgs.AcceptAllChangesOnSuccess",
       "Microsoft.EntityFrameworkCore.TransactionsDatabaseFacadeExtensions.EnlistTransaction",
       "Microsoft.EntityFrameworkCore.TransactionsDatabaseFacadeExtensions.GetEnlistedTransaction"
     ],
@@ -192542,10 +192545,13 @@
       "MemberKind": "Property",
       "ApiMemberName": "AcceptAllChangesOnSuccess",
       "Signature": "System.Boolean AcceptAllChangesOnSuccess get;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-SAVE-EVENTS-SUCCESS-ASYNC",
+        "EF10-SAVE-EVENTS-SUCCESS-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.SaveChangesEventArgs.AcceptAllChangesOnSuccess"
     },
     {
@@ -192578,10 +192584,13 @@
       "MemberKind": "Property",
       "ApiMemberName": "Exception",
       "Signature": "System.Exception Exception get;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-SAVE-EVENTS-FAILURE-ASYNC",
+        "EF10-SAVE-EVENTS-FAILURE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.SaveChangesFailedEventArgs.Exception"
     },
     {
@@ -192614,10 +192623,13 @@
       "MemberKind": "Property",
       "ApiMemberName": "EntitiesSavedCount",
       "Signature": "System.Int32 EntitiesSavedCount get;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-SAVE-EVENTS-SUCCESS-ASYNC",
+        "EF10-SAVE-EVENTS-SUCCESS-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.SavedChangesEventArgs.EntitiesSavedCount"
     },
     {
