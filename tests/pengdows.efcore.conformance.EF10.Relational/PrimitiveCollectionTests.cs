@@ -165,4 +165,58 @@ public sealed class PrimitiveCollectionTests
             .Single();
         Assert.Equal(expected, actual);
     }
+
+    [Fact]
+    [BehavioralCoverage("EF10-PRIMITIVE-COLLECTION-NULL-PREDICATE-ASYNC", "System.Linq.Queryable.Where", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    public async Task PrimitiveCollection_QueriesForNullElementAsynchronously()
+    {
+        ProviderTestRuntime.RequireCapability("primitive-collections");
+        var id = Guid.NewGuid();
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.PrimitiveCollectionRecords.Add(new PrimitiveCollectionRecord
+            {
+                Id = id,
+                OptionalValues = [null, 16]
+            });
+            await write.SaveChangesAsync(TestContext.Current.CancellationToken);
+        }
+
+        int? searchedValue = null;
+        await using var query = ProviderTestRuntime.CreateContext();
+        var actualId = await query.PrimitiveCollectionRecords.AsNoTracking()
+            .Where(record => record.Id == id && record.OptionalValues.Contains(searchedValue))
+            .Select(record => record.Id)
+            .SingleAsync(TestContext.Current.CancellationToken);
+
+        Assert.Equal(id, actualId);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-PRIMITIVE-COLLECTION-NULL-PREDICATE-SYNC", "System.Linq.Queryable.Where", "System.Linq.Queryable.Single")]
+    public async Task PrimitiveCollection_QueriesForNullElementSynchronously()
+    {
+        ProviderTestRuntime.RequireCapability("primitive-collections");
+        var id = Guid.NewGuid();
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.PrimitiveCollectionRecords.Add(new PrimitiveCollectionRecord
+            {
+                Id = id,
+                OptionalValues = [null, 17]
+            });
+            await write.SaveChangesAsync(TestContext.Current.CancellationToken);
+        }
+
+        int? searchedValue = null;
+        await using var query = ProviderTestRuntime.CreateContext();
+        var actualId = query.PrimitiveCollectionRecords.AsNoTracking()
+            .Where(record => record.Id == id && record.OptionalValues.Contains(searchedValue))
+            .Select(record => record.Id)
+            .Single();
+
+        Assert.Equal(id, actualId);
+    }
 }
