@@ -19,16 +19,18 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 108,
+    "AwaitingClassification": 107,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 626,
-    "UncoveredMemberFamilies": 75
+    "MemberEntriesInCoveredFamilies": 627,
+    "UncoveredMemberFamilies": 74
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
     "ExternalApiSelectors": [
       "System.Collections.Generic.IAsyncDisposable.DisposeAsync",
       "System.Collections.Generic.IAsyncEnumerator\u00601.MoveNextAsync",
+      "System.Data.Common.DbCommand.ExecuteReader",
+      "System.Data.Common.DbDataReader.Read",
       "System.Linq.Enumerable.ToList",
       "System.Linq.IQueryable.GetEnumerator",
       "System.Linq.Queryable.All",
@@ -191677,10 +191679,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "CreateDbCommand",
       "Signature": "System.Data.Common.DbCommand CreateDbCommand(System.Linq.IQueryable source)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-QUERY-CREATE-DB-COMMAND"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalQueryableExtensions.CreateDbCommand"
     },
     {

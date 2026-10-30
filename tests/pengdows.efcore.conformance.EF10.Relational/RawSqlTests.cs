@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using System.Data.Common;
 using pengdows.efcore.conformance;
 using Xunit;
 
@@ -8,6 +9,37 @@ namespace pengdows.efcore.conformance.EF10.Relational;
 [CapabilityRequirement("raw-sql")]
 public sealed class RawSqlTests
 {
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-CREATE-DB-COMMAND", "Microsoft.EntityFrameworkCore.RelationalQueryableExtensions.CreateDbCommand", "System.Data.Common.DbCommand.ExecuteReader", "System.Data.Common.DbDataReader.Read")]
+    public async Task CreateDbCommand_ExecutesFilteredQueryWithExpectedValues()
+    {
+        var marker = $"CreateDbCommand {Guid.NewGuid():N}";
+        await using (var seed = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(seed, TestContext.Current.CancellationToken);
+            seed.People.AddRange(
+                new Person { Id = Guid.NewGuid(), Name = $"{marker} first", Age = 23 },
+                new Person { Id = Guid.NewGuid(), Name = $"{marker} second", Age = 31 });
+            Assert.Equal(2, await seed.SaveChangesAsync(TestContext.Current.CancellationToken));
+        }
+
+        await using var context = ProviderTestRuntime.CreateContext();
+        context.Database.OpenConnection();
+        using var command = context.People
+            .Where(person => person.Name.StartsWith(marker))
+            .OrderBy(person => person.Age)
+            .Select(person => new { person.Name, person.Age })
+            .CreateDbCommand();
+        using var reader = command.ExecuteReader();
+        var rows = new List<(string Name, int Age)>();
+        while (reader.Read())
+        {
+            rows.Add((reader.GetString(0), reader.GetInt32(1)));
+        }
+
+        Assert.Equal(new[] { ($"{marker} first", 23), ($"{marker} second", 31) }, rows);
+    }
+
     [Fact]
     [BehavioralCoverage("EF10-RAW-SQL-KEYLESS-ASYNC", "Microsoft.EntityFrameworkCore.KeylessAttribute", "Microsoft.EntityFrameworkCore.KeylessAttribute..ctor", "Microsoft.EntityFrameworkCore.RelationalQueryableExtensions.FromSqlInterpolated", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
     public async Task KeylessAttribute_MapsParameterizedSqlResultsAsynchronously()
