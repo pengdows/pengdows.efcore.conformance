@@ -23,10 +23,10 @@
     "TotalEntries": 18795,
     "PublicTypes": 2033,
     "PublicMembers": 16762,
-    "AwaitingClassification": 85,
+    "AwaitingClassification": 73,
     "ExplicitlyExcluded": 5921,
-    "MemberEntriesInCoveredFamilies": 699,
-    "UncoveredMemberFamilies": 74
+    "MemberEntriesInCoveredFamilies": 711,
+    "UncoveredMemberFamilies": 62
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -154115,10 +154115,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "GenerateMigration",
       "Signature": "System.String GenerateMigration(System.String migrationNamespace, System.String migrationName, System.Collections.Generic.IReadOnlyList\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.MigrationOperation\u003E upOperations, System.Collections.Generic.IReadOnlyList\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.MigrationOperation\u003E downOperations)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-MIGRATION-CODE-GENERATION"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpMigrationsGenerator.GenerateMigration"
     },
     {
@@ -154127,10 +154129,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "GenerateMetadata",
       "Signature": "System.String GenerateMetadata(System.String migrationNamespace, System.Type contextType, System.String migrationName, System.String migrationId, Microsoft.EntityFrameworkCore.Metadata.IModel targetModel)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-MIGRATION-CODE-GENERATION"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpMigrationsGenerator.GenerateMetadata"
     },
     {
@@ -154139,10 +154143,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "GenerateSnapshot",
       "Signature": "System.String GenerateSnapshot(System.String modelSnapshotNamespace, System.Type contextType, System.String modelSnapshotName, Microsoft.EntityFrameworkCore.Metadata.IModel model)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-MIGRATION-CODE-GENERATION"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpMigrationsGenerator.GenerateSnapshot"
     },
     {
@@ -154163,10 +154169,12 @@
       "MemberKind": "Property",
       "ApiMemberName": "FileExtension",
       "Signature": "System.String FileExtension get;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-MIGRATION-CODE-GENERATION"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpMigrationsGenerator.FileExtension"
     },
     {
@@ -154175,10 +154183,12 @@
       "MemberKind": "Property",
       "ApiMemberName": "Language",
       "Signature": "System.String Language get;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-MIGRATION-CODE-GENERATION"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpMigrationsGenerator.Language"
     },
     {
@@ -154617,10 +154627,12 @@
       "MemberKind": "Property",
       "ApiMemberName": "FileExtension",
       "Signature": "System.String FileExtension get;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-MIGRATION-CODE-GENERATION"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.IMigrationsCodeGenerator.FileExtension"
     },
     {
@@ -154719,10 +154731,12 @@
       "MemberKind": "Constructor",
       "ApiMemberName": ".ctor",
       "Signature": ".ctor()",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-MIGRATION-CODE-GENERATION"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationFiles..ctor"
     },
     {
@@ -154773,10 +154787,12 @@
       "MemberKind": "Property",
       "ApiMemberName": "Migration",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Design.ScaffoldedMigration Migration get; set;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-MIGRATION-CODE-GENERATION"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationFiles.Migration"
     },
     {
@@ -155375,10 +155391,12 @@
       "MemberKind": "Property",
       "ApiMemberName": "PreviousMigrationId",
       "Signature": "System.String PreviousMigrationId get;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-MIGRATION-CODE-GENERATION"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.ScaffoldedMigration.PreviousMigrationId"
     },
     {
@@ -155429,10 +155447,12 @@
       "MemberKind": "Property",
       "ApiMemberName": "MigrationSubNamespace",
       "Signature": "System.String MigrationSubNamespace get;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-MIGRATION-CODE-GENERATION"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.ScaffoldedMigration.MigrationSubNamespace"
     },
     {
@@ -155455,10 +155475,12 @@
       "MemberKind": "Property",
       "ApiMemberName": "SnapshotName",
       "Signature": "System.String SnapshotName get;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-MIGRATION-CODE-GENERATION"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.ScaffoldedMigration.SnapshotName"
     },
     {
@@ -155467,10 +155489,12 @@
       "MemberKind": "Property",
       "ApiMemberName": "SnapshotSubnamespace",
       "Signature": "System.String SnapshotSubnamespace get;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-MIGRATION-CODE-GENERATION"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.ScaffoldedMigration.SnapshotSubnamespace"
     },
     {
