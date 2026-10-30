@@ -362,6 +362,11 @@ async Task<int> RunTestsAsync(string[] arguments, string? configuredConnectionSt
                             (mapping, "DiscoveredNativeType_PreservesNullAsynchronously", "NULL-ASYNC")
                         };
                         var clrType = Nullable.GetUnderlyingType(mapping.ClrType) ?? mapping.ClrType;
+                        if (clrType == typeof(decimal))
+                        {
+                            cases.Add((mapping, "DiscoveredNativeType_DecimalBoundaryValuesRoundTripSynchronously", "DECIMAL-BOUNDARY-SYNC"));
+                            cases.Add((mapping, "DiscoveredNativeType_DecimalBoundaryValuesRoundTripAsynchronously", "DECIMAL-BOUNDARY-ASYNC"));
+                        }
                         if (!clrType.IsArray && clrType != typeof(byte[]) &&
                             !mapping.DatabaseTypeName.Contains("json", StringComparison.OrdinalIgnoreCase) &&
                             !mapping.DatabaseTypeName.Equals("xml", StringComparison.OrdinalIgnoreCase) &&

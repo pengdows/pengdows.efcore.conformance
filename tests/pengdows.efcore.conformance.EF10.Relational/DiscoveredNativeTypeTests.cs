@@ -51,6 +51,32 @@ public sealed class DiscoveredNativeTypeTests
         }
     }
 
+    public static TheoryData<int, string, string, decimal> DecimalBoundaryMappings
+    {
+        get
+        {
+            var data = new TheoryData<int, string, string, decimal>();
+            foreach (var probe in ProviderTestRuntime.NativeTypeProbes.Where(probe =>
+                         (Nullable.GetUnderlyingType(probe.Mapping.ClrType) ?? probe.Mapping.ClrType) == typeof(decimal)))
+            {
+                var values = probe.Mapping.DatabaseTypeName.Equals("money", StringComparison.OrdinalIgnoreCase)
+                    ? new[] { 0m, 92233720368547758.07m, -92233720368547758.08m }
+                    : new[] { 0m, 1m, -1m, decimal.MaxValue, decimal.MinValue };
+                foreach (var value in values)
+                {
+                    data.Add(probe.Index, probe.Mapping.DatabaseTypeName, probe.Mapping.ClrType.Name, value);
+                }
+            }
+
+            if (data.Count == 0)
+            {
+                data.Add(-1, "NO-DECIMAL-TYPE-PROFILE", "decimal", 0m);
+            }
+
+            return data;
+        }
+    }
+
     [Theory]
     [MemberData(nameof(DiscoveredMappings))]
     [BehavioralCoverage("EF10-NATIVE-TYPE-ROUNDTRIP-ASYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
@@ -89,6 +115,68 @@ public sealed class DiscoveredNativeTypeTests
         var expected = NativeTypeSampleFactory.Create(probe.Mapping);
 
         await using (var write = nativeTable.CreateContext())
+        {
+            write.Set<Dictionary<string, object>>(probe.EntityTypeName).Add(CreateRow(id, expected));
+            Assert.Equal(1, write.SaveChanges());
+        }
+
+        await using var verify = nativeTable.CreateContext();
+        var actual = verify.Set<Dictionary<string, object>>(probe.EntityTypeName)
+            .AsNoTracking()
+            .Single(row => EF.Property<Guid>(row, "id") == id);
+        AssertValueEqual(expected, actual["value"], probe.Mapping);
+    }
+
+    [Theory]
+    [MemberData(nameof(DecimalBoundaryMappings))]
+    [BehavioralCoverage("EF10-NATIVE-TYPE-DECIMAL-BOUNDARY-ASYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    public async Task DiscoveredNativeType_DecimalBoundaryValuesRoundTripAsynchronously(
+        int probeIndex,
+        string databaseTypeName,
+        string clrTypeName,
+        decimal expected)
+    {
+        ProviderTestRuntime.RequireCapability("native-type-fidelity");
+        var probe = GetProbe(probeIndex, databaseTypeName, clrTypeName);
+        var id = Guid.NewGuid();
+        var tableSuffix = id.ToString("N")[..12];
+        await using var nativeTable = await ProviderTestRuntime.CreateNativeTypeTableAsync(
+            probe,
+            tableSuffix,
+            TestContext.Current.CancellationToken);
+
+        await using (var write = nativeTable.CreateContext())
+        {
+            write.Set<Dictionary<string, object>>(probe.EntityTypeName).Add(CreateRow(id, expected));
+            Assert.Equal(1, await write.SaveChangesAsync(TestContext.Current.CancellationToken));
+        }
+
+        await using var verify = nativeTable.CreateContext();
+        var actual = await verify.Set<Dictionary<string, object>>(probe.EntityTypeName)
+            .AsNoTracking()
+            .SingleAsync(row => EF.Property<Guid>(row, "id") == id, TestContext.Current.CancellationToken);
+        AssertValueEqual(expected, actual["value"], probe.Mapping);
+    }
+
+    [Theory]
+    [MemberData(nameof(DecimalBoundaryMappings))]
+    [BehavioralCoverage("EF10-NATIVE-TYPE-DECIMAL-BOUNDARY-SYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "System.Linq.Queryable.Single")]
+    public async Task DiscoveredNativeType_DecimalBoundaryValuesRoundTripSynchronously(
+        int probeIndex,
+        string databaseTypeName,
+        string clrTypeName,
+        decimal expected)
+    {
+        ProviderTestRuntime.RequireCapability("native-type-fidelity");
+        var probe = GetProbe(probeIndex, databaseTypeName, clrTypeName);
+        var id = Guid.NewGuid();
+        var tableSuffix = id.ToString("N")[..12];
+        await using var nativeTable = await ProviderTestRuntime.CreateNativeTypeTableAsync(
+            probe,
+            tableSuffix,
+            TestContext.Current.CancellationToken);
+
+        using (var write = nativeTable.CreateContext())
         {
             write.Set<Dictionary<string, object>>(probe.EntityTypeName).Add(CreateRow(id, expected));
             Assert.Equal(1, write.SaveChanges());
