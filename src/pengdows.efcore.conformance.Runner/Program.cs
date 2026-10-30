@@ -408,6 +408,7 @@ static string ClassifyComparison(ConformanceResult? candidate, ConformanceResult
     if (candidateFailed && referenceFailed) return "FAILS_ON_REFERENCE_TOO";
     if (candidateFailed && reference.Outcome == ConformanceOutcome.Pass) return "CANDIDATE_ONLY_FAILURE";
     if (candidate.Outcome == ConformanceOutcome.Pass && referenceFailed) return "REFERENCE_ONLY_FAILURE";
+    if (candidate.Outcome == ConformanceOutcome.Unsupported && reference.Outcome == ConformanceOutcome.Unsupported) return "UNSUPPORTED_ON_BOTH";
     if (candidate.Outcome == ConformanceOutcome.Unsupported || reference.Outcome == ConformanceOutcome.Unsupported) return "CAPABILITY_OUTCOME_DIFFERS";
     return "OUTCOME_DIFFERS";
 }
