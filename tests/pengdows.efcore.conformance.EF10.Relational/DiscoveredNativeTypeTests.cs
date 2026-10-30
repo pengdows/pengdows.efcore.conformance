@@ -303,6 +303,8 @@ public sealed class DiscoveredNativeTypeTests
         var storeType = mapping.DatabaseTypeName;
         var hasProviderSpecificEquality = storeType.Contains("json", StringComparison.OrdinalIgnoreCase) ||
                                           storeType.Equals("xml", StringComparison.OrdinalIgnoreCase) ||
+                                          storeType.Equals("point", StringComparison.OrdinalIgnoreCase) ||
+                                          storeType.Equals("polygon", StringComparison.OrdinalIgnoreCase) ||
                                           type == typeof(BitArray) ||
                                           storeType.Equals("cid", StringComparison.OrdinalIgnoreCase) ||
                                           storeType.Equals("xid8", StringComparison.OrdinalIgnoreCase);
@@ -367,6 +369,7 @@ internal static class NativeTypeSampleFactory
     public static object Create(NativeTypeMapping mapping)
     {
         var type = Nullable.GetUnderlyingType(mapping.ClrType) ?? mapping.ClrType;
+        if (TryCreateNpgsqlValue(type, alternate: false, out var providerValue)) return providerValue;
         if (IsNpgsqlRange(type)) return CreateRange(type, mapping, alternate: false);
         if (type == typeof(BitArray)) return new BitArray(mapping.DatabaseTypeName.Equals("bit", StringComparison.OrdinalIgnoreCase) ? [true] : [true, false, true]);
         if (type == typeof(byte[])) return new byte[] { 0x4a };
@@ -425,6 +428,7 @@ internal static class NativeTypeSampleFactory
     public static object CreateAlternate(NativeTypeMapping mapping)
     {
         var type = Nullable.GetUnderlyingType(mapping.ClrType) ?? mapping.ClrType;
+        if (TryCreateNpgsqlValue(type, alternate: true, out var providerValue)) return providerValue;
         if (IsNpgsqlRange(type)) return CreateRange(type, mapping, alternate: true);
         if (type == typeof(BitArray)) return new BitArray(mapping.DatabaseTypeName.Equals("bit", StringComparison.OrdinalIgnoreCase) ? [false] : [false, true, false]);
         if (type == typeof(byte[])) return new byte[] { 0x52 };
@@ -472,6 +476,76 @@ internal static class NativeTypeSampleFactory
     private static bool IsNpgsqlRange(Type type) =>
         type.IsGenericType && type.GetGenericTypeDefinition().FullName == "NpgsqlTypes.NpgsqlRange`1";
 
+    private static bool TryCreateNpgsqlValue(Type type, bool alternate, out object value)
+    {
+        var fullName = type.FullName;
+        var marker = alternate ? 2d : 1d;
+        if (fullName == "NpgsqlTypes.NpgsqlPoint")
+        {
+            value = Activator.CreateInstance(type, marker, marker + 1)!;
+            return true;
+        }
+        if (fullName == "NpgsqlTypes.NpgsqlTid")
+        {
+            value = Activator.CreateInstance(type, alternate ? 23456u : 12345u, alternate ? (ushort)2 : (ushort)1)!;
+            return true;
+        }
+        if (fullName == "NpgsqlTypes.NpgsqlLSeg")
+        {
+            var pointType = type.Assembly.GetType("NpgsqlTypes.NpgsqlPoint")!;
+            var first = Activator.CreateInstance(pointType, marker, marker + 1)!;
+            var second = Activator.CreateInstance(pointType, marker + 2, marker + 3)!;
+            value = Activator.CreateInstance(type, first, second)!;
+            return true;
+        }
+        if (fullName == "NpgsqlTypes.NpgsqlPath" || fullName == "NpgsqlTypes.NpgsqlPolygon")
+        {
+            var pointType = type.Assembly.GetType("NpgsqlTypes.NpgsqlPoint")!;
+            var points = Array.CreateInstance(pointType, 3);
+            for (var index = 0; index < points.Length; index++)
+                points.SetValue(Activator.CreateInstance(pointType, marker + index, marker + index + 1), index);
+            value = fullName.EndsWith("NpgsqlPath", StringComparison.Ordinal)
+                ? Activator.CreateInstance(type, points, true)!
+                : Activator.CreateInstance(type, points)!;
+            return true;
+        }
+        if (fullName == "NpgsqlTypes.NpgsqlBox" || fullName == "NpgsqlTypes.NpgsqlCircle")
+        {
+            var pointType = type.Assembly.GetType("NpgsqlTypes.NpgsqlPoint")!;
+            var first = Activator.CreateInstance(pointType, marker + 4, marker + 5)!;
+            if (fullName.EndsWith("NpgsqlBox", StringComparison.Ordinal))
+            {
+                var second = Activator.CreateInstance(pointType, marker, marker + 1)!;
+                value = Activator.CreateInstance(type, first, second)!;
+            }
+            else
+            {
+                value = Activator.CreateInstance(type, first, marker + 2)!;
+            }
+            return true;
+        }
+        if (fullName == "NpgsqlTypes.NpgsqlLine")
+        {
+            value = Activator.CreateInstance(type, marker, marker + 1, marker + 2)!;
+            return true;
+        }
+        if (fullName == "NpgsqlTypes.NpgsqlLogSequenceNumber")
+        {
+            value = Activator.CreateInstance(type, alternate ? 987654321ul : 123456789ul)!;
+            return true;
+        }
+        if (fullName is "NpgsqlTypes.NpgsqlTsVector" or "NpgsqlTypes.NpgsqlTsQuery")
+        {
+            var parse = type.GetMethod("Parse", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static, [typeof(string)])!;
+            value = parse.Invoke(null, [fullName.EndsWith("TsVector", StringComparison.Ordinal)
+                ? alternate ? "other:1 value:2" : "value:1 sample:2"
+                : alternate ? "other & sample" : "value & sample"])!;
+            return true;
+        }
+        value = null!;
+        return false;
+    }
+
     private static object CreateRange(Type rangeType, NativeTypeMapping mapping, bool alternate)
     {
         var elementType = rangeType.GetGenericArguments()[0];
@@ -517,8 +591,14 @@ internal static class NativeTypeSampleFactory
     {
         object[] values;
         if (IsNpgsqlRange(elementType)) values = [CreateRange(elementType, mapping, alternate)];
+        else if (TryCreateNpgsqlValue(elementType, alternate: false, out var providerSample) &&
+                 TryCreateNpgsqlValue(elementType, alternate: true, out var providerAlternate))
+            values = alternate ? [providerAlternate, providerSample] : [providerSample, providerAlternate];
         else if (elementType == typeof(bool)) values = alternate ? [false, true] : [true, false];
         else if (elementType == typeof(short)) values = alternate ? [(short)5, (short)0] : [(short)1, (short)-1];
+        else if (elementType == typeof(ushort)) values = alternate ? [(ushort)5, (ushort)0] : [(ushort)1, ushort.MaxValue];
+        else if (elementType == typeof(uint)) values = alternate ? [23456u, 0u] : [12345u, 67890u];
+        else if (elementType == typeof(ulong)) values = alternate ? [987654321ul, 0ul] : [1234567890123ul, 987654321ul];
         else if (elementType == typeof(int)) values = alternate ? [5, 0, 1] : [1, 0, 5];
         else if (elementType == typeof(long)) values = alternate ? [5L, 0L] : [1L, -1L];
         else if (elementType == typeof(float)) values = alternate ? [-5.5f, 0f] : [1.25f, -1.5f];
@@ -539,6 +619,9 @@ internal static class NativeTypeSampleFactory
             : alternate
                 ? [new BitArray([false, true, false]), new BitArray([true, false])]
                 : [new BitArray([true, false, true]), new BitArray([false, true])];
+        else if (elementType == typeof(byte[])) values = alternate
+            ? [new byte[] { 0x52 }, new byte[] { 0x53 }]
+            : [new byte[] { 0x4a }, new byte[] { 0x4b }];
         else if (elementType == typeof(Guid)) values = alternate
             ? [Guid.Parse("84c5903f-330f-42d1-92f4-94ab241b1b32"), Guid.Empty]
             : [Guid.Parse("5d37ddf5-fab9-4e5b-95fb-b5259a5e3d31"), Guid.Empty];

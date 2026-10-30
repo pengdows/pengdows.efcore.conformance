@@ -349,6 +349,8 @@ async Task<int> RunTestsAsync(string[] arguments, string? configuredConnectionSt
                         if (!clrType.IsArray && clrType != typeof(byte[]) &&
                             !mapping.DatabaseTypeName.Contains("json", StringComparison.OrdinalIgnoreCase) &&
                             !mapping.DatabaseTypeName.Equals("xml", StringComparison.OrdinalIgnoreCase) &&
+                            !mapping.DatabaseTypeName.Equals("point", StringComparison.OrdinalIgnoreCase) &&
+                            !mapping.DatabaseTypeName.Equals("polygon", StringComparison.OrdinalIgnoreCase) &&
                             !mapping.DatabaseTypeName.Equals("cid", StringComparison.OrdinalIgnoreCase) &&
                             !mapping.DatabaseTypeName.Equals("xid8", StringComparison.OrdinalIgnoreCase))
                         {
