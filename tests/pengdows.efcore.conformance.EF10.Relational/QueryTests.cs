@@ -278,6 +278,94 @@ public sealed class QueryTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-QUERY-STRING-CONTAINS-SYNC", "System.String.Contains(System.String)", "System.Linq.Queryable.Where", "System.Linq.Queryable.ToArray")]
+    public async Task StringContains_FiltersByParameterizedSubstringSynchronously()
+    {
+        var batch = Guid.NewGuid().ToString("N");
+        await SeedAsync(new[]
+        {
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-target-suffix", Age = 1 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-target-other", Age = 2 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-other-suffix", Age = 3 }
+        });
+
+        var substring = "target";
+        await using var query = ProviderTestRuntime.CreateContext();
+        var names = query.People
+            .Where(person => person.Name.StartsWith(batch) && person.Name.Contains(substring))
+            .Select(person => person.Name)
+            .ToArray();
+
+        Assert.Equal(new[] { $"{batch}-target-other", $"{batch}-target-suffix" }, names.Order(StringComparer.Ordinal));
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-STRING-CONTAINS-ASYNC", "System.String.Contains(System.String)", "System.Linq.Queryable.Where", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToArrayAsync")]
+    public async Task StringContains_FiltersByParameterizedSubstringAsynchronously()
+    {
+        var batch = Guid.NewGuid().ToString("N");
+        await SeedAsync(new[]
+        {
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-target-suffix", Age = 1 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-target-other", Age = 2 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-other-suffix", Age = 3 }
+        });
+
+        var substring = "target";
+        await using var query = ProviderTestRuntime.CreateContext();
+        var names = await query.People
+            .Where(person => person.Name.StartsWith(batch) && person.Name.Contains(substring))
+            .Select(person => person.Name)
+            .ToArrayAsync(TestContext.Current.CancellationToken);
+
+        Assert.Equal(new[] { $"{batch}-target-other", $"{batch}-target-suffix" }, names.Order(StringComparer.Ordinal));
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-STRING-ENDS-WITH-SYNC", "System.String.EndsWith(System.String)", "System.Linq.Queryable.Where", "System.Linq.Queryable.ToArray")]
+    public async Task StringEndsWith_FiltersByParameterizedSuffixSynchronously()
+    {
+        var batch = Guid.NewGuid().ToString("N");
+        await SeedAsync(new[]
+        {
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-target-suffix", Age = 1 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-target-other", Age = 2 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-other-suffix", Age = 3 }
+        });
+
+        var suffix = "suffix";
+        await using var query = ProviderTestRuntime.CreateContext();
+        var names = query.People
+            .Where(person => person.Name.StartsWith(batch) && person.Name.EndsWith(suffix))
+            .Select(person => person.Name)
+            .ToArray();
+
+        Assert.Equal(new[] { $"{batch}-other-suffix", $"{batch}-target-suffix" }, names.Order(StringComparer.Ordinal));
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-STRING-ENDS-WITH-ASYNC", "System.String.EndsWith(System.String)", "System.Linq.Queryable.Where", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToArrayAsync")]
+    public async Task StringEndsWith_FiltersByParameterizedSuffixAsynchronously()
+    {
+        var batch = Guid.NewGuid().ToString("N");
+        await SeedAsync(new[]
+        {
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-target-suffix", Age = 1 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-target-other", Age = 2 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-other-suffix", Age = 3 }
+        });
+
+        var suffix = "suffix";
+        await using var query = ProviderTestRuntime.CreateContext();
+        var names = await query.People
+            .Where(person => person.Name.StartsWith(batch) && person.Name.EndsWith(suffix))
+            .Select(person => person.Name)
+            .ToArrayAsync(TestContext.Current.CancellationToken);
+
+        Assert.Equal(new[] { $"{batch}-other-suffix", $"{batch}-target-suffix" }, names.Order(StringComparer.Ordinal));
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-QUERY-GROUPBY-ASYNC", "System.Linq.Queryable.GroupBy", "System.Linq.Queryable.Count", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync")]
     public async Task GroupByAndAggregate_ReturnsExpectedGroupsAsynchronously()
     {
