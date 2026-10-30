@@ -218,6 +218,262 @@ public sealed class InterceptionTests
             .SingleAsync(TestContext.Current.CancellationToken));
     }
 
+    [Fact]
+    [CapabilityRequirement("transactions")]
+    [BehavioralCoverage("EF10-INTERCEPTION-TRANSACTION-SYNC", "Microsoft.EntityFrameworkCore.DbContextOptionsBuilder.AddInterceptors", "Microsoft.EntityFrameworkCore.Diagnostics.DbTransactionInterceptor.TransactionStarted", "Microsoft.EntityFrameworkCore.Diagnostics.DbTransactionInterceptor.TransactionCommitted", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.BeginTransaction", "Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction.Commit")]
+    public async Task Transaction_InvokesSynchronousInterceptorCallbacks()
+    {
+        ProviderTestRuntime.RequireCapability("transactions");
+        var person = CreatePerson("Sync transaction interceptor");
+        var interceptor = new RecordingTransactionInterceptor();
+
+        await using (var initialize = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(initialize, TestContext.Current.CancellationToken);
+        }
+
+        await using (var context = ProviderTestRuntime.CreateContext(options => options.AddInterceptors(interceptor)))
+        {
+            using var transaction = context.Database.BeginTransaction();
+            context.People.Add(person);
+            Assert.Equal(1, context.SaveChanges());
+            transaction.Commit();
+        }
+
+        Assert.Equal(1, interceptor.TransactionStartedCalls);
+        Assert.Equal(1, interceptor.TransactionCommittedCalls);
+        Assert.Equal(0, interceptor.TransactionStartedAsyncCalls);
+        Assert.Equal(0, interceptor.TransactionCommittedAsyncCalls);
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.True(await verify.People.AsNoTracking()
+            .AnyAsync(item => item.Id == person.Id, TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
+    [CapabilityRequirement("transactions")]
+    [BehavioralCoverage("EF10-INTERCEPTION-TRANSACTION-ASYNC", "Microsoft.EntityFrameworkCore.DbContextOptionsBuilder.AddInterceptors", "Microsoft.EntityFrameworkCore.Diagnostics.DbTransactionInterceptor.TransactionStartedAsync", "Microsoft.EntityFrameworkCore.Diagnostics.DbTransactionInterceptor.TransactionCommittedAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.BeginTransactionAsync", "Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction.CommitAsync")]
+    public async Task Transaction_InvokesAsynchronousInterceptorCallbacks()
+    {
+        ProviderTestRuntime.RequireCapability("transactions");
+        var person = CreatePerson("Async transaction interceptor");
+        var interceptor = new RecordingTransactionInterceptor();
+
+        await using (var initialize = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(initialize, TestContext.Current.CancellationToken);
+        }
+
+        await using (var context = ProviderTestRuntime.CreateContext(options => options.AddInterceptors(interceptor)))
+        {
+            await using var transaction = await context.Database.BeginTransactionAsync(TestContext.Current.CancellationToken);
+            context.People.Add(person);
+            Assert.Equal(1, await context.SaveChangesAsync(TestContext.Current.CancellationToken));
+            await transaction.CommitAsync(TestContext.Current.CancellationToken);
+        }
+
+        Assert.Equal(0, interceptor.TransactionStartedCalls);
+        Assert.Equal(0, interceptor.TransactionCommittedCalls);
+        Assert.Equal(1, interceptor.TransactionStartedAsyncCalls);
+        Assert.Equal(1, interceptor.TransactionCommittedAsyncCalls);
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.True(await verify.People.AsNoTracking()
+            .AnyAsync(item => item.Id == person.Id, TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
+    [CapabilityRequirement("transactions")]
+    [CapabilityRequirement("savepoints")]
+    [BehavioralCoverage("EF10-INTERCEPTION-SAVEPOINT-SYNC", "Microsoft.EntityFrameworkCore.DbContextOptionsBuilder.AddInterceptors", "Microsoft.EntityFrameworkCore.Diagnostics.DbTransactionInterceptor.CreatedSavepoint", "Microsoft.EntityFrameworkCore.Diagnostics.DbTransactionInterceptor.RolledBackToSavepoint", "Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction.CreateSavepoint", "Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction.RollbackToSavepoint")]
+    public async Task Savepoint_InvokesSynchronousInterceptorCallbacks()
+    {
+        ProviderTestRuntime.RequireCapability("transactions");
+        ProviderTestRuntime.RequireCapability("savepoints");
+        var id = Guid.NewGuid();
+        var interceptor = new RecordingTransactionInterceptor();
+
+        await using (var initialize = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(initialize, TestContext.Current.CancellationToken);
+        }
+
+        await using (var context = ProviderTestRuntime.CreateContext(options => options.AddInterceptors(interceptor)))
+        {
+            using var transaction = context.Database.BeginTransaction();
+            transaction.CreateSavepoint("before_insert");
+            context.People.Add(new Person { Id = id, Name = "Sync savepoint interceptor", Age = 42 });
+            Assert.Equal(1, context.SaveChanges());
+            transaction.RollbackToSavepoint("before_insert");
+            context.ChangeTracker.Clear();
+            transaction.Commit();
+        }
+
+        Assert.True(interceptor.CreatedSavepointCalls >= 1);
+        Assert.Equal(1, interceptor.RolledBackToSavepointCalls);
+        Assert.Equal(0, interceptor.CreatedSavepointAsyncCalls);
+        Assert.Equal(0, interceptor.RolledBackToSavepointAsyncCalls);
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.False(await verify.People.AsNoTracking().AnyAsync(item => item.Id == id, TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
+    [CapabilityRequirement("transactions")]
+    [CapabilityRequirement("savepoints")]
+    [BehavioralCoverage("EF10-INTERCEPTION-SAVEPOINT-ASYNC", "Microsoft.EntityFrameworkCore.DbContextOptionsBuilder.AddInterceptors", "Microsoft.EntityFrameworkCore.Diagnostics.DbTransactionInterceptor.CreatedSavepointAsync", "Microsoft.EntityFrameworkCore.Diagnostics.DbTransactionInterceptor.RolledBackToSavepointAsync", "Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction.CreateSavepointAsync", "Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction.RollbackToSavepointAsync")]
+    public async Task Savepoint_InvokesAsynchronousInterceptorCallbacks()
+    {
+        ProviderTestRuntime.RequireCapability("transactions");
+        ProviderTestRuntime.RequireCapability("savepoints");
+        var id = Guid.NewGuid();
+        var interceptor = new RecordingTransactionInterceptor();
+
+        await using (var initialize = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(initialize, TestContext.Current.CancellationToken);
+        }
+
+        await using (var context = ProviderTestRuntime.CreateContext(options => options.AddInterceptors(interceptor)))
+        {
+            await using var transaction = await context.Database.BeginTransactionAsync(TestContext.Current.CancellationToken);
+            await transaction.CreateSavepointAsync("before_insert", TestContext.Current.CancellationToken);
+            context.People.Add(new Person { Id = id, Name = "Async savepoint interceptor", Age = 43 });
+            Assert.Equal(1, await context.SaveChangesAsync(TestContext.Current.CancellationToken));
+            await transaction.RollbackToSavepointAsync("before_insert", TestContext.Current.CancellationToken);
+            context.ChangeTracker.Clear();
+            await transaction.CommitAsync(TestContext.Current.CancellationToken);
+        }
+
+        Assert.Equal(0, interceptor.CreatedSavepointCalls);
+        Assert.Equal(0, interceptor.RolledBackToSavepointCalls);
+        Assert.True(interceptor.CreatedSavepointAsyncCalls >= 1);
+        Assert.Equal(1, interceptor.RolledBackToSavepointAsyncCalls);
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.False(await verify.People.AsNoTracking().AnyAsync(item => item.Id == id, TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
+    [CapabilityRequirement("transactions")]
+    [BehavioralCoverage("EF10-INTERCEPTION-TRANSACTION-ROLLBACK-SYNC", "Microsoft.EntityFrameworkCore.Diagnostics.DbTransactionInterceptor.TransactionRolledBack", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.BeginTransaction", "Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction.Rollback")]
+    public async Task Transaction_RollbackInvokesSynchronousInterceptorCallback()
+    {
+        ProviderTestRuntime.RequireCapability("transactions");
+        var person = CreatePerson("Sync transaction rollback interceptor");
+        var interceptor = new RecordingTransactionInterceptor();
+
+        await using (var initialize = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(initialize, TestContext.Current.CancellationToken);
+        }
+
+        await using (var context = ProviderTestRuntime.CreateContext(options => options.AddInterceptors(interceptor)))
+        {
+            using var transaction = context.Database.BeginTransaction();
+            context.People.Add(person);
+            Assert.Equal(1, context.SaveChanges());
+            transaction.Rollback();
+        }
+
+        Assert.Equal(1, interceptor.TransactionRolledBackCalls);
+        Assert.Equal(0, interceptor.TransactionRolledBackAsyncCalls);
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.False(await verify.People.AsNoTracking().AnyAsync(item => item.Id == person.Id, TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
+    [CapabilityRequirement("transactions")]
+    [BehavioralCoverage("EF10-INTERCEPTION-TRANSACTION-ROLLBACK-ASYNC", "Microsoft.EntityFrameworkCore.Diagnostics.DbTransactionInterceptor.TransactionRolledBackAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.BeginTransactionAsync", "Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction.RollbackAsync")]
+    public async Task Transaction_RollbackInvokesAsynchronousInterceptorCallback()
+    {
+        ProviderTestRuntime.RequireCapability("transactions");
+        var person = CreatePerson("Async transaction rollback interceptor");
+        var interceptor = new RecordingTransactionInterceptor();
+
+        await using (var initialize = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(initialize, TestContext.Current.CancellationToken);
+        }
+
+        await using (var context = ProviderTestRuntime.CreateContext(options => options.AddInterceptors(interceptor)))
+        {
+            await using var transaction = await context.Database.BeginTransactionAsync(TestContext.Current.CancellationToken);
+            context.People.Add(person);
+            Assert.Equal(1, await context.SaveChangesAsync(TestContext.Current.CancellationToken));
+            await transaction.RollbackAsync(TestContext.Current.CancellationToken);
+        }
+
+        Assert.Equal(0, interceptor.TransactionRolledBackCalls);
+        Assert.Equal(1, interceptor.TransactionRolledBackAsyncCalls);
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.False(await verify.People.AsNoTracking().AnyAsync(item => item.Id == person.Id, TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
+    [CapabilityRequirement("transactions")]
+    [CapabilityRequirement("savepoints")]
+    [BehavioralCoverage("EF10-INTERCEPTION-SAVEPOINT-RELEASE-SYNC", "Microsoft.EntityFrameworkCore.Diagnostics.DbTransactionInterceptor.ReleasedSavepoint", "Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction.CreateSavepoint", "Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction.ReleaseSavepoint")]
+    public async Task Savepoint_ReleaseInvokesSynchronousInterceptorCallback()
+    {
+        ProviderTestRuntime.RequireCapability("transactions");
+        ProviderTestRuntime.RequireCapability("savepoints");
+        var person = CreatePerson("Sync savepoint release interceptor");
+        var interceptor = new RecordingTransactionInterceptor();
+
+        await using (var initialize = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(initialize, TestContext.Current.CancellationToken);
+        }
+
+        await using (var context = ProviderTestRuntime.CreateContext(options => options.AddInterceptors(interceptor)))
+        {
+            using var transaction = context.Database.BeginTransaction();
+            transaction.CreateSavepoint("release_point");
+            transaction.ReleaseSavepoint("release_point");
+            context.People.Add(person);
+            Assert.Equal(1, context.SaveChanges());
+            transaction.Commit();
+        }
+
+        Assert.True(interceptor.ReleasedSavepointCalls >= 1);
+        Assert.Equal(0, interceptor.ReleasedSavepointAsyncCalls);
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.True(await verify.People.AsNoTracking().AnyAsync(item => item.Id == person.Id, TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
+    [CapabilityRequirement("transactions")]
+    [CapabilityRequirement("savepoints")]
+    [BehavioralCoverage("EF10-INTERCEPTION-SAVEPOINT-RELEASE-ASYNC", "Microsoft.EntityFrameworkCore.Diagnostics.DbTransactionInterceptor.ReleasedSavepointAsync", "Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction.CreateSavepointAsync", "Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction.ReleaseSavepointAsync")]
+    public async Task Savepoint_ReleaseInvokesAsynchronousInterceptorCallback()
+    {
+        ProviderTestRuntime.RequireCapability("transactions");
+        ProviderTestRuntime.RequireCapability("savepoints");
+        var person = CreatePerson("Async savepoint release interceptor");
+        var interceptor = new RecordingTransactionInterceptor();
+
+        await using (var initialize = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(initialize, TestContext.Current.CancellationToken);
+        }
+
+        await using (var context = ProviderTestRuntime.CreateContext(options => options.AddInterceptors(interceptor)))
+        {
+            await using var transaction = await context.Database.BeginTransactionAsync(TestContext.Current.CancellationToken);
+            await transaction.CreateSavepointAsync("release_point", TestContext.Current.CancellationToken);
+            await transaction.ReleaseSavepointAsync("release_point", TestContext.Current.CancellationToken);
+            context.People.Add(person);
+            Assert.Equal(1, await context.SaveChangesAsync(TestContext.Current.CancellationToken));
+            await transaction.CommitAsync(TestContext.Current.CancellationToken);
+        }
+
+        Assert.Equal(0, interceptor.ReleasedSavepointCalls);
+        Assert.True(interceptor.ReleasedSavepointAsyncCalls >= 1);
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.True(await verify.People.AsNoTracking().AnyAsync(item => item.Id == person.Id, TestContext.Current.CancellationToken));
+    }
+
     private static Person CreatePerson(string prefix) => new()
     {
         Id = Guid.NewGuid(),
@@ -397,6 +653,112 @@ public sealed class InterceptionTests
             CancellationToken cancellationToken = default)
         {
             ConnectionOpenedAsyncCalls++;
+            return Task.CompletedTask;
+        }
+    }
+
+    private sealed class RecordingTransactionInterceptor : DbTransactionInterceptor
+    {
+        public int TransactionStartedCalls { get; private set; }
+
+        public int TransactionCommittedCalls { get; private set; }
+
+        public int TransactionStartedAsyncCalls { get; private set; }
+
+        public int TransactionCommittedAsyncCalls { get; private set; }
+
+        public int CreatedSavepointCalls { get; private set; }
+
+        public int RolledBackToSavepointCalls { get; private set; }
+
+        public int CreatedSavepointAsyncCalls { get; private set; }
+
+        public int RolledBackToSavepointAsyncCalls { get; private set; }
+
+        public int TransactionRolledBackCalls { get; private set; }
+
+        public int TransactionRolledBackAsyncCalls { get; private set; }
+
+        public int ReleasedSavepointCalls { get; private set; }
+
+        public int ReleasedSavepointAsyncCalls { get; private set; }
+
+        public override DbTransaction TransactionStarted(
+            DbConnection connection,
+            TransactionEndEventData eventData,
+            DbTransaction result)
+        {
+            TransactionStartedCalls++;
+            return result;
+        }
+
+        public override void TransactionCommitted(DbTransaction transaction, TransactionEndEventData eventData) =>
+            TransactionCommittedCalls++;
+
+        public override ValueTask<DbTransaction> TransactionStartedAsync(
+            DbConnection connection,
+            TransactionEndEventData eventData,
+            DbTransaction result,
+            CancellationToken cancellationToken = default)
+        {
+            TransactionStartedAsyncCalls++;
+            return ValueTask.FromResult(result);
+        }
+
+        public override Task TransactionCommittedAsync(
+            DbTransaction transaction,
+            TransactionEndEventData eventData,
+            CancellationToken cancellationToken = default)
+        {
+            TransactionCommittedAsyncCalls++;
+            return Task.CompletedTask;
+        }
+
+        public override void CreatedSavepoint(DbTransaction transaction, TransactionEventData eventData) =>
+            CreatedSavepointCalls++;
+
+        public override void RolledBackToSavepoint(DbTransaction transaction, TransactionEventData eventData) =>
+            RolledBackToSavepointCalls++;
+
+        public override Task CreatedSavepointAsync(
+            DbTransaction transaction,
+            TransactionEventData eventData,
+            CancellationToken cancellationToken = default)
+        {
+            CreatedSavepointAsyncCalls++;
+            return Task.CompletedTask;
+        }
+
+        public override Task RolledBackToSavepointAsync(
+            DbTransaction transaction,
+            TransactionEventData eventData,
+            CancellationToken cancellationToken = default)
+        {
+            RolledBackToSavepointAsyncCalls++;
+            return Task.CompletedTask;
+        }
+
+        public override void TransactionRolledBack(DbTransaction transaction, TransactionEndEventData eventData) =>
+            TransactionRolledBackCalls++;
+
+        public override Task TransactionRolledBackAsync(
+            DbTransaction transaction,
+            TransactionEndEventData eventData,
+            CancellationToken cancellationToken = default)
+        {
+            TransactionRolledBackAsyncCalls++;
+            return Task.CompletedTask;
+        }
+
+        public override void ReleasedSavepoint(DbTransaction transaction, TransactionEventData eventData) =>
+            ReleasedSavepointCalls++;
+
+        public override Task ReleasedSavepointAsync(
+            DbTransaction transaction,
+            TransactionEventData eventData,
+            CancellationToken cancellationToken = default)
+        {
+            ReleasedSavepointAsyncCalls++;
             return Task.CompletedTask;
         }
     }

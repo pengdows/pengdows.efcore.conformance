@@ -446,6 +446,29 @@ async Task<int> RunTestsAsync(string[] arguments, string? configuredConnectionSt
 
 static async Task CleanupDatabaseAsync(IProviderAdapter adapter, string connectionString)
 {
+    try
+    {
+        await CleanupDatabaseOnceAsync(adapter, connectionString);
+    }
+    catch (Exception firstException)
+    {
+        // Some relational providers terminate the database connection while a successful
+        // EnsureDeleted operation drops the database. A fresh context distinguishes that
+        // expected disconnect from a cleanup that still needs to be retried.
+        try
+        {
+            await CleanupDatabaseOnceAsync(adapter, connectionString);
+        }
+        catch (Exception retryException)
+        {
+            throw new AggregateException("Database cleanup failed on the initial attempt and retry.",
+                firstException, retryException);
+        }
+    }
+}
+
+static async Task CleanupDatabaseOnceAsync(IProviderAdapter adapter, string connectionString)
+{
     var options = new DbContextOptionsBuilder();
     adapter.Configure(options, connectionString);
     await using var context = new DbContext(options.Options);

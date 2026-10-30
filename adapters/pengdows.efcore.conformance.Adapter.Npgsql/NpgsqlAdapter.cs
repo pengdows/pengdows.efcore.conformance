@@ -173,8 +173,36 @@ public sealed class NpgsqlAdapter : IAdoNetProviderAdapter, INativeTypeMappingPr
             cancellationToken);
     }
 
-    public Task CleanupDatabaseAsync(DbContext context, CancellationToken cancellationToken) =>
-        context.Database.EnsureDeletedAsync(cancellationToken);
+    public async Task CleanupDatabaseAsync(DbContext context, CancellationToken cancellationToken)
+    {
+        try
+        {
+            await context.Database.EnsureDeletedAsync(cancellationToken);
+        }
+        catch (Exception exception) when (IsAdministrativeDisconnect(exception))
+        {
+            // PostgreSQL closes the current database connection when EnsureDeleted drops
+            // that database. Confirm the outcome through the maintenance database before
+            // treating that disconnect as successful cleanup.
+            var target = new NpgsqlConnectionStringBuilder(context.Database.GetConnectionString());
+            var databaseName = target.Database ?? throw new InvalidOperationException(
+                "A database name is required to verify PostgreSQL cleanup.");
+            target.Database = "postgres";
+            await using var connection = new NpgsqlConnection(target.ConnectionString);
+            await connection.OpenAsync(cancellationToken);
+            await using var command = connection.CreateCommand();
+            command.CommandText = "SELECT EXISTS (SELECT 1 FROM pg_database WHERE datname = @database_name)";
+            command.Parameters.AddWithValue("database_name", databaseName);
+            if (await command.ExecuteScalarAsync(cancellationToken) is true)
+            {
+                throw;
+            }
+        }
+    }
+
+    private static bool IsAdministrativeDisconnect(Exception exception) =>
+        exception is PostgresException { SqlState: "57P01" } ||
+        exception.InnerException is not null && IsAdministrativeDisconnect(exception.InnerException);
 
     public DbConnection CreateConnection(string connectionString) => new NpgsqlConnection(connectionString);
 
