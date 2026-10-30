@@ -348,6 +348,32 @@ public sealed class QueryTerminalOperatorTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-QUERY-ELEMENTAT-OUT-OF-RANGE-SYNC", "System.Linq.Queryable.ElementAt")]
+    public async Task ElementAt_ThrowsWhenIndexIsBeyondTheResultSynchronously()
+    {
+        var (batch, _, _, _) = await SeedThreePeopleAsync();
+        await using var context = ProviderTestRuntime.CreateContext();
+
+        Assert.Throws<InvalidOperationException>(() => context.People
+            .Where(person => person.Name.StartsWith(batch))
+            .OrderBy(person => person.Age)
+            .ElementAt(3));
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-ELEMENTAT-OUT-OF-RANGE-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ElementAtAsync")]
+    public async Task ElementAtAsync_ThrowsWhenIndexIsBeyondTheResult()
+    {
+        var (batch, _, _, _) = await SeedThreePeopleAsync();
+        await using var context = ProviderTestRuntime.CreateContext();
+
+        await Assert.ThrowsAsync<InvalidOperationException>(() => context.People
+            .Where(person => person.Name.StartsWith(batch))
+            .OrderBy(person => person.Age)
+            .ElementAtAsync(3, TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-QUERY-ELEMENTAT-OR-DEFAULT-SYNC", "System.Linq.Queryable.ElementAtOrDefault")]
     public async Task ElementAtOrDefault_ReturnsDefaultOutOfRangeSynchronously()
     {
@@ -371,6 +397,34 @@ public sealed class QueryTerminalOperatorTests
         var actual = await context.People.Where(person => person.Name.StartsWith(batch))
             .OrderBy(person => person.Age)
             .ElementAtOrDefaultAsync(10, TestContext.Current.CancellationToken);
+
+        Assert.Null(actual);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-ELEMENTAT-OR-DEFAULT-NEGATIVE-SYNC", "System.Linq.Queryable.ElementAtOrDefault")]
+    public async Task ElementAtOrDefault_ReturnsDefaultForNegativeIndexSynchronously()
+    {
+        var (batch, _, _, _) = await SeedThreePeopleAsync();
+        await using var context = ProviderTestRuntime.CreateContext();
+
+        var actual = context.People.Where(person => person.Name.StartsWith(batch))
+            .OrderBy(person => person.Age)
+            .ElementAtOrDefault(-1);
+
+        Assert.Null(actual);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-ELEMENTAT-OR-DEFAULT-NEGATIVE-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ElementAtOrDefaultAsync")]
+    public async Task ElementAtOrDefaultAsync_ReturnsDefaultForNegativeIndex()
+    {
+        var (batch, _, _, _) = await SeedThreePeopleAsync();
+        await using var context = ProviderTestRuntime.CreateContext();
+
+        var actual = await context.People.Where(person => person.Name.StartsWith(batch))
+            .OrderBy(person => person.Age)
+            .ElementAtOrDefaultAsync(-1, TestContext.Current.CancellationToken);
 
         Assert.Null(actual);
     }
