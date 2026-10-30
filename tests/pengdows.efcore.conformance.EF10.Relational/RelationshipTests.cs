@@ -42,6 +42,52 @@ public sealed class RelationshipTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-RELATIONSHIPS-FILTERED-INCLUDE-SYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.Include", "System.Linq.Queryable.Where", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ThenInclude", "System.Linq.Queryable.Single")]
+    public async Task FilteredInclude_LoadsOnlyMatchingRelatedRowsSynchronously()
+    {
+        var blog = await CreateBlogAsync();
+
+        await using (var query = ProviderTestRuntime.CreateContext())
+        {
+            var loaded = query.Blogs
+                .Include(item => item.Posts.Where(post => post.Title == "First"))
+                .ThenInclude(post => post.Comments)
+                .Single(item => item.Id == blog.Id);
+
+            var post = Assert.Single(loaded.Posts);
+            Assert.Equal("First", post.Title);
+            Assert.Equal("First comment", Assert.Single(post.Comments).Text);
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.Equal(2, verify.Set<Post>().Count(post => post.BlogId == blog.Id));
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-RELATIONSHIPS-FILTERED-INCLUDE-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.Include", "System.Linq.Queryable.Where", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ThenInclude", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    public async Task FilteredInclude_LoadsOnlyMatchingRelatedRowsAsynchronously()
+    {
+        var blog = await CreateBlogAsync();
+
+        await using (var query = ProviderTestRuntime.CreateContext())
+        {
+            var loaded = await query.Blogs
+                .Include(item => item.Posts.Where(post => post.Title == "First"))
+                .ThenInclude(post => post.Comments)
+                .SingleAsync(item => item.Id == blog.Id, TestContext.Current.CancellationToken);
+
+            var post = Assert.Single(loaded.Posts);
+            Assert.Equal("First", post.Title);
+            Assert.Equal("First comment", Assert.Single(post.Comments).Text);
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.Equal(2, await verify.Set<Post>().CountAsync(
+            post => post.BlogId == blog.Id,
+            TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-RELATIONSHIPS-FOREIGN-KEY", "Microsoft.EntityFrameworkCore.DbSet`1.Add", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.AsNoTracking", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
     public async Task ForeignKeyAndNavigation_PersistAndReadBack()
     {

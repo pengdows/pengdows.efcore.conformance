@@ -55366,6 +55366,7 @@
         "EF10-RAW-SQL-FROM-SQL-ASYNC",
         "EF10-RAW-SQL-KEYLESS-ASYNC",
         "EF10-RAW-SQL-SCALAR-RAW-ASYNC",
+        "EF10-RELATIONSHIPS-FILTERED-INCLUDE-ASYNC",
         "EF10-RELATIONSHIPS-FOREIGN-KEY",
         "EF10-RELATIONSHIPS-INCLUDE-ASYNC",
         "EF10-RELATIONSHIPS-SPLIT-QUERY-ASYNC",
@@ -55424,6 +55425,7 @@
         "EF10-RAW-SQL-FROM-SQL-ASYNC",
         "EF10-RAW-SQL-KEYLESS-ASYNC",
         "EF10-RAW-SQL-SCALAR-RAW-ASYNC",
+        "EF10-RELATIONSHIPS-FILTERED-INCLUDE-ASYNC",
         "EF10-RELATIONSHIPS-FOREIGN-KEY",
         "EF10-RELATIONSHIPS-INCLUDE-ASYNC",
         "EF10-RELATIONSHIPS-SPLIT-QUERY-ASYNC",
@@ -56197,6 +56199,8 @@
       "Signature": "Microsoft.EntityFrameworkCore.Query.IIncludableQueryable\u003CTEntity, TProperty\u003E Include\u003CTEntity, TProperty\u003E(System.Linq.IQueryable\u003CTEntity\u003E source, System.Linq.Expressions.Expression\u003CSystem.Func\u003CTEntity, TProperty\u003E\u003E navigationPropertyPath) where TEntity : class",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-RELATIONSHIPS-FILTERED-INCLUDE-ASYNC",
+        "EF10-RELATIONSHIPS-FILTERED-INCLUDE-SYNC",
         "EF10-RELATIONSHIPS-INCLUDE-ASYNC",
         "EF10-RELATIONSHIPS-INCLUDE-SYNC",
         "EF10-RELATIONSHIPS-SINGLE-QUERY-SYNC",
@@ -56215,6 +56219,8 @@
       "Signature": "Microsoft.EntityFrameworkCore.Query.IIncludableQueryable\u003CTEntity, TProperty\u003E ThenInclude\u003CTEntity, TPreviousProperty, TProperty\u003E(Microsoft.EntityFrameworkCore.Query.IIncludableQueryable\u003CTEntity, System.Collections.Generic.IEnumerable\u003CTPreviousProperty\u003E\u003E source, System.Linq.Expressions.Expression\u003CSystem.Func\u003CTPreviousProperty, TProperty\u003E\u003E navigationPropertyPath) where TEntity : class",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-RELATIONSHIPS-FILTERED-INCLUDE-ASYNC",
+        "EF10-RELATIONSHIPS-FILTERED-INCLUDE-SYNC",
         "EF10-RELATIONSHIPS-INCLUDE-ASYNC",
         "EF10-RELATIONSHIPS-INCLUDE-SYNC",
         "EF10-RELATIONSHIPS-SINGLE-QUERY-SYNC",
@@ -56233,6 +56239,8 @@
       "Signature": "Microsoft.EntityFrameworkCore.Query.IIncludableQueryable\u003CTEntity, TProperty\u003E ThenInclude\u003CTEntity, TPreviousProperty, TProperty\u003E(Microsoft.EntityFrameworkCore.Query.IIncludableQueryable\u003CTEntity, TPreviousProperty\u003E source, System.Linq.Expressions.Expression\u003CSystem.Func\u003CTPreviousProperty, TProperty\u003E\u003E navigationPropertyPath) where TEntity : class",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-RELATIONSHIPS-FILTERED-INCLUDE-ASYNC",
+        "EF10-RELATIONSHIPS-FILTERED-INCLUDE-SYNC",
         "EF10-RELATIONSHIPS-INCLUDE-ASYNC",
         "EF10-RELATIONSHIPS-INCLUDE-SYNC",
         "EF10-RELATIONSHIPS-SINGLE-QUERY-SYNC",
@@ -56251,6 +56259,8 @@
       "Signature": "System.Linq.IQueryable\u003CTEntity\u003E Include\u003CTEntity\u003E(System.Linq.IQueryable\u003CTEntity\u003E source, System.String navigationPropertyPath) where TEntity : class",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-RELATIONSHIPS-FILTERED-INCLUDE-ASYNC",
+        "EF10-RELATIONSHIPS-FILTERED-INCLUDE-SYNC",
         "EF10-RELATIONSHIPS-INCLUDE-ASYNC",
         "EF10-RELATIONSHIPS-INCLUDE-SYNC",
         "EF10-RELATIONSHIPS-SINGLE-QUERY-SYNC",
