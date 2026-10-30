@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 107,
+    "AwaitingClassification": 105,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 627,
-    "UncoveredMemberFamilies": 74
+    "MemberEntriesInCoveredFamilies": 629,
+    "UncoveredMemberFamilies": 72
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -52392,6 +52392,7 @@
       "BehavioralContracts": [
         "EF10-COMPLEX-TYPE-ASYNC",
         "EF10-DB-FUNCTION-ATTRIBUTE-ASYNC",
+        "EF10-DB-FUNCTION-LEAST-GREATEST-ASYNC",
         "EF10-DB-FUNCTION-NULLABLE-ASYNC",
         "EF10-DBSET-LOCAL-QUERY-ASYNC",
         "EF10-JSON-MAPPING-ASYNC",
@@ -52434,6 +52435,7 @@
       "BehavioralContracts": [
         "EF10-COMPLEX-TYPE-ASYNC",
         "EF10-DB-FUNCTION-ATTRIBUTE-ASYNC",
+        "EF10-DB-FUNCTION-LEAST-GREATEST-ASYNC",
         "EF10-DB-FUNCTION-NULLABLE-ASYNC",
         "EF10-DBSET-LOCAL-QUERY-ASYNC",
         "EF10-JSON-MAPPING-ASYNC",
@@ -183882,10 +183884,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "Least",
       "Signature": "T Least\u003CT\u003E(Microsoft.EntityFrameworkCore.DbFunctions _, T[] values)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DB-FUNCTION-LEAST-GREATEST-ASYNC",
+        "EF10-DB-FUNCTION-LEAST-GREATEST-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalDbFunctionsExtensions.Least"
     },
     {
@@ -183894,10 +183899,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "Greatest",
       "Signature": "T Greatest\u003CT\u003E(Microsoft.EntityFrameworkCore.DbFunctions _, T[] values)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DB-FUNCTION-LEAST-GREATEST-ASYNC",
+        "EF10-DB-FUNCTION-LEAST-GREATEST-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalDbFunctionsExtensions.Greatest"
     },
     {

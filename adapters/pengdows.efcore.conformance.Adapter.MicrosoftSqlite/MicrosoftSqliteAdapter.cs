@@ -26,7 +26,8 @@ public sealed class MicrosoftSqliteAdapter : IAdoNetProviderAdapter, IParameteri
         },
         new HashSet<string>(StringComparer.Ordinal)
         {
-            "ambient-transactions"
+            "ambient-transactions",
+            "least-greatest-functions"
         });
 
     public string Name => "Microsoft EF Core SQLite";

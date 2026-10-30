@@ -59,7 +59,8 @@ public sealed record ProviderCapabilities(
         "execute-delete",
         "primitive-collections",
         "external-connection",
-        "parameterized-collection-modes"
+        "parameterized-collection-modes",
+        "least-greatest-functions"
     };
 
     public IReadOnlyList<string> UndeclaredFeatures => KnownFeatures

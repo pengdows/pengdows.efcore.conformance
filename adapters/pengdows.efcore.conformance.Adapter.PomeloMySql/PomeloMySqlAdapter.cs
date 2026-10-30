@@ -27,7 +27,8 @@ public sealed class PomeloMySqlAdapter : IAdoNetProviderAdapter, IParameterizedC
         {
             "filtered-indexes",
             "json-mapping",
-            "primitive-collections"
+            "primitive-collections",
+            "least-greatest-functions"
         });
 
     public string Name => "Pomelo EF Core MySQL";
