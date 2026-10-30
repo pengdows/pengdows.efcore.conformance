@@ -57,4 +57,66 @@ public sealed class PrimitiveCollectionTests
 
         Assert.Equal(expected, actual);
     }
+
+    [Fact]
+    [BehavioralCoverage("EF10-PRIMITIVE-COLLECTION-MUTATION-ASYNC", "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.DetectChanges", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync")]
+    public async Task PrimitiveCollection_InPlaceElementMutationPersistsAsynchronously()
+    {
+        ProviderTestRuntime.RequireCapability("primitive-collections");
+        var record = new PrimitiveCollectionRecord { Id = Guid.NewGuid(), Values = [10, 20, 30] };
+
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.PrimitiveCollectionRecords.Add(record);
+            await write.SaveChangesAsync(TestContext.Current.CancellationToken);
+        }
+
+        await using (var update = ProviderTestRuntime.CreateContext())
+        {
+            var tracked = await update.PrimitiveCollectionRecords.SingleAsync(
+                item => item.Id == record.Id,
+                TestContext.Current.CancellationToken);
+            tracked.Values[1] = 99;
+
+            Assert.Equal(1, await update.SaveChangesAsync(TestContext.Current.CancellationToken));
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        var actual = await verify.PrimitiveCollectionRecords.AsNoTracking()
+            .Where(item => item.Id == record.Id)
+            .Select(item => item.Values)
+            .SingleAsync(TestContext.Current.CancellationToken);
+        Assert.Equal(new[] { 10, 99, 30 }, actual);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-PRIMITIVE-COLLECTION-MUTATION-SYNC", "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.DetectChanges", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges")]
+    public async Task PrimitiveCollection_InPlaceElementMutationPersistsSynchronously()
+    {
+        ProviderTestRuntime.RequireCapability("primitive-collections");
+        var record = new PrimitiveCollectionRecord { Id = Guid.NewGuid(), Values = [11, 21, 31] };
+
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.PrimitiveCollectionRecords.Add(record);
+            await write.SaveChangesAsync(TestContext.Current.CancellationToken);
+        }
+
+        await using (var update = ProviderTestRuntime.CreateContext())
+        {
+            var tracked = update.PrimitiveCollectionRecords.Single(item => item.Id == record.Id);
+            tracked.Values[1] = 98;
+
+            Assert.Equal(1, update.SaveChanges());
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        var actual = verify.PrimitiveCollectionRecords.AsNoTracking()
+            .Where(item => item.Id == record.Id)
+            .Select(item => item.Values)
+            .Single();
+        Assert.Equal(new[] { 11, 98, 31 }, actual);
+    }
 }
