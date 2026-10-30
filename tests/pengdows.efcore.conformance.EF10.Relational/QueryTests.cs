@@ -184,6 +184,76 @@ public sealed class QueryTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-QUERY-GROUPJOIN-LEFT-ASYNC", "System.Linq.Queryable.GroupJoin", "System.Linq.Queryable.SelectMany", "System.Linq.Queryable.DefaultIfEmpty", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync")]
+    public async Task GroupJoinWithDefaultIfEmpty_ReturnsMatchesAndUnmatchedRowsAsynchronously()
+    {
+        var batch = Guid.NewGuid().ToString("N");
+        await SeedAsync(new[]
+        {
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-One", Age = 1 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-Two", Age = 2 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-Three", Age = 3 }
+        });
+
+        await using var query = ProviderTestRuntime.CreateContext();
+        var left = query.People.Where(person => person.Name.StartsWith(batch));
+        var right = query.People.Where(person => person.Name.StartsWith(batch) && person.Age >= 2);
+        var actual = await left.GroupJoin(
+                right,
+                outer => outer.Age + 1,
+                inner => inner.Age,
+                (outer, matches) => new { Outer = outer, Matches = matches })
+            .SelectMany(
+                joined => joined.Matches.DefaultIfEmpty(),
+                (joined, inner) => new LeftJoinResult(joined.Outer.Age, inner == null ? null : inner.Name))
+            .ToListAsync(TestContext.Current.CancellationToken);
+
+        Assert.Equal(
+            new[]
+            {
+                new LeftJoinResult(1, $"{batch}-Two"),
+                new LeftJoinResult(2, $"{batch}-Three"),
+                new LeftJoinResult(3, null)
+            },
+            actual.OrderBy(result => result.Age).ToArray());
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-GROUPJOIN-LEFT-SYNC", "System.Linq.Queryable.GroupJoin", "System.Linq.Queryable.SelectMany", "System.Linq.Queryable.DefaultIfEmpty", "System.Linq.Enumerable.ToList")]
+    public async Task GroupJoinWithDefaultIfEmpty_ReturnsMatchesAndUnmatchedRowsSynchronously()
+    {
+        var batch = Guid.NewGuid().ToString("N");
+        await SeedAsync(new[]
+        {
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-One", Age = 1 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-Two", Age = 2 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-Three", Age = 3 }
+        });
+
+        await using var query = ProviderTestRuntime.CreateContext();
+        var left = query.People.Where(person => person.Name.StartsWith(batch));
+        var right = query.People.Where(person => person.Name.StartsWith(batch) && person.Age >= 2);
+        var actual = left.GroupJoin(
+                right,
+                outer => outer.Age + 1,
+                inner => inner.Age,
+                (outer, matches) => new { Outer = outer, Matches = matches })
+            .SelectMany(
+                joined => joined.Matches.DefaultIfEmpty(),
+                (joined, inner) => new LeftJoinResult(joined.Outer.Age, inner == null ? null : inner.Name))
+            .ToList();
+
+        Assert.Equal(
+            new[]
+            {
+                new LeftJoinResult(1, $"{batch}-Two"),
+                new LeftJoinResult(2, $"{batch}-Three"),
+                new LeftJoinResult(3, null)
+            },
+            actual.OrderBy(result => result.Age).ToArray());
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-LINQ-RIGHTJOIN-ASYNC", "System.Linq.Queryable.RightJoin", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync")]
     public async Task RightJoin_ReturnsMatchingAndMissingRightRows()
     {
