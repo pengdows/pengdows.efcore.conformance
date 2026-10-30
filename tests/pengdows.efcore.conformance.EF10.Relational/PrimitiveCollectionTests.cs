@@ -271,4 +271,58 @@ public sealed class PrimitiveCollectionTests
 
         Assert.Equal(30, value);
     }
+
+    [Fact]
+    [BehavioralCoverage("EF10-PRIMITIVE-COLLECTION-ANY-PARAMETER-ASYNC", "System.Linq.Queryable.Where", "System.Linq.Queryable.Select", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    public async Task PrimitiveCollection_CanFilterByParameterizedElementPredicateAsynchronously()
+    {
+        ProviderTestRuntime.RequireCapability("primitive-collections");
+        var id = Guid.NewGuid();
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.PrimitiveCollectionRecords.Add(new PrimitiveCollectionRecord
+            {
+                Id = id,
+                Values = [12, 24, 36, 48]
+            });
+            await write.SaveChangesAsync(TestContext.Current.CancellationToken);
+        }
+
+        var minimum = 40;
+        await using var query = ProviderTestRuntime.CreateContext();
+        var actualId = await query.PrimitiveCollectionRecords.AsNoTracking()
+            .Where(record => record.Id == id && record.Values.Any(value => value > minimum))
+            .Select(record => record.Id)
+            .SingleAsync(TestContext.Current.CancellationToken);
+
+        Assert.Equal(id, actualId);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-PRIMITIVE-COLLECTION-ANY-PARAMETER-SYNC", "System.Linq.Queryable.Where", "System.Linq.Queryable.Select", "System.Linq.Queryable.Single")]
+    public async Task PrimitiveCollection_CanFilterByParameterizedElementPredicateSynchronously()
+    {
+        ProviderTestRuntime.RequireCapability("primitive-collections");
+        var id = Guid.NewGuid();
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.PrimitiveCollectionRecords.Add(new PrimitiveCollectionRecord
+            {
+                Id = id,
+                Values = [13, 25, 37, 49]
+            });
+            await write.SaveChangesAsync(TestContext.Current.CancellationToken);
+        }
+
+        var minimum = 40;
+        await using var query = ProviderTestRuntime.CreateContext();
+        var actualId = query.PrimitiveCollectionRecords.AsNoTracking()
+            .Where(record => record.Id == id && record.Values.Any(value => value > minimum))
+            .Select(record => record.Id)
+            .Single();
+
+        Assert.Equal(id, actualId);
+    }
 }
