@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using System.Data.Common;
+using System.Linq.Expressions;
 using pengdows.efcore.conformance;
 using Xunit;
 
@@ -57,6 +58,54 @@ public sealed class InterceptionTests
 
         await using var verify = ProviderTestRuntime.CreateContext();
         Assert.True(await verify.People.AnyAsync(item => item.Id == person.Id, TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-INTERCEPTION-SAVE-SUPPRESS-SYNC", "Microsoft.EntityFrameworkCore.Diagnostics.SaveChangesInterceptor.SavingChanges", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges")]
+    public async Task SaveChanges_SynchronousInterceptorCanSuppressPersistence()
+    {
+        var person = CreatePerson("Sync save suppression");
+        var interceptor = new SuppressingSaveChangesInterceptor();
+
+        await using (var initialize = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(initialize, TestContext.Current.CancellationToken);
+        }
+
+        await using (var context = ProviderTestRuntime.CreateContext(options => options.AddInterceptors(interceptor)))
+        {
+            context.People.Add(person);
+            Assert.Equal(0, context.SaveChanges());
+        }
+
+        Assert.Equal(1, interceptor.SyncSuppressionCalls);
+        Assert.Equal(0, interceptor.AsyncSuppressionCalls);
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.False(await verify.People.AsNoTracking().AnyAsync(item => item.Id == person.Id, TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-INTERCEPTION-SAVE-SUPPRESS-ASYNC", "Microsoft.EntityFrameworkCore.Diagnostics.SaveChangesInterceptor.SavingChangesAsync", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync")]
+    public async Task SaveChangesAsync_AsynchronousInterceptorCanSuppressPersistence()
+    {
+        var person = CreatePerson("Async save suppression");
+        var interceptor = new SuppressingSaveChangesInterceptor();
+
+        await using (var initialize = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(initialize, TestContext.Current.CancellationToken);
+        }
+
+        await using (var context = ProviderTestRuntime.CreateContext(options => options.AddInterceptors(interceptor)))
+        {
+            context.People.Add(person);
+            Assert.Equal(0, await context.SaveChangesAsync(TestContext.Current.CancellationToken));
+        }
+
+        Assert.Equal(0, interceptor.SyncSuppressionCalls);
+        Assert.Equal(1, interceptor.AsyncSuppressionCalls);
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.False(await verify.People.AsNoTracking().AnyAsync(item => item.Id == person.Id, TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -264,6 +313,36 @@ public sealed class InterceptionTests
         });
         Assert.Equal(0, interceptor.ParametersChanged);
         Assert.Equal(1, interceptor.AsyncParametersChanged);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-INTERCEPTION-QUERY-COMPILATION-SYNC", "Microsoft.EntityFrameworkCore.Diagnostics.IQueryExpressionInterceptor.QueryCompilationStarting", "Microsoft.EntityFrameworkCore.DbContextOptionsBuilder.AddInterceptors", "System.Linq.Queryable.Single")]
+    public async Task Query_InvokesQueryCompilationInterceptorSynchronously()
+    {
+        var person = CreatePerson("Sync query compilation");
+        await SeedAsync(person);
+        var interceptor = new RecordingQueryExpressionInterceptor();
+
+        await using var context = ProviderTestRuntime.CreateContext(options => options.AddInterceptors(interceptor));
+        var result = context.People.Single(item => item.Name == person.Name);
+
+        Assert.Equal(person.Id, result.Id);
+        Assert.Equal(1, interceptor.Calls);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-INTERCEPTION-QUERY-COMPILATION-ASYNC", "Microsoft.EntityFrameworkCore.Diagnostics.IQueryExpressionInterceptor.QueryCompilationStarting", "Microsoft.EntityFrameworkCore.DbContextOptionsBuilder.AddInterceptors", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    public async Task Query_InvokesQueryCompilationInterceptorAsynchronously()
+    {
+        var person = CreatePerson("Async query compilation");
+        await SeedAsync(person);
+        var interceptor = new RecordingQueryExpressionInterceptor();
+
+        await using var context = ProviderTestRuntime.CreateContext(options => options.AddInterceptors(interceptor));
+        var result = await context.People.SingleAsync(item => item.Id == person.Id, TestContext.Current.CancellationToken);
+
+        Assert.Equal(person.Id, result.Id);
+        Assert.Equal(1, interceptor.Calls);
     }
 
     [Fact]
@@ -600,6 +679,39 @@ public sealed class InterceptionTests
             }
 
             return changed;
+        }
+    }
+
+    private sealed class SuppressingSaveChangesInterceptor : SaveChangesInterceptor
+    {
+        public int SyncSuppressionCalls { get; private set; }
+
+        public int AsyncSuppressionCalls { get; private set; }
+
+        public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
+        {
+            SyncSuppressionCalls++;
+            return InterceptionResult<int>.SuppressWithResult(0);
+        }
+
+        public override ValueTask<InterceptionResult<int>> SavingChangesAsync(
+            DbContextEventData eventData,
+            InterceptionResult<int> result,
+            CancellationToken cancellationToken = default)
+        {
+            AsyncSuppressionCalls++;
+            return ValueTask.FromResult(InterceptionResult<int>.SuppressWithResult(0));
+        }
+    }
+
+    private sealed class RecordingQueryExpressionInterceptor : IQueryExpressionInterceptor
+    {
+        public int Calls { get; private set; }
+
+        public Expression QueryCompilationStarting(Expression queryExpression, QueryExpressionEventData eventData)
+        {
+            Calls++;
+            return queryExpression;
         }
     }
 

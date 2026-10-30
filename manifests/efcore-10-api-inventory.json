@@ -25,7 +25,7 @@
     "PublicMembers": 16762,
     "AwaitingClassification": 0,
     "ExplicitlyExcluded": 5921,
-    "MemberEntriesInCoveredFamilies": 767,
+    "MemberEntriesInCoveredFamilies": 768,
     "UncoveredMemberFamilies": 0
   },
   "CoverageSelectors": {
@@ -16094,6 +16094,7 @@
         "EF10-INHERITANCE-TPC-SYNC",
         "EF10-INHERITANCE-TPH-SYNC",
         "EF10-INHERITANCE-TPT-SYNC",
+        "EF10-INTERCEPTION-SAVE-SUPPRESS-SYNC",
         "EF10-INTERCEPTION-SAVE-SYNC",
         "EF10-JSON-MAPPING-SYNC",
         "EF10-MIGRATIONS-SET-DEFAULT-SYNC",
@@ -16176,6 +16177,7 @@
         "EF10-INHERITANCE-TPC-SYNC",
         "EF10-INHERITANCE-TPH-SYNC",
         "EF10-INHERITANCE-TPT-SYNC",
+        "EF10-INTERCEPTION-SAVE-SUPPRESS-SYNC",
         "EF10-INTERCEPTION-SAVE-SYNC",
         "EF10-JSON-MAPPING-SYNC",
         "EF10-MIGRATIONS-SET-DEFAULT-SYNC",
@@ -16261,6 +16263,7 @@
         "EF10-INHERITANCE-TPH-ASYNC",
         "EF10-INHERITANCE-TPT-ASYNC",
         "EF10-INTERCEPTION-SAVE-ASYNC",
+        "EF10-INTERCEPTION-SAVE-SUPPRESS-ASYNC",
         "EF10-JSON-MAPPING-ASYNC",
         "EF10-MIGRATIONS-SET-DEFAULT-ASYNC",
         "EF10-MODEL-ATTRIBUTES-ASYNC",
@@ -16347,6 +16350,7 @@
         "EF10-INHERITANCE-TPH-ASYNC",
         "EF10-INHERITANCE-TPT-ASYNC",
         "EF10-INTERCEPTION-SAVE-ASYNC",
+        "EF10-INTERCEPTION-SAVE-SUPPRESS-ASYNC",
         "EF10-JSON-MAPPING-ASYNC",
         "EF10-MIGRATIONS-SET-DEFAULT-ASYNC",
         "EF10-MODEL-ATTRIBUTES-ASYNC",
@@ -17538,6 +17542,8 @@
         "EF10-INTERCEPTION-MATERIALIZATION-SYNC",
         "EF10-INTERCEPTION-NONQUERY-UPDATE-ASYNC",
         "EF10-INTERCEPTION-NONQUERY-UPDATE-SYNC",
+        "EF10-INTERCEPTION-QUERY-COMPILATION-ASYNC",
+        "EF10-INTERCEPTION-QUERY-COMPILATION-SYNC",
         "EF10-INTERCEPTION-SAVE-ASYNC",
         "EF10-INTERCEPTION-SAVE-SYNC",
         "EF10-INTERCEPTION-SAVEPOINT-ASYNC",
@@ -17565,6 +17571,8 @@
         "EF10-INTERCEPTION-MATERIALIZATION-SYNC",
         "EF10-INTERCEPTION-NONQUERY-UPDATE-ASYNC",
         "EF10-INTERCEPTION-NONQUERY-UPDATE-SYNC",
+        "EF10-INTERCEPTION-QUERY-COMPILATION-ASYNC",
+        "EF10-INTERCEPTION-QUERY-COMPILATION-SYNC",
         "EF10-INTERCEPTION-SAVE-ASYNC",
         "EF10-INTERCEPTION-SAVE-SYNC",
         "EF10-INTERCEPTION-SAVEPOINT-ASYNC",
@@ -38520,10 +38528,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "QueryCompilationStarting",
       "Signature": "System.Linq.Expressions.Expression QueryCompilationStarting(System.Linq.Expressions.Expression queryExpression, Microsoft.EntityFrameworkCore.Diagnostics.QueryExpressionEventData eventData)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "ef-owned-no-provider-contract",
-      "DispositionReason": "Diagnostic identifiers, event payloads, and logging helpers are owned by EF Core. Provider-observable interception behavior is covered through public SaveChanges tests where applicable.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-INTERCEPTION-QUERY-COMPILATION-ASYNC",
+        "EF10-INTERCEPTION-QUERY-COMPILATION-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Diagnostics.IQueryExpressionInterceptor.QueryCompilationStarting"
     },
     {
@@ -51734,6 +51745,7 @@
       "Signature": "Microsoft.EntityFrameworkCore.Diagnostics.InterceptionResult\u003CSystem.Int32\u003E SavingChanges(Microsoft.EntityFrameworkCore.Diagnostics.DbContextEventData eventData, Microsoft.EntityFrameworkCore.Diagnostics.InterceptionResult\u003CSystem.Int32\u003E result)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-INTERCEPTION-SAVE-SUPPRESS-SYNC",
         "EF10-INTERCEPTION-SAVE-SYNC"
       ],
       "Disposition": "behavior-tested-family",
@@ -51774,7 +51786,8 @@
       "Signature": "System.Threading.Tasks.ValueTask\u003CMicrosoft.EntityFrameworkCore.Diagnostics.InterceptionResult\u003CSystem.Int32\u003E\u003E SavingChangesAsync(Microsoft.EntityFrameworkCore.Diagnostics.DbContextEventData eventData, Microsoft.EntityFrameworkCore.Diagnostics.InterceptionResult\u003CSystem.Int32\u003E result, System.Threading.CancellationToken cancellationToken = null)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
-        "EF10-INTERCEPTION-SAVE-ASYNC"
+        "EF10-INTERCEPTION-SAVE-ASYNC",
+        "EF10-INTERCEPTION-SAVE-SUPPRESS-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -55245,6 +55258,7 @@
         "EF10-GENERATED-DEFAULT-VALUES-ASYNC",
         "EF10-INTERCEPTION-COMMAND-ASYNC",
         "EF10-INTERCEPTION-MATERIALIZATION-ASYNC",
+        "EF10-INTERCEPTION-QUERY-COMPILATION-ASYNC",
         "EF10-JSON-MAPPING-ASYNC",
         "EF10-MIGRATIONS-SET-DEFAULT-ASYNC",
         "EF10-NATIVE-TYPE-NULL-ASYNC",
@@ -55299,6 +55313,7 @@
         "EF10-GENERATED-DEFAULT-VALUES-ASYNC",
         "EF10-INTERCEPTION-COMMAND-ASYNC",
         "EF10-INTERCEPTION-MATERIALIZATION-ASYNC",
+        "EF10-INTERCEPTION-QUERY-COMPILATION-ASYNC",
         "EF10-JSON-MAPPING-ASYNC",
         "EF10-MIGRATIONS-SET-DEFAULT-ASYNC",
         "EF10-NATIVE-TYPE-NULL-ASYNC",
