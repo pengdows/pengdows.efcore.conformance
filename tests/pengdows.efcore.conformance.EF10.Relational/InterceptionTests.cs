@@ -96,6 +96,37 @@ public sealed class InterceptionTests
         Assert.Equal(1, interceptor.ReaderExecutedAsyncCalls);
     }
 
+    [Fact]
+    [BehavioralCoverage("EF10-INTERCEPTION-MATERIALIZATION-SYNC", "Microsoft.EntityFrameworkCore.DbContextOptionsBuilder.AddInterceptors", "Microsoft.EntityFrameworkCore.Diagnostics.IMaterializationInterceptor.CreatingInstance", "Microsoft.EntityFrameworkCore.Diagnostics.IMaterializationInterceptor.CreatedInstance", "Microsoft.EntityFrameworkCore.Diagnostics.IMaterializationInterceptor.InitializingInstance", "Microsoft.EntityFrameworkCore.Diagnostics.IMaterializationInterceptor.InitializedInstance", "System.Linq.Queryable.Single")]
+    public async Task Query_InvokesMaterializationInterceptorCallbacksSynchronously()
+    {
+        var person = CreatePerson("Sync materialization interceptor");
+        await SeedAsync(person);
+        var interceptor = new RecordingMaterializationInterceptor();
+
+        await using var context = ProviderTestRuntime.CreateContext(options => options.AddInterceptors(interceptor));
+        var actual = context.People.AsNoTracking().Single(item => item.Id == person.Id);
+
+        Assert.Equal(person.Name, actual.Name);
+        Assert.Equal(new[] { "creating", "created", "initializing", "initialized" }, interceptor.Callbacks);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-INTERCEPTION-MATERIALIZATION-ASYNC", "Microsoft.EntityFrameworkCore.DbContextOptionsBuilder.AddInterceptors", "Microsoft.EntityFrameworkCore.Diagnostics.IMaterializationInterceptor.CreatingInstance", "Microsoft.EntityFrameworkCore.Diagnostics.IMaterializationInterceptor.CreatedInstance", "Microsoft.EntityFrameworkCore.Diagnostics.IMaterializationInterceptor.InitializingInstance", "Microsoft.EntityFrameworkCore.Diagnostics.IMaterializationInterceptor.InitializedInstance", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    public async Task Query_InvokesMaterializationInterceptorCallbacksAsynchronously()
+    {
+        var person = CreatePerson("Async materialization interceptor");
+        await SeedAsync(person);
+        var interceptor = new RecordingMaterializationInterceptor();
+
+        await using var context = ProviderTestRuntime.CreateContext(options => options.AddInterceptors(interceptor));
+        var actual = await context.People.AsNoTracking()
+            .SingleAsync(item => item.Id == person.Id, TestContext.Current.CancellationToken);
+
+        Assert.Equal(person.Name, actual.Name);
+        Assert.Equal(new[] { "creating", "created", "initializing", "initialized" }, interceptor.Callbacks);
+    }
+
     private static Person CreatePerson(string prefix) => new()
     {
         Id = Guid.NewGuid(),
@@ -157,6 +188,40 @@ public sealed class InterceptionTests
         {
             ReaderExecutedAsyncCalls++;
             return ValueTask.FromResult(result);
+        }
+    }
+
+    private sealed class RecordingMaterializationInterceptor : IMaterializationInterceptor
+    {
+        public List<string> Callbacks { get; } = [];
+
+        public InterceptionResult<object> CreatingInstance(
+            MaterializationInterceptionData materializationData,
+            InterceptionResult<object> result)
+        {
+            Callbacks.Add("creating");
+            return result;
+        }
+
+        public object CreatedInstance(MaterializationInterceptionData materializationData, object entity)
+        {
+            Callbacks.Add("created");
+            return entity;
+        }
+
+        public InterceptionResult InitializingInstance(
+            MaterializationInterceptionData materializationData,
+            object entity,
+            InterceptionResult result)
+        {
+            Callbacks.Add("initializing");
+            return result;
+        }
+
+        public object InitializedInstance(MaterializationInterceptionData materializationData, object entity)
+        {
+            Callbacks.Add("initialized");
+            return entity;
         }
     }
 
