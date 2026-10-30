@@ -302,7 +302,10 @@ public sealed class DiscoveredNativeTypeTests
         var type = Nullable.GetUnderlyingType(mapping.ClrType) ?? mapping.ClrType;
         var storeType = mapping.DatabaseTypeName;
         var hasProviderSpecificEquality = storeType.Contains("json", StringComparison.OrdinalIgnoreCase) ||
-                                          storeType.Equals("xml", StringComparison.OrdinalIgnoreCase);
+                                          storeType.Equals("xml", StringComparison.OrdinalIgnoreCase) ||
+                                          type == typeof(BitArray) ||
+                                          storeType.Equals("cid", StringComparison.OrdinalIgnoreCase) ||
+                                          storeType.Equals("xid8", StringComparison.OrdinalIgnoreCase);
         return !type.IsArray && type != typeof(byte[]) && !hasProviderSpecificEquality;
     }
 
@@ -311,6 +314,11 @@ public sealed class DiscoveredNativeTypeTests
         var equal = mapping.DatabaseTypeName.Equals("time with time zone", StringComparison.OrdinalIgnoreCase) ||
                     mapping.DatabaseTypeName.Equals("time with time zone[]", StringComparison.OrdinalIgnoreCase)
             ? TimeWithTimeZoneValuesEqual(expected, actual)
+            : expected is BitArray expectedBits && actual is BitArray actualBits
+                ? expectedBits.Cast<bool>().SequenceEqual(actualBits.Cast<bool>())
+                : expected is BitArray[] expectedBitArrays && actual is BitArray[] actualBitArrays
+                    ? expectedBitArrays.Length == actualBitArrays.Length && expectedBitArrays.Zip(actualBitArrays)
+                        .All(pair => pair.First.Cast<bool>().SequenceEqual(pair.Second.Cast<bool>()))
             : expected is string[] expectedJsonValues && actual is string[] actualJsonValues &&
               mapping.DatabaseTypeName.Contains("json", StringComparison.OrdinalIgnoreCase)
                 ? expectedJsonValues.Length == actualJsonValues.Length &&
@@ -354,6 +362,7 @@ internal static class NativeTypeSampleFactory
     {
         var type = Nullable.GetUnderlyingType(mapping.ClrType) ?? mapping.ClrType;
         if (IsNpgsqlRange(type)) return CreateRange(type, mapping, alternate: false);
+        if (type == typeof(BitArray)) return new BitArray(mapping.DatabaseTypeName.Equals("bit", StringComparison.OrdinalIgnoreCase) ? [true] : [true, false, true]);
         if (type == typeof(byte[])) return new byte[] { 0x4a };
         if (type.IsArray)
         {
@@ -373,6 +382,7 @@ internal static class NativeTypeSampleFactory
         if (type == typeof(byte)) return byte.MaxValue;
         if (type == typeof(short)) return short.MinValue;
         if (type == typeof(ushort)) return ushort.MaxValue;
+        if (type == typeof(uint)) return mapping.DatabaseTypeName is "oid" or "xid" or "cid" ? 12345u : uint.MaxValue;
         if (type == typeof(int)) return mapping.DatabaseTypeName.Equals("YEAR", StringComparison.OrdinalIgnoreCase)
             ? 2024
             : mapping.DatabaseTypeName.Equals("MEDIUMINT", StringComparison.OrdinalIgnoreCase) ? -12345 : int.MinValue;
@@ -380,7 +390,7 @@ internal static class NativeTypeSampleFactory
             ? 12345u
             : uint.MaxValue;
         if (type == typeof(long)) return long.MinValue;
-        if (type == typeof(ulong)) return ulong.MaxValue;
+        if (type == typeof(ulong)) return mapping.DatabaseTypeName.Equals("xid8", StringComparison.OrdinalIgnoreCase) ? 1234567890123ul : ulong.MaxValue;
         if (type == typeof(decimal)) return mapping.DatabaseTypeName.Equals("money", StringComparison.OrdinalIgnoreCase) ? 12345.67m : 123456789.1234m;
         if (type == typeof(float)) return 1234.5f;
         if (type == typeof(double)) return 9876.125d;
@@ -409,6 +419,7 @@ internal static class NativeTypeSampleFactory
     {
         var type = Nullable.GetUnderlyingType(mapping.ClrType) ?? mapping.ClrType;
         if (IsNpgsqlRange(type)) return CreateRange(type, mapping, alternate: true);
+        if (type == typeof(BitArray)) return new BitArray(mapping.DatabaseTypeName.Equals("bit", StringComparison.OrdinalIgnoreCase) ? [false] : [false, true, false]);
         if (type == typeof(byte[])) return new byte[] { 0x52 };
         if (type.IsArray) return CreateArray(type.GetElementType()!, mapping, alternate: true);
         if (type == typeof(string) && mapping.DatabaseTypeName.Contains("json", StringComparison.OrdinalIgnoreCase)) return "{\"value\":2}";
@@ -419,12 +430,13 @@ internal static class NativeTypeSampleFactory
         if (type == typeof(byte)) return (byte)0;
         if (type == typeof(short)) return short.MaxValue;
         if (type == typeof(ushort)) return (ushort)0;
+        if (type == typeof(uint)) return mapping.DatabaseTypeName is "oid" or "xid" or "cid" ? 12346u : 0u;
         if (type == typeof(int)) return mapping.DatabaseTypeName.Equals("YEAR", StringComparison.OrdinalIgnoreCase)
             ? 2023
             : mapping.DatabaseTypeName.Equals("MEDIUMINT", StringComparison.OrdinalIgnoreCase) ? 12345 : int.MaxValue;
         if (type == typeof(uint)) return 0u;
         if (type == typeof(long)) return long.MaxValue;
-        if (type == typeof(ulong)) return 0ul;
+        if (type == typeof(ulong)) return mapping.DatabaseTypeName.Equals("xid8", StringComparison.OrdinalIgnoreCase) ? 987654321ul : 0ul;
         if (type == typeof(decimal)) return mapping.DatabaseTypeName.Equals("money", StringComparison.OrdinalIgnoreCase) ? -987.65m : -987654321.4321m;
         if (type == typeof(float)) return -135.25f;
         if (type == typeof(double)) return -2468.5d;
@@ -510,6 +522,13 @@ internal static class NativeTypeSampleFactory
                 ? alternate ? ["<v>2</v>", "<v>3</v>"] : ["<v>1</v>", "<v>3</v>"]
                 : alternate ? ["C", "D"] : ["A", "B"];
         else if (elementType == typeof(char)) values = alternate ? ['R', 'S'] : ['Q', 'T'];
+        else if (elementType == typeof(BitArray)) values = mapping.DatabaseTypeName.Equals("bit[]", StringComparison.OrdinalIgnoreCase)
+            ? alternate
+                ? [new BitArray([false]), new BitArray([true])]
+                : [new BitArray([true]), new BitArray([false])]
+            : alternate
+                ? [new BitArray([false, true, false]), new BitArray([true, false])]
+                : [new BitArray([true, false, true]), new BitArray([false, true])];
         else if (elementType == typeof(Guid)) values = alternate
             ? [Guid.Parse("84c5903f-330f-42d1-92f4-94ab241b1b32"), Guid.Empty]
             : [Guid.Parse("5d37ddf5-fab9-4e5b-95fb-b5259a5e3d31"), Guid.Empty];

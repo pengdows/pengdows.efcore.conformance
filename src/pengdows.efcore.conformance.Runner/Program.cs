@@ -348,7 +348,9 @@ async Task<int> RunTestsAsync(string[] arguments, string? configuredConnectionSt
                         var clrType = Nullable.GetUnderlyingType(mapping.ClrType) ?? mapping.ClrType;
                         if (!clrType.IsArray && clrType != typeof(byte[]) &&
                             !mapping.DatabaseTypeName.Contains("json", StringComparison.OrdinalIgnoreCase) &&
-                            !mapping.DatabaseTypeName.Equals("xml", StringComparison.OrdinalIgnoreCase))
+                            !mapping.DatabaseTypeName.Equals("xml", StringComparison.OrdinalIgnoreCase) &&
+                            !mapping.DatabaseTypeName.Equals("cid", StringComparison.OrdinalIgnoreCase) &&
+                            !mapping.DatabaseTypeName.Equals("xid8", StringComparison.OrdinalIgnoreCase))
                         {
                             cases.Add((mapping, "DiscoveredNativeType_QueriesByParameterizedValueSynchronously", "PARAMETER-SYNC"));
                             cases.Add((mapping, "DiscoveredNativeType_QueriesByParameterizedValueAsynchronously", "PARAMETER-ASYNC"));

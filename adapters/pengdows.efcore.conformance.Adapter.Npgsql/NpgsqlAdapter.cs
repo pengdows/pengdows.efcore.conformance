@@ -1,4 +1,5 @@
 using System.Data.Common;
+using System.Collections;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using pengdows.efcore.conformance;
@@ -29,6 +30,10 @@ public sealed class NpgsqlAdapter : IAdoNetProviderAdapter, INativeTypeMappingPr
         new("timestamp with time zone", typeof(DateTimeOffset)),
         new("interval", typeof(TimeSpan)),
         new("uuid", typeof(Guid)),
+        new("oid", typeof(uint)),
+        new("xid", typeof(uint)),
+        new("cid", typeof(uint)),
+        new("xid8", typeof(ulong)),
         new("inet", typeof(System.Net.IPAddress)),
         new("cidr", typeof(System.Net.IPNetwork)),
         new("macaddr", typeof(System.Net.NetworkInformation.PhysicalAddress)),
@@ -71,6 +76,10 @@ public sealed class NpgsqlAdapter : IAdoNetProviderAdapter, INativeTypeMappingPr
         new("xml[]", typeof(string[])),
         new("char[]", typeof(char[])),
         new("name[]", typeof(string[])),
+        new("bit", typeof(BitArray)),
+        new("bit varying", typeof(BitArray)),
+        new("bit[]", typeof(BitArray[])),
+        new("bit varying[]", typeof(BitArray[])),
         new("json", typeof(string)),
         new("jsonb", typeof(string)),
         new("xml", typeof(string), "xml"),
