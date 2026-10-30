@@ -220,6 +220,48 @@ public sealed class InterceptionTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-INTERCEPTION-CONNECTION-DISPOSE-SYNC", "Microsoft.EntityFrameworkCore.Diagnostics.DbConnectionInterceptor.ConnectionDisposing", "Microsoft.EntityFrameworkCore.Diagnostics.DbConnectionInterceptor.ConnectionDisposed", "Microsoft.EntityFrameworkCore.DbContext.Dispose")]
+    public async Task ContextDispose_InvokesSynchronousConnectionDisposalCallbacks()
+    {
+        await using (var initialize = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(initialize, TestContext.Current.CancellationToken);
+        }
+
+        var interceptor = new RecordingConnectionInterceptor();
+        using (var context = ProviderTestRuntime.CreateContext(options => options.AddInterceptors(interceptor)))
+        {
+            _ = context.People.Count();
+        }
+
+        Assert.Equal(1, interceptor.ConnectionDisposingCalls);
+        Assert.Equal(1, interceptor.ConnectionDisposedCalls);
+        Assert.Equal(0, interceptor.ConnectionDisposingAsyncCalls);
+        Assert.Equal(0, interceptor.ConnectionDisposedAsyncCalls);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-INTERCEPTION-CONNECTION-DISPOSE-ASYNC", "Microsoft.EntityFrameworkCore.Diagnostics.DbConnectionInterceptor.ConnectionDisposingAsync", "Microsoft.EntityFrameworkCore.Diagnostics.DbConnectionInterceptor.ConnectionDisposedAsync", "Microsoft.EntityFrameworkCore.DbContext.DisposeAsync")]
+    public async Task ContextDisposeAsync_InvokesAsynchronousConnectionDisposalCallbacks()
+    {
+        await using (var initialize = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(initialize, TestContext.Current.CancellationToken);
+        }
+
+        var interceptor = new RecordingConnectionInterceptor();
+        await using (var context = ProviderTestRuntime.CreateContext(options => options.AddInterceptors(interceptor)))
+        {
+            _ = await context.People.CountAsync(TestContext.Current.CancellationToken);
+        }
+
+        Assert.Equal(0, interceptor.ConnectionDisposingCalls);
+        Assert.Equal(0, interceptor.ConnectionDisposedCalls);
+        Assert.Equal(1, interceptor.ConnectionDisposingAsyncCalls);
+        Assert.Equal(1, interceptor.ConnectionDisposedAsyncCalls);
+    }
+
+    [Fact]
     [CapabilityRequirement("execute-update")]
     [BehavioralCoverage("EF10-INTERCEPTION-NONQUERY-UPDATE-SYNC", "Microsoft.EntityFrameworkCore.DbContextOptionsBuilder.AddInterceptors", "Microsoft.EntityFrameworkCore.Diagnostics.DbCommandInterceptor.NonQueryExecuting", "Microsoft.EntityFrameworkCore.Diagnostics.DbCommandInterceptor.NonQueryExecuted", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteUpdate")]
     public async Task ExecuteUpdate_InvokesSynchronousNonQueryInterceptorCallbacks()
@@ -870,6 +912,14 @@ public sealed class InterceptionTests
 
         public int ConnectionClosedAsyncCalls { get; private set; }
 
+        public int ConnectionDisposingCalls { get; private set; }
+
+        public int ConnectionDisposedCalls { get; private set; }
+
+        public int ConnectionDisposingAsyncCalls { get; private set; }
+
+        public int ConnectionDisposedAsyncCalls { get; private set; }
+
         public override InterceptionResult ConnectionOpening(
             DbConnection connection,
             ConnectionEventData eventData,
@@ -927,6 +977,33 @@ public sealed class InterceptionTests
             ConnectionEndEventData eventData)
         {
             ConnectionClosedAsyncCalls++;
+            return Task.CompletedTask;
+        }
+
+        public override InterceptionResult ConnectionDisposing(
+            DbConnection connection,
+            ConnectionEventData eventData,
+            InterceptionResult result)
+        {
+            ConnectionDisposingCalls++;
+            return result;
+        }
+
+        public override void ConnectionDisposed(DbConnection connection, ConnectionEndEventData eventData) =>
+            ConnectionDisposedCalls++;
+
+        public override ValueTask<InterceptionResult> ConnectionDisposingAsync(
+            DbConnection connection,
+            ConnectionEventData eventData,
+            InterceptionResult result)
+        {
+            ConnectionDisposingAsyncCalls++;
+            return ValueTask.FromResult(result);
+        }
+
+        public override Task ConnectionDisposedAsync(DbConnection connection, ConnectionEndEventData eventData)
+        {
+            ConnectionDisposedAsyncCalls++;
             return Task.CompletedTask;
         }
     }
