@@ -159,6 +159,65 @@ public sealed class InterceptionTests
         Assert.Equal(1, interceptor.ConnectionOpenedAsyncCalls);
     }
 
+    [Fact]
+    [CapabilityRequirement("execute-update")]
+    [BehavioralCoverage("EF10-INTERCEPTION-NONQUERY-UPDATE-SYNC", "Microsoft.EntityFrameworkCore.DbContextOptionsBuilder.AddInterceptors", "Microsoft.EntityFrameworkCore.Diagnostics.DbCommandInterceptor.NonQueryExecuting", "Microsoft.EntityFrameworkCore.Diagnostics.DbCommandInterceptor.NonQueryExecuted", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteUpdate")]
+    public async Task ExecuteUpdate_InvokesSynchronousNonQueryInterceptorCallbacks()
+    {
+        ProviderTestRuntime.RequireCapability("execute-update");
+        var person = CreatePerson("Sync non-query interceptor");
+        await SeedAsync(person);
+        var interceptor = new RecordingCommandInterceptor();
+
+        await using (var context = ProviderTestRuntime.CreateContext(options => options.AddInterceptors(interceptor)))
+        {
+            var affected = context.People.Where(item => item.Id == person.Id)
+                .ExecuteUpdate(setters => setters.SetProperty(item => item.Age, item => item.Age + 1));
+            Assert.Equal(1, affected);
+        }
+
+        Assert.Equal(1, interceptor.NonQueryExecutingCalls);
+        Assert.Equal(1, interceptor.NonQueryExecutedCalls);
+        Assert.Equal(0, interceptor.NonQueryExecutingAsyncCalls);
+        Assert.Equal(0, interceptor.NonQueryExecutedAsyncCalls);
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.Equal(person.Age + 1, await verify.People.AsNoTracking()
+            .Where(item => item.Id == person.Id)
+            .Select(item => item.Age)
+            .SingleAsync(TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
+    [CapabilityRequirement("execute-update")]
+    [BehavioralCoverage("EF10-INTERCEPTION-NONQUERY-UPDATE-ASYNC", "Microsoft.EntityFrameworkCore.DbContextOptionsBuilder.AddInterceptors", "Microsoft.EntityFrameworkCore.Diagnostics.DbCommandInterceptor.NonQueryExecutingAsync", "Microsoft.EntityFrameworkCore.Diagnostics.DbCommandInterceptor.NonQueryExecutedAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteUpdateAsync")]
+    public async Task ExecuteUpdateAsync_InvokesAsynchronousNonQueryInterceptorCallbacks()
+    {
+        ProviderTestRuntime.RequireCapability("execute-update");
+        var person = CreatePerson("Async non-query interceptor");
+        await SeedAsync(person);
+        var interceptor = new RecordingCommandInterceptor();
+
+        await using (var context = ProviderTestRuntime.CreateContext(options => options.AddInterceptors(interceptor)))
+        {
+            var affected = await context.People.Where(item => item.Id == person.Id)
+                .ExecuteUpdateAsync(setters => setters.SetProperty(item => item.Age, item => item.Age + 1),
+                    TestContext.Current.CancellationToken);
+            Assert.Equal(1, affected);
+        }
+
+        Assert.Equal(0, interceptor.NonQueryExecutingCalls);
+        Assert.Equal(0, interceptor.NonQueryExecutedCalls);
+        Assert.Equal(1, interceptor.NonQueryExecutingAsyncCalls);
+        Assert.Equal(1, interceptor.NonQueryExecutedAsyncCalls);
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.Equal(person.Age + 1, await verify.People.AsNoTracking()
+            .Where(item => item.Id == person.Id)
+            .Select(item => item.Age)
+            .SingleAsync(TestContext.Current.CancellationToken));
+    }
+
     private static Person CreatePerson(string prefix) => new()
     {
         Id = Guid.NewGuid(),
@@ -183,6 +242,14 @@ public sealed class InterceptionTests
         public int ReaderExecutingAsyncCalls { get; private set; }
 
         public int ReaderExecutedAsyncCalls { get; private set; }
+
+        public int NonQueryExecutingCalls { get; private set; }
+
+        public int NonQueryExecutedCalls { get; private set; }
+
+        public int NonQueryExecutingAsyncCalls { get; private set; }
+
+        public int NonQueryExecutedAsyncCalls { get; private set; }
 
         public override InterceptionResult<DbDataReader> ReaderExecuting(
             DbCommand command,
@@ -219,6 +286,41 @@ public sealed class InterceptionTests
             CancellationToken cancellationToken = default)
         {
             ReaderExecutedAsyncCalls++;
+            return ValueTask.FromResult(result);
+        }
+
+        public override InterceptionResult<int> NonQueryExecuting(
+            DbCommand command,
+            CommandEventData eventData,
+            InterceptionResult<int> result)
+        {
+            NonQueryExecutingCalls++;
+            return result;
+        }
+
+        public override int NonQueryExecuted(DbCommand command, CommandExecutedEventData eventData, int result)
+        {
+            NonQueryExecutedCalls++;
+            return result;
+        }
+
+        public override ValueTask<InterceptionResult<int>> NonQueryExecutingAsync(
+            DbCommand command,
+            CommandEventData eventData,
+            InterceptionResult<int> result,
+            CancellationToken cancellationToken = default)
+        {
+            NonQueryExecutingAsyncCalls++;
+            return ValueTask.FromResult(result);
+        }
+
+        public override ValueTask<int> NonQueryExecutedAsync(
+            DbCommand command,
+            CommandExecutedEventData eventData,
+            int result,
+            CancellationToken cancellationToken = default)
+        {
+            NonQueryExecutedAsyncCalls++;
             return ValueTask.FromResult(result);
         }
     }
