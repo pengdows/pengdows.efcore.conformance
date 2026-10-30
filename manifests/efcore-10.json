@@ -17,6 +17,71 @@
   "capabilityRule": "Capability declarations control applicability only and never modify expected results.",
   "dispositionRules": [
     {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpMigrationOperationGeneratorDependencies",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite validates the observable generated migration output instead of inspecting provider service graphs."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpMigrationsGeneratorDependencies",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite validates the observable generated migration output instead of inspecting provider service graphs."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpSnapshotGeneratorDependencies",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite validates the observable generated snapshot output instead of inspecting provider service graphs."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsCodeGeneratorDependencies",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite validates the observable generated migration output instead of inspecting provider service graphs."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsScaffolderDependencies",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite tests migration scaffolding results without inspecting provider service graphs."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpMigrationOperationGenerator..ctor",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "The generator is created by EF design-time dependency injection. Constructor wiring is not observable provider behavior; the generated operation code is tested through the public generator API."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpMigrationsGenerator..ctor",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "The generator is created by EF design-time dependency injection. Constructor wiring is not observable provider behavior; generation and scaffolding results are tested through public APIs."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpSnapshotGenerator..ctor",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "The generator is created by EF design-time dependency injection. Constructor wiring is not observable provider behavior; generated snapshot output is tested through the public generator API."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsScaffolder..ctor",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "The scaffolder is created by EF design-time dependency injection. Constructor wiring is not observable provider behavior; scaffold results are tested through its public API."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.Design.IMigrationsScaffolder.RemoveMigration",
+      "disposition": "ef-owned-no-provider-contract",
+      "reason": "Removing migration source files and rewriting a project snapshot is EF command-line tooling behavior. Provider migration history and application behavior are tested through public migration APIs; project file operations do not define a relational provider contract."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsScaffolder.RemoveMigration",
+      "disposition": "ef-owned-no-provider-contract",
+      "reason": "Removing migration source files and rewriting a project snapshot is EF command-line tooling behavior. Provider migration history and application behavior are tested through public migration APIs; project file operations do not define a relational provider contract."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsBundle.Execute",
+      "disposition": "ef-owned-no-provider-contract",
+      "reason": "This method is the EF migration bundle process entry point. Command-line startup and assembly loading are EF tooling responsibilities; migration execution against the database is covered through public migrator APIs."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.Design.ScaffoldedMigration..ctor",
+      "disposition": "ef-owned-no-provider-contract",
+      "reason": "This constructor creates EF's immutable scaffold-result DTO. The provider-facing scaffold output and the DTO's returned properties are covered through public scaffolder APIs."
+    },
+    {
       "selectorPrefix": "Microsoft.EntityFrameworkCore.Query.",
       "disposition": "not-applicable-with-rationale",
       "reason": "These are public query provider service and expression APIs. The suite does not invoke provider services directly; it verifies translation and results through public IQueryable operations."

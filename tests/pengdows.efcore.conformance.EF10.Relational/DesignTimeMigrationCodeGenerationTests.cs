@@ -106,6 +106,15 @@ public sealed class DesignTimeMigrationCodeGenerationTests
         "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpMigrationsGenerator.GenerateMigration",
         "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpMigrationsGenerator.GenerateMetadata",
         "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpMigrationsGenerator.GenerateSnapshot",
+        "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsCodeGenerator.GenerateMigration",
+        "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsCodeGenerator.GenerateMetadata",
+        "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsCodeGenerator.GenerateSnapshot",
+        "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsCodeGenerator.FileExtension",
+        "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsCodeGenerator.Language",
+        "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsScaffolder.ScaffoldMigration",
+        "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsScaffolder.Save",
+        "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpMigrationOperationGenerator.Generate",
+        "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpSnapshotGenerator.Generate",
         "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationFiles.MigrationFile",
         "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationFiles.MetadataFile",
         "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationFiles.SnapshotFile",
@@ -127,6 +136,7 @@ public sealed class DesignTimeMigrationCodeGenerationTests
             .GetRequiredService<IMigrationsCodeGeneratorSelector>()
             .Select("C#");
         var csharpGenerator = Assert.IsType<CSharpMigrationsGenerator>(generator);
+        var baseGenerator = Assert.IsAssignableFrom<MigrationsCodeGenerator>(csharpGenerator);
         var designModel = context.GetService<IDesignTimeModel>().Model;
         var operation = new AddColumnOperation
         {
@@ -143,32 +153,53 @@ public sealed class DesignTimeMigrationCodeGenerationTests
             "AddPersonAge",
             [operation],
             Array.Empty<MigrationOperation>());
+        Assert.Equal(generated, baseGenerator.GenerateMigration(
+            "Example.Migrations",
+            "AddPersonAge",
+            [operation],
+            Array.Empty<MigrationOperation>()));
         var metadata = generator.GenerateMetadata(
             "Example.Migrations",
             typeof(ConformanceDbContext),
             "AddPersonAge",
             "202610300001_AddPersonAge",
             designModel);
+        Assert.Equal(metadata, baseGenerator.GenerateMetadata(
+            "Example.Migrations",
+            typeof(ConformanceDbContext),
+            "AddPersonAge",
+            "202610300001_AddPersonAge",
+            designModel));
         var snapshot = generator.GenerateSnapshot(
             "Example.Migrations",
             typeof(ConformanceDbContext),
             "ConformanceContextModelSnapshot",
             designModel);
+        Assert.Equal(snapshot, baseGenerator.GenerateSnapshot(
+            "Example.Migrations",
+            typeof(ConformanceDbContext),
+            "ConformanceContextModelSnapshot",
+            designModel));
         var scaffoldedMigration = serviceProvider.GetRequiredService<IMigrationsScaffolder>()
             .ScaffoldMigration("ConformanceInitial", "Example.Migrations", language: "C#", dryRun: true);
-        var scaffolder = serviceProvider.GetRequiredService<IMigrationsScaffolder>();
+        var scaffolder = Assert.IsType<MigrationsScaffolder>(serviceProvider.GetRequiredService<IMigrationsScaffolder>());
+        var overloadScaffold = scaffolder.ScaffoldMigration("ConformanceOverload", "Example.Migrations", "ExplicitSubnamespace");
         var projectDirectory = Path.Combine(Path.GetTempPath(), $"ef10-design-{Guid.NewGuid():N}");
         var savedFiles = scaffolder.Save(projectDirectory, scaffoldedMigration, "Migrations", dryRun: true);
         var operationBuilder = new IndentedStringBuilder();
-        serviceProvider.GetRequiredService<ICSharpMigrationOperationGenerator>()
-            .Generate("migrationBuilder", [operation], operationBuilder);
+        var operationGenerator = Assert.IsType<CSharpMigrationOperationGenerator>(
+            serviceProvider.GetRequiredService<ICSharpMigrationOperationGenerator>());
+        operationGenerator.Generate("migrationBuilder", [operation], operationBuilder);
         var snapshotBuilder = new IndentedStringBuilder();
-        serviceProvider.GetRequiredService<ICSharpSnapshotGenerator>()
-            .Generate("modelBuilder", designModel, snapshotBuilder);
+        var snapshotGenerator = Assert.IsType<CSharpSnapshotGenerator>(
+            serviceProvider.GetRequiredService<ICSharpSnapshotGenerator>());
+        snapshotGenerator.Generate("modelBuilder", designModel, snapshotBuilder);
 
         Assert.Equal(".cs", generator.FileExtension);
         Assert.Equal("C#", csharpGenerator.Language);
         Assert.Equal(".cs", csharpGenerator.FileExtension);
+        Assert.Equal("C#", baseGenerator.Language);
+        Assert.Equal(".cs", baseGenerator.FileExtension);
         Assert.Contains("AddColumn<int>", generated, StringComparison.Ordinal);
         Assert.Contains("name: \"age\"", generated, StringComparison.Ordinal);
         Assert.Contains("table: \"people\"", generated, StringComparison.Ordinal);
@@ -182,6 +213,8 @@ public sealed class DesignTimeMigrationCodeGenerationTests
         Assert.Contains("ConformanceInitial", scaffoldedMigration.MigrationId, StringComparison.Ordinal);
         Assert.Contains("ConformanceInitial", scaffoldedMigration.MetadataCode, StringComparison.Ordinal);
         Assert.Contains("ModelSnapshot", scaffoldedMigration.SnapshotCode, StringComparison.Ordinal);
+        Assert.Contains("CreateTable", overloadScaffold.MigrationCode, StringComparison.Ordinal);
+        Assert.Equal("ExplicitSubnamespace", overloadScaffold.MigrationSubNamespace);
         Assert.Equal(context.Database.GetMigrations().LastOrDefault(), scaffoldedMigration.PreviousMigrationId);
         Assert.Contains("ConformanceDb", scaffoldedMigration.MigrationSubNamespace, StringComparison.Ordinal);
         Assert.Equal("ConformanceDbContextModelSnapshot", scaffoldedMigration.SnapshotName);

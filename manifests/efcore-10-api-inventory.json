@@ -23,10 +23,10 @@
     "TotalEntries": 18795,
     "PublicTypes": 2033,
     "PublicMembers": 16762,
-    "AwaitingClassification": 57,
+    "AwaitingClassification": 0,
     "ExplicitlyExcluded": 5921,
-    "MemberEntriesInCoveredFamilies": 727,
-    "UncoveredMemberFamilies": 55
+    "MemberEntriesInCoveredFamilies": 737,
+    "UncoveredMemberFamilies": 0
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -153959,10 +153959,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "Generate",
       "Signature": "System.Void Generate(System.String builderName, System.Collections.Generic.IReadOnlyList\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.MigrationOperation\u003E operations, Microsoft.EntityFrameworkCore.Infrastructure.IndentedStringBuilder builder)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-MIGRATION-CODE-GENERATION"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpMigrationOperationGenerator.Generate"
     },
     {
@@ -153971,10 +153973,10 @@
       "MemberKind": "Constructor",
       "ApiMemberName": ".ctor",
       "Signature": ".ctor(Microsoft.EntityFrameworkCore.Migrations.Design.CSharpMigrationOperationGeneratorDependencies dependencies)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "The generator is created by EF design-time dependency injection. Constructor wiring is not observable provider behavior; the generated operation code is tested through the public generator API.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpMigrationOperationGenerator..ctor"
     },
     {
@@ -154007,10 +154009,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "op_Inequality",
       "Signature": "System.Boolean op_Inequality(Microsoft.EntityFrameworkCore.Migrations.Design.CSharpMigrationOperationGeneratorDependencies left, Microsoft.EntityFrameworkCore.Migrations.Design.CSharpMigrationOperationGeneratorDependencies right)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite validates the observable generated migration output instead of inspecting provider service graphs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpMigrationOperationGeneratorDependencies.op_Inequality"
     },
     {
@@ -154019,10 +154021,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "op_Equality",
       "Signature": "System.Boolean op_Equality(Microsoft.EntityFrameworkCore.Migrations.Design.CSharpMigrationOperationGeneratorDependencies left, Microsoft.EntityFrameworkCore.Migrations.Design.CSharpMigrationOperationGeneratorDependencies right)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite validates the observable generated migration output instead of inspecting provider service graphs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpMigrationOperationGeneratorDependencies.op_Equality"
     },
     {
@@ -154055,10 +154057,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "Equals",
       "Signature": "System.Boolean Equals(Microsoft.EntityFrameworkCore.Migrations.Design.CSharpMigrationOperationGeneratorDependencies other)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite validates the observable generated migration output instead of inspecting provider service graphs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpMigrationOperationGeneratorDependencies.Equals"
     },
     {
@@ -154067,10 +154069,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "\u003CClone\u003E$",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpMigrationOperationGeneratorDependencies \u003CClone\u003E$()",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite validates the observable generated migration output instead of inspecting provider service graphs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpMigrationOperationGeneratorDependencies.\u003CClone\u003E$"
     },
     {
@@ -154091,10 +154093,10 @@
       "MemberKind": "Property",
       "ApiMemberName": "CSharpHelper",
       "Signature": "Microsoft.EntityFrameworkCore.Design.ICSharpHelper CSharpHelper get; set;",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite validates the observable generated migration output instead of inspecting provider service graphs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpMigrationOperationGeneratorDependencies.CSharpHelper"
     },
     {
@@ -154157,10 +154159,10 @@
       "MemberKind": "Constructor",
       "ApiMemberName": ".ctor",
       "Signature": ".ctor(Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsCodeGeneratorDependencies dependencies, Microsoft.EntityFrameworkCore.Migrations.Design.CSharpMigrationsGeneratorDependencies csharpDependencies)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "The generator is created by EF design-time dependency injection. Constructor wiring is not observable provider behavior; generation and scaffolding results are tested through public APIs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpMigrationsGenerator..ctor"
     },
     {
@@ -154221,10 +154223,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "op_Inequality",
       "Signature": "System.Boolean op_Inequality(Microsoft.EntityFrameworkCore.Migrations.Design.CSharpMigrationsGeneratorDependencies left, Microsoft.EntityFrameworkCore.Migrations.Design.CSharpMigrationsGeneratorDependencies right)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite validates the observable generated migration output instead of inspecting provider service graphs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpMigrationsGeneratorDependencies.op_Inequality"
     },
     {
@@ -154233,10 +154235,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "op_Equality",
       "Signature": "System.Boolean op_Equality(Microsoft.EntityFrameworkCore.Migrations.Design.CSharpMigrationsGeneratorDependencies left, Microsoft.EntityFrameworkCore.Migrations.Design.CSharpMigrationsGeneratorDependencies right)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite validates the observable generated migration output instead of inspecting provider service graphs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpMigrationsGeneratorDependencies.op_Equality"
     },
     {
@@ -154269,10 +154271,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "Equals",
       "Signature": "System.Boolean Equals(Microsoft.EntityFrameworkCore.Migrations.Design.CSharpMigrationsGeneratorDependencies other)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite validates the observable generated migration output instead of inspecting provider service graphs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpMigrationsGeneratorDependencies.Equals"
     },
     {
@@ -154281,10 +154283,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "\u003CClone\u003E$",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpMigrationsGeneratorDependencies \u003CClone\u003E$()",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite validates the observable generated migration output instead of inspecting provider service graphs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpMigrationsGeneratorDependencies.\u003CClone\u003E$"
     },
     {
@@ -154305,10 +154307,10 @@
       "MemberKind": "Property",
       "ApiMemberName": "CSharpHelper",
       "Signature": "Microsoft.EntityFrameworkCore.Design.ICSharpHelper CSharpHelper get; set;",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite validates the observable generated migration output instead of inspecting provider service graphs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpMigrationsGeneratorDependencies.CSharpHelper"
     },
     {
@@ -154317,10 +154319,10 @@
       "MemberKind": "Property",
       "ApiMemberName": "CSharpMigrationOperationGenerator",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Design.ICSharpMigrationOperationGenerator CSharpMigrationOperationGenerator get; set;",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite validates the observable generated migration output instead of inspecting provider service graphs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpMigrationsGeneratorDependencies.CSharpMigrationOperationGenerator"
     },
     {
@@ -154329,10 +154331,10 @@
       "MemberKind": "Property",
       "ApiMemberName": "CSharpSnapshotGenerator",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Design.ICSharpSnapshotGenerator CSharpSnapshotGenerator get; set;",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite validates the observable generated migration output instead of inspecting provider service graphs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpMigrationsGeneratorDependencies.CSharpSnapshotGenerator"
     },
     {
@@ -154353,10 +154355,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "Generate",
       "Signature": "System.Void Generate(System.String modelBuilderName, Microsoft.EntityFrameworkCore.Metadata.IModel model, Microsoft.EntityFrameworkCore.Infrastructure.IndentedStringBuilder stringBuilder)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-MIGRATION-CODE-GENERATION"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpSnapshotGenerator.Generate"
     },
     {
@@ -154365,10 +154369,10 @@
       "MemberKind": "Constructor",
       "ApiMemberName": ".ctor",
       "Signature": ".ctor(Microsoft.EntityFrameworkCore.Migrations.Design.CSharpSnapshotGeneratorDependencies dependencies)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "The generator is created by EF design-time dependency injection. Constructor wiring is not observable provider behavior; generated snapshot output is tested through the public generator API.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpSnapshotGenerator..ctor"
     },
     {
@@ -154401,10 +154405,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "op_Inequality",
       "Signature": "System.Boolean op_Inequality(Microsoft.EntityFrameworkCore.Migrations.Design.CSharpSnapshotGeneratorDependencies left, Microsoft.EntityFrameworkCore.Migrations.Design.CSharpSnapshotGeneratorDependencies right)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite validates the observable generated snapshot output instead of inspecting provider service graphs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpSnapshotGeneratorDependencies.op_Inequality"
     },
     {
@@ -154413,10 +154417,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "op_Equality",
       "Signature": "System.Boolean op_Equality(Microsoft.EntityFrameworkCore.Migrations.Design.CSharpSnapshotGeneratorDependencies left, Microsoft.EntityFrameworkCore.Migrations.Design.CSharpSnapshotGeneratorDependencies right)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite validates the observable generated snapshot output instead of inspecting provider service graphs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpSnapshotGeneratorDependencies.op_Equality"
     },
     {
@@ -154449,10 +154453,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "Equals",
       "Signature": "System.Boolean Equals(Microsoft.EntityFrameworkCore.Migrations.Design.CSharpSnapshotGeneratorDependencies other)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite validates the observable generated snapshot output instead of inspecting provider service graphs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpSnapshotGeneratorDependencies.Equals"
     },
     {
@@ -154461,10 +154465,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "\u003CClone\u003E$",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpSnapshotGeneratorDependencies \u003CClone\u003E$()",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite validates the observable generated snapshot output instead of inspecting provider service graphs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpSnapshotGeneratorDependencies.\u003CClone\u003E$"
     },
     {
@@ -154485,10 +154489,10 @@
       "MemberKind": "Property",
       "ApiMemberName": "CSharpHelper",
       "Signature": "Microsoft.EntityFrameworkCore.Design.ICSharpHelper CSharpHelper get; set;",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite validates the observable generated snapshot output instead of inspecting provider service graphs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpSnapshotGeneratorDependencies.CSharpHelper"
     },
     {
@@ -154497,10 +154501,10 @@
       "MemberKind": "Property",
       "ApiMemberName": "RelationalTypeMappingSource",
       "Signature": "Microsoft.EntityFrameworkCore.Storage.IRelationalTypeMappingSource RelationalTypeMappingSource get; set;",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite validates the observable generated snapshot output instead of inspecting provider service graphs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpSnapshotGeneratorDependencies.RelationalTypeMappingSource"
     },
     {
@@ -154509,10 +154513,10 @@
       "MemberKind": "Property",
       "ApiMemberName": "AnnotationCodeGenerator",
       "Signature": "Microsoft.EntityFrameworkCore.Design.IAnnotationCodeGenerator AnnotationCodeGenerator get; set;",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite validates the observable generated snapshot output instead of inspecting provider service graphs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.CSharpSnapshotGeneratorDependencies.AnnotationCodeGenerator"
     },
     {
@@ -154693,10 +154697,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "RemoveMigration",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationFiles RemoveMigration(System.String projectDir, System.String rootNamespace, System.Boolean force, System.String language, System.Boolean dryRun = false)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "ef-owned-no-provider-contract",
+      "DispositionReason": "Removing migration source files and rewriting a project snapshot is EF command-line tooling behavior. Provider migration history and application behavior are tested through public migration APIs; project file operations do not define a relational provider contract.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.IMigrationsScaffolder.RemoveMigration"
     },
     {
@@ -154813,10 +154817,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "Execute",
       "Signature": "System.Int32 Execute(System.String context, System.Reflection.Assembly assembly, System.Reflection.Assembly startupAssembly, System.String[] args)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "ef-owned-no-provider-contract",
+      "DispositionReason": "This method is the EF migration bundle process entry point. Command-line startup and assembly loading are EF tooling responsibilities; migration execution against the database is covered through public migrator APIs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsBundle.Execute"
     },
     {
@@ -154837,10 +154841,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "GenerateMigration",
       "Signature": "System.String GenerateMigration(System.String migrationNamespace, System.String migrationName, System.Collections.Generic.IReadOnlyList\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.MigrationOperation\u003E upOperations, System.Collections.Generic.IReadOnlyList\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.MigrationOperation\u003E downOperations)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-MIGRATION-CODE-GENERATION"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsCodeGenerator.GenerateMigration"
     },
     {
@@ -154849,10 +154855,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "GenerateMetadata",
       "Signature": "System.String GenerateMetadata(System.String migrationNamespace, System.Type contextType, System.String migrationName, System.String migrationId, Microsoft.EntityFrameworkCore.Metadata.IModel targetModel)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-MIGRATION-CODE-GENERATION"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsCodeGenerator.GenerateMetadata"
     },
     {
@@ -154861,10 +154869,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "GenerateSnapshot",
       "Signature": "System.String GenerateSnapshot(System.String modelSnapshotNamespace, System.Type contextType, System.String modelSnapshotName, Microsoft.EntityFrameworkCore.Metadata.IModel model)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-MIGRATION-CODE-GENERATION"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsCodeGenerator.GenerateSnapshot"
     },
     {
@@ -154873,10 +154883,12 @@
       "MemberKind": "Property",
       "ApiMemberName": "FileExtension",
       "Signature": "System.String FileExtension get;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-MIGRATION-CODE-GENERATION"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsCodeGenerator.FileExtension"
     },
     {
@@ -154885,10 +154897,12 @@
       "MemberKind": "Property",
       "ApiMemberName": "Language",
       "Signature": "System.String Language get;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-MIGRATION-CODE-GENERATION"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsCodeGenerator.Language"
     },
     {
@@ -154921,10 +154935,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "op_Inequality",
       "Signature": "System.Boolean op_Inequality(Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsCodeGeneratorDependencies left, Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsCodeGeneratorDependencies right)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite validates the observable generated migration output instead of inspecting provider service graphs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsCodeGeneratorDependencies.op_Inequality"
     },
     {
@@ -154933,10 +154947,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "op_Equality",
       "Signature": "System.Boolean op_Equality(Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsCodeGeneratorDependencies left, Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsCodeGeneratorDependencies right)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite validates the observable generated migration output instead of inspecting provider service graphs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsCodeGeneratorDependencies.op_Equality"
     },
     {
@@ -154969,10 +154983,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "Equals",
       "Signature": "System.Boolean Equals(Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsCodeGeneratorDependencies other)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite validates the observable generated migration output instead of inspecting provider service graphs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsCodeGeneratorDependencies.Equals"
     },
     {
@@ -154981,10 +154995,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "\u003CClone\u003E$",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsCodeGeneratorDependencies \u003CClone\u003E$()",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite validates the observable generated migration output instead of inspecting provider service graphs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsCodeGeneratorDependencies.\u003CClone\u003E$"
     },
     {
@@ -155005,10 +155019,10 @@
       "MemberKind": "Property",
       "ApiMemberName": "RelationalTypeMappingSource",
       "Signature": "Microsoft.EntityFrameworkCore.Storage.IRelationalTypeMappingSource RelationalTypeMappingSource get; set;",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite validates the observable generated migration output instead of inspecting provider service graphs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsCodeGeneratorDependencies.RelationalTypeMappingSource"
     },
     {
@@ -155017,10 +155031,10 @@
       "MemberKind": "Property",
       "ApiMemberName": "AnnotationCodeGenerator",
       "Signature": "Microsoft.EntityFrameworkCore.Design.IAnnotationCodeGenerator AnnotationCodeGenerator get; set;",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite validates the observable generated migration output instead of inspecting provider service graphs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsCodeGeneratorDependencies.AnnotationCodeGenerator"
     },
     {
@@ -155041,10 +155055,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "ScaffoldMigration",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Design.ScaffoldedMigration ScaffoldMigration(System.String migrationName, System.String rootNamespace, System.String subNamespace)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-MIGRATION-CODE-GENERATION"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsScaffolder.ScaffoldMigration"
     },
     {
@@ -155053,10 +155069,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "ScaffoldMigration",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Design.ScaffoldedMigration ScaffoldMigration(System.String migrationName, System.String rootNamespace, System.String subNamespace = null, System.String language = null, System.Boolean dryRun = false)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-MIGRATION-CODE-GENERATION"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsScaffolder.ScaffoldMigration"
     },
     {
@@ -155065,10 +155083,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "RemoveMigration",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationFiles RemoveMigration(System.String projectDir, System.String rootNamespace, System.Boolean force, System.Boolean dryRun)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "ef-owned-no-provider-contract",
+      "DispositionReason": "Removing migration source files and rewriting a project snapshot is EF command-line tooling behavior. Provider migration history and application behavior are tested through public migration APIs; project file operations do not define a relational provider contract.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsScaffolder.RemoveMigration"
     },
     {
@@ -155077,10 +155095,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "RemoveMigration",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationFiles RemoveMigration(System.String projectDir, System.String rootNamespace, System.Boolean force, System.String language, System.Boolean dryRun)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "ef-owned-no-provider-contract",
+      "DispositionReason": "Removing migration source files and rewriting a project snapshot is EF command-line tooling behavior. Provider migration history and application behavior are tested through public migration APIs; project file operations do not define a relational provider contract.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsScaffolder.RemoveMigration"
     },
     {
@@ -155089,10 +155107,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "Save",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationFiles Save(System.String projectDir, Microsoft.EntityFrameworkCore.Migrations.Design.ScaffoldedMigration migration, System.String outputDir, System.Boolean dryRun)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-MIGRATION-CODE-GENERATION"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsScaffolder.Save"
     },
     {
@@ -155101,10 +155121,10 @@
       "MemberKind": "Constructor",
       "ApiMemberName": ".ctor",
       "Signature": ".ctor(Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsScaffolderDependencies dependencies)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "The scaffolder is created by EF design-time dependency injection. Constructor wiring is not observable provider behavior; scaffold results are tested through its public API.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsScaffolder..ctor"
     },
     {
@@ -155137,10 +155157,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "op_Inequality",
       "Signature": "System.Boolean op_Inequality(Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsScaffolderDependencies left, Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsScaffolderDependencies right)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite tests migration scaffolding results without inspecting provider service graphs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsScaffolderDependencies.op_Inequality"
     },
     {
@@ -155149,10 +155169,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "op_Equality",
       "Signature": "System.Boolean op_Equality(Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsScaffolderDependencies left, Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsScaffolderDependencies right)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite tests migration scaffolding results without inspecting provider service graphs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsScaffolderDependencies.op_Equality"
     },
     {
@@ -155185,10 +155205,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "Equals",
       "Signature": "System.Boolean Equals(Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsScaffolderDependencies other)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite tests migration scaffolding results without inspecting provider service graphs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsScaffolderDependencies.Equals"
     },
     {
@@ -155197,10 +155217,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "\u003CClone\u003E$",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsScaffolderDependencies \u003CClone\u003E$()",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite tests migration scaffolding results without inspecting provider service graphs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsScaffolderDependencies.\u003CClone\u003E$"
     },
     {
@@ -155221,10 +155241,10 @@
       "MemberKind": "Property",
       "ApiMemberName": "CurrentContext",
       "Signature": "Microsoft.EntityFrameworkCore.Infrastructure.ICurrentDbContext CurrentContext get; set;",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite tests migration scaffolding results without inspecting provider service graphs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsScaffolderDependencies.CurrentContext"
     },
     {
@@ -155233,10 +155253,10 @@
       "MemberKind": "Property",
       "ApiMemberName": "Model",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.IModel Model get; set;",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite tests migration scaffolding results without inspecting provider service graphs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsScaffolderDependencies.Model"
     },
     {
@@ -155245,10 +155265,10 @@
       "MemberKind": "Property",
       "ApiMemberName": "MigrationsAssembly",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.IMigrationsAssembly MigrationsAssembly get; set;",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite tests migration scaffolding results without inspecting provider service graphs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsScaffolderDependencies.MigrationsAssembly"
     },
     {
@@ -155257,10 +155277,10 @@
       "MemberKind": "Property",
       "ApiMemberName": "MigrationsModelDiffer",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.IMigrationsModelDiffer MigrationsModelDiffer get; set;",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite tests migration scaffolding results without inspecting provider service graphs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsScaffolderDependencies.MigrationsModelDiffer"
     },
     {
@@ -155269,10 +155289,10 @@
       "MemberKind": "Property",
       "ApiMemberName": "MigrationsIdGenerator",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.IMigrationsIdGenerator MigrationsIdGenerator get; set;",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite tests migration scaffolding results without inspecting provider service graphs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsScaffolderDependencies.MigrationsIdGenerator"
     },
     {
@@ -155281,10 +155301,10 @@
       "MemberKind": "Property",
       "ApiMemberName": "MigrationsCodeGeneratorSelector",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Design.IMigrationsCodeGeneratorSelector MigrationsCodeGeneratorSelector get; set;",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite tests migration scaffolding results without inspecting provider service graphs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsScaffolderDependencies.MigrationsCodeGeneratorSelector"
     },
     {
@@ -155293,10 +155313,10 @@
       "MemberKind": "Property",
       "ApiMemberName": "HistoryRepository",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.IHistoryRepository HistoryRepository get; set;",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite tests migration scaffolding results without inspecting provider service graphs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsScaffolderDependencies.HistoryRepository"
     },
     {
@@ -155317,10 +155337,10 @@
       "MemberKind": "Property",
       "ApiMemberName": "DatabaseProvider",
       "Signature": "Microsoft.EntityFrameworkCore.Storage.IDatabaseProvider DatabaseProvider get; set;",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite tests migration scaffolding results without inspecting provider service graphs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsScaffolderDependencies.DatabaseProvider"
     },
     {
@@ -155341,10 +155361,10 @@
       "MemberKind": "Property",
       "ApiMemberName": "Migrator",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.IMigrator Migrator get; set;",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "This dependency bag is constructed and replaced through EF design-time dependency injection when implementing or extending a provider. Its equality, cloning, and dependency properties are provider implementation wiring; this black-box suite tests migration scaffolding results without inspecting provider service graphs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.MigrationsScaffolderDependencies.Migrator"
     },
     {
@@ -155365,10 +155385,10 @@
       "MemberKind": "Constructor",
       "ApiMemberName": ".ctor",
       "Signature": ".ctor(System.String fileExtension, System.String previousMigrationId, System.String migrationCode, System.String migrationId, System.String metadataCode, System.String migrationSubNamespace, System.String snapshotCode, System.String snapshotName, System.String snapshotSubNamespace)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "ef-owned-no-provider-contract",
+      "DispositionReason": "This constructor creates EF\u0027s immutable scaffold-result DTO. The provider-facing scaffold output and the DTO\u0027s returned properties are covered through public scaffolder APIs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.ScaffoldedMigration..ctor"
     },
     {
