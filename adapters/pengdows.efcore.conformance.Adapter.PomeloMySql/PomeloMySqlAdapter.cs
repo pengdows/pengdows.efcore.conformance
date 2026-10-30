@@ -12,6 +12,7 @@ public sealed class PomeloMySqlAdapter : IAdoNetProviderAdapter, INativeTypeMapp
     private static readonly IReadOnlyList<NativeTypeMapping> DeclaredNativeTypes =
     [
         new("BOOL", typeof(bool), "tinyint"),
+        new("BIT", typeof(ulong), "bit", "16"),
         new("TINYINT", typeof(sbyte)),
         new("TINYINT", typeof(byte), "tinyint unsigned"),
         new("SMALLINT", typeof(short)),
@@ -39,9 +40,11 @@ public sealed class PomeloMySqlAdapter : IAdoNetProviderAdapter, INativeTypeMapp
         new("LONGBLOB", typeof(byte[])),
         new("DATETIME", typeof(DateTime)),
         new("DATE", typeof(DateOnly)),
+        new("DATE", typeof(DateTime), "date"),
         new("TIME", typeof(TimeSpan)),
         new("TIMESTAMP", typeof(DateTime)),
-        new("YEAR", typeof(int))
+        new("YEAR", typeof(int)),
+        new("GUID", typeof(Guid), "char(36)", "800")
     ];
 
     private static readonly ProviderCapabilities DeclaredCapabilities = new(

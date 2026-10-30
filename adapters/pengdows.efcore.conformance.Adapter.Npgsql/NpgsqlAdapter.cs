@@ -15,6 +15,7 @@ public sealed class NpgsqlAdapter : IAdoNetProviderAdapter, INativeTypeMappingPr
         new("integer", typeof(int)),
         new("bigint", typeof(long)),
         new("numeric", typeof(decimal)),
+        new("money", typeof(decimal), "money"),
         new("real", typeof(float)),
         new("double precision", typeof(double)),
         new("character varying", typeof(string)),
@@ -24,11 +25,17 @@ public sealed class NpgsqlAdapter : IAdoNetProviderAdapter, INativeTypeMappingPr
         new("date", typeof(DateOnly)),
         new("time without time zone", typeof(TimeOnly)),
         new("timestamp without time zone", typeof(DateTime)),
+        new("timestamp with time zone", typeof(DateTime), "timestamp with time zone"),
         new("timestamp with time zone", typeof(DateTimeOffset)),
         new("interval", typeof(TimeSpan)),
         new("uuid", typeof(Guid)),
+        new("inet", typeof(System.Net.IPAddress)),
+        new("cidr", typeof(System.Net.IPNetwork)),
+        new("macaddr", typeof(System.Net.NetworkInformation.PhysicalAddress)),
+        new("macaddr8", typeof(System.Net.NetworkInformation.PhysicalAddress)),
         new("json", typeof(string)),
         new("jsonb", typeof(string)),
+        new("xml", typeof(string), "xml"),
         new("integer[]", typeof(int[]))
     ];
 

@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Linq.Expressions;
+using System.Net;
+using System.Net.NetworkInformation;
 using System.Text.Json.Nodes;
 using Microsoft.EntityFrameworkCore;
 using pengdows.efcore.conformance;
@@ -298,8 +300,10 @@ public sealed class DiscoveredNativeTypeTests
     private static bool IsEqualityApplicable(NativeTypeMapping mapping)
     {
         var type = Nullable.GetUnderlyingType(mapping.ClrType) ?? mapping.ClrType;
-        var isJson = mapping.DatabaseTypeName.Contains("json", StringComparison.OrdinalIgnoreCase);
-        return !type.IsArray && type != typeof(byte[]) && !isJson;
+        var storeType = mapping.DatabaseTypeName;
+        var hasProviderSpecificEquality = storeType.Contains("json", StringComparison.OrdinalIgnoreCase) ||
+                                          storeType.Equals("xml", StringComparison.OrdinalIgnoreCase);
+        return !type.IsArray && type != typeof(byte[]) && !hasProviderSpecificEquality;
     }
 
     private static void AssertValueEqual(object expected, object? actual, NativeTypeMapping mapping)
@@ -330,7 +334,10 @@ internal static class NativeTypeSampleFactory
             return "{\"value\":1}";
         }
 
+        if (type == typeof(string) && mapping.DatabaseTypeName.Equals("xml", StringComparison.OrdinalIgnoreCase)) return "<v>1</v>";
+
         if (type == typeof(bool)) return true;
+        if (type == typeof(ulong) && mapping.DatabaseTypeName.Equals("BIT", StringComparison.OrdinalIgnoreCase)) return 1ul;
         if (type == typeof(sbyte)) return sbyte.MinValue;
         if (type == typeof(byte)) return byte.MaxValue;
         if (type == typeof(short)) return short.MinValue;
@@ -343,15 +350,22 @@ internal static class NativeTypeSampleFactory
             : uint.MaxValue;
         if (type == typeof(long)) return long.MinValue;
         if (type == typeof(ulong)) return ulong.MaxValue;
-        if (type == typeof(decimal)) return 123456789.1234m;
+        if (type == typeof(decimal)) return mapping.DatabaseTypeName.Equals("money", StringComparison.OrdinalIgnoreCase) ? 12345.67m : 123456789.1234m;
         if (type == typeof(float)) return 1234.5f;
         if (type == typeof(double)) return 9876.125d;
         if (type == typeof(string)) return "A";
         if (type == typeof(Guid)) return Guid.Parse("5d37ddf5-fab9-4e5b-95fb-b5259a5e3d31");
         if (type == typeof(DateOnly)) return new DateOnly(2024, 2, 29);
         if (type == typeof(TimeOnly)) return new TimeOnly(13, 14, 15);
-        if (type == typeof(DateTime)) return new DateTime(2024, 2, 29, 13, 14, 15, DateTimeKind.Unspecified);
+        if (type == typeof(DateTime)) return mapping.DatabaseTypeName.Equals("DATE", StringComparison.OrdinalIgnoreCase)
+            ? new DateTime(2024, 2, 29, 0, 0, 0, DateTimeKind.Unspecified)
+            : mapping.DatabaseTypeName.Equals("timestamp with time zone", StringComparison.OrdinalIgnoreCase)
+                ? new DateTime(2024, 2, 29, 13, 14, 15, DateTimeKind.Utc)
+                : new DateTime(2024, 2, 29, 13, 14, 15, DateTimeKind.Unspecified);
         if (type == typeof(DateTimeOffset)) return new DateTimeOffset(2024, 2, 29, 13, 14, 15, TimeSpan.Zero);
+        if (type == typeof(IPAddress)) return IPAddress.Parse("192.0.2.1");
+        if (type == typeof(IPNetwork)) return IPNetwork.Parse("192.0.2.0/24");
+        if (type == typeof(PhysicalAddress)) return PhysicalAddress.Parse(mapping.DatabaseTypeName.Equals("macaddr8", StringComparison.OrdinalIgnoreCase) ? "0011223344556677" : "001122334455");
         if (type == typeof(TimeSpan)) return TimeSpan.FromHours(1) + TimeSpan.FromMinutes(2) + TimeSpan.FromSeconds(3);
         if (type == typeof(char)) return 'Q';
 
@@ -365,7 +379,9 @@ internal static class NativeTypeSampleFactory
         if (type == typeof(int[])) return new[] { 5, 0, 1 };
         if (type.IsArray) return CreateArray(type.GetElementType()!, mapping);
         if (type == typeof(string) && mapping.DatabaseTypeName.Contains("json", StringComparison.OrdinalIgnoreCase)) return "{\"value\":2}";
+        if (type == typeof(string) && mapping.DatabaseTypeName.Equals("xml", StringComparison.OrdinalIgnoreCase)) return "<v>2</v>";
         if (type == typeof(bool)) return false;
+        if (type == typeof(ulong) && mapping.DatabaseTypeName.Equals("BIT", StringComparison.OrdinalIgnoreCase)) return 0ul;
         if (type == typeof(sbyte)) return sbyte.MaxValue;
         if (type == typeof(byte)) return (byte)0;
         if (type == typeof(short)) return short.MaxValue;
@@ -376,15 +392,22 @@ internal static class NativeTypeSampleFactory
         if (type == typeof(uint)) return 0u;
         if (type == typeof(long)) return long.MaxValue;
         if (type == typeof(ulong)) return 0ul;
-        if (type == typeof(decimal)) return -987654321.4321m;
+        if (type == typeof(decimal)) return mapping.DatabaseTypeName.Equals("money", StringComparison.OrdinalIgnoreCase) ? -987.65m : -987654321.4321m;
         if (type == typeof(float)) return -135.25f;
         if (type == typeof(double)) return -2468.5d;
         if (type == typeof(string)) return "B";
         if (type == typeof(Guid)) return Guid.Parse("84c5903f-330f-42d1-92f4-94ab241b1b32");
         if (type == typeof(DateOnly)) return new DateOnly(2023, 1, 2);
         if (type == typeof(TimeOnly)) return new TimeOnly(9, 8, 7);
-        if (type == typeof(DateTime)) return new DateTime(2023, 1, 2, 9, 8, 7, DateTimeKind.Unspecified);
+        if (type == typeof(DateTime)) return mapping.DatabaseTypeName.Equals("DATE", StringComparison.OrdinalIgnoreCase)
+            ? new DateTime(2023, 1, 2, 0, 0, 0, DateTimeKind.Unspecified)
+            : mapping.DatabaseTypeName.Equals("timestamp with time zone", StringComparison.OrdinalIgnoreCase)
+                ? new DateTime(2023, 1, 2, 9, 8, 7, DateTimeKind.Utc)
+                : new DateTime(2023, 1, 2, 9, 8, 7, DateTimeKind.Unspecified);
         if (type == typeof(DateTimeOffset)) return new DateTimeOffset(2023, 1, 2, 9, 8, 7, TimeSpan.Zero);
+        if (type == typeof(IPAddress)) return IPAddress.Parse("2001:db8::1");
+        if (type == typeof(IPNetwork)) return IPNetwork.Parse("198.51.100.0/24");
+        if (type == typeof(PhysicalAddress)) return PhysicalAddress.Parse(mapping.DatabaseTypeName.Equals("macaddr8", StringComparison.OrdinalIgnoreCase) ? "8899AABBCCDDEEFF" : "8899AABBCCDD");
         if (type == typeof(TimeSpan)) return new TimeSpan(3, 4, 5);
         if (type == typeof(char)) return 'R';
 
