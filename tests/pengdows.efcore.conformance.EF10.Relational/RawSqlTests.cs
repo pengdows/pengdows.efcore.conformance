@@ -333,6 +333,36 @@ public sealed class RawSqlTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact]
+    [BehavioralCoverage("EF10-RAW-SQL-SCALAR-INTERPOLATED-ASYNC", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.SqlQuery", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    public async Task SqlQuery_ReturnsInterpolatedScalarAsynchronously()
+    {
+        ProviderTestRuntime.RequireCapability("raw-sql");
+        const int expected = 2718281;
+        await using var context = ProviderTestRuntime.CreateContext();
+
+        var actual = await context.Database
+            .SqlQuery<int>($"SELECT {expected} AS \"Value\"")
+            .SingleAsync(TestContext.Current.CancellationToken);
+
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-RAW-SQL-SCALAR-INTERPOLATED-SYNC", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.SqlQuery", "System.Linq.Queryable.Single")]
+    public async Task SqlQuery_ReturnsInterpolatedScalarSynchronously()
+    {
+        ProviderTestRuntime.RequireCapability("raw-sql");
+        const int expected = 1414213;
+        await using var context = ProviderTestRuntime.CreateContext();
+
+        var actual = context.Database
+            .SqlQuery<int>($"SELECT {expected} AS \"Value\"")
+            .Single();
+
+        Assert.Equal(expected, actual);
+    }
+
     private static async Task SeedAsync(Guid id, string name)
     {
         ProviderTestRuntime.RequireCapability("raw-sql");

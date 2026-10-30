@@ -55383,6 +55383,7 @@
         "EF10-RAW-SQL-FROM-RAW-ASYNC",
         "EF10-RAW-SQL-FROM-SQL-ASYNC",
         "EF10-RAW-SQL-KEYLESS-ASYNC",
+        "EF10-RAW-SQL-SCALAR-INTERPOLATED-ASYNC",
         "EF10-RAW-SQL-SCALAR-RAW-ASYNC",
         "EF10-RELATIONSHIPS-FILTERED-INCLUDE-ASYNC",
         "EF10-RELATIONSHIPS-FOREIGN-KEY",
@@ -55444,6 +55445,7 @@
         "EF10-RAW-SQL-FROM-RAW-ASYNC",
         "EF10-RAW-SQL-FROM-SQL-ASYNC",
         "EF10-RAW-SQL-KEYLESS-ASYNC",
+        "EF10-RAW-SQL-SCALAR-INTERPOLATED-ASYNC",
         "EF10-RAW-SQL-SCALAR-RAW-ASYNC",
         "EF10-RELATIONSHIPS-FILTERED-INCLUDE-ASYNC",
         "EF10-RELATIONSHIPS-FOREIGN-KEY",
@@ -190721,7 +190723,9 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-MIGRATIONS-APPLY-ASYNC",
-        "EF10-MIGRATIONS-APPLY-SYNC"
+        "EF10-MIGRATIONS-APPLY-SYNC",
+        "EF10-RAW-SQL-SCALAR-INTERPOLATED-ASYNC",
+        "EF10-RAW-SQL-SCALAR-INTERPOLATED-SYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
