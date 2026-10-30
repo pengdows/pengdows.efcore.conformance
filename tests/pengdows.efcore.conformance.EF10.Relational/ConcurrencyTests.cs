@@ -59,6 +59,52 @@ public sealed class ConcurrencyTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-CONCURRENCY-DELETE-ASYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException", "Microsoft.EntityFrameworkCore.DbUpdateException.Entries")]
+    public async Task SaveChangesAsync_ReportsConflictWhenAnotherContextDeletedTheRow()
+    {
+        var id = Guid.NewGuid();
+        await SeedAsync(id);
+        await using var first = ProviderTestRuntime.CreateContext();
+        await using var second = ProviderTestRuntime.CreateContext();
+        var firstCopy = await first.People.SingleAsync(item => item.Id == id, TestContext.Current.CancellationToken);
+        var secondCopy = await second.People.SingleAsync(item => item.Id == id, TestContext.Current.CancellationToken);
+
+        first.People.Remove(firstCopy);
+        Assert.Equal(1, await first.SaveChangesAsync(TestContext.Current.CancellationToken));
+        second.People.Remove(secondCopy);
+        var conflict = await Assert.ThrowsAsync<DbUpdateConcurrencyException>(
+            () => second.SaveChangesAsync(TestContext.Current.CancellationToken));
+
+        var entry = Assert.Single(conflict.Entries);
+        Assert.Same(secondCopy, entry.Entity);
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.False(await verify.People.IgnoreQueryFilters()
+            .AnyAsync(item => item.Id == id, TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-CONCURRENCY-DELETE-SYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException", "Microsoft.EntityFrameworkCore.DbUpdateException.Entries")]
+    public async Task SaveChanges_ReportsConflictWhenAnotherContextDeletedTheRowSynchronously()
+    {
+        var id = Guid.NewGuid();
+        await SeedAsync(id);
+        await using var first = ProviderTestRuntime.CreateContext();
+        await using var second = ProviderTestRuntime.CreateContext();
+        var firstCopy = first.People.Single(item => item.Id == id);
+        var secondCopy = second.People.Single(item => item.Id == id);
+
+        first.People.Remove(firstCopy);
+        Assert.Equal(1, first.SaveChanges());
+        second.People.Remove(secondCopy);
+        var conflict = Assert.Throws<DbUpdateConcurrencyException>(() => second.SaveChanges());
+
+        var entry = Assert.Single(conflict.Entries);
+        Assert.Same(secondCopy, entry.Entity);
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.False(verify.People.IgnoreQueryFilters().Any(item => item.Id == id));
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-CONCURRENCY-RESOLVE-ASYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.DbUpdateException.Entries", "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry.GetDatabaseValuesAsync", "Microsoft.EntityFrameworkCore.ChangeTracking.PropertyValues.SetValues")]
     public async Task SaveChangesAsync_ConflictCanBeResolvedAndRetried()
     {
