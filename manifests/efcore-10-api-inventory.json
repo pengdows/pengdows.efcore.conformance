@@ -23,10 +23,10 @@
     "TotalEntries": 18795,
     "PublicTypes": 2033,
     "PublicMembers": 16762,
-    "AwaitingClassification": 96,
+    "AwaitingClassification": 94,
     "ExplicitlyExcluded": 5921,
-    "MemberEntriesInCoveredFamilies": 688,
-    "UncoveredMemberFamilies": 85
+    "MemberEntriesInCoveredFamilies": 690,
+    "UncoveredMemberFamilies": 83
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -154523,10 +154523,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "Generate",
       "Signature": "System.Void Generate(System.String builderName, System.Collections.Generic.IReadOnlyList\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.MigrationOperation\u003E operations, Microsoft.EntityFrameworkCore.Infrastructure.IndentedStringBuilder builder)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-MIGRATION-CODE-GENERATION"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.ICSharpMigrationOperationGenerator.Generate"
     },
     {
@@ -154547,10 +154549,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "Generate",
       "Signature": "System.Void Generate(System.String builderName, Microsoft.EntityFrameworkCore.Metadata.IModel model, Microsoft.EntityFrameworkCore.Infrastructure.IndentedStringBuilder stringBuilder)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-MIGRATION-CODE-GENERATION"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.Design.ICSharpSnapshotGenerator.Generate"
     },
     {

@@ -21,7 +21,9 @@ public sealed class DesignTimeMigrationCodeGenerationTests
         "Microsoft.EntityFrameworkCore.Migrations.Design.IMigrationsCodeGenerator.GenerateMigration",
         "Microsoft.EntityFrameworkCore.Migrations.Design.IMigrationsCodeGenerator.GenerateMetadata",
         "Microsoft.EntityFrameworkCore.Migrations.Design.IMigrationsCodeGenerator.GenerateSnapshot",
-        "Microsoft.EntityFrameworkCore.Migrations.Design.IMigrationsScaffolder.ScaffoldMigration")]
+        "Microsoft.EntityFrameworkCore.Migrations.Design.IMigrationsScaffolder.ScaffoldMigration",
+        "Microsoft.EntityFrameworkCore.Migrations.Design.ICSharpMigrationOperationGenerator.Generate",
+        "Microsoft.EntityFrameworkCore.Migrations.Design.ICSharpSnapshotGenerator.Generate")]
     public void CSharpMigrationCodeGenerator_EmitsDeclaredOperation()
     {
         var services = new ServiceCollection();
@@ -66,6 +68,12 @@ public sealed class DesignTimeMigrationCodeGenerationTests
             designModel);
         var scaffoldedMigration = serviceProvider.GetRequiredService<IMigrationsScaffolder>()
             .ScaffoldMigration("ConformanceInitial", "Example.Migrations", language: "C#", dryRun: true);
+        var operationBuilder = new IndentedStringBuilder();
+        serviceProvider.GetRequiredService<ICSharpMigrationOperationGenerator>()
+            .Generate("migrationBuilder", [operation], operationBuilder);
+        var snapshotBuilder = new IndentedStringBuilder();
+        serviceProvider.GetRequiredService<ICSharpSnapshotGenerator>()
+            .Generate("modelBuilder", designModel, snapshotBuilder);
 
         Assert.Equal(".cs", generator.FileExtension);
         Assert.Contains("AddColumn<int>", generated, StringComparison.Ordinal);
@@ -77,5 +85,7 @@ public sealed class DesignTimeMigrationCodeGenerationTests
         Assert.Contains("ef10conformancepeople", snapshot, StringComparison.Ordinal);
         Assert.Contains("CreateTable", scaffoldedMigration.MigrationCode, StringComparison.Ordinal);
         Assert.Contains("ef10conformancepeople", scaffoldedMigration.MigrationCode, StringComparison.Ordinal);
+        Assert.Contains("AddColumn<int>", operationBuilder.ToString(), StringComparison.Ordinal);
+        Assert.Contains("ef10conformancepeople", snapshotBuilder.ToString(), StringComparison.Ordinal);
     }
 }
