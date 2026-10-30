@@ -334,14 +334,26 @@ async Task<int> RunTestsAsync(string[] arguments, string? configuredConnectionSt
             var typeReport = nativeDiscoveryReport;
             var testCases = runAdapter is INativeTypeMappingProfile nativeMappings
                 ? nativeMappings.NativeTypeMappings
-                    .SelectMany(mapping => new[]
+                    .SelectMany(mapping =>
                     {
-                        (Mapping: mapping, TestName: "DiscoveredNativeType_RoundTripsSynchronously", ContractSuffix: "ROUNDTRIP-SYNC"),
-                        (Mapping: mapping, TestName: "DiscoveredNativeType_RoundTripsAsynchronously", ContractSuffix: "ROUNDTRIP-ASYNC"),
-                        (Mapping: mapping, TestName: "DiscoveredNativeType_UpdatesAndRoundTripsSynchronously", ContractSuffix: "UPDATE-SYNC"),
-                        (Mapping: mapping, TestName: "DiscoveredNativeType_UpdatesAndRoundTripsAsynchronously", ContractSuffix: "UPDATE-ASYNC"),
-                        (Mapping: mapping, TestName: "DiscoveredNativeType_PreservesNullSynchronously", ContractSuffix: "NULL-SYNC"),
-                        (Mapping: mapping, TestName: "DiscoveredNativeType_PreservesNullAsynchronously", ContractSuffix: "NULL-ASYNC")
+                        var cases = new List<(NativeTypeMapping Mapping, string TestName, string ContractSuffix)>
+                        {
+                            (mapping, "DiscoveredNativeType_RoundTripsSynchronously", "ROUNDTRIP-SYNC"),
+                            (mapping, "DiscoveredNativeType_RoundTripsAsynchronously", "ROUNDTRIP-ASYNC"),
+                            (mapping, "DiscoveredNativeType_UpdatesAndRoundTripsSynchronously", "UPDATE-SYNC"),
+                            (mapping, "DiscoveredNativeType_UpdatesAndRoundTripsAsynchronously", "UPDATE-ASYNC"),
+                            (mapping, "DiscoveredNativeType_PreservesNullSynchronously", "NULL-SYNC"),
+                            (mapping, "DiscoveredNativeType_PreservesNullAsynchronously", "NULL-ASYNC")
+                        };
+                        var clrType = Nullable.GetUnderlyingType(mapping.ClrType) ?? mapping.ClrType;
+                        if (!clrType.IsArray && clrType != typeof(byte[]) &&
+                            !mapping.DatabaseTypeName.Contains("json", StringComparison.OrdinalIgnoreCase))
+                        {
+                            cases.Add((mapping, "DiscoveredNativeType_QueriesByParameterizedValueSynchronously", "PARAMETER-SYNC"));
+                            cases.Add((mapping, "DiscoveredNativeType_QueriesByParameterizedValueAsynchronously", "PARAMETER-ASYNC"));
+                        }
+
+                        return cases;
                     })
                     .ToArray()
                 : [];

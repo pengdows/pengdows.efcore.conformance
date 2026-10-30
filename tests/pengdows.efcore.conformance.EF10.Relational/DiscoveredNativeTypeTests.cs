@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq.Expressions;
 using System.Text.Json.Nodes;
 using Microsoft.EntityFrameworkCore;
 using pengdows.efcore.conformance;
@@ -23,6 +24,25 @@ public sealed class DiscoveredNativeTypeTests
             if (data.Count == 0)
             {
                 data.Add(-1, "NO-INDEPENDENT-TYPE-PROFILE", "none");
+            }
+
+            return data;
+        }
+    }
+
+    public static TheoryData<int, string, string> EqualityMappings
+    {
+        get
+        {
+            var data = new TheoryData<int, string, string>();
+            foreach (var probe in ProviderTestRuntime.NativeTypeProbes.Where(probe => IsEqualityApplicable(probe.Mapping)))
+            {
+                data.Add(probe.Index, probe.Mapping.DatabaseTypeName, probe.Mapping.ClrType.FullName ?? probe.Mapping.ClrType.Name);
+            }
+
+            if (data.Count == 0)
+            {
+                data.Add(-1, "NO-SCALAR-EQUALITY-MAPPINGS", "none");
             }
 
             return data;
@@ -187,6 +207,60 @@ public sealed class DiscoveredNativeTypeTests
         Assert.Null(actual["value"]);
     }
 
+    [Theory]
+    [MemberData(nameof(EqualityMappings))]
+    [BehavioralCoverage("EF10-NATIVE-TYPE-PARAMETER-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync", "Microsoft.EntityFrameworkCore.EF.Property")]
+    public async Task DiscoveredNativeType_QueriesByParameterizedValueAsynchronously(int probeIndex, string databaseTypeName, string clrTypeName)
+    {
+        ProviderTestRuntime.RequireCapability("native-type-fidelity");
+        var probe = GetProbe(probeIndex, databaseTypeName, clrTypeName);
+        AssertEqualityApplicable(probe.Mapping);
+        var id = Guid.NewGuid();
+        var expected = NativeTypeSampleFactory.Create(probe.Mapping);
+
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.Set<Dictionary<string, object>>(probe.EntityTypeName).Add(CreateRow(id, expected));
+            Assert.Equal(1, await write.SaveChangesAsync(TestContext.Current.CancellationToken));
+        }
+
+        await using var query = ProviderTestRuntime.CreateContext();
+        var row = await query.Set<Dictionary<string, object>>(probe.EntityTypeName)
+            .Where(BuildValuePredicate(probe.Mapping.ClrType, expected))
+            .Where(item => EF.Property<Guid>(item, "id") == id)
+            .SingleAsync(TestContext.Current.CancellationToken);
+        Assert.Equal(id, row["id"]);
+        AssertValueEqual(expected, row["value"], probe.Mapping);
+    }
+
+    [Theory]
+    [MemberData(nameof(EqualityMappings))]
+    [BehavioralCoverage("EF10-NATIVE-TYPE-PARAMETER-SYNC", "System.Linq.Queryable.Single", "Microsoft.EntityFrameworkCore.EF.Property")]
+    public async Task DiscoveredNativeType_QueriesByParameterizedValueSynchronously(int probeIndex, string databaseTypeName, string clrTypeName)
+    {
+        ProviderTestRuntime.RequireCapability("native-type-fidelity");
+        var probe = GetProbe(probeIndex, databaseTypeName, clrTypeName);
+        AssertEqualityApplicable(probe.Mapping);
+        var id = Guid.NewGuid();
+        var expected = NativeTypeSampleFactory.Create(probe.Mapping);
+
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.Set<Dictionary<string, object>>(probe.EntityTypeName).Add(CreateRow(id, expected));
+            Assert.Equal(1, write.SaveChanges());
+        }
+
+        await using var query = ProviderTestRuntime.CreateContext();
+        var row = query.Set<Dictionary<string, object>>(probe.EntityTypeName)
+            .Where(BuildValuePredicate(probe.Mapping.ClrType, expected))
+            .Where(item => EF.Property<Guid>(item, "id") == id)
+            .Single();
+        Assert.Equal(id, row["id"]);
+        AssertValueEqual(expected, row["value"], probe.Mapping);
+    }
+
     private static NativeTypeProbeDefinition GetProbe(int index, string databaseTypeName, string clrTypeName)
     {
         var probe = ProviderTestRuntime.NativeTypeProbes.SingleOrDefault(item => item.Index == index);
@@ -201,6 +275,32 @@ public sealed class DiscoveredNativeTypeTests
         ["id"] = id,
         ["value"] = value
     };
+
+    private static Expression<Func<Dictionary<string, object>, bool>> BuildValuePredicate(Type valueType, object value)
+    {
+        var row = Expression.Parameter(typeof(Dictionary<string, object>), "row");
+        var property = Expression.Call(
+            typeof(EF),
+            nameof(EF.Property),
+            [valueType],
+            row,
+            Expression.Constant("value"));
+        var equals = Expression.Equal(property, Expression.Constant(value, valueType));
+        return Expression.Lambda<Func<Dictionary<string, object>, bool>>(equals, row);
+    }
+
+    private static void AssertEqualityApplicable(NativeTypeMapping mapping)
+    {
+        Assert.True(IsEqualityApplicable(mapping),
+            $"Native mapping '{mapping.DatabaseTypeName}' is outside the scalar equality query contract.");
+    }
+
+    private static bool IsEqualityApplicable(NativeTypeMapping mapping)
+    {
+        var type = Nullable.GetUnderlyingType(mapping.ClrType) ?? mapping.ClrType;
+        var isJson = mapping.DatabaseTypeName.Contains("json", StringComparison.OrdinalIgnoreCase);
+        return !type.IsArray && type != typeof(byte[]) && !isJson;
+    }
 
     private static void AssertValueEqual(object expected, object? actual, NativeTypeMapping mapping)
     {
