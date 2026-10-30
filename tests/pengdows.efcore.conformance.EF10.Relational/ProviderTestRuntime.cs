@@ -29,6 +29,11 @@ internal static class ProviderTestRuntime
             $"Provider '{Adapter.Name}' declares case-insensitive collation support without a collation profile.",
             new InvalidOperationException("The adapter does not implement ICollationTestAdapter."));
 
+    public static IIndexMetadataAdapter IndexMetadataAdapter => Adapter as IIndexMetadataAdapter
+        ?? throw new ConformanceInfrastructureException(
+            $"Provider '{Adapter.Name}' declares index-sort-metadata support without an index metadata reader.",
+            new InvalidOperationException("The adapter does not implement IIndexMetadataAdapter."));
+
     public static DbConnection CreateConnection() => Adapter is IAdoNetProviderAdapter adoNetAdapter
         ? adoNetAdapter.CreateConnection(ConnectionString)
         : throw new ConformanceInfrastructureException(
@@ -159,6 +164,8 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
 
     public DbSet<CommentedRecord> CommentedRecords => Set<CommentedRecord>();
 
+    public DbSet<IndexSortRecord> IndexSortRecords => Set<IndexSortRecord>();
+
     [DbFunction("lower", IsBuiltIn = true, IsNullable = true)]
     public static string? Lower(string? value) => throw new NotSupportedException("This method is intended for use in EF Core queries.");
 
@@ -193,6 +200,14 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
             entity.HasKey(record => record.Id);
             entity.Property(record => record.Id).HasColumnName("id");
             entity.Property(record => record.Value).HasColumnName("value");
+        });
+        modelBuilder.Entity<IndexSortRecord>(entity =>
+        {
+            entity.ToTable("ef10conformance_indexsort");
+            entity.HasKey(record => record.Id);
+            entity.Property(record => record.Id).HasColumnName("id");
+            entity.Property(record => record.First).HasColumnName("first");
+            entity.Property(record => record.Second).HasColumnName("second");
         });
         modelBuilder.Entity<FilteredUniqueValueRecord>(entity =>
         {
@@ -624,6 +639,17 @@ internal sealed class UniqueValueRecord
     public Guid Id { get; set; }
 
     public string Value { get; set; } = string.Empty;
+}
+
+[Index(nameof(First), nameof(Second), Name = "IX_EF10_IndexSort_Mixed", IsDescending = new bool[] { true, false })]
+[Index(nameof(First), nameof(Second), Name = "IX_EF10_IndexSort_AllDescending", AllDescending = true)]
+internal sealed class IndexSortRecord
+{
+    public Guid Id { get; set; }
+
+    public string First { get; set; } = string.Empty;
+
+    public string Second { get; set; } = string.Empty;
 }
 
 [Comment("EF10 conformance table comment")]

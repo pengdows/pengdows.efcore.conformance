@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 15,
+    "AwaitingClassification": 12,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 663,
-    "UncoveredMemberFamilies": 14
+    "MemberEntriesInCoveredFamilies": 666,
+    "UncoveredMemberFamilies": 11
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -54278,10 +54278,12 @@
       "MemberKind": "Property",
       "ApiMemberName": "IsDescending",
       "Signature": "System.Boolean[] IsDescending get; set;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-INDEX-DIRECTION-METADATA"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.IndexAttribute.IsDescending"
     },
     {
@@ -54290,10 +54292,12 @@
       "MemberKind": "Property",
       "ApiMemberName": "AllDescending",
       "Signature": "System.Boolean AllDescending get; set;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-INDEX-DIRECTION-METADATA"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.IndexAttribute.AllDescending"
     },
     {
@@ -54302,10 +54306,13 @@
       "MemberKind": "Property",
       "ApiMemberName": "IsUniqueHasValue",
       "Signature": "System.Boolean IsUniqueHasValue get;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-INDEX-ATTRIBUTE-UNIQUE-ASYNC",
+        "EF10-INDEX-ATTRIBUTE-UNIQUE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.IndexAttribute.IsUniqueHasValue"
     },
     {

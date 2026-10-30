@@ -34,7 +34,7 @@ public sealed class IndexAttributeTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-INDEX-ATTRIBUTE-UNIQUE-ASYNC", "Microsoft.EntityFrameworkCore.IndexAttribute", "Microsoft.EntityFrameworkCore.IndexAttribute..ctor", "Microsoft.EntityFrameworkCore.IndexAttribute.PropertyNames", "Microsoft.EntityFrameworkCore.IndexAttribute.IsUnique", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.DbUpdateException", "Microsoft.EntityFrameworkCore.DbUpdateException.Entries")]
+    [BehavioralCoverage("EF10-INDEX-ATTRIBUTE-UNIQUE-ASYNC", "Microsoft.EntityFrameworkCore.IndexAttribute", "Microsoft.EntityFrameworkCore.IndexAttribute..ctor", "Microsoft.EntityFrameworkCore.IndexAttribute.PropertyNames", "Microsoft.EntityFrameworkCore.IndexAttribute.IsUnique", "Microsoft.EntityFrameworkCore.IndexAttribute.IsUniqueHasValue", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.DbUpdateException", "Microsoft.EntityFrameworkCore.DbUpdateException.Entries")]
     public async Task UniqueIndexAttribute_RejectsDuplicateValuesAsynchronously()
     {
         ProviderTestRuntime.RequireCapability("relational");
@@ -65,7 +65,7 @@ public sealed class IndexAttributeTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-INDEX-ATTRIBUTE-UNIQUE-SYNC", "Microsoft.EntityFrameworkCore.IndexAttribute", "Microsoft.EntityFrameworkCore.IndexAttribute..ctor", "Microsoft.EntityFrameworkCore.IndexAttribute.PropertyNames", "Microsoft.EntityFrameworkCore.IndexAttribute.IsUnique", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "Microsoft.EntityFrameworkCore.DbUpdateException", "Microsoft.EntityFrameworkCore.DbUpdateException.Entries")]
+    [BehavioralCoverage("EF10-INDEX-ATTRIBUTE-UNIQUE-SYNC", "Microsoft.EntityFrameworkCore.IndexAttribute", "Microsoft.EntityFrameworkCore.IndexAttribute..ctor", "Microsoft.EntityFrameworkCore.IndexAttribute.PropertyNames", "Microsoft.EntityFrameworkCore.IndexAttribute.IsUnique", "Microsoft.EntityFrameworkCore.IndexAttribute.IsUniqueHasValue", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "Microsoft.EntityFrameworkCore.DbUpdateException", "Microsoft.EntityFrameworkCore.DbUpdateException.Entries")]
     public async Task UniqueIndexAttribute_RejectsDuplicateValuesSynchronously()
     {
         ProviderTestRuntime.RequireCapability("relational");

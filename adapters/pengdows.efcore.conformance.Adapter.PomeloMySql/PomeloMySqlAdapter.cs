@@ -7,7 +7,7 @@ using pengdows.efcore.conformance;
 namespace pengdows.efcore.conformance.Adapter.PomeloMySql;
 
 /// <summary>Optional EF Core 10 adapter for MySQL-compatible servers using Pomelo.</summary>
-public sealed class PomeloMySqlAdapter : IAdoNetProviderAdapter, IParameterizedCollectionModeAdapter, ICollationTestAdapter
+public sealed class PomeloMySqlAdapter : IAdoNetProviderAdapter, IParameterizedCollectionModeAdapter, ICollationTestAdapter, IIndexMetadataAdapter
 {
     private static readonly ProviderCapabilities DeclaredCapabilities = new(
         new HashSet<string>(StringComparer.Ordinal)
@@ -23,6 +23,7 @@ public sealed class PomeloMySqlAdapter : IAdoNetProviderAdapter, IParameterizedC
             "schema-comments",
             "migration-add-constraint-operations",
             "case-insensitive-collation",
+            "index-sort-metadata",
             "raw-sql",
             "execute-update",
             "execute-delete",
@@ -66,4 +67,33 @@ public sealed class PomeloMySqlAdapter : IAdoNetProviderAdapter, IParameterizedC
         context.Database.EnsureDeletedAsync(cancellationToken);
 
     public DbConnection CreateConnection(string connectionString) => new MySqlConnection(connectionString);
+
+    public IReadOnlyList<IndexColumnMetadata> GetIndexColumns(DbConnection openConnection, string tableName, string indexName)
+    {
+        using var command = openConnection.CreateCommand();
+        command.CommandText = """
+            SELECT COLUMN_NAME, SEQ_IN_INDEX, COLLATION
+            FROM information_schema.STATISTICS
+            WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = @tableName AND INDEX_NAME = @indexName
+            ORDER BY SEQ_IN_INDEX
+            """;
+        var tableParameter = command.CreateParameter();
+        tableParameter.ParameterName = "@tableName";
+        tableParameter.Value = tableName;
+        command.Parameters.Add(tableParameter);
+        var indexParameter = command.CreateParameter();
+        indexParameter.ParameterName = "@indexName";
+        indexParameter.Value = indexName;
+        command.Parameters.Add(indexParameter);
+
+        using var reader = command.ExecuteReader();
+        var columns = new List<IndexColumnMetadata>();
+        while (reader.Read())
+        {
+            var sortOrder = reader.IsDBNull(2) ? null : reader.GetString(2);
+            columns.Add(new IndexColumnMetadata(reader.GetString(0), reader.GetInt32(1), string.Equals(sortOrder, "D", StringComparison.OrdinalIgnoreCase)));
+        }
+
+        return columns;
+    }
 }

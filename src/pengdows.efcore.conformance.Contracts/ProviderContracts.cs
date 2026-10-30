@@ -40,6 +40,14 @@ public interface ICollationTestAdapter : IProviderAdapter
     string CaseInsensitiveCollation { get; }
 }
 
+/// <summary>Reads index column order from public database catalog metadata.</summary>
+public interface IIndexMetadataAdapter : IProviderAdapter
+{
+    IReadOnlyList<IndexColumnMetadata> GetIndexColumns(DbConnection openConnection, string tableName, string indexName);
+}
+
+public sealed record IndexColumnMetadata(string ColumnName, int Ordinal, bool IsDescending);
+
 /// <summary>Optional database-catalog discovery for types omitted from ADO.NET schema metadata.</summary>
 public interface ISupplementalTypeDiscovery
 {
@@ -73,7 +81,8 @@ public sealed record ProviderCapabilities(
         "schema-comments",
         "migration-add-constraint-operations",
         "case-insensitive-collation",
-        "migration-set-default"
+        "migration-set-default",
+        "index-sort-metadata"
     };
 
     public IReadOnlyList<string> UndeclaredFeatures => KnownFeatures

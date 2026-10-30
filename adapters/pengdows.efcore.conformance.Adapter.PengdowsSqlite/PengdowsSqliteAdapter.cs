@@ -7,7 +7,7 @@ using pengdows.efcore.conformance;
 namespace pengdows.efcore.conformance.Adapter.PengdowsSqlite;
 
 /// <summary>Sample adapter for exercising the suite against the pengdows ADO.NET SQLite provider.</summary>
-public sealed class PengdowsSqliteAdapter : IAdoNetProviderAdapter, ISupplementalTypeDiscovery, IParameterizedCollectionModeAdapter, ICollationTestAdapter
+public sealed class PengdowsSqliteAdapter : IAdoNetProviderAdapter, ISupplementalTypeDiscovery, IParameterizedCollectionModeAdapter, ICollationTestAdapter, IIndexMetadataAdapter
 {
     private static readonly ProviderCapabilities SupportedCapabilities = new(
         new HashSet<string>(StringComparer.Ordinal)
@@ -25,7 +25,8 @@ public sealed class PengdowsSqliteAdapter : IAdoNetProviderAdapter, ISupplementa
             "external-connection",
             "parameterized-collection-modes",
             "case-insensitive-collation",
-            "migration-set-default"
+            "migration-set-default",
+            "index-sort-metadata"
         },
         new HashSet<string>(StringComparer.Ordinal)
         {
@@ -62,6 +63,30 @@ public sealed class PengdowsSqliteAdapter : IAdoNetProviderAdapter, ISupplementa
         context.Database.EnsureDeletedAsync(cancellationToken);
 
     public DbConnection CreateConnection(string connectionString) => new SqliteConnection(connectionString);
+
+    public IReadOnlyList<IndexColumnMetadata> GetIndexColumns(DbConnection openConnection, string tableName, string indexName)
+    {
+        using var command = openConnection.CreateCommand();
+        var escapedName = indexName.Replace("'", "''", StringComparison.Ordinal);
+        command.CommandText = $"PRAGMA index_xinfo('{escapedName}')";
+        using var reader = command.ExecuteReader();
+        var columns = new List<IndexColumnMetadata>();
+        var ordinalIndex = reader.GetOrdinal("seqno");
+        var nameIndex = reader.GetOrdinal("name");
+        var descendingIndex = reader.GetOrdinal("desc");
+        var keyIndex = reader.GetOrdinal("key");
+        while (reader.Read())
+        {
+            if (reader.GetInt32(keyIndex) == 0 || reader.IsDBNull(nameIndex))
+            {
+                continue;
+            }
+
+            columns.Add(new IndexColumnMetadata(reader.GetString(nameIndex), reader.GetInt32(ordinalIndex), reader.GetInt32(descendingIndex) != 0));
+        }
+
+        return columns;
+    }
 
     public IReadOnlyList<DatabaseTypeDefinition> DiscoverSupplementalTypes(DbConnection openConnection)
     {
