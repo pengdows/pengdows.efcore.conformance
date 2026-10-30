@@ -344,6 +344,8 @@ public sealed class Ef10MigrationAddConstraintsMigration : Migration
             {
                 id = table.Column<int>(type: null, nullable: false),
                 probeid = table.Column<Guid>(type: null, nullable: false),
+                nullableprobeid = table.Column<Guid>(type: null, nullable: true),
+                noactionprobeid = table.Column<Guid>(type: null, nullable: true),
                 code = table.Column<string>(type: null, nullable: false)
             });
         migrationBuilder.AddPrimaryKey(
@@ -361,6 +363,20 @@ public sealed class Ef10MigrationAddConstraintsMigration : Migration
             principalTable: "ef10conformance_migrationprobe_renamed",
             principalColumn: "id",
             onDelete: ReferentialAction.Cascade);
+        migrationBuilder.AddForeignKey(
+            name: "FK_ef10conformance_migrationconstraints_nullableprobe",
+            table: "ef10conformance_migrationconstraints",
+            column: "nullableprobeid",
+            principalTable: "ef10conformance_migrationprobe_renamed",
+            principalColumn: "id",
+            onDelete: ReferentialAction.SetNull);
+        migrationBuilder.AddForeignKey(
+            name: "FK_ef10conformance_migrationconstraints_noactionprobe",
+            table: "ef10conformance_migrationconstraints",
+            column: "noactionprobeid",
+            principalTable: "ef10conformance_migrationprobe_renamed",
+            principalColumn: "id",
+            onDelete: ReferentialAction.NoAction);
         migrationBuilder.CreateCheckConstraint(
             name: "CK_ef10conformance_migrationconstraints_code_nonempty",
             table: "ef10conformance_migrationconstraints",
@@ -391,6 +407,12 @@ public sealed class Ef10MigrationAddConstraintsMigration : Migration
             name: "CK_ef10conformance_migrationconstraints_code_nonempty",
             table: "ef10conformance_migrationconstraints");
         migrationBuilder.DropForeignKey(
+            name: "FK_ef10conformance_migrationconstraints_noactionprobe",
+            table: "ef10conformance_migrationconstraints");
+        migrationBuilder.DropForeignKey(
+            name: "FK_ef10conformance_migrationconstraints_nullableprobe",
+            table: "ef10conformance_migrationconstraints");
+        migrationBuilder.DropForeignKey(
             name: "FK_ef10conformance_migrationconstraints_probe",
             table: "ef10conformance_migrationconstraints");
         migrationBuilder.DropUniqueConstraint(
@@ -411,6 +433,8 @@ public sealed class Ef10MigrationAddConstraintsMigration : Migration
             entity.HasAlternateKey(row => row.Code);
             entity.Property(row => row.Id).HasColumnName("id");
             entity.Property(row => row.ProbeId).HasColumnName("probeid");
+            entity.Property<Guid?>("NullableProbeId").HasColumnName("nullableprobeid");
+            entity.Property<Guid?>("NoActionProbeId").HasColumnName("noactionprobeid");
             entity.Property(row => row.Code).HasColumnName("code");
             entity.HasOne<MigrationProbeLongRow>().WithMany().HasForeignKey(row => row.ProbeId)
                 .OnDelete(DeleteBehavior.Cascade);

@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 18,
+    "AwaitingClassification": 16,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 660,
-    "UncoveredMemberFamilies": 17
+    "MemberEntriesInCoveredFamilies": 662,
+    "UncoveredMemberFamilies": 15
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -156288,10 +156288,13 @@
       "MemberKind": "Field",
       "ApiMemberName": "NoAction",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.ReferentialAction NoAction = 0",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-ADD-CONSTRAINTS-ASYNC",
+        "EF10-MIGRATIONS-ADD-CONSTRAINTS-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.ReferentialAction.NoAction"
     },
     {
@@ -156330,10 +156333,13 @@
       "MemberKind": "Field",
       "ApiMemberName": "SetNull",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.ReferentialAction SetNull = 3",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-ADD-CONSTRAINTS-ASYNC",
+        "EF10-MIGRATIONS-ADD-CONSTRAINTS-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.ReferentialAction.SetNull"
     },
     {
