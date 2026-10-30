@@ -60,7 +60,9 @@ public sealed record ProviderCapabilities(
         "primitive-collections",
         "external-connection",
         "parameterized-collection-modes",
-        "least-greatest-functions"
+        "least-greatest-functions",
+        "migration-rename-index",
+        "migration-check-constraint"
     };
 
     public IReadOnlyList<string> UndeclaredFeatures => KnownFeatures

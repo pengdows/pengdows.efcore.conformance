@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 60,
+    "AwaitingClassification": 38,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 635,
-    "UncoveredMemberFamilies": 56
+    "MemberEntriesInCoveredFamilies": 639,
+    "UncoveredMemberFamilies": 34
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -201,10 +201,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "ToDebugString",
       "Signature": "System.String ToDebugString(Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker changeTracker, Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTrackerDebugStringOptions options = LongDefault, System.Int32 indent = 0)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "ef-owned-no-provider-contract",
+      "DispositionReason": "This formats EF Core\u0027s public debug view. Provider conformance is measured through database-visible operations and results, not formatting diagnostics.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ChangeTrackerExtensions.ToDebugString"
     },
     {
@@ -51997,10 +51997,10 @@
       "MemberKind": "Property",
       "ApiMemberName": "IsDesignTime",
       "Signature": "System.Boolean IsDesignTime get; set;",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "ef-owned-no-provider-contract",
+      "DispositionReason": "This flag marks EF Core design-time model construction and does not represent a runtime relational provider operation.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.IsDesignTime"
     },
     {
@@ -52009,10 +52009,13 @@
       "MemberKind": "Property",
       "ApiMemberName": "Functions",
       "Signature": "Microsoft.EntityFrameworkCore.DbFunctions Functions get;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DB-FUNCTION-RANDOM-ASYNC",
+        "EF10-DB-FUNCTION-RANDOM-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EF.Functions"
     },
     {
@@ -150110,10 +150113,10 @@
       "MemberKind": "Constructor",
       "ApiMemberName": ".ctor",
       "Signature": ".ctor(System.String migrationId, System.String productVersion)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "History rows are the persistence representation used by provider migration-history services. Migration lifecycle behavior is tested through DatabaseFacade APIs and applied database state.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.HistoryRow..ctor"
     },
     {
@@ -150122,10 +150125,10 @@
       "MemberKind": "Property",
       "ApiMemberName": "MigrationId",
       "Signature": "System.String MigrationId get;",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "History rows are the persistence representation used by provider migration-history services. Migration lifecycle behavior is tested through DatabaseFacade APIs and applied database state.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.HistoryRow.MigrationId"
     },
     {
@@ -150134,10 +150137,10 @@
       "MemberKind": "Property",
       "ApiMemberName": "ProductVersion",
       "Signature": "System.String ProductVersion get;",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "History rows are the persistence representation used by provider migration-history services. Migration lifecycle behavior is tested through DatabaseFacade APIs and applied database state.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.HistoryRow.ProductVersion"
     },
     {
@@ -151334,10 +151337,10 @@
       "MemberKind": "Field",
       "ApiMemberName": "Transaction",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.LockReleaseBehavior Transaction = 0",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "This enum configures provider migration-lock lifecycle behavior. Lock implementation details are outside the black-box contract; migration outcomes are verified through public APIs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.LockReleaseBehavior.Transaction"
     },
     {
@@ -151346,10 +151349,10 @@
       "MemberKind": "Field",
       "ApiMemberName": "Connection",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.LockReleaseBehavior Connection = 1",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "This enum configures provider migration-lock lifecycle behavior. Lock implementation details are outside the black-box contract; migration outcomes are verified through public APIs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.LockReleaseBehavior.Connection"
     },
     {
@@ -151358,10 +151361,10 @@
       "MemberKind": "Field",
       "ApiMemberName": "Explicit",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.LockReleaseBehavior Explicit = 2",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "This enum configures provider migration-lock lifecycle behavior. Lock implementation details are outside the black-box contract; migration outcomes are verified through public APIs.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.LockReleaseBehavior.Explicit"
     },
     {
@@ -151721,10 +151724,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "AddCheckConstraint",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.OperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.AddCheckConstraintOperation\u003E AddCheckConstraint(System.String name, System.String table, System.String sql, System.String schema = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-INDEX-RENAME-AND-CHECK-CONSTRAINT-ASYNC",
+        "EF10-MIGRATIONS-INDEX-RENAME-AND-CHECK-CONSTRAINT-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AddCheckConstraint"
     },
     {
@@ -151826,10 +151832,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "DropCheckConstraint",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.OperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.DropCheckConstraintOperation\u003E DropCheckConstraint(System.String name, System.String table, System.String schema = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-INDEX-RENAME-AND-CHECK-CONSTRAINT-ASYNC",
+        "EF10-MIGRATIONS-INDEX-RENAME-AND-CHECK-CONSTRAINT-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropCheckConstraint"
     },
     {
@@ -151880,10 +151889,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "RenameIndex",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.OperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.RenameIndexOperation\u003E RenameIndex(System.String name, System.String newName, System.String table = null, System.String schema = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-INDEX-RENAME-AND-CHECK-CONSTRAINT-ASYNC",
+        "EF10-MIGRATIONS-INDEX-RENAME-AND-CHECK-CONSTRAINT-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.RenameIndex"
     },
     {
@@ -153068,10 +153080,10 @@
       "MemberKind": "Field",
       "ApiMemberName": "Default",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.MigrationsSqlGenerationOptions Default = 0",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These flags configure generated migration scripts and transaction text. Generated SQL inspection and SQL-script formatting are outside this runtime database-behavior suite.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationsSqlGenerationOptions.Default"
     },
     {
@@ -153080,10 +153092,10 @@
       "MemberKind": "Field",
       "ApiMemberName": "Script",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.MigrationsSqlGenerationOptions Script = 1",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These flags configure generated migration scripts and transaction text. Generated SQL inspection and SQL-script formatting are outside this runtime database-behavior suite.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationsSqlGenerationOptions.Script"
     },
     {
@@ -153092,10 +153104,10 @@
       "MemberKind": "Field",
       "ApiMemberName": "Idempotent",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.MigrationsSqlGenerationOptions Idempotent = 2",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These flags configure generated migration scripts and transaction text. Generated SQL inspection and SQL-script formatting are outside this runtime database-behavior suite.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationsSqlGenerationOptions.Idempotent"
     },
     {
@@ -153104,10 +153116,10 @@
       "MemberKind": "Field",
       "ApiMemberName": "NoTransactions",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.MigrationsSqlGenerationOptions NoTransactions = 4",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "These flags configure generated migration scripts and transaction text. Generated SQL inspection and SQL-script formatting are outside this runtime database-behavior suite.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationsSqlGenerationOptions.NoTransactions"
     },
     {
@@ -157076,10 +157088,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "ToBindingList",
       "Signature": "System.ComponentModel.BindingList\u003CT\u003E ToBindingList\u003CT\u003E(System.Collections.ObjectModel.ObservableCollection\u003CT\u003E source) where T : class",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "ef-owned-no-provider-contract",
+      "DispositionReason": "This adapts in-memory collections for data binding and does not interact with a database provider.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ObservableCollectionExtensions.ToBindingList"
     },
     {
@@ -157441,10 +157453,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "Format",
       "Signature": "System.String Format(System.Collections.Generic.IEnumerable\u003CMicrosoft.EntityFrameworkCore.Metadata.IReadOnlyPropertyBase\u003E properties, System.Boolean includeTypes = false)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "ef-owned-no-provider-contract",
+      "DispositionReason": "This formats EF Core model metadata for diagnostics. It does not perform or define provider database behavior.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.PropertyBaseExtensions.Format"
     },
     {
@@ -192633,10 +192645,10 @@
       "MemberKind": "Constructor",
       "ApiMemberName": ".ctor",
       "Signature": ".ctor(System.Boolean acceptAllChangesOnSuccess, System.Exception exception)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "ef-owned-no-provider-contract",
+      "DispositionReason": "The constructor creates an EF Core event payload. Provider failure behavior is tested by causing and observing SaveChanges failures through the public API.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.SaveChangesFailedEventArgs..ctor"
     },
     {
@@ -192672,10 +192684,10 @@
       "MemberKind": "Constructor",
       "ApiMemberName": ".ctor",
       "Signature": ".ctor(System.Boolean acceptAllChangesOnSuccess, System.Int32 entitiesSavedCount)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "ef-owned-no-provider-contract",
+      "DispositionReason": "The constructor creates an EF Core event payload. Provider save behavior is tested through SaveChanges and the emitted public event.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.SavedChangesEventArgs..ctor"
     },
     {
@@ -192711,10 +192723,10 @@
       "MemberKind": "Constructor",
       "ApiMemberName": ".ctor",
       "Signature": ".ctor(System.Boolean acceptAllChangesOnSuccess)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "ef-owned-no-provider-contract",
+      "DispositionReason": "The constructor creates an EF Core event payload. Provider save behavior is tested through SaveChanges and the emitted public event.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.SavingChangesEventArgs..ctor"
     },
     {
@@ -209842,10 +209854,10 @@
       "MemberKind": "Method",
       "ApiMemberName": "UnwrapJoin",
       "Signature": "Microsoft.EntityFrameworkCore.Query.SqlExpressions.TableExpressionBase UnwrapJoin(Microsoft.EntityFrameworkCore.Query.SqlExpressions.TableExpressionBase table)",
-      "ProviderApplicable": null,
+      "ProviderApplicable": false,
       "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "Disposition": "not-applicable-with-rationale",
+      "DispositionReason": "This operates on EF Core query expression tree structures. The suite verifies query translation through application LINQ results and does not call expression transformation helpers directly.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.TableExpressionExtensions.UnwrapJoin"
     },
     {

@@ -53,7 +53,7 @@ public sealed class DatabaseFunctionTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-DB-FUNCTION-RANDOM-SYNC", "Microsoft.EntityFrameworkCore.DbFunctionsExtensions.Random", "System.Linq.Queryable.Select", "System.Linq.Queryable.ToArray")]
+    [BehavioralCoverage("EF10-DB-FUNCTION-RANDOM-SYNC", "Microsoft.EntityFrameworkCore.EF.Functions", "Microsoft.EntityFrameworkCore.DbFunctionsExtensions.Random", "System.Linq.Queryable.Select", "System.Linq.Queryable.ToArray")]
     public async Task Random_ReturnsValuesStrictlyBetweenZeroAndOneSynchronously()
     {
         var marker = await SeedAsync();
@@ -70,7 +70,7 @@ public sealed class DatabaseFunctionTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-DB-FUNCTION-RANDOM-ASYNC", "Microsoft.EntityFrameworkCore.DbFunctionsExtensions.Random", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToArrayAsync", "System.Linq.Queryable.Select", "System.Linq.Queryable.OrderBy")]
+    [BehavioralCoverage("EF10-DB-FUNCTION-RANDOM-ASYNC", "Microsoft.EntityFrameworkCore.EF.Functions", "Microsoft.EntityFrameworkCore.DbFunctionsExtensions.Random", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToArrayAsync", "System.Linq.Queryable.Select", "System.Linq.Queryable.OrderBy")]
     public async Task Random_ReturnsValuesStrictlyBetweenZeroAndOneAsynchronously()
     {
         var marker = await SeedAsync();

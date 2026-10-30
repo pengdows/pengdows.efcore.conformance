@@ -23,12 +23,13 @@ public sealed class MigrationsTests
             await using (var migrate = ProviderTestRuntime.CreateContext())
             {
                 await migrate.Database.EnsureDeletedAsync(cancellationToken);
-                var migrationIds = new[] { "20261029000101_EF10Probe", "20261029000102_EF10MigrationOperations", "20261029000103_EF10MigrationChanges", "20261029000104_EF10MigrationRenameTable", "20261029000105_EF10MigrationSqlOperation" };
+                var migrationIds = new[] { "20261029000101_EF10Probe", "20261029000102_EF10MigrationOperations", "20261029000103_EF10MigrationChanges", "20261029000104_EF10MigrationRenameTable", "20261029000105_EF10MigrationSqlOperation", "20261029000106_EF10MigrationIndexRename", "20261029000107_EF10MigrationCheckConstraint" };
                 Assert.Equal(migrationIds, migrate.Database.GetMigrations());
-                await migrate.Database.MigrateAsync(cancellationToken);
+                var portableMigrations = migrationIds.Take(5).ToArray();
+                await migrate.Database.MigrateAsync(portableMigrations[^1], cancellationToken);
                 Assert.True(migrate.Database.HasPendingModelChanges());
-                Assert.Equal(migrationIds, await migrate.Database.GetAppliedMigrationsAsync(cancellationToken));
-                Assert.Empty(await migrate.Database.GetPendingMigrationsAsync(cancellationToken));
+                Assert.Equal(portableMigrations, await migrate.Database.GetAppliedMigrationsAsync(cancellationToken));
+                Assert.Equal(migrationIds.Skip(portableMigrations.Length), await migrate.Database.GetPendingMigrationsAsync(cancellationToken));
                 Assert.Equal(1, await migrate.Database.ExecuteSqlInterpolatedAsync(
                     $"INSERT INTO ef10conformance_migrationprobe_renamed (id, value, description) VALUES ({id}, {expected}, {"async row"})",
                     cancellationToken));
@@ -91,7 +92,7 @@ public sealed class MigrationsTests
 
             await using (var reapply = ProviderTestRuntime.CreateContext())
             {
-                await reapply.Database.MigrateAsync(cancellationToken: cancellationToken);
+                await reapply.Database.MigrateAsync("20261029000105_EF10MigrationSqlOperation", cancellationToken);
             }
 
             await using var verifyReapply = ProviderTestRuntime.CreateContext();
@@ -122,12 +123,13 @@ public sealed class MigrationsTests
             await using (var migrate = ProviderTestRuntime.CreateContext())
             {
                 await migrate.Database.EnsureDeletedAsync(TestContext.Current.CancellationToken);
-                var migrationIds = new[] { "20261029000101_EF10Probe", "20261029000102_EF10MigrationOperations", "20261029000103_EF10MigrationChanges", "20261029000104_EF10MigrationRenameTable", "20261029000105_EF10MigrationSqlOperation" };
+                var migrationIds = new[] { "20261029000101_EF10Probe", "20261029000102_EF10MigrationOperations", "20261029000103_EF10MigrationChanges", "20261029000104_EF10MigrationRenameTable", "20261029000105_EF10MigrationSqlOperation", "20261029000106_EF10MigrationIndexRename", "20261029000107_EF10MigrationCheckConstraint" };
                 Assert.Equal(migrationIds, migrate.Database.GetMigrations());
-                migrate.Database.Migrate();
+                var portableMigrations = migrationIds.Take(5).ToArray();
+                migrate.Database.Migrate(portableMigrations[^1]);
                 Assert.True(migrate.Database.HasPendingModelChanges());
-                Assert.Equal(migrationIds, migrate.Database.GetAppliedMigrations());
-                Assert.Empty(migrate.Database.GetPendingMigrations());
+                Assert.Equal(portableMigrations, migrate.Database.GetAppliedMigrations());
+                Assert.Equal(migrationIds.Skip(portableMigrations.Length), migrate.Database.GetPendingMigrations());
                 Assert.Equal(1, migrate.Database.ExecuteSqlInterpolated(
                     $"INSERT INTO ef10conformance_migrationprobe_renamed (id, value, description) VALUES ({id}, {expected}, {"sync row"})"));
                 Assert.Equal(1, migrate.Database.ExecuteSqlInterpolated(
@@ -182,7 +184,7 @@ public sealed class MigrationsTests
 
             await using (var reapply = ProviderTestRuntime.CreateContext())
             {
-                reapply.Database.Migrate();
+                reapply.Database.Migrate("20261029000105_EF10MigrationSqlOperation");
             }
 
             await using var verifyReapply = ProviderTestRuntime.CreateContext();
@@ -192,6 +194,77 @@ public sealed class MigrationsTests
             Assert.Equal(4242, verifyReapply.Database.SqlQuery<int>(
                     $"SELECT value AS Value FROM ef10conformance_migrationsql WHERE id = {1}")
                 .Single());
+        }
+        finally
+        {
+            await using var cleanup = ProviderTestRuntime.CreateContext();
+            await cleanup.Database.EnsureDeletedAsync(CancellationToken.None);
+        }
+    }
+
+    [Fact]
+    [CapabilityRequirement("migration-rename-index")]
+    [CapabilityRequirement("migration-check-constraint")]
+    [BehavioralCoverage("EF10-MIGRATIONS-INDEX-RENAME-AND-CHECK-CONSTRAINT-ASYNC", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.RenameIndex", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AddCheckConstraint", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropCheckConstraint")]
+    public async Task MigrationIndexRenameAndCheckConstraint_AffectDatabaseBehaviorAsync()
+    {
+        ProviderTestRuntime.RequireCapability("migration-rename-index");
+        var cancellationToken = TestContext.Current.CancellationToken;
+        var id = Guid.Parse("3a34d6d8-aef0-42af-a248-28a2d82a6520");
+        try
+        {
+            await using (var migrate = ProviderTestRuntime.CreateContext())
+            {
+                await migrate.Database.EnsureDeletedAsync(cancellationToken);
+                await migrate.Database.MigrateAsync(cancellationToken: cancellationToken);
+                await Assert.ThrowsAnyAsync<DbException>(() => migrate.Database.ExecuteSqlInterpolatedAsync(
+                    $"UPDATE ef10conformance_migrationprobe_renamed SET value = {-1} WHERE id = {id}", cancellationToken));
+            }
+
+            await using (var rollback = ProviderTestRuntime.CreateContext())
+            {
+                await rollback.Database.MigrateAsync("20261029000105_EF10MigrationSqlOperation", cancellationToken);
+                Assert.Equal(314159, await rollback.Database.SqlQuery<int>(
+                    $"SELECT value AS Value FROM ef10conformance_migrationprobe_renamed WHERE id = {id}")
+                    .SingleAsync(cancellationToken));
+                Assert.Equal(1, await rollback.Database.ExecuteSqlInterpolatedAsync(
+                    $"UPDATE ef10conformance_migrationprobe_renamed SET value = {-1} WHERE id = {id}", cancellationToken));
+            }
+        }
+        finally
+        {
+            await using var cleanup = ProviderTestRuntime.CreateContext();
+            await cleanup.Database.EnsureDeletedAsync(CancellationToken.None);
+        }
+    }
+
+    [Fact]
+    [CapabilityRequirement("migration-rename-index")]
+    [CapabilityRequirement("migration-check-constraint")]
+    [BehavioralCoverage("EF10-MIGRATIONS-INDEX-RENAME-AND-CHECK-CONSTRAINT-SYNC", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.RenameIndex", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AddCheckConstraint", "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropCheckConstraint")]
+    public async Task MigrationIndexRenameAndCheckConstraint_AffectDatabaseBehaviorSynchronously()
+    {
+        ProviderTestRuntime.RequireCapability("migration-rename-index");
+        var id = Guid.Parse("3a34d6d8-aef0-42af-a248-28a2d82a6520");
+        try
+        {
+            await using (var migrate = ProviderTestRuntime.CreateContext())
+            {
+                await migrate.Database.EnsureDeletedAsync(TestContext.Current.CancellationToken);
+                migrate.Database.Migrate();
+                Assert.ThrowsAny<DbException>(() => migrate.Database.ExecuteSqlInterpolated(
+                    $"UPDATE ef10conformance_migrationprobe_renamed SET value = {-1} WHERE id = {id}"));
+            }
+
+            await using (var rollback = ProviderTestRuntime.CreateContext())
+            {
+                rollback.Database.Migrate("20261029000105_EF10MigrationSqlOperation");
+                Assert.Equal(314159, rollback.Database.SqlQuery<int>(
+                    $"SELECT value AS Value FROM ef10conformance_migrationprobe_renamed WHERE id = {id}")
+                    .Single());
+                Assert.Equal(1, rollback.Database.ExecuteSqlInterpolated(
+                    $"UPDATE ef10conformance_migrationprobe_renamed SET value = {-1} WHERE id = {id}"));
+            }
         }
         finally
         {

@@ -505,6 +505,61 @@
       "selectorPrefix": "Microsoft.EntityFrameworkCore.RelationalTypeMappingConfigurationBuilderExtensions",
       "disposition": "not-applicable-with-rationale",
       "reason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.ChangeTrackerExtensions.ToDebugString",
+      "disposition": "ef-owned-no-provider-contract",
+      "reason": "This formats EF Core's public debug view. Provider conformance is measured through database-visible operations and results, not formatting diagnostics."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.PropertyBaseExtensions.Format",
+      "disposition": "ef-owned-no-provider-contract",
+      "reason": "This formats EF Core model metadata for diagnostics. It does not perform or define provider database behavior."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.TableExpressionExtensions.UnwrapJoin",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "This operates on EF Core query expression tree structures. The suite verifies query translation through application LINQ results and does not call expression transformation helpers directly."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.ObservableCollectionExtensions.ToBindingList",
+      "disposition": "ef-owned-no-provider-contract",
+      "reason": "This adapts in-memory collections for data binding and does not interact with a database provider."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.HistoryRow",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "History rows are the persistence representation used by provider migration-history services. Migration lifecycle behavior is tested through DatabaseFacade APIs and applied database state."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.LockReleaseBehavior",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "This enum configures provider migration-lock lifecycle behavior. Lock implementation details are outside the black-box contract; migration outcomes are verified through public APIs."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.Migrations.MigrationsSqlGenerationOptions",
+      "disposition": "not-applicable-with-rationale",
+      "reason": "These flags configure generated migration scripts and transaction text. Generated SQL inspection and SQL-script formatting are outside this runtime database-behavior suite."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.SaveChangesFailedEventArgs..ctor",
+      "disposition": "ef-owned-no-provider-contract",
+      "reason": "The constructor creates an EF Core event payload. Provider failure behavior is tested by causing and observing SaveChanges failures through the public API."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.SavedChangesEventArgs..ctor",
+      "disposition": "ef-owned-no-provider-contract",
+      "reason": "The constructor creates an EF Core event payload. Provider save behavior is tested through SaveChanges and the emitted public event."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.SavingChangesEventArgs..ctor",
+      "disposition": "ef-owned-no-provider-contract",
+      "reason": "The constructor creates an EF Core event payload. Provider save behavior is tested through SaveChanges and the emitted public event."
+    },
+    {
+      "selectorPrefix": "Microsoft.EntityFrameworkCore.EF.IsDesignTime",
+      "disposition": "ef-owned-no-provider-contract",
+      "reason": "This flag marks EF Core design-time model construction and does not represent a runtime relational provider operation."
     }
   ]
 }

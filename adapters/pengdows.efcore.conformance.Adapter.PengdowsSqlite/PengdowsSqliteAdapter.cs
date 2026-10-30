@@ -28,7 +28,9 @@ public sealed class PengdowsSqliteAdapter : IAdoNetProviderAdapter, ISupplementa
         new HashSet<string>(StringComparer.Ordinal)
         {
             "ambient-transactions",
-            "least-greatest-functions"
+            "least-greatest-functions",
+            "migration-rename-index",
+            "migration-check-constraint"
         });
 
     public string Name => "pengdows.efcore.adonet SQLite";

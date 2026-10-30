@@ -251,6 +251,82 @@ public sealed class Ef10MigrationSqlOperationMigration : Migration
     }
 }
 
+[DbContext(typeof(ConformanceDbContext))]
+[Migration("20261029000106_EF10MigrationIndexRename")]
+public sealed class Ef10MigrationIndexRenameMigration : Migration
+{
+    protected override void Up(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.CreateIndex(
+            name: "IX_ef10conformance_migrationprobe_value",
+            table: "ef10conformance_migrationprobe_renamed",
+            column: "value");
+        migrationBuilder.RenameIndex(
+            name: "IX_ef10conformance_migrationprobe_value",
+            table: "ef10conformance_migrationprobe_renamed",
+            newName: "IX_ef10conformance_migrationprobe_value_renamed");
+    }
+
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.RenameIndex(
+            name: "IX_ef10conformance_migrationprobe_value_renamed",
+            table: "ef10conformance_migrationprobe_renamed",
+            newName: "IX_ef10conformance_migrationprobe_value");
+        migrationBuilder.DropIndex(
+            name: "IX_ef10conformance_migrationprobe_value",
+            table: "ef10conformance_migrationprobe_renamed");
+    }
+
+    protected override void BuildTargetModel(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<MigrationProbeRow>(entity =>
+        {
+            entity.ToTable("ef10conformance_migrationprobe_renamed");
+            entity.HasKey(row => row.Id);
+            entity.Property(row => row.Id).HasColumnName("id");
+            entity.Property(row => row.Value).HasColumnName("value");
+            entity.Property(row => row.Description).HasColumnName("description");
+            entity.HasIndex(row => row.Value).HasDatabaseName("IX_ef10conformance_migrationprobe_value_renamed");
+        });
+        modelBuilder.HasAnnotation("ProductVersion", "10.0.14");
+    }
+}
+
+[DbContext(typeof(ConformanceDbContext))]
+[Migration("20261029000107_EF10MigrationCheckConstraint")]
+public sealed class Ef10MigrationCheckConstraintMigration : Migration
+{
+    protected override void Up(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.AddCheckConstraint(
+            name: "CK_ef10conformance_migrationprobe_value_positive",
+            table: "ef10conformance_migrationprobe_renamed",
+            sql: "value > 0");
+    }
+
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.DropCheckConstraint(
+            name: "CK_ef10conformance_migrationprobe_value_positive",
+            table: "ef10conformance_migrationprobe_renamed");
+    }
+
+    protected override void BuildTargetModel(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<MigrationProbeRow>(entity =>
+        {
+            entity.ToTable("ef10conformance_migrationprobe_renamed", table =>
+                table.HasCheckConstraint("CK_ef10conformance_migrationprobe_value_positive", "value > 0"));
+            entity.HasKey(row => row.Id);
+            entity.Property(row => row.Id).HasColumnName("id");
+            entity.Property(row => row.Value).HasColumnName("value");
+            entity.Property(row => row.Description).HasColumnName("description");
+        });
+        modelBuilder.HasAnnotation("ProductVersion", "10.0.14");
+    }
+}
+
 public sealed class MigrationSqlOperationRow
 {
     public int Id { get; set; }
