@@ -373,7 +373,7 @@ async Task<int> RunTestsAsync(string[] arguments, string? configuredConnectionSt
                     var caseResults = results.Where(result => mappings.Any(test => result.DisplayName.Contains(test.TestName, StringComparison.Ordinal)))
                         .Where(result => result.DisplayName.Contains($"databaseTypeName: \"{type.DatabaseTypeName}\"", StringComparison.OrdinalIgnoreCase))
                         .Where(result => mappings.Any(test => result.DisplayName.Contains(
-                            $"clrTypeName: \"{test.Mapping.ClrType.FullName ?? test.Mapping.ClrType.Name}\"", StringComparison.Ordinal)))
+                            $"clrTypeName: \"{test.Mapping.ClrType.Name}\"", StringComparison.Ordinal)))
                         .ToArray();
                     var outcome = mappings.Length == 0 ? "UNLINKED" : caseResults.Length == 0 ? "NOT_EXECUTED" :
                         caseResults.Any(result => result.Outcome is ConformanceOutcome.Fail or ConformanceOutcome.Error or ConformanceOutcome.Untranslatable) ? "FAIL" :

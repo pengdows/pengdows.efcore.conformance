@@ -20,7 +20,7 @@ public sealed class DiscoveredNativeTypeTests
             var data = new TheoryData<int, string, string>();
             foreach (var probe in ProviderTestRuntime.NativeTypeProbes)
             {
-                data.Add(probe.Index, probe.Mapping.DatabaseTypeName, probe.Mapping.ClrType.FullName ?? probe.Mapping.ClrType.Name);
+                data.Add(probe.Index, probe.Mapping.DatabaseTypeName, probe.Mapping.ClrType.Name);
             }
 
             if (data.Count == 0)
@@ -39,7 +39,7 @@ public sealed class DiscoveredNativeTypeTests
             var data = new TheoryData<int, string, string>();
             foreach (var probe in ProviderTestRuntime.NativeTypeProbes.Where(probe => IsEqualityApplicable(probe.Mapping)))
             {
-                data.Add(probe.Index, probe.Mapping.DatabaseTypeName, probe.Mapping.ClrType.FullName ?? probe.Mapping.ClrType.Name);
+                data.Add(probe.Index, probe.Mapping.DatabaseTypeName, probe.Mapping.ClrType.Name);
             }
 
             if (data.Count == 0)
@@ -268,7 +268,7 @@ public sealed class DiscoveredNativeTypeTests
         var probe = ProviderTestRuntime.NativeTypeProbes.SingleOrDefault(item => item.Index == index);
         Assert.NotNull(probe);
         Assert.Equal(databaseTypeName, probe.Mapping.DatabaseTypeName);
-        Assert.Equal(clrTypeName, probe.Mapping.ClrType.FullName ?? probe.Mapping.ClrType.Name);
+        Assert.Equal(clrTypeName, probe.Mapping.ClrType.Name);
         return probe;
     }
 
@@ -323,6 +323,7 @@ internal static class NativeTypeSampleFactory
     public static object Create(NativeTypeMapping mapping)
     {
         var type = Nullable.GetUnderlyingType(mapping.ClrType) ?? mapping.ClrType;
+        if (IsNpgsqlRange(type)) return CreateRange(type, mapping, alternate: false);
         if (type == typeof(byte[])) return new byte[] { 0x4a };
         if (type.IsArray)
         {
@@ -375,6 +376,7 @@ internal static class NativeTypeSampleFactory
     public static object CreateAlternate(NativeTypeMapping mapping)
     {
         var type = Nullable.GetUnderlyingType(mapping.ClrType) ?? mapping.ClrType;
+        if (IsNpgsqlRange(type)) return CreateRange(type, mapping, alternate: true);
         if (type == typeof(byte[])) return new byte[] { 0x52 };
         if (type == typeof(int[])) return new[] { 5, 0, 1 };
         if (type.IsArray) return CreateArray(type.GetElementType()!, mapping);
@@ -412,6 +414,50 @@ internal static class NativeTypeSampleFactory
         if (type == typeof(char)) return 'R';
 
         throw new InvalidOperationException($"No centrally defined alternate value is available for CLR type '{type.FullName}'.");
+    }
+
+    private static bool IsNpgsqlRange(Type type) =>
+        type.IsGenericType && type.GetGenericTypeDefinition().FullName == "NpgsqlTypes.NpgsqlRange`1";
+
+    private static object CreateRange(Type rangeType, NativeTypeMapping mapping, bool alternate)
+    {
+        var elementType = rangeType.GetGenericArguments()[0];
+        object lower;
+        object upper;
+        if (elementType == typeof(int))
+        {
+            lower = alternate ? 10 : 1;
+            upper = alternate ? 20 : 5;
+        }
+        else if (elementType == typeof(long))
+        {
+            lower = alternate ? 100L : 1L;
+            upper = alternate ? 200L : 5L;
+        }
+        else if (elementType == typeof(decimal))
+        {
+            lower = alternate ? 10.25m : 1.25m;
+            upper = alternate ? 20.75m : 5.75m;
+        }
+        else if (elementType == typeof(DateOnly))
+        {
+            lower = alternate ? new DateOnly(2023, 1, 1) : new DateOnly(2024, 1, 1);
+            upper = alternate ? new DateOnly(2023, 12, 31) : new DateOnly(2024, 12, 31);
+        }
+        else if (elementType == typeof(DateTime))
+        {
+            var isTimeZoneRange = mapping.DatabaseTypeName.Equals("tstzrange", StringComparison.OrdinalIgnoreCase);
+            var kind = isTimeZoneRange ? DateTimeKind.Utc : DateTimeKind.Unspecified;
+            lower = alternate ? new DateTime(2023, 1, 1, 0, 0, 0, kind) : new DateTime(2024, 1, 1, 0, 0, 0, kind);
+            upper = alternate ? new DateTime(2023, 12, 31, 0, 0, 0, kind) : new DateTime(2024, 12, 31, 0, 0, 0, kind);
+        }
+        else
+        {
+            throw new InvalidOperationException($"No centrally defined range bounds are available for '{elementType.FullName}'.");
+        }
+
+        return Activator.CreateInstance(rangeType, lower, true, upper, false)
+               ?? throw new InvalidOperationException($"Could not construct a sample for range type '{rangeType.FullName}'.");
     }
 
     private static Array CreateArray(Type elementType, NativeTypeMapping mapping)
