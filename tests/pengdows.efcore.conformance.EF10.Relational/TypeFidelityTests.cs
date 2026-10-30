@@ -293,6 +293,109 @@ public sealed class TypeFidelityTests
     }
 
     [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    [BehavioralCoverage("EF10-TYPES-TEMPORAL-ROUNDTRIP", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "System.Linq.Queryable.Single", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    public async Task DateTimeAndDateTimeOffset_RoundTripUsingSyncAndAsyncApis(bool useAsync)
+    {
+        var expected = new TemporalTypesRecord
+        {
+            Id = Guid.NewGuid(),
+            DateTimeValue = new DateTime(2024, 2, 29, 13, 14, 15, 123, DateTimeKind.Utc).AddTicks(4560),
+            UtcDateTime = new DateTime(2024, 2, 29, 13, 14, 15, 654, DateTimeKind.Utc).AddTicks(3210),
+            OffsetDateTime = new DateTimeOffset(2024, 2, 29, 13, 14, 15, 987, TimeSpan.Zero).AddTicks(6540)
+        };
+
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.TemporalTypesRecords.Add(expected);
+            if (useAsync)
+            {
+                Assert.Equal(1, await write.SaveChangesAsync(TestContext.Current.CancellationToken));
+            }
+            else
+            {
+                Assert.Equal(1, write.SaveChanges());
+            }
+        }
+
+        await using var read = ProviderTestRuntime.CreateContext();
+        TemporalTypesRecord actual;
+        if (useAsync)
+        {
+            actual = await read.TemporalTypesRecords.AsNoTracking()
+                .SingleAsync(record => record.Id == expected.Id, TestContext.Current.CancellationToken);
+        }
+        else
+        {
+            actual = read.TemporalTypesRecords.AsNoTracking().Single(record => record.Id == expected.Id);
+        }
+
+        Assert.Equal(expected.DateTimeValue, actual.DateTimeValue);
+        Assert.Equal(expected.UtcDateTime, actual.UtcDateTime);
+        Assert.Equal(expected.OffsetDateTime, actual.OffsetDateTime);
+        var matchingId = useAsync
+            ? await read.TemporalTypesRecords.AsNoTracking()
+                .Where(record => record.Id == expected.Id && record.UtcDateTime == expected.UtcDateTime && record.OffsetDateTime == expected.OffsetDateTime)
+                .Select(record => record.Id)
+                .SingleAsync(TestContext.Current.CancellationToken)
+            : read.TemporalTypesRecords.AsNoTracking()
+                .Where(record => record.Id == expected.Id && record.UtcDateTime == expected.UtcDateTime && record.OffsetDateTime == expected.OffsetDateTime)
+                .Select(record => record.Id)
+                .Single();
+        Assert.Equal(expected.Id, matchingId);
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    [BehavioralCoverage("EF10-TYPES-TEMPORAL-BOUNDARIES", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "System.Linq.Queryable.Single", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    public async Task TemporalValuesAtPrecisionBoundaries_RoundTrip(bool useAsync)
+    {
+        var expected = new TemporalTypesRecord
+        {
+            Id = Guid.NewGuid(),
+            DateTimeValue = new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+            UtcDateTime = new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddTicks(9_999_990),
+            OffsetDateTime = new DateTimeOffset(2000, 1, 1, 0, 0, 0, TimeSpan.Zero).AddTicks(9_999_990)
+        };
+
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.TemporalTypesRecords.Add(expected);
+            if (useAsync)
+            {
+                Assert.Equal(1, await write.SaveChangesAsync(TestContext.Current.CancellationToken));
+            }
+            else
+            {
+                Assert.Equal(1, write.SaveChanges());
+            }
+        }
+
+        await using var read = ProviderTestRuntime.CreateContext();
+        var actual = useAsync
+            ? await read.TemporalTypesRecords.AsNoTracking().SingleAsync(record => record.Id == expected.Id, TestContext.Current.CancellationToken)
+            : read.TemporalTypesRecords.AsNoTracking().Single(record => record.Id == expected.Id);
+
+        Assert.Equal(expected.DateTimeValue, actual.DateTimeValue);
+        Assert.Equal(expected.UtcDateTime, actual.UtcDateTime);
+        Assert.Equal(expected.OffsetDateTime, actual.OffsetDateTime);
+        var matchingId = useAsync
+            ? await read.TemporalTypesRecords.AsNoTracking()
+                .Where(record => record.Id == expected.Id && record.UtcDateTime == expected.UtcDateTime && record.OffsetDateTime == expected.OffsetDateTime)
+                .Select(record => record.Id)
+                .SingleAsync(TestContext.Current.CancellationToken)
+            : read.TemporalTypesRecords.AsNoTracking()
+                .Where(record => record.Id == expected.Id && record.UtcDateTime == expected.UtcDateTime && record.OffsetDateTime == expected.OffsetDateTime)
+                .Select(record => record.Id)
+                .Single();
+        Assert.Equal(expected.Id, matchingId);
+    }
+
+    [Theory]
     [MemberData(nameof(DecimalBoundaryValues))]
     [BehavioralCoverage("EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC", "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder.HasPrecision", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
     public async Task Decimal18Scale4_RoundTripsBoundaryValuesAsynchronously(decimal amount)
@@ -410,6 +513,8 @@ public sealed class TypeFidelityTests
             tracked.Payload = null;
             tracked.Token = null;
             tracked.Duration = null;
+            tracked.DateTimeValue = null;
+            tracked.OffsetDateTimeValue = null;
             Assert.Equal(1, await update.SaveChangesAsync(TestContext.Current.CancellationToken));
         }
 
@@ -450,6 +555,8 @@ public sealed class TypeFidelityTests
             tracked.Payload = null;
             tracked.Token = null;
             tracked.Duration = null;
+            tracked.DateTimeValue = null;
+            tracked.OffsetDateTimeValue = null;
             Assert.Equal(1, update.SaveChanges());
         }
 
@@ -482,7 +589,9 @@ public sealed class TypeFidelityTests
         Time = new TimeOnly(13, 14, 15),
         Payload = [0, 1, 127, 255],
         Token = Guid.NewGuid(),
-        Duration = TimeSpan.FromTicks(9876543210)
+        Duration = TimeSpan.FromTicks(9876543210),
+        DateTimeValue = new DateTime(2024, 2, 29, 13, 14, 15, 123, DateTimeKind.Utc).AddTicks(4560),
+        OffsetDateTimeValue = new DateTimeOffset(2024, 2, 29, 13, 14, 15, 654, TimeSpan.Zero).AddTicks(3210)
     };
 
     private static IEnumerable<object?> GetNullableValues(NullableScalarRecord value)
@@ -496,6 +605,8 @@ public sealed class TypeFidelityTests
         yield return value.Payload;
         yield return value.Token;
         yield return value.Duration;
+        yield return value.DateTimeValue;
+        yield return value.OffsetDateTimeValue;
     }
 
     private static void AssertNullableValue(NullableScalarRecord expected, NullableScalarRecord actual)
@@ -510,6 +621,8 @@ public sealed class TypeFidelityTests
         Assert.Equal(expected.Payload, actual.Payload);
         Assert.Equal(expected.Token, actual.Token);
         Assert.Equal(expected.Duration, actual.Duration);
+        Assert.Equal(expected.DateTimeValue, actual.DateTimeValue);
+        Assert.Equal(expected.OffsetDateTimeValue, actual.OffsetDateTimeValue);
     }
 
     private static AdditionalClrTypesRecord CreateAdditionalValues() => new()

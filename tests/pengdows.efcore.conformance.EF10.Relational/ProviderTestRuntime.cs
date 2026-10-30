@@ -243,6 +243,8 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
 
     public DbSet<AdditionalClrTypesRecord> AdditionalClrTypesRecords => Set<AdditionalClrTypesRecord>();
 
+    public DbSet<TemporalTypesRecord> TemporalTypesRecords => Set<TemporalTypesRecord>();
+
     public DbSet<TphItem> TphItems => Set<TphItem>();
 
     public DbSet<TptItem> TptItems => Set<TptItem>();
@@ -514,6 +516,8 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
             entity.Property(record => record.Payload).HasColumnName("payload");
             entity.Property(record => record.Token).HasColumnName("token");
             entity.Property(record => record.Duration).HasColumnName("duration");
+            entity.Property(record => record.DateTimeValue).HasColumnName("datetime_value").HasPrecision(6);
+            entity.Property(record => record.OffsetDateTimeValue).HasColumnName("offset_datetime_value").HasPrecision(6);
         });
         modelBuilder.Entity<AdditionalClrTypesRecord>(entity =>
         {
@@ -527,6 +531,15 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
             entity.Property(record => record.DoubleValue).HasColumnName("doublevalue");
             entity.Property(record => record.CharacterValue).HasColumnName("charactervalue");
             entity.Property(record => record.DurationValue).HasColumnName("durationvalue");
+        });
+        modelBuilder.Entity<TemporalTypesRecord>(entity =>
+        {
+            entity.ToTable("ef10conformancetemporaltypes");
+            entity.HasKey(record => record.Id);
+            entity.Property(record => record.Id).HasColumnName("id");
+            entity.Property(record => record.DateTimeValue).HasColumnName("localdatetime").HasPrecision(6);
+            entity.Property(record => record.UtcDateTime).HasColumnName("utcdatetime").HasPrecision(6);
+            entity.Property(record => record.OffsetDateTime).HasColumnName("offsetdatetime").HasPrecision(6);
         });
         modelBuilder.Entity<TphItem>(entity =>
         {
@@ -1047,6 +1060,10 @@ internal sealed class NullableScalarRecord
     public Guid? Token { get; set; }
 
     public TimeSpan? Duration { get; set; }
+
+    public DateTime? DateTimeValue { get; set; }
+
+    public DateTimeOffset? OffsetDateTimeValue { get; set; }
 }
 
 internal sealed class AdditionalClrTypesRecord
@@ -1066,6 +1083,17 @@ internal sealed class AdditionalClrTypesRecord
     public char CharacterValue { get; set; }
 
     public TimeSpan DurationValue { get; set; }
+}
+
+internal sealed class TemporalTypesRecord
+{
+    public Guid Id { get; set; }
+
+    public DateTime DateTimeValue { get; set; }
+
+    public DateTime UtcDateTime { get; set; }
+
+    public DateTimeOffset OffsetDateTime { get; set; }
 }
 
 internal enum TestMood
