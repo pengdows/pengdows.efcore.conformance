@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 65,
+    "AwaitingClassification": 63,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 629,
-    "UncoveredMemberFamilies": 61
+    "MemberEntriesInCoveredFamilies": 632,
+    "UncoveredMemberFamilies": 59
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -16068,6 +16068,7 @@
         "EF10-DELETE-BEHAVIOR-CASCADE-SYNC",
         "EF10-DELETE-BEHAVIOR-CLIENT-SYNC",
         "EF10-DELETE-BEHAVIOR-RESTRICT-SYNC",
+        "EF10-ENTITY-TYPE-CONFIGURATION-GENERIC-SYNC",
         "EF10-ENTITY-TYPE-CONFIGURATION-SYNC",
         "EF10-FILTERED-INDEX-SYNC",
         "EF10-GENERATED-KEYS-SYNC",
@@ -16143,6 +16144,7 @@
         "EF10-DELETE-BEHAVIOR-CASCADE-SYNC",
         "EF10-DELETE-BEHAVIOR-CLIENT-SYNC",
         "EF10-DELETE-BEHAVIOR-RESTRICT-SYNC",
+        "EF10-ENTITY-TYPE-CONFIGURATION-GENERIC-SYNC",
         "EF10-ENTITY-TYPE-CONFIGURATION-SYNC",
         "EF10-FILTERED-INDEX-SYNC",
         "EF10-GENERATED-KEYS-SYNC",
@@ -16220,6 +16222,7 @@
         "EF10-DELETE-BEHAVIOR-CLIENT-ASYNC",
         "EF10-DELETE-BEHAVIOR-RESTRICT-ASYNC",
         "EF10-ENTITY-TYPE-CONFIGURATION-ASYNC",
+        "EF10-ENTITY-TYPE-CONFIGURATION-GENERIC-ASYNC",
         "EF10-FILTERED-INDEX-ASYNC",
         "EF10-GENERATED-KEYS-ASYNC",
         "EF10-INDEX-ATTRIBUTE-UNIQUE-ASYNC",
@@ -16298,6 +16301,7 @@
         "EF10-DELETE-BEHAVIOR-CLIENT-ASYNC",
         "EF10-DELETE-BEHAVIOR-RESTRICT-ASYNC",
         "EF10-ENTITY-TYPE-CONFIGURATION-ASYNC",
+        "EF10-ENTITY-TYPE-CONFIGURATION-GENERIC-ASYNC",
         "EF10-FILTERED-INDEX-ASYNC",
         "EF10-GENERATED-KEYS-ASYNC",
         "EF10-INDEX-ATTRIBUTE-UNIQUE-ASYNC",
@@ -53641,10 +53645,12 @@
       "MemberKind": "Field",
       "ApiMemberName": "Unchanged",
       "Signature": "Microsoft.EntityFrameworkCore.EntityState Unchanged = 1",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-PERSIST-CONTEXT-ATTACH"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityState.Unchanged"
     },
     {
@@ -53742,10 +53748,13 @@
       "MemberKind": "Type",
       "ApiMemberName": null,
       "Signature": "class Microsoft.EntityFrameworkCore.EntityTypeConfigurationAttribute\u003CTConfiguration, TEntity\u003E",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "A public type declaration is an inventory node; provider applicability is assessed on its callable members and their observable behavior.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-ENTITY-TYPE-CONFIGURATION-GENERIC-ASYNC",
+        "EF10-ENTITY-TYPE-CONFIGURATION-GENERIC-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityTypeConfigurationAttribute\u00602"
     },
     {
@@ -53754,10 +53763,13 @@
       "MemberKind": "Constructor",
       "ApiMemberName": ".ctor",
       "Signature": ".ctor()",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-ENTITY-TYPE-CONFIGURATION-GENERIC-ASYNC",
+        "EF10-ENTITY-TYPE-CONFIGURATION-GENERIC-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.EntityTypeConfigurationAttribute\u00602..ctor"
     },
     {
@@ -54136,6 +54148,8 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-ENTITY-TYPE-CONFIGURATION-ASYNC",
+        "EF10-ENTITY-TYPE-CONFIGURATION-GENERIC-ASYNC",
+        "EF10-ENTITY-TYPE-CONFIGURATION-GENERIC-SYNC",
         "EF10-ENTITY-TYPE-CONFIGURATION-SYNC"
       ],
       "Disposition": "behavior-tested-family",
@@ -183582,6 +183596,8 @@
         "EF10-CONTEXT-DISPOSE-ASYNC",
         "EF10-CONTEXT-DISPOSE-SYNC",
         "EF10-DATABASE-FACADE-SET-CONNECTION",
+        "EF10-ENTITY-TYPE-CONFIGURATION-GENERIC-ASYNC",
+        "EF10-ENTITY-TYPE-CONFIGURATION-GENERIC-SYNC",
         "EF10-TRANSACTION-EXTERNAL-ASYNC",
         "EF10-TRANSACTION-EXTERNAL-SYNC"
       ],

@@ -113,6 +113,8 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
 
     public DbSet<AttributedConfigurationRecord> AttributedConfigurationRecords => Set<AttributedConfigurationRecord>();
 
+    public DbSet<GenericAttributedConfigurationRecord> GenericAttributedConfigurationRecords => Set<GenericAttributedConfigurationRecord>();
+
     public DbSet<Blog> Blogs => Set<Blog>();
 
     public DbSet<ScalarRecord> ScalarRecords => Set<ScalarRecord>();
@@ -546,6 +548,25 @@ internal sealed class AttributedConfigurationRecordConfiguration : IEntityTypeCo
         builder.HasKey(record => record.Id);
         builder.Property(record => record.Id).HasColumnName("id");
         builder.Property(record => record.Value).HasColumnName("value");
+    }
+}
+
+[EntityTypeConfiguration<GenericAttributedConfigurationRecordConfiguration, GenericAttributedConfigurationRecord>]
+internal sealed class GenericAttributedConfigurationRecord
+{
+    public Guid Id { get; set; }
+
+    public string Value { get; set; } = string.Empty;
+}
+
+internal sealed class GenericAttributedConfigurationRecordConfiguration : IEntityTypeConfiguration<GenericAttributedConfigurationRecord>
+{
+    public void Configure(EntityTypeBuilder<GenericAttributedConfigurationRecord> builder)
+    {
+        builder.ToTable("ef10conformancegenericattributed");
+        builder.HasKey(record => record.Id);
+        builder.Property(record => record.Id).HasColumnName("configured_id");
+        builder.Property(record => record.Value).HasColumnName("configured_value");
     }
 }
 

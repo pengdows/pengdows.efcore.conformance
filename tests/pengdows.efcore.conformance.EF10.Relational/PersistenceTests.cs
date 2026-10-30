@@ -75,7 +75,7 @@ public sealed class PersistenceTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-PERSIST-CONTEXT-ATTACH", "Microsoft.EntityFrameworkCore.DbContext.Attach", "Microsoft.EntityFrameworkCore.DbContext.Entry", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync")]
+    [BehavioralCoverage("EF10-PERSIST-CONTEXT-ATTACH", "Microsoft.EntityFrameworkCore.DbContext.Attach", "Microsoft.EntityFrameworkCore.DbContext.Entry", "Microsoft.EntityFrameworkCore.EntityState.Unchanged", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync")]
     public async Task DbContextAttach_TracksDetachedEntityAndPersistsChanges()
     {
         var id = Guid.NewGuid();
