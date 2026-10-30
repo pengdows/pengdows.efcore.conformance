@@ -1,3 +1,4 @@
+using System.Data;
 using System.Data.Common;
 using Microsoft.EntityFrameworkCore;
 using pengdows.efcore.conformance;
@@ -275,17 +276,21 @@ public sealed class MigrationsTests
 
     [Fact]
     [CapabilityRequirement("migration-add-constraint-operations")]
+    [CapabilityRequirement("schema-comments")]
     [BehavioralCoverage(
         "EF10-MIGRATIONS-ADD-CONSTRAINTS-ASYNC",
         "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AddPrimaryKey",
         "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AddUniqueConstraint",
         "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AddForeignKey",
+        "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.CreateCheckConstraint",
+        "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AlterTable",
         "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropPrimaryKey",
         "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropUniqueConstraint",
         "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropForeignKey")]
     public async Task AddConstraintMigration_EnforcesKeysAndRelationshipsAsynchronously()
     {
         ProviderTestRuntime.RequireCapability("migration-add-constraint-operations");
+        ProviderTestRuntime.RequireCapability("schema-comments");
         var cancellationToken = TestContext.Current.CancellationToken;
         var principalId = Guid.NewGuid();
         try
@@ -294,6 +299,13 @@ public sealed class MigrationsTests
             {
                 await migrate.Database.EnsureDeletedAsync(cancellationToken);
                 await migrate.Database.MigrateAsync(cancellationToken: cancellationToken);
+                await using (var metadataConnection = ProviderTestRuntime.CreateConnection())
+                {
+                    await metadataConnection.OpenAsync(cancellationToken);
+                    var tables = metadataConnection.GetSchema("Tables");
+                    Assert.Contains(tables.Rows.Cast<DataRow>(), row => HasMetadataValues(
+                        row, "ef10conformance_migrationconstraints", "EF10 migration constraints table"));
+                }
                 Assert.Equal(1, await migrate.Database.ExecuteSqlInterpolatedAsync(
                     $"INSERT INTO ef10conformance_migrationprobe_renamed (id, value, description) VALUES ({principalId}, {777}, {"cascade principal"})",
                     cancellationToken));
@@ -305,6 +317,9 @@ public sealed class MigrationsTests
                     cancellationToken));
                 await Assert.ThrowsAnyAsync<DbException>(() => migrate.Database.ExecuteSqlInterpolatedAsync(
                     $"INSERT INTO ef10conformance_migrationconstraints (id, probeid, code) VALUES ({3}, {Guid.NewGuid()}, {"orphan"})",
+                    cancellationToken));
+                await Assert.ThrowsAnyAsync<DbException>(() => migrate.Database.ExecuteSqlInterpolatedAsync(
+                    $"INSERT INTO ef10conformance_migrationconstraints (id, probeid, code) VALUES ({4}, {principalId}, {string.Empty})",
                     cancellationToken));
                 Assert.Equal(1, await migrate.Database.ExecuteSqlInterpolatedAsync(
                     $"DELETE FROM ef10conformance_migrationprobe_renamed WHERE id = {principalId}",
@@ -329,17 +344,21 @@ public sealed class MigrationsTests
 
     [Fact]
     [CapabilityRequirement("migration-add-constraint-operations")]
+    [CapabilityRequirement("schema-comments")]
     [BehavioralCoverage(
         "EF10-MIGRATIONS-ADD-CONSTRAINTS-SYNC",
         "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AddPrimaryKey",
         "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AddUniqueConstraint",
         "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AddForeignKey",
+        "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.CreateCheckConstraint",
+        "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AlterTable",
         "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropPrimaryKey",
         "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropUniqueConstraint",
         "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropForeignKey")]
     public async Task AddConstraintMigration_EnforcesKeysAndRelationshipsSynchronously()
     {
         ProviderTestRuntime.RequireCapability("migration-add-constraint-operations");
+        ProviderTestRuntime.RequireCapability("schema-comments");
         var principalId = Guid.NewGuid();
         try
         {
@@ -347,6 +366,13 @@ public sealed class MigrationsTests
             {
                 await migrate.Database.EnsureDeletedAsync(TestContext.Current.CancellationToken);
                 migrate.Database.Migrate();
+                await using (var metadataConnection = ProviderTestRuntime.CreateConnection())
+                {
+                    metadataConnection.Open();
+                    var tables = metadataConnection.GetSchema("Tables");
+                    Assert.Contains(tables.Rows.Cast<DataRow>(), row => HasMetadataValues(
+                        row, "ef10conformance_migrationconstraints", "EF10 migration constraints table"));
+                }
                 Assert.Equal(1, migrate.Database.ExecuteSqlInterpolated(
                     $"INSERT INTO ef10conformance_migrationprobe_renamed (id, value, description) VALUES ({principalId}, {777}, {"cascade principal"})"));
                 Assert.Equal(1, migrate.Database.ExecuteSqlInterpolated(
@@ -355,6 +381,8 @@ public sealed class MigrationsTests
                     $"INSERT INTO ef10conformance_migrationconstraints (id, probeid, code) VALUES ({2}, {principalId}, {"first"})"));
                 Assert.ThrowsAny<DbException>(() => migrate.Database.ExecuteSqlInterpolated(
                     $"INSERT INTO ef10conformance_migrationconstraints (id, probeid, code) VALUES ({3}, {Guid.NewGuid()}, {"orphan"})"));
+                Assert.ThrowsAny<DbException>(() => migrate.Database.ExecuteSqlInterpolated(
+                    $"INSERT INTO ef10conformance_migrationconstraints (id, probeid, code) VALUES ({4}, {principalId}, {string.Empty})"));
                 Assert.Equal(1, migrate.Database.ExecuteSqlInterpolated(
                     $"DELETE FROM ef10conformance_migrationprobe_renamed WHERE id = {principalId}"));
                 Assert.Equal(0, migrate.Database.SqlQuery<int>(
@@ -374,4 +402,10 @@ public sealed class MigrationsTests
             await cleanup.Database.EnsureDeletedAsync(CancellationToken.None);
         }
     }
+
+    private static bool HasMetadataValues(DataRow row, params string[] expectedValues) =>
+        expectedValues.All(expected => row.ItemArray.Any(value => string.Equals(
+            Convert.ToString(value, System.Globalization.CultureInfo.InvariantCulture),
+            expected,
+            StringComparison.OrdinalIgnoreCase)));
 }

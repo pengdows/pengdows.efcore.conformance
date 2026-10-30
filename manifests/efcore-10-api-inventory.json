@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 26,
+    "AwaitingClassification": 24,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 652,
-    "UncoveredMemberFamilies": 25
+    "MemberEntriesInCoveredFamilies": 654,
+    "UncoveredMemberFamilies": 23
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -151660,10 +151660,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "AlterTable",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.AlterOperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.AlterTableOperation\u003E AlterTable(System.String name, System.String schema = null, System.String comment = null, System.String oldComment = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-ADD-CONSTRAINTS-ASYNC",
+        "EF10-MIGRATIONS-ADD-CONSTRAINTS-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AlterTable"
     },
     {
@@ -151738,10 +151741,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "CreateCheckConstraint",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.OperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.AddCheckConstraintOperation\u003E CreateCheckConstraint(System.String name, System.String table, System.String sql, System.String schema = null)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-MIGRATIONS-ADD-CONSTRAINTS-ASYNC",
+        "EF10-MIGRATIONS-ADD-CONSTRAINTS-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.CreateCheckConstraint"
     },
     {

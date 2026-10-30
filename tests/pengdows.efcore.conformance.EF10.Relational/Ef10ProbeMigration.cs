@@ -356,10 +356,23 @@ public sealed class Ef10MigrationAddConstraintsMigration : Migration
             principalTable: "ef10conformance_migrationprobe_renamed",
             principalColumn: "id",
             onDelete: ReferentialAction.Cascade);
+        migrationBuilder.CreateCheckConstraint(
+            name: "CK_ef10conformance_migrationconstraints_code_nonempty",
+            table: "ef10conformance_migrationconstraints",
+            sql: "code <> ''");
+        migrationBuilder.AlterTable(
+            name: "ef10conformance_migrationconstraints",
+            comment: "EF10 migration constraints table");
     }
 
     protected override void Down(MigrationBuilder migrationBuilder)
     {
+        migrationBuilder.AlterTable(
+            name: "ef10conformance_migrationconstraints",
+            oldComment: "EF10 migration constraints table");
+        migrationBuilder.DropCheckConstraint(
+            name: "CK_ef10conformance_migrationconstraints_code_nonempty",
+            table: "ef10conformance_migrationconstraints");
         migrationBuilder.DropForeignKey(
             name: "FK_ef10conformance_migrationconstraints_probe",
             table: "ef10conformance_migrationconstraints");
