@@ -139,7 +139,7 @@ static IReadOnlyList<NativeTypeCoverageResult> BuildNativeTypeCoverage(
                 .ToArray();
         results.Add(new NativeTypeCoverageResult(
             observedType.DatabaseTypeName.Trim(),
-            matches.Length > 0 ? "COVERED" : familyMatches.Length > 0 ? "PARTIAL" : "UNCOVERED",
+            matches.Length > 0 ? "LINKED" : familyMatches.Length > 0 ? "FAMILY_LINKED" : "UNLINKED",
             familyMatches.Select(item => item.ClrTypeName).Distinct(StringComparer.Ordinal).Order(StringComparer.Ordinal).ToArray(),
             familyMatches.Select(item => item.ContractId).Distinct(StringComparer.Ordinal).Order(StringComparer.Ordinal).ToArray())
         {

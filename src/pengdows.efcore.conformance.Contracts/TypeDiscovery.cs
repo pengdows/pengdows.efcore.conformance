@@ -1,6 +1,7 @@
 using System.Data;
 using System.Data.Common;
 using System.Runtime.Loader;
+using System.Text.Json.Serialization;
 
 namespace pengdows.efcore.conformance;
 
@@ -43,11 +44,23 @@ public sealed record TypeDiscoveryReport(
 
     public bool DataTypesCollectionAdvertised => MetadataCollections.Contains("DataTypes", StringComparer.OrdinalIgnoreCase);
 
-    public int TypesWithBehavioralCoverage => NativeTypeCoverage.Count(item => item.Outcome == "COVERED");
+    public int TypesWithExactTestLinks => NativeTypeCoverage.Count(item => item.Outcome == "LINKED");
 
-    public int TypesWithPartialBehavioralCoverage => NativeTypeCoverage.Count(item => item.Outcome == "PARTIAL");
+    public int TypesWithFamilyTestLinks => NativeTypeCoverage.Count(item => item.Outcome == "FAMILY_LINKED");
 
-    public int TypesWithoutBehavioralCoverage => NativeTypeCoverage.Count(item => item.Outcome == "UNCOVERED");
+    public int TypesWithoutDeclaredTestLinks => NativeTypeCoverage.Count(item => item.Outcome == "UNLINKED");
+
+    [JsonIgnore]
+    [Obsolete("Use TypesWithExactTestLinks; a declared link does not mean the native type was executed.")]
+    public int TypesWithBehavioralCoverage => TypesWithExactTestLinks;
+
+    [JsonIgnore]
+    [Obsolete("Use TypesWithFamilyTestLinks; a family link does not mean each native type was executed.")]
+    public int TypesWithPartialBehavioralCoverage => TypesWithFamilyTestLinks;
+
+    [JsonIgnore]
+    [Obsolete("Use TypesWithoutDeclaredTestLinks.")]
+    public int TypesWithoutBehavioralCoverage => TypesWithoutDeclaredTestLinks;
 
     public int DeclaredTestTypesNotObserved => NativeTypeCoverage.Count(item => item.Outcome == "NOT_OBSERVED");
 
