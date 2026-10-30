@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations.Design;
 using Microsoft.EntityFrameworkCore.Migrations.Operations;
+using Microsoft.EntityFrameworkCore.Scaffolding;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using System.IO;
@@ -15,6 +16,70 @@ namespace pengdows.efcore.conformance.EF10.Relational;
 [Collection(RelationalTestCollection.Name)]
 public sealed class DesignTimeMigrationCodeGenerationTests
 {
+    [Fact]
+    [BehavioralCoverage(
+        "EF10-DESIGN-SCAFFOLDING-MODEL-HELPERS",
+        "Microsoft.EntityFrameworkCore.ScaffoldingModelExtensions.GetDbSetName",
+        "Microsoft.EntityFrameworkCore.ScaffoldingModelExtensions.IsHandledByConvention",
+        "Microsoft.EntityFrameworkCore.ScaffoldingModelExtensions.IsHandledByDataAnnotations",
+        "Microsoft.EntityFrameworkCore.ScaffoldingModelExtensions.IsSimpleManyToManyJoinEntityType",
+        "Microsoft.EntityFrameworkCore.ScaffoldingModelExtensions.IsLeftNavigation",
+        "Microsoft.EntityFrameworkCore.ScaffoldingModelExtensions.GetDataAnnotations",
+        "Microsoft.EntityFrameworkCore.ScaffoldingModelExtensions.GetFluentApiCalls")]
+    public void ScaffoldingModelExtensions_DescribeConfiguredModel()
+    {
+        var options = new DbContextOptionsBuilder();
+        ProviderTestRuntime.Adapter.Configure(options, ProviderTestRuntime.ConnectionString);
+        using var context = new ScaffoldingDesignContext(options.Options);
+        var services = new ServiceCollection();
+        services.AddEntityFrameworkDesignTimeServices();
+        services.AddDbContextDesignTimeServices(context);
+        var relationalTypeMappingSource = context.GetService<IRelationalTypeMappingSource>();
+        services.AddSingleton<IRelationalTypeMappingSource>(relationalTypeMappingSource);
+        services.AddSingleton<ITypeMappingSource>(relationalTypeMappingSource);
+        new EntityFrameworkRelationalDesignServicesBuilder(services).TryAddCoreServices();
+        using var serviceProvider = services.BuildServiceProvider();
+
+        var annotationCodeGenerator = serviceProvider.GetRequiredService<IAnnotationCodeGenerator>();
+        var model = context.GetService<IDesignTimeModel>().Model;
+        var post = model.FindEntityType(typeof(ScaffoldingPost))!;
+        var tag = model.FindEntityType(typeof(ScaffoldingTag))!;
+        var skipNavigation = post.GetSkipNavigations().Single();
+        var join = skipNavigation.JoinEntityType;
+        var primaryKey = post.FindPrimaryKey()!;
+        var title = post.FindProperty(nameof(ScaffoldingPost.Title))!;
+        var index = post.GetIndexes().Single(candidate => candidate.Properties.Contains(title));
+        var navigation = post.GetNavigations().Single(candidate => candidate.Name == nameof(ScaffoldingPost.Blog));
+
+        Assert.Equal(nameof(ScaffoldingDesignContext.Posts), post.GetDbSetName());
+        Assert.True(primaryKey.IsHandledByConvention());
+        Assert.True(index.IsHandledByDataAnnotations(annotationCodeGenerator));
+        Assert.True(join.IsSimpleManyToManyJoinEntityType());
+        Assert.NotEqual(skipNavigation.IsLeftNavigation(), skipNavigation.Inverse.IsLeftNavigation());
+        Assert.NotEmpty(post.GetDataAnnotations(annotationCodeGenerator));
+        Assert.NotEmpty(title.GetDataAnnotations(annotationCodeGenerator));
+        Assert.NotNull(navigation.GetDataAnnotations(annotationCodeGenerator));
+        Assert.NotNull(skipNavigation.GetDataAnnotations(annotationCodeGenerator));
+        AssertFluentApiFragment(model.GetFluentApiCalls(annotationCodeGenerator));
+        AssertFluentApiFragment(post.GetFluentApiCalls(annotationCodeGenerator));
+        AssertFluentApiFragment(primaryKey.GetFluentApiCalls(annotationCodeGenerator));
+        Assert.Equal("IsUnique", index.GetFluentApiCalls(annotationCodeGenerator)!.Method);
+        var titleFluentApi = title.GetFluentApiCalls(annotationCodeGenerator)!;
+        Assert.Equal("IsRequired", titleFluentApi.Method);
+        Assert.True(titleFluentApi.IsHandledByDataAnnotations);
+        AssertFluentApiFragment(navigation.ForeignKey.GetFluentApiCalls(annotationCodeGenerator));
+        AssertFluentApiFragment(tag.GetFluentApiCalls(annotationCodeGenerator));
+    }
+
+    private static void AssertFluentApiFragment(FluentApiCodeFragment? fragment)
+    {
+        if (fragment is not null)
+        {
+            Assert.False(string.IsNullOrWhiteSpace(fragment.Method));
+            Assert.True(fragment.Arguments.Count > 0 || fragment.ChainedCall is not null);
+        }
+    }
+
     [Fact]
     [BehavioralCoverage(
         "EF10-DESIGN-MIGRATION-CODE-GENERATION",
@@ -129,4 +194,45 @@ public sealed class DesignTimeMigrationCodeGenerationTests
         Assert.Contains("AddColumn<int>", operationBuilder.ToString(), StringComparison.Ordinal);
         Assert.Contains("ef10conformancepeople", snapshotBuilder.ToString(), StringComparison.Ordinal);
     }
+}
+
+internal sealed class ScaffoldingDesignContext(DbContextOptions options) : DbContext(options)
+{
+    public DbSet<ScaffoldingPost> Posts => Set<ScaffoldingPost>();
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<ScaffoldingBlog>().HasMany(blog => blog.Posts).WithOne(post => post.Blog);
+        modelBuilder.Entity<ScaffoldingPost>()
+            .HasIndex(post => post.Title)
+            .IsUnique();
+        modelBuilder.Entity<ScaffoldingPost>().HasMany(post => post.Tags).WithMany(tag => tag.Posts);
+    }
+}
+
+internal sealed class ScaffoldingBlog
+{
+    public int Id { get; set; }
+
+    public ICollection<ScaffoldingPost> Posts { get; set; } = new List<ScaffoldingPost>();
+}
+
+internal sealed class ScaffoldingPost
+{
+    public int Id { get; set; }
+
+    public string Title { get; set; } = string.Empty;
+
+    public int BlogId { get; set; }
+
+    public ScaffoldingBlog Blog { get; set; } = null!;
+
+    public ICollection<ScaffoldingTag> Tags { get; set; } = new List<ScaffoldingTag>();
+}
+
+internal sealed class ScaffoldingTag
+{
+    public int Id { get; set; }
+
+    public ICollection<ScaffoldingPost> Posts { get; set; } = new List<ScaffoldingPost>();
 }

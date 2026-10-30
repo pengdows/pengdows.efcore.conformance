@@ -23,10 +23,10 @@
     "TotalEntries": 18795,
     "PublicTypes": 2033,
     "PublicMembers": 16762,
-    "AwaitingClassification": 73,
+    "AwaitingClassification": 57,
     "ExplicitlyExcluded": 5921,
-    "MemberEntriesInCoveredFamilies": 711,
-    "UncoveredMemberFamilies": 62
+    "MemberEntriesInCoveredFamilies": 727,
+    "UncoveredMemberFamilies": 55
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -203868,10 +203868,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "IsSimpleManyToManyJoinEntityType",
       "Signature": "System.Boolean IsSimpleManyToManyJoinEntityType(Microsoft.EntityFrameworkCore.Metadata.IEntityType entityType)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-SCAFFOLDING-MODEL-HELPERS"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ScaffoldingModelExtensions.IsSimpleManyToManyJoinEntityType"
     },
     {
@@ -203880,10 +203882,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "IsLeftNavigation",
       "Signature": "System.Boolean IsLeftNavigation(Microsoft.EntityFrameworkCore.Metadata.ISkipNavigation skipNavigation)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-SCAFFOLDING-MODEL-HELPERS"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ScaffoldingModelExtensions.IsLeftNavigation"
     },
     {
@@ -203892,10 +203896,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "GetDbSetName",
       "Signature": "System.String GetDbSetName(Microsoft.EntityFrameworkCore.Metadata.IReadOnlyEntityType entityType)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-SCAFFOLDING-MODEL-HELPERS"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ScaffoldingModelExtensions.GetDbSetName"
     },
     {
@@ -203904,10 +203910,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "IsHandledByConvention",
       "Signature": "System.Boolean IsHandledByConvention(Microsoft.EntityFrameworkCore.Metadata.IKey key)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-SCAFFOLDING-MODEL-HELPERS"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ScaffoldingModelExtensions.IsHandledByConvention"
     },
     {
@@ -203916,10 +203924,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "IsHandledByDataAnnotations",
       "Signature": "System.Boolean IsHandledByDataAnnotations(Microsoft.EntityFrameworkCore.Metadata.IIndex index, Microsoft.EntityFrameworkCore.Design.IAnnotationCodeGenerator annotationCodeGenerator)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-SCAFFOLDING-MODEL-HELPERS"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ScaffoldingModelExtensions.IsHandledByDataAnnotations"
     },
     {
@@ -203928,10 +203938,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "GetDataAnnotations",
       "Signature": "System.Collections.Generic.IEnumerable\u003CMicrosoft.EntityFrameworkCore.Design.AttributeCodeFragment\u003E GetDataAnnotations(Microsoft.EntityFrameworkCore.Metadata.IEntityType entityType, Microsoft.EntityFrameworkCore.Design.IAnnotationCodeGenerator annotationCodeGenerator)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-SCAFFOLDING-MODEL-HELPERS"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ScaffoldingModelExtensions.GetDataAnnotations"
     },
     {
@@ -203940,10 +203952,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "GetDataAnnotations",
       "Signature": "System.Collections.Generic.IEnumerable\u003CMicrosoft.EntityFrameworkCore.Design.AttributeCodeFragment\u003E GetDataAnnotations(Microsoft.EntityFrameworkCore.Metadata.IProperty property, Microsoft.EntityFrameworkCore.Design.IAnnotationCodeGenerator annotationCodeGenerator)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-SCAFFOLDING-MODEL-HELPERS"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ScaffoldingModelExtensions.GetDataAnnotations"
     },
     {
@@ -203952,10 +203966,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "GetDataAnnotations",
       "Signature": "System.Collections.Generic.IEnumerable\u003CMicrosoft.EntityFrameworkCore.Design.AttributeCodeFragment\u003E GetDataAnnotations(Microsoft.EntityFrameworkCore.Metadata.INavigation navigation, Microsoft.EntityFrameworkCore.Design.IAnnotationCodeGenerator annotationCodeGenerator)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-SCAFFOLDING-MODEL-HELPERS"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ScaffoldingModelExtensions.GetDataAnnotations"
     },
     {
@@ -203964,10 +203980,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "GetDataAnnotations",
       "Signature": "System.Collections.Generic.IEnumerable\u003CMicrosoft.EntityFrameworkCore.Design.AttributeCodeFragment\u003E GetDataAnnotations(Microsoft.EntityFrameworkCore.Metadata.ISkipNavigation skipNavigation, Microsoft.EntityFrameworkCore.Design.IAnnotationCodeGenerator annotationCodeGenerator)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-SCAFFOLDING-MODEL-HELPERS"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ScaffoldingModelExtensions.GetDataAnnotations"
     },
     {
@@ -203976,10 +203994,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "GetFluentApiCalls",
       "Signature": "Microsoft.EntityFrameworkCore.Design.FluentApiCodeFragment GetFluentApiCalls(Microsoft.EntityFrameworkCore.Metadata.IModel model, Microsoft.EntityFrameworkCore.Design.IAnnotationCodeGenerator annotationCodeGenerator)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-SCAFFOLDING-MODEL-HELPERS"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ScaffoldingModelExtensions.GetFluentApiCalls"
     },
     {
@@ -203988,10 +204008,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "GetFluentApiCalls",
       "Signature": "Microsoft.EntityFrameworkCore.Design.FluentApiCodeFragment GetFluentApiCalls(Microsoft.EntityFrameworkCore.Metadata.IEntityType entityType, Microsoft.EntityFrameworkCore.Design.IAnnotationCodeGenerator annotationCodeGenerator)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-SCAFFOLDING-MODEL-HELPERS"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ScaffoldingModelExtensions.GetFluentApiCalls"
     },
     {
@@ -204000,10 +204022,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "GetFluentApiCalls",
       "Signature": "Microsoft.EntityFrameworkCore.Design.FluentApiCodeFragment GetFluentApiCalls(Microsoft.EntityFrameworkCore.Metadata.IKey key, Microsoft.EntityFrameworkCore.Design.IAnnotationCodeGenerator annotationCodeGenerator)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-SCAFFOLDING-MODEL-HELPERS"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ScaffoldingModelExtensions.GetFluentApiCalls"
     },
     {
@@ -204012,10 +204036,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "GetFluentApiCalls",
       "Signature": "Microsoft.EntityFrameworkCore.Design.FluentApiCodeFragment GetFluentApiCalls(Microsoft.EntityFrameworkCore.Metadata.IIndex index, Microsoft.EntityFrameworkCore.Design.IAnnotationCodeGenerator annotationCodeGenerator)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-SCAFFOLDING-MODEL-HELPERS"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ScaffoldingModelExtensions.GetFluentApiCalls"
     },
     {
@@ -204024,10 +204050,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "GetFluentApiCalls",
       "Signature": "Microsoft.EntityFrameworkCore.Design.FluentApiCodeFragment GetFluentApiCalls(Microsoft.EntityFrameworkCore.Metadata.IProperty property, Microsoft.EntityFrameworkCore.Design.IAnnotationCodeGenerator annotationCodeGenerator)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-SCAFFOLDING-MODEL-HELPERS"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ScaffoldingModelExtensions.GetFluentApiCalls"
     },
     {
@@ -204036,10 +204064,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "GetFluentApiCalls",
       "Signature": "Microsoft.EntityFrameworkCore.Design.FluentApiCodeFragment GetFluentApiCalls(Microsoft.EntityFrameworkCore.Metadata.IForeignKey foreignKey, Microsoft.EntityFrameworkCore.Design.IAnnotationCodeGenerator annotationCodeGenerator, System.Boolean useStrings = false)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-SCAFFOLDING-MODEL-HELPERS"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ScaffoldingModelExtensions.GetFluentApiCalls"
     },
     {
@@ -204048,10 +204078,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "GetFluentApiCalls",
       "Signature": "Microsoft.EntityFrameworkCore.Design.FluentApiCodeFragment GetFluentApiCalls(Microsoft.EntityFrameworkCore.Metadata.ISequence sequence, Microsoft.EntityFrameworkCore.Design.IAnnotationCodeGenerator annotationCodeGenerator)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-DESIGN-SCAFFOLDING-MODEL-HELPERS"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.ScaffoldingModelExtensions.GetFluentApiCalls"
     },
     {
