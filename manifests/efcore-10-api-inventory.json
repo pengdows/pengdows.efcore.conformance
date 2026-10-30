@@ -16530,6 +16530,7 @@
         "EF10-TRACKING-DBCONTEXT-FIND-ASYNC",
         "EF10-TRACKING-DETACH",
         "EF10-TRACKING-FIND",
+        "EF10-TRACKING-FIND-ADDED-ASYNC",
         "EF10-TRACKING-FIND-ASYNC",
         "EF10-TRACKING-NO-TRACKING",
         "EF10-TRACKING-RELOAD-ASYNC",
@@ -16565,6 +16566,7 @@
         "EF10-TRACKING-DBCONTEXT-FIND-ASYNC",
         "EF10-TRACKING-DETACH",
         "EF10-TRACKING-FIND",
+        "EF10-TRACKING-FIND-ADDED-ASYNC",
         "EF10-TRACKING-FIND-ASYNC",
         "EF10-TRACKING-NO-TRACKING",
         "EF10-TRACKING-RELOAD-ASYNC",
@@ -16878,7 +16880,8 @@
       "Signature": "System.Threading.Tasks.ValueTask\u003CSystem.Object\u003E FindAsync(System.Type entityType, System.Object[] keyValues)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
-        "EF10-TRACKING-DBCONTEXT-FIND-ASYNC"
+        "EF10-TRACKING-DBCONTEXT-FIND-ASYNC",
+        "EF10-TRACKING-DBCONTEXT-FIND-ASYNC-NO-TOKEN"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -16892,7 +16895,8 @@
       "Signature": "System.Threading.Tasks.ValueTask\u003CSystem.Object\u003E FindAsync(System.Type entityType, System.Object[] keyValues, System.Threading.CancellationToken cancellationToken)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
-        "EF10-TRACKING-DBCONTEXT-FIND-ASYNC"
+        "EF10-TRACKING-DBCONTEXT-FIND-ASYNC",
+        "EF10-TRACKING-DBCONTEXT-FIND-ASYNC-NO-TOKEN"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -16920,7 +16924,8 @@
       "Signature": "System.Threading.Tasks.ValueTask\u003CTEntity\u003E FindAsync\u003CTEntity\u003E(System.Object[] keyValues) where TEntity : class",
       "ProviderApplicable": true,
       "BehavioralContracts": [
-        "EF10-TRACKING-DBCONTEXT-FIND-ASYNC"
+        "EF10-TRACKING-DBCONTEXT-FIND-ASYNC",
+        "EF10-TRACKING-DBCONTEXT-FIND-ASYNC-NO-TOKEN"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -16934,7 +16939,8 @@
       "Signature": "System.Threading.Tasks.ValueTask\u003CTEntity\u003E FindAsync\u003CTEntity\u003E(System.Object[] keyValues, System.Threading.CancellationToken cancellationToken) where TEntity : class",
       "ProviderApplicable": true,
       "BehavioralContracts": [
-        "EF10-TRACKING-DBCONTEXT-FIND-ASYNC"
+        "EF10-TRACKING-DBCONTEXT-FIND-ASYNC",
+        "EF10-TRACKING-DBCONTEXT-FIND-ASYNC-NO-TOKEN"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -18954,7 +18960,9 @@
       "Signature": "System.Threading.Tasks.ValueTask\u003CTEntity\u003E FindAsync(System.Object[] keyValues)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-TRACKING-FIND-ADDED-ASYNC",
         "EF10-TRACKING-FIND-ASYNC",
+        "EF10-TRACKING-FIND-ASYNC-NO-TOKEN",
         "EF10-TRACKING-FIND-MISSING-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
@@ -18969,7 +18977,9 @@
       "Signature": "System.Threading.Tasks.ValueTask\u003CTEntity\u003E FindAsync(System.Object[] keyValues, System.Threading.CancellationToken cancellationToken)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-TRACKING-FIND-ADDED-ASYNC",
         "EF10-TRACKING-FIND-ASYNC",
+        "EF10-TRACKING-FIND-ASYNC-NO-TOKEN",
         "EF10-TRACKING-FIND-MISSING-ASYNC"
       ],
       "Disposition": "behavior-tested-family",

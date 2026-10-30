@@ -40,6 +40,41 @@ public sealed class StateManagementTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-TRACKING-FIND-ASYNC-NO-TOKEN", "Microsoft.EntityFrameworkCore.DbSet`1.FindAsync")]
+#pragma warning disable xUnit1051 // Exercise the public overload that intentionally omits CancellationToken.
+    public async Task FindAsync_WithoutCancellationTokenLoadsAndTracksEntity()
+    {
+        var id = Guid.NewGuid();
+        await SeedAsync(id);
+
+        await using var context = ProviderTestRuntime.CreateContext();
+        var person = await context.People.FindAsync(id);
+
+        Assert.NotNull(person);
+        Assert.Equal(id, person.Id);
+        Assert.Equal(EntityState.Unchanged, context.Entry(person).State);
+    }
+#pragma warning restore xUnit1051
+
+    [Fact]
+    [BehavioralCoverage("EF10-TRACKING-FIND-ADDED-ASYNC", "Microsoft.EntityFrameworkCore.DbSet`1.FindAsync", "Microsoft.EntityFrameworkCore.DbContext.Entry")]
+#pragma warning disable xUnit1051 // Exercise the public overload that intentionally omits CancellationToken.
+    public async Task FindAsync_ReturnsMatchingAddedEntityBeforeItIsPersisted()
+    {
+        var id = Guid.NewGuid();
+        await using var context = ProviderTestRuntime.CreateContext();
+        await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
+
+        var added = new Person { Id = id, Name = "Pending added entity", Age = 41 };
+        context.People.Add(added);
+        var found = await context.People.FindAsync(id);
+
+        Assert.Same(added, found);
+        Assert.Equal(EntityState.Added, context.Entry(found!).State);
+    }
+#pragma warning restore xUnit1051
+
+    [Fact]
     [BehavioralCoverage("EF10-TRACKING-DBCONTEXT-FIND", "Microsoft.EntityFrameworkCore.DbContext.Find", "Microsoft.EntityFrameworkCore.DbContext.Entry")]
     public async Task DbContextFind_LoadsEntityByKeySynchronously()
     {
@@ -70,6 +105,23 @@ public sealed class StateManagementTests
         Assert.Equal($"Tracked {id:N}", person.Name);
         Assert.Equal(EntityState.Unchanged, context.Entry(person).State);
     }
+
+    [Fact]
+    [BehavioralCoverage("EF10-TRACKING-DBCONTEXT-FIND-ASYNC-NO-TOKEN", "Microsoft.EntityFrameworkCore.DbContext.FindAsync")]
+#pragma warning disable xUnit1051 // Exercise the public overload that intentionally omits CancellationToken.
+    public async Task DbContextFindAsync_WithoutCancellationTokenLoadsEntity()
+    {
+        var id = Guid.NewGuid();
+        await SeedAsync(id);
+
+        await using var context = ProviderTestRuntime.CreateContext();
+        var person = await context.FindAsync<Person>(id);
+
+        Assert.NotNull(person);
+        Assert.Equal(id, person.Id);
+        Assert.Equal(EntityState.Unchanged, context.Entry(person).State);
+    }
+#pragma warning restore xUnit1051
 
     [Fact]
     [BehavioralCoverage("EF10-TRACKING-FIND-MISSING-SYNC", "Microsoft.EntityFrameworkCore.DbSet`1.Find")]
