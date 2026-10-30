@@ -249,6 +249,49 @@ public sealed class TypeFidelityTests
         AssertAdditionalValues(expected, actual);
     }
 
+    [Fact]
+    [BehavioralCoverage("EF10-TYPES-ADDITIONAL-INTEGER-BOUNDARIES-ASYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    public async Task AdditionalClrIntegerBoundaryValues_RoundTripAsynchronously()
+    {
+        var expected = CreateAdditionalValues();
+        expected.ByteValue = byte.MinValue;
+        expected.Int16Value = short.MaxValue;
+        expected.Int64Value = long.MaxValue;
+
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.AdditionalClrTypesRecords.Add(expected);
+            Assert.Equal(1, await write.SaveChangesAsync(TestContext.Current.CancellationToken));
+        }
+
+        await using var read = ProviderTestRuntime.CreateContext();
+        var actual = await read.AdditionalClrTypesRecords.AsNoTracking()
+            .SingleAsync(record => record.Id == expected.Id, TestContext.Current.CancellationToken);
+        AssertAdditionalValues(expected, actual);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-TYPES-ADDITIONAL-INTEGER-BOUNDARIES-SYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "System.Linq.Queryable.Single")]
+    public async Task AdditionalClrIntegerBoundaryValues_RoundTripSynchronously()
+    {
+        var expected = CreateAdditionalValues();
+        expected.ByteValue = byte.MinValue;
+        expected.Int16Value = short.MaxValue;
+        expected.Int64Value = long.MaxValue;
+
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.AdditionalClrTypesRecords.Add(expected);
+            Assert.Equal(1, write.SaveChanges());
+        }
+
+        await using var read = ProviderTestRuntime.CreateContext();
+        var actual = read.AdditionalClrTypesRecords.AsNoTracking().Single(record => record.Id == expected.Id);
+        AssertAdditionalValues(expected, actual);
+    }
+
     [Theory]
     [MemberData(nameof(DecimalBoundaryValues))]
     [BehavioralCoverage("EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC", "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder.HasPrecision", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]

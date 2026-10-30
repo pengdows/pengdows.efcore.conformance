@@ -1,4 +1,6 @@
+using System.Data.Common;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using pengdows.efcore.conformance;
 using Xunit;
 
@@ -353,13 +355,14 @@ public sealed class PersistenceTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-PERSIST-INSERT-FAILURE-ASYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.DbUpdateException", "Microsoft.EntityFrameworkCore.DbUpdateException.Entries", "Microsoft.EntityFrameworkCore.DbContext.ChangeTracker", "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry.State")]
+    [BehavioralCoverage("EF10-PERSIST-INSERT-FAILURE-ASYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.DbUpdateException", "Microsoft.EntityFrameworkCore.DbUpdateException.Entries", "Microsoft.EntityFrameworkCore.DbContext.ChangeTracker", "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry.State", "Microsoft.EntityFrameworkCore.Diagnostics.DbCommandInterceptor.CommandFailedAsync")]
     public async Task SaveChangesAsync_FailedInsertLeavesTrackedEntityUnaccepted()
     {
         var id = Guid.NewGuid();
         await SeedAsync(id, "Existing row", 41);
+        var interceptor = new RecordingFailureCommandInterceptor();
 
-        await using (var write = ProviderTestRuntime.CreateContext())
+        await using (var write = ProviderTestRuntime.CreateContext(options => options.AddInterceptors(interceptor)))
         {
             var duplicate = new Person { Id = id, Name = "Duplicate row", Age = 42 };
             write.People.Add(duplicate);
@@ -371,6 +374,9 @@ public sealed class PersistenceTests
             Assert.Same(duplicate, Assert.Single(exception.Entries).Entity);
         }
 
+        Assert.Equal(0, interceptor.CommandFailedCalls);
+        Assert.Equal(1, interceptor.CommandFailedAsyncCalls);
+
         await using var verify = ProviderTestRuntime.CreateContext();
         var persisted = await verify.People.AsNoTracking().SingleAsync(
             person => person.Id == id,
@@ -380,13 +386,14 @@ public sealed class PersistenceTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-PERSIST-INSERT-FAILURE-SYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "Microsoft.EntityFrameworkCore.DbUpdateException", "Microsoft.EntityFrameworkCore.DbUpdateException.Entries", "Microsoft.EntityFrameworkCore.DbContext.ChangeTracker", "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry.State")]
+    [BehavioralCoverage("EF10-PERSIST-INSERT-FAILURE-SYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "Microsoft.EntityFrameworkCore.DbUpdateException", "Microsoft.EntityFrameworkCore.DbUpdateException.Entries", "Microsoft.EntityFrameworkCore.DbContext.ChangeTracker", "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry.State", "Microsoft.EntityFrameworkCore.Diagnostics.DbCommandInterceptor.CommandFailed")]
     public async Task SaveChanges_FailedInsertLeavesTrackedEntityUnacceptedSynchronously()
     {
         var id = Guid.NewGuid();
         await SeedAsync(id, "Existing sync row", 51);
+        var interceptor = new RecordingFailureCommandInterceptor();
 
-        await using (var write = ProviderTestRuntime.CreateContext())
+        await using (var write = ProviderTestRuntime.CreateContext(options => options.AddInterceptors(interceptor)))
         {
             var duplicate = new Person { Id = id, Name = "Duplicate sync row", Age = 52 };
             write.People.Add(duplicate);
@@ -396,6 +403,9 @@ public sealed class PersistenceTests
             Assert.Equal(EntityState.Added, write.ChangeTracker.Entries<Person>().Single().State);
             Assert.Same(duplicate, Assert.Single(exception.Entries).Entity);
         }
+
+        Assert.Equal(1, interceptor.CommandFailedCalls);
+        Assert.Equal(0, interceptor.CommandFailedAsyncCalls);
 
         await using var verify = ProviderTestRuntime.CreateContext();
         var persisted = await verify.People.AsNoTracking().SingleAsync(
@@ -641,5 +651,24 @@ public sealed class PersistenceTests
         await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
         context.People.Add(new Person { Id = id, Name = name, Age = age });
         await context.SaveChangesAsync(TestContext.Current.CancellationToken);
+    }
+
+    private sealed class RecordingFailureCommandInterceptor : DbCommandInterceptor
+    {
+        public int CommandFailedCalls { get; private set; }
+
+        public int CommandFailedAsyncCalls { get; private set; }
+
+        public override void CommandFailed(DbCommand command, CommandErrorEventData eventData) =>
+            CommandFailedCalls++;
+
+        public override Task CommandFailedAsync(
+            DbCommand command,
+            CommandErrorEventData eventData,
+            CancellationToken cancellationToken = default)
+        {
+            CommandFailedAsyncCalls++;
+            return Task.CompletedTask;
+        }
     }
 }

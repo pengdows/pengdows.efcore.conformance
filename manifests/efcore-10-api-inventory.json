@@ -25,7 +25,7 @@
     "PublicMembers": 16762,
     "AwaitingClassification": 0,
     "ExplicitlyExcluded": 5921,
-    "MemberEntriesInCoveredFamilies": 778,
+    "MemberEntriesInCoveredFamilies": 780,
     "UncoveredMemberFamilies": 0
   },
   "CoverageSelectors": {
@@ -16136,6 +16136,7 @@
         "EF10-TRANSACTION-EXTERNAL-SYNC",
         "EF10-TRANSACTION-FACADE-COMMIT-ROLLBACK-SYNC",
         "EF10-TRANSACTION-ROLLBACK-SYNC",
+        "EF10-TYPES-ADDITIONAL-INTEGER-BOUNDARIES-SYNC",
         "EF10-TYPES-ADDITIONAL-SCALARS-SYNC",
         "EF10-TYPES-BOUNDARIES-SYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-SYNC",
@@ -16219,6 +16220,7 @@
         "EF10-TRANSACTION-EXTERNAL-SYNC",
         "EF10-TRANSACTION-FACADE-COMMIT-ROLLBACK-SYNC",
         "EF10-TRANSACTION-ROLLBACK-SYNC",
+        "EF10-TYPES-ADDITIONAL-INTEGER-BOUNDARIES-SYNC",
         "EF10-TYPES-ADDITIONAL-SCALARS-SYNC",
         "EF10-TYPES-BOUNDARIES-SYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-SYNC",
@@ -16306,6 +16308,7 @@
         "EF10-TRANSACTION-EXTERNAL-ASYNC",
         "EF10-TRANSACTION-FACADE-COMMIT-ROLLBACK-ASYNC",
         "EF10-TRANSACTION-ROLLBACK-ASYNC",
+        "EF10-TYPES-ADDITIONAL-INTEGER-BOUNDARIES-ASYNC",
         "EF10-TYPES-ADDITIONAL-SCALARS-ASYNC",
         "EF10-TYPES-BOUNDARIES-ASYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC",
@@ -16393,6 +16396,7 @@
         "EF10-TRANSACTION-EXTERNAL-ASYNC",
         "EF10-TRANSACTION-FACADE-COMMIT-ROLLBACK-ASYNC",
         "EF10-TRANSACTION-ROLLBACK-ASYNC",
+        "EF10-TYPES-ADDITIONAL-INTEGER-BOUNDARIES-ASYNC",
         "EF10-TYPES-ADDITIONAL-SCALARS-ASYNC",
         "EF10-TYPES-BOUNDARIES-ASYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC",
@@ -35278,10 +35282,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "CommandFailed",
       "Signature": "System.Void CommandFailed(System.Data.Common.DbCommand command, Microsoft.EntityFrameworkCore.Diagnostics.CommandErrorEventData eventData)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "ef-owned-no-provider-contract",
-      "DispositionReason": "Diagnostic identifiers, event payloads, and logging helpers are owned by EF Core. Provider-observable interception behavior is covered through public SaveChanges tests where applicable.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-PERSIST-INSERT-FAILURE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Diagnostics.DbCommandInterceptor.CommandFailed"
     },
     {
@@ -35290,10 +35296,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "CommandFailedAsync",
       "Signature": "System.Threading.Tasks.Task CommandFailedAsync(System.Data.Common.DbCommand command, Microsoft.EntityFrameworkCore.Diagnostics.CommandErrorEventData eventData, System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "ef-owned-no-provider-contract",
-      "DispositionReason": "Diagnostic identifiers, event payloads, and logging helpers are owned by EF Core. Provider-observable interception behavior is covered through public SaveChanges tests where applicable.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-PERSIST-INSERT-FAILURE-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Diagnostics.DbCommandInterceptor.CommandFailedAsync"
     },
     {
@@ -55309,6 +55317,7 @@
         "EF10-RELATIONSHIPS-FOREIGN-KEY",
         "EF10-RELATIONSHIPS-INCLUDE-ASYNC",
         "EF10-RELATIONSHIPS-SPLIT-QUERY-ASYNC",
+        "EF10-TYPES-ADDITIONAL-INTEGER-BOUNDARIES-ASYNC",
         "EF10-TYPES-ADDITIONAL-SCALARS-ASYNC",
         "EF10-TYPES-BOUNDARIES-ASYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC",
@@ -55364,6 +55373,7 @@
         "EF10-RELATIONSHIPS-FOREIGN-KEY",
         "EF10-RELATIONSHIPS-INCLUDE-ASYNC",
         "EF10-RELATIONSHIPS-SPLIT-QUERY-ASYNC",
+        "EF10-TYPES-ADDITIONAL-INTEGER-BOUNDARIES-ASYNC",
         "EF10-TYPES-ADDITIONAL-SCALARS-ASYNC",
         "EF10-TYPES-BOUNDARIES-ASYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC",
