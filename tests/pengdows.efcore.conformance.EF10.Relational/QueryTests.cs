@@ -536,6 +536,80 @@ public sealed class QueryTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-QUERY-GROUPBY-NULLABLE-AGGREGATE-SYNC", "System.Linq.Queryable.GroupBy", "System.Linq.Queryable.Count", "System.Linq.Queryable.Sum", "System.Linq.Queryable.ToArray")]
+    public async Task GroupByNullableKey_AggregatesNullGroupAndFilteredCountsSynchronously()
+    {
+        var batch = Guid.NewGuid().ToString("N");
+        await SeedAsync(new[]
+        {
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-null-low", Age = 20, OptionalRank = null },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-null-high", Age = 22, OptionalRank = null },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-rank-four", Age = 24, OptionalRank = 4 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-rank-seven-low", Age = 23, OptionalRank = 7 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-rank-seven-high", Age = 25, OptionalRank = 7 }
+        });
+
+        await using var query = ProviderTestRuntime.CreateContext();
+        var actual = query.People
+            .Where(person => person.Name.StartsWith(batch))
+            .GroupBy(person => person.OptionalRank)
+            .Select(group => new
+            {
+                Rank = group.Key,
+                Count = group.Count(),
+                AgeSum = group.Sum(person => person.Age),
+                OlderCount = group.Count(person => person.Age >= 24)
+            })
+            .ToArray();
+
+        Assert.Equal(
+            new[]
+            {
+                new { Rank = (int?)null, Count = 2, AgeSum = 42, OlderCount = 0 },
+                new { Rank = (int?)4, Count = 1, AgeSum = 24, OlderCount = 1 },
+                new { Rank = (int?)7, Count = 2, AgeSum = 48, OlderCount = 1 }
+            },
+            actual.OrderBy(group => group.Rank).ToArray());
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-GROUPBY-NULLABLE-AGGREGATE-ASYNC", "System.Linq.Queryable.GroupBy", "System.Linq.Queryable.Count", "System.Linq.Queryable.Sum", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToArrayAsync")]
+    public async Task GroupByNullableKey_AggregatesNullGroupAndFilteredCountsAsynchronously()
+    {
+        var batch = Guid.NewGuid().ToString("N");
+        await SeedAsync(new[]
+        {
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-null-low", Age = 20, OptionalRank = null },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-null-high", Age = 22, OptionalRank = null },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-rank-four", Age = 24, OptionalRank = 4 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-rank-seven-low", Age = 23, OptionalRank = 7 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-rank-seven-high", Age = 25, OptionalRank = 7 }
+        });
+
+        await using var query = ProviderTestRuntime.CreateContext();
+        var actual = await query.People
+            .Where(person => person.Name.StartsWith(batch))
+            .GroupBy(person => person.OptionalRank)
+            .Select(group => new
+            {
+                Rank = group.Key,
+                Count = group.Count(),
+                AgeSum = group.Sum(person => person.Age),
+                OlderCount = group.Count(person => person.Age >= 24)
+            })
+            .ToArrayAsync(TestContext.Current.CancellationToken);
+
+        Assert.Equal(
+            new[]
+            {
+                new { Rank = (int?)null, Count = 2, AgeSum = 42, OlderCount = 0 },
+                new { Rank = (int?)4, Count = 1, AgeSum = 24, OlderCount = 1 },
+                new { Rank = (int?)7, Count = 2, AgeSum = 48, OlderCount = 1 }
+            },
+            actual.OrderBy(group => group.Rank).ToArray());
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-QUERY-AGGREGATES-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.CountAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SumAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.AverageAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.MinAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.MaxAsync")]
     public async Task Aggregates_ReturnExpectedValuesAsynchronously()
     {
