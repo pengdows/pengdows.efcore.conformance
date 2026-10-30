@@ -115,6 +115,58 @@ public sealed class JsonMappingTests
         Assert.Equal(updatedViews, actual.Details.Views);
     }
 
+    [Fact]
+    [BehavioralCoverage("EF10-JSON-COMPLEX-QUERY-ASYNC", "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder.ComplexProperty", "Microsoft.EntityFrameworkCore.RelationalComplexPropertyBuilderExtensions.ToJson", "System.Linq.Queryable.Where", "System.Linq.Queryable.Select", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    public async Task ComplexJsonProperty_CanBeFilteredAndProjectedAsynchronously()
+    {
+        ProviderTestRuntime.RequireCapability("json-mapping");
+        var id = Guid.NewGuid();
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.JsonExecuteUpdateRecords.Add(new JsonExecuteUpdateRecord
+            {
+                Id = id,
+                Details = new JsonExecuteUpdateDetails { Title = "Complex JSON query", Views = 42 }
+            });
+            await write.SaveChangesAsync(TestContext.Current.CancellationToken);
+        }
+
+        await using var query = ProviderTestRuntime.CreateContext();
+        var title = await query.JsonExecuteUpdateRecords.AsNoTracking()
+            .Where(record => record.Id == id && record.Details.Views >= 40)
+            .Select(record => record.Details.Title)
+            .SingleAsync(TestContext.Current.CancellationToken);
+
+        Assert.Equal("Complex JSON query", title);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-JSON-COMPLEX-QUERY-SYNC", "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder.ComplexProperty", "Microsoft.EntityFrameworkCore.RelationalComplexPropertyBuilderExtensions.ToJson", "System.Linq.Queryable.Where", "System.Linq.Queryable.Select", "System.Linq.Queryable.Single")]
+    public async Task ComplexJsonProperty_CanBeFilteredAndProjectedSynchronously()
+    {
+        ProviderTestRuntime.RequireCapability("json-mapping");
+        var id = Guid.NewGuid();
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.JsonExecuteUpdateRecords.Add(new JsonExecuteUpdateRecord
+            {
+                Id = id,
+                Details = new JsonExecuteUpdateDetails { Title = "Complex JSON sync query", Views = 43 }
+            });
+            await write.SaveChangesAsync(TestContext.Current.CancellationToken);
+        }
+
+        await using var query = ProviderTestRuntime.CreateContext();
+        var title = query.JsonExecuteUpdateRecords.AsNoTracking()
+            .Where(record => record.Id == id && record.Details.Views >= 40)
+            .Select(record => record.Details.Title)
+            .Single();
+
+        Assert.Equal("Complex JSON sync query", title);
+    }
+
     private static JsonProfileRecord CreateRecord(string biography, bool emailNotifications) => new()
     {
         Id = Guid.NewGuid(),

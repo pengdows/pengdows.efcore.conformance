@@ -55407,6 +55407,7 @@
         "EF10-INTERCEPTION-COMMAND-ASYNC",
         "EF10-INTERCEPTION-MATERIALIZATION-ASYNC",
         "EF10-INTERCEPTION-QUERY-COMPILATION-ASYNC",
+        "EF10-JSON-COMPLEX-QUERY-ASYNC",
         "EF10-JSON-MAPPING-ASYNC",
         "EF10-MIGRATIONS-SET-DEFAULT-ASYNC",
         "EF10-NATIVE-TYPE-DECIMAL-BOUNDARY-ASYNC",
@@ -55473,6 +55474,7 @@
         "EF10-INTERCEPTION-COMMAND-ASYNC",
         "EF10-INTERCEPTION-MATERIALIZATION-ASYNC",
         "EF10-INTERCEPTION-QUERY-COMPILATION-ASYNC",
+        "EF10-JSON-COMPLEX-QUERY-ASYNC",
         "EF10-JSON-MAPPING-ASYNC",
         "EF10-MIGRATIONS-SET-DEFAULT-ASYNC",
         "EF10-NATIVE-TYPE-DECIMAL-BOUNDARY-ASYNC",
@@ -76722,6 +76724,8 @@
       "BehavioralContracts": [
         "EF10-COMPLEX-TYPE-ASYNC",
         "EF10-COMPLEX-TYPE-SYNC",
+        "EF10-JSON-COMPLEX-QUERY-ASYNC",
+        "EF10-JSON-COMPLEX-QUERY-SYNC",
         "EF10-JSON-EXECUTE-UPDATE-ASYNC",
         "EF10-JSON-EXECUTE-UPDATE-SYNC"
       ],
@@ -76739,6 +76743,8 @@
       "BehavioralContracts": [
         "EF10-COMPLEX-TYPE-ASYNC",
         "EF10-COMPLEX-TYPE-SYNC",
+        "EF10-JSON-COMPLEX-QUERY-ASYNC",
+        "EF10-JSON-COMPLEX-QUERY-SYNC",
         "EF10-JSON-EXECUTE-UPDATE-ASYNC",
         "EF10-JSON-EXECUTE-UPDATE-SYNC"
       ],
@@ -76756,6 +76762,8 @@
       "BehavioralContracts": [
         "EF10-COMPLEX-TYPE-ASYNC",
         "EF10-COMPLEX-TYPE-SYNC",
+        "EF10-JSON-COMPLEX-QUERY-ASYNC",
+        "EF10-JSON-COMPLEX-QUERY-SYNC",
         "EF10-JSON-EXECUTE-UPDATE-ASYNC",
         "EF10-JSON-EXECUTE-UPDATE-SYNC"
       ],
@@ -76773,6 +76781,8 @@
       "BehavioralContracts": [
         "EF10-COMPLEX-TYPE-ASYNC",
         "EF10-COMPLEX-TYPE-SYNC",
+        "EF10-JSON-COMPLEX-QUERY-ASYNC",
+        "EF10-JSON-COMPLEX-QUERY-SYNC",
         "EF10-JSON-EXECUTE-UPDATE-ASYNC",
         "EF10-JSON-EXECUTE-UPDATE-SYNC"
       ],
@@ -76790,6 +76800,8 @@
       "BehavioralContracts": [
         "EF10-COMPLEX-TYPE-ASYNC",
         "EF10-COMPLEX-TYPE-SYNC",
+        "EF10-JSON-COMPLEX-QUERY-ASYNC",
+        "EF10-JSON-COMPLEX-QUERY-SYNC",
         "EF10-JSON-EXECUTE-UPDATE-ASYNC",
         "EF10-JSON-EXECUTE-UPDATE-SYNC"
       ],
@@ -76807,6 +76819,8 @@
       "BehavioralContracts": [
         "EF10-COMPLEX-TYPE-ASYNC",
         "EF10-COMPLEX-TYPE-SYNC",
+        "EF10-JSON-COMPLEX-QUERY-ASYNC",
+        "EF10-JSON-COMPLEX-QUERY-SYNC",
         "EF10-JSON-EXECUTE-UPDATE-ASYNC",
         "EF10-JSON-EXECUTE-UPDATE-SYNC"
       ],
@@ -76824,6 +76838,8 @@
       "BehavioralContracts": [
         "EF10-COMPLEX-TYPE-ASYNC",
         "EF10-COMPLEX-TYPE-SYNC",
+        "EF10-JSON-COMPLEX-QUERY-ASYNC",
+        "EF10-JSON-COMPLEX-QUERY-SYNC",
         "EF10-JSON-EXECUTE-UPDATE-ASYNC",
         "EF10-JSON-EXECUTE-UPDATE-SYNC"
       ],
@@ -76841,6 +76857,8 @@
       "BehavioralContracts": [
         "EF10-COMPLEX-TYPE-ASYNC",
         "EF10-COMPLEX-TYPE-SYNC",
+        "EF10-JSON-COMPLEX-QUERY-ASYNC",
+        "EF10-JSON-COMPLEX-QUERY-SYNC",
         "EF10-JSON-EXECUTE-UPDATE-ASYNC",
         "EF10-JSON-EXECUTE-UPDATE-SYNC"
       ],
@@ -76858,6 +76876,8 @@
       "BehavioralContracts": [
         "EF10-COMPLEX-TYPE-ASYNC",
         "EF10-COMPLEX-TYPE-SYNC",
+        "EF10-JSON-COMPLEX-QUERY-ASYNC",
+        "EF10-JSON-COMPLEX-QUERY-SYNC",
         "EF10-JSON-EXECUTE-UPDATE-ASYNC",
         "EF10-JSON-EXECUTE-UPDATE-SYNC"
       ],
@@ -76875,6 +76895,8 @@
       "BehavioralContracts": [
         "EF10-COMPLEX-TYPE-ASYNC",
         "EF10-COMPLEX-TYPE-SYNC",
+        "EF10-JSON-COMPLEX-QUERY-ASYNC",
+        "EF10-JSON-COMPLEX-QUERY-SYNC",
         "EF10-JSON-EXECUTE-UPDATE-ASYNC",
         "EF10-JSON-EXECUTE-UPDATE-SYNC"
       ],
@@ -189815,6 +189837,8 @@
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexPropertyBuilder ToJson(Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexPropertyBuilder complexPropertyBuilder, System.String jsonColumnName = null)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-JSON-COMPLEX-QUERY-ASYNC",
+        "EF10-JSON-COMPLEX-QUERY-SYNC",
         "EF10-JSON-EXECUTE-UPDATE-ASYNC",
         "EF10-JSON-EXECUTE-UPDATE-SYNC"
       ],
@@ -189830,6 +189854,8 @@
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexPropertyBuilder\u003CTComplex\u003E ToJson\u003CTComplex\u003E(Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexPropertyBuilder\u003CTComplex\u003E complexPropertyBuilder, System.String jsonColumnName = null) where TComplex : class",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-JSON-COMPLEX-QUERY-ASYNC",
+        "EF10-JSON-COMPLEX-QUERY-SYNC",
         "EF10-JSON-EXECUTE-UPDATE-ASYNC",
         "EF10-JSON-EXECUTE-UPDATE-SYNC"
       ],
