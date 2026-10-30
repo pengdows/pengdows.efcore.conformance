@@ -119,4 +119,50 @@ public sealed class PrimitiveCollectionTests
             .Single();
         Assert.Equal(new[] { 11, 98, 31 }, actual);
     }
+
+    [Fact]
+    [BehavioralCoverage("EF10-PRIMITIVE-COLLECTION-NULLABLE-ELEMENTS-ASYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    public async Task PrimitiveCollection_NullableElementsRoundTripAsynchronously()
+    {
+        ProviderTestRuntime.RequireCapability("primitive-collections");
+        int?[] expected = [null, int.MinValue, 0, 42, int.MaxValue];
+        var record = new PrimitiveCollectionRecord { Id = Guid.NewGuid(), OptionalValues = [.. expected] };
+
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.PrimitiveCollectionRecords.Add(record);
+            Assert.Equal(1, await write.SaveChangesAsync(TestContext.Current.CancellationToken));
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        var actual = await verify.PrimitiveCollectionRecords.AsNoTracking()
+            .Where(item => item.Id == record.Id)
+            .Select(item => item.OptionalValues)
+            .SingleAsync(TestContext.Current.CancellationToken);
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-PRIMITIVE-COLLECTION-NULLABLE-ELEMENTS-SYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "System.Linq.Queryable.Single")]
+    public async Task PrimitiveCollection_NullableElementsRoundTripSynchronously()
+    {
+        ProviderTestRuntime.RequireCapability("primitive-collections");
+        int?[] expected = [null, int.MinValue, 0, 42, int.MaxValue];
+        var record = new PrimitiveCollectionRecord { Id = Guid.NewGuid(), OptionalValues = [.. expected] };
+
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.PrimitiveCollectionRecords.Add(record);
+            Assert.Equal(1, write.SaveChanges());
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        var actual = verify.PrimitiveCollectionRecords.AsNoTracking()
+            .Where(item => item.Id == record.Id)
+            .Select(item => item.OptionalValues)
+            .Single();
+        Assert.Equal(expected, actual);
+    }
 }
