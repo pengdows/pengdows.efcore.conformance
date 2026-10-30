@@ -339,6 +339,84 @@ public sealed class TypeFidelityTests
             .Single());
     }
 
+    [Fact]
+    [BehavioralCoverage("EF10-TYPES-NULLABLE-ROUNDTRIP-ASYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync", "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry`1.Property")]
+    public async Task NullableClrValues_RoundTripAndUpdateThroughFreshContextsAsynchronously()
+    {
+        var expected = CreateNullableValue();
+        var nullAtInsert = new NullableScalarRecord { Id = Guid.NewGuid() };
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.NullableScalarRecords.AddRange(expected, nullAtInsert);
+            Assert.Equal(2, await write.SaveChangesAsync(TestContext.Current.CancellationToken));
+        }
+
+        await using (var update = ProviderTestRuntime.CreateContext())
+        {
+            var tracked = await update.NullableScalarRecords.SingleAsync(
+                record => record.Id == expected.Id,
+                TestContext.Current.CancellationToken);
+            AssertNullableValue(expected, tracked);
+            tracked.Integer = null;
+            tracked.Flag = null;
+            tracked.Amount = null;
+            tracked.Text = null;
+            tracked.Day = null;
+            tracked.Time = null;
+            tracked.Payload = null;
+            tracked.Token = null;
+            tracked.Duration = null;
+            Assert.Equal(1, await update.SaveChangesAsync(TestContext.Current.CancellationToken));
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        var actual = await verify.NullableScalarRecords.AsNoTracking().SingleAsync(
+            record => record.Id == expected.Id,
+            TestContext.Current.CancellationToken);
+        Assert.All(GetNullableValues(actual), value => Assert.Null(value));
+        var insertedNull = await verify.NullableScalarRecords.AsNoTracking().SingleAsync(
+            record => record.Id == nullAtInsert.Id,
+            TestContext.Current.CancellationToken);
+        Assert.All(GetNullableValues(insertedNull), value => Assert.Null(value));
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-TYPES-NULLABLE-ROUNDTRIP-SYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "System.Linq.Queryable.Single", "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry`1.Property")]
+    public async Task NullableClrValues_RoundTripAndUpdateThroughFreshContextsSynchronously()
+    {
+        var expected = CreateNullableValue();
+        var nullAtInsert = new NullableScalarRecord { Id = Guid.NewGuid() };
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.NullableScalarRecords.AddRange(expected, nullAtInsert);
+            Assert.Equal(2, write.SaveChanges());
+        }
+
+        await using (var update = ProviderTestRuntime.CreateContext())
+        {
+            var tracked = update.NullableScalarRecords.Single(record => record.Id == expected.Id);
+            AssertNullableValue(expected, tracked);
+            tracked.Integer = null;
+            tracked.Flag = null;
+            tracked.Amount = null;
+            tracked.Text = null;
+            tracked.Day = null;
+            tracked.Time = null;
+            tracked.Payload = null;
+            tracked.Token = null;
+            tracked.Duration = null;
+            Assert.Equal(1, update.SaveChanges());
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        var actual = verify.NullableScalarRecords.AsNoTracking().Single(record => record.Id == expected.Id);
+        Assert.All(GetNullableValues(actual), value => Assert.Null(value));
+        var insertedNull = verify.NullableScalarRecords.AsNoTracking().Single(record => record.Id == nullAtInsert.Id);
+        Assert.All(GetNullableValues(insertedNull), value => Assert.Null(value));
+    }
+
     private static ScalarRecord CreateValue(decimal amount) => new()
     {
         Id = Guid.NewGuid(),
@@ -349,6 +427,47 @@ public sealed class TypeFidelityTests
         Payload = [0, 1, 127, 255],
         Mood = TestMood.Curious
     };
+
+    private static NullableScalarRecord CreateNullableValue() => new()
+    {
+        Id = Guid.NewGuid(),
+        Integer = 42,
+        Flag = true,
+        Amount = 123456789.1234m,
+        Text = "nullable value",
+        Day = new DateOnly(2024, 2, 29),
+        Time = new TimeOnly(13, 14, 15),
+        Payload = [0, 1, 127, 255],
+        Token = Guid.NewGuid(),
+        Duration = TimeSpan.FromTicks(9876543210)
+    };
+
+    private static IEnumerable<object?> GetNullableValues(NullableScalarRecord value)
+    {
+        yield return value.Integer;
+        yield return value.Flag;
+        yield return value.Amount;
+        yield return value.Text;
+        yield return value.Day;
+        yield return value.Time;
+        yield return value.Payload;
+        yield return value.Token;
+        yield return value.Duration;
+    }
+
+    private static void AssertNullableValue(NullableScalarRecord expected, NullableScalarRecord actual)
+    {
+        Assert.Equal(expected.Id, actual.Id);
+        Assert.Equal(expected.Integer, actual.Integer);
+        Assert.Equal(expected.Flag, actual.Flag);
+        Assert.Equal(expected.Amount, actual.Amount);
+        Assert.Equal(expected.Text, actual.Text);
+        Assert.Equal(expected.Day, actual.Day);
+        Assert.Equal(expected.Time, actual.Time);
+        Assert.Equal(expected.Payload, actual.Payload);
+        Assert.Equal(expected.Token, actual.Token);
+        Assert.Equal(expected.Duration, actual.Duration);
+    }
 
     private static AdditionalClrTypesRecord CreateAdditionalValues() => new()
     {

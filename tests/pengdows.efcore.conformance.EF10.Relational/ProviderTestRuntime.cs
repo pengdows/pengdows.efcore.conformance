@@ -135,6 +135,8 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
 
     public DbSet<ScalarRecord> ScalarRecords => Set<ScalarRecord>();
 
+    public DbSet<NullableScalarRecord> NullableScalarRecords => Set<NullableScalarRecord>();
+
     public DbSet<AdditionalClrTypesRecord> AdditionalClrTypesRecords => Set<AdditionalClrTypesRecord>();
 
     public DbSet<TphItem> TphItems => Set<TphItem>();
@@ -391,6 +393,21 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
             entity.Property(record => record.Enabled).HasColumnName("enabled");
             entity.Property(record => record.Payload).HasColumnName("payload");
             entity.Property(record => record.Mood).HasColumnName("mood").HasConversion<string>();
+        });
+        modelBuilder.Entity<NullableScalarRecord>(entity =>
+        {
+            entity.ToTable("ef10conformancenullablescalars");
+            entity.HasKey(record => record.Id);
+            entity.Property(record => record.Id).HasColumnName("id");
+            entity.Property(record => record.Integer).HasColumnName("integer_value");
+            entity.Property(record => record.Flag).HasColumnName("flag");
+            entity.Property(record => record.Amount).HasColumnName("amount").HasPrecision(18, 4);
+            entity.Property(record => record.Text).HasColumnName("text_value").HasMaxLength(160);
+            entity.Property(record => record.Day).HasColumnName("day");
+            entity.Property(record => record.Time).HasColumnName("time_value").HasPrecision(6);
+            entity.Property(record => record.Payload).HasColumnName("payload");
+            entity.Property(record => record.Token).HasColumnName("token");
+            entity.Property(record => record.Duration).HasColumnName("duration");
         });
         modelBuilder.Entity<AdditionalClrTypesRecord>(entity =>
         {
@@ -835,6 +852,29 @@ internal sealed class ScalarRecord
     public byte[] Payload { get; set; } = [];
 
     public TestMood Mood { get; set; }
+}
+
+internal sealed class NullableScalarRecord
+{
+    public Guid Id { get; set; }
+
+    public int? Integer { get; set; }
+
+    public bool? Flag { get; set; }
+
+    public decimal? Amount { get; set; }
+
+    public string? Text { get; set; }
+
+    public DateOnly? Day { get; set; }
+
+    public TimeOnly? Time { get; set; }
+
+    public byte[]? Payload { get; set; }
+
+    public Guid? Token { get; set; }
+
+    public TimeSpan? Duration { get; set; }
 }
 
 internal sealed class AdditionalClrTypesRecord
