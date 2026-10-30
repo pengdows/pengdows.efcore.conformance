@@ -1,8 +1,8 @@
 {
-  "contract": "EF Core 10 relational public API conformance",
+  "contract": "EF Core 10 relational runtime and design-time public API conformance",
   "targetFramework": "net10.0",
   "efCorePackageVersion": "10.0.14",
-  "providerFamily": "relational",
+  "providerFamily": "relational runtime with EF design-time API inventory",
   "apiInventory": "manifests/efcore-10-api-inventory.json",
   "allowedDispositionValues": [
     "behavior-tested-family",

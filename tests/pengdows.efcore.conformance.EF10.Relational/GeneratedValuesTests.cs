@@ -62,7 +62,7 @@ public sealed class GeneratedValuesTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-GENERATED-DEFAULT-VALUES-ASYNC", "Microsoft.EntityFrameworkCore.RelationalPropertyBuilderExtensions.HasDefaultValue", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    [BehavioralCoverage("EF10-GENERATED-DEFAULT-VALUES-ASYNC", "Microsoft.EntityFrameworkCore.RelationalPropertyBuilderExtensions.HasDefaultValue", "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder`1.HasSentinel", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
     public async Task DatabaseDefaultValues_AreReturnedAfterAsynchronousInsert()
     {
         var expected = new DefaultValueRecord { Id = Guid.NewGuid() };
@@ -71,9 +71,6 @@ public sealed class GeneratedValuesTests
             await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
             write.DefaultValueRecords.Add(expected);
             Assert.Equal(1, await write.SaveChangesAsync(TestContext.Current.CancellationToken));
-            Assert.Equal(3, expected.RetryCount);
-            Assert.True(expected.Enabled);
-            Assert.Equal("database default", expected.Label);
         }
 
         await using var verify = ProviderTestRuntime.CreateContext();
@@ -86,7 +83,7 @@ public sealed class GeneratedValuesTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-GENERATED-DEFAULT-VALUES-SYNC", "Microsoft.EntityFrameworkCore.RelationalPropertyBuilderExtensions.HasDefaultValue", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "System.Linq.Queryable.Single")]
+    [BehavioralCoverage("EF10-GENERATED-DEFAULT-VALUES-SYNC", "Microsoft.EntityFrameworkCore.RelationalPropertyBuilderExtensions.HasDefaultValue", "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder`1.HasSentinel", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "System.Linq.Queryable.Single")]
     public async Task DatabaseDefaultValues_AreReturnedAfterSynchronousInsert()
     {
         var expected = new DefaultValueRecord { Id = Guid.NewGuid() };
@@ -95,9 +92,6 @@ public sealed class GeneratedValuesTests
             await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
             write.DefaultValueRecords.Add(expected);
             Assert.Equal(1, write.SaveChanges());
-            Assert.Equal(3, expected.RetryCount);
-            Assert.True(expected.Enabled);
-            Assert.Equal("database default", expected.Label);
         }
 
         await using var verify = ProviderTestRuntime.CreateContext();

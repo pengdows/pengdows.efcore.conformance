@@ -560,7 +560,7 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
             entity.HasKey(record => record.Id);
             entity.Property(record => record.Id).HasColumnName("id");
             entity.Property(record => record.RetryCount).HasColumnName("retry_count").HasDefaultValue(3);
-            entity.Property(record => record.Enabled).HasColumnName("enabled").HasDefaultValue(true);
+            entity.Property(record => record.Enabled).HasColumnName("enabled").HasDefaultValue(true).HasSentinel(false);
             entity.Property(record => record.Label).HasColumnName("label").HasMaxLength(160).HasDefaultValue("database default");
         });
         modelBuilder.Entity<AttributeConfiguredRecord>();

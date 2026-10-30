@@ -28,7 +28,8 @@ var assemblies = new[]
 {
     typeof(DbContext).Assembly,
     Assembly.Load("Microsoft.EntityFrameworkCore.Abstractions"),
-    typeof(RelationalDatabaseFacadeExtensions).Assembly
+    typeof(RelationalDatabaseFacadeExtensions).Assembly,
+    Assembly.Load("Microsoft.EntityFrameworkCore.Design")
 }.Distinct().ToArray();
 
 var entries = assemblies
