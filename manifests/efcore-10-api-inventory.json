@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 37,
+    "AwaitingClassification": 35,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 640,
-    "UncoveredMemberFamilies": 33
+    "MemberEntriesInCoveredFamilies": 643,
+    "UncoveredMemberFamilies": 31
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -15978,10 +15978,12 @@
       "MemberKind": "Type",
       "ApiMemberName": null,
       "Signature": "class Microsoft.EntityFrameworkCore.CommentAttribute",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "A public type declaration is an inventory node; provider applicability is assessed on its callable members and their observable behavior.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMMENT-ATTRIBUTE-SCHEMA"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.CommentAttribute"
     },
     {
@@ -15990,10 +15992,12 @@
       "MemberKind": "Constructor",
       "ApiMemberName": ".ctor",
       "Signature": ".ctor(System.String comment)",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMMENT-ATTRIBUTE-SCHEMA"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.CommentAttribute..ctor"
     },
     {
@@ -16002,10 +16006,12 @@
       "MemberKind": "Property",
       "ApiMemberName": "Comment",
       "Signature": "System.String Comment get;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-COMMENT-ATTRIBUTE-SCHEMA"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.CommentAttribute.Comment"
     },
     {

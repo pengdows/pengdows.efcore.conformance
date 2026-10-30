@@ -151,6 +151,8 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
 
     public DbSet<AttributeConfiguredRecord> AttributeConfiguredRecords => Set<AttributeConfiguredRecord>();
 
+    public DbSet<CommentedRecord> CommentedRecords => Set<CommentedRecord>();
+
     [DbFunction("lower", IsBuiltIn = true, IsNullable = true)]
     public static string? Lower(string? value) => throw new NotSupportedException("This method is intended for use in EF Core queries.");
 
@@ -178,6 +180,13 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
             entity.HasKey(record => record.Id);
             entity.Property(record => record.Id).HasColumnName("id");
             entity.Property(record => record.Value).HasColumnName("value").IsRequired().HasMaxLength(160);
+        });
+        modelBuilder.Entity<CommentedRecord>(entity =>
+        {
+            entity.ToTable("ef10conformance_commentedrecord");
+            entity.HasKey(record => record.Id);
+            entity.Property(record => record.Id).HasColumnName("id");
+            entity.Property(record => record.Value).HasColumnName("value");
         });
         modelBuilder.Entity<FilteredUniqueValueRecord>(entity =>
         {
@@ -608,6 +617,15 @@ internal sealed class UniqueValueRecord
 {
     public Guid Id { get; set; }
 
+    public string Value { get; set; } = string.Empty;
+}
+
+[Comment("EF10 conformance table comment")]
+internal sealed class CommentedRecord
+{
+    public Guid Id { get; set; }
+
+    [Comment("EF10 conformance column comment")]
     public string Value { get; set; } = string.Empty;
 }
 
