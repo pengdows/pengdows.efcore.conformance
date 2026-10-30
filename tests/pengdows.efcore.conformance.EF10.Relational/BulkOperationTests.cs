@@ -128,6 +128,58 @@ public sealed class BulkOperationTests
 
     [Fact]
     [CapabilityRequirement("execute-update")]
+    [BehavioralCoverage("EF10-BULK-UPDATE-NULL-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteUpdateAsync")]
+    public async Task ExecuteUpdateAsync_SetsNullablePropertyToNull()
+    {
+        ProviderTestRuntime.RequireCapability("execute-update");
+        var id = await SeedAsync(optionalRank: 8);
+
+        await using (var update = ProviderTestRuntime.CreateContext())
+        {
+            var tracked = await update.People.SingleAsync(person => person.Id == id, TestContext.Current.CancellationToken);
+            Assert.Equal(8, tracked.OptionalRank);
+            Assert.Equal(1, await update.People.Where(person => person.Id == id)
+                .ExecuteUpdateAsync(
+                    setters => setters.SetProperty(person => person.OptionalRank, (int?)null),
+                    TestContext.Current.CancellationToken));
+            Assert.Equal(8, tracked.OptionalRank);
+            Assert.Equal(EntityState.Unchanged, update.Entry(tracked).State);
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.Null(await verify.People.AsNoTracking()
+            .Where(person => person.Id == id)
+            .Select(person => person.OptionalRank)
+            .SingleAsync(TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
+    [CapabilityRequirement("execute-update")]
+    [BehavioralCoverage("EF10-BULK-UPDATE-NULL-SYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteUpdate")]
+    public async Task ExecuteUpdate_SetsNullablePropertyToNullSynchronously()
+    {
+        ProviderTestRuntime.RequireCapability("execute-update");
+        var id = await SeedAsync(optionalRank: 8);
+
+        await using (var update = ProviderTestRuntime.CreateContext())
+        {
+            var tracked = update.People.Single(person => person.Id == id);
+            Assert.Equal(8, tracked.OptionalRank);
+            Assert.Equal(1, update.People.Where(person => person.Id == id)
+                .ExecuteUpdate(setters => setters.SetProperty(person => person.OptionalRank, (int?)null)));
+            Assert.Equal(8, tracked.OptionalRank);
+            Assert.Equal(EntityState.Unchanged, update.Entry(tracked).State);
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.Null(verify.People.AsNoTracking()
+            .Where(person => person.Id == id)
+            .Select(person => person.OptionalRank)
+            .Single());
+    }
+
+    [Fact]
+    [CapabilityRequirement("execute-update")]
     [BehavioralCoverage("EF10-BULK-UPDATE-NO-MATCH-SYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteUpdate")]
     public async Task ExecuteUpdate_ReturnsZeroWhenNoRowsMatchSynchronously()
     {
@@ -213,12 +265,12 @@ public sealed class BulkOperationTests
         Assert.Equal(0, affected);
     }
 
-    private static async Task<Guid> SeedAsync()
+    private static async Task<Guid> SeedAsync(int? optionalRank = null)
     {
         var id = Guid.NewGuid();
         await using var context = ProviderTestRuntime.CreateContext();
         await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
-        context.People.Add(new Person { Id = id, Name = $"Bulk {id:N}", Age = 40 });
+        context.People.Add(new Person { Id = id, Name = $"Bulk {id:N}", Age = 40, OptionalRank = optionalRank });
         await context.SaveChangesAsync(TestContext.Current.CancellationToken);
         return id;
     }
