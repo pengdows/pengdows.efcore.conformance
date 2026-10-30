@@ -325,6 +325,7 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
             entity.HasKey(record => record.Id);
             entity.Property(record => record.Id).HasColumnName("id");
             entity.Property(record => record.Amount).HasColumnName("amount").HasPrecision(18, 4);
+            entity.Property(record => record.ConvertedAmount).HasColumnName("convertedamount").HasConversion<string>();
             entity.Property(record => record.Day).HasColumnName("day");
             entity.Property(record => record.Start).HasColumnName("start");
             entity.Property(record => record.Enabled).HasColumnName("enabled");
@@ -577,6 +578,7 @@ internal sealed class PrecisionAttributeRecord
 
     [Precision(18, 4)]
     public decimal Amount { get; set; }
+
 }
 
 internal sealed class RestrictPrincipal
@@ -715,6 +717,8 @@ internal sealed class ScalarRecord
     public Guid Id { get; set; }
 
     public decimal Amount { get; set; }
+
+    public decimal ConvertedAmount { get; set; }
 
     public DateOnly Day { get; set; }
 

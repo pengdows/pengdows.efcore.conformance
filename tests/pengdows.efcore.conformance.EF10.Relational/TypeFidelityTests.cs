@@ -261,6 +261,58 @@ public sealed class TypeFidelityTests
         Assert.Equal(amount, actual.Amount);
     }
 
+    [Theory]
+    [MemberData(nameof(DecimalBoundaryValues))]
+    [BehavioralCoverage("EF10-TYPES-DECIMAL-CONVERSION-ASYNC", "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder`1.HasConversion", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    [NativeTypeCoverage("TEXT", typeof(decimal), "EF10-TYPES-DECIMAL-CONVERSION-ASYNC")]
+    public async Task DecimalStringConversion_PreservesBoundaryValuesAsynchronously(decimal amount)
+    {
+        var expected = CreateValue(0m);
+        expected.ConvertedAmount = amount;
+
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.ScalarRecords.Add(expected);
+            Assert.Equal(1, await write.SaveChangesAsync(TestContext.Current.CancellationToken));
+        }
+
+        await using var read = ProviderTestRuntime.CreateContext();
+        var actual = await read.ScalarRecords.AsNoTracking().SingleAsync(
+            record => record.Id == expected.Id,
+            TestContext.Current.CancellationToken);
+        Assert.Equal(amount, actual.ConvertedAmount);
+        Assert.Equal(expected.Id, await read.ScalarRecords.AsNoTracking()
+            .Where(record => record.Id == expected.Id && record.ConvertedAmount == amount)
+            .Select(record => record.Id)
+            .SingleAsync(TestContext.Current.CancellationToken));
+    }
+
+    [Theory]
+    [MemberData(nameof(DecimalBoundaryValues))]
+    [BehavioralCoverage("EF10-TYPES-DECIMAL-CONVERSION-SYNC", "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder`1.HasConversion", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "System.Linq.Queryable.Single")]
+    [NativeTypeCoverage("TEXT", typeof(decimal), "EF10-TYPES-DECIMAL-CONVERSION-SYNC")]
+    public async Task DecimalStringConversion_PreservesBoundaryValuesSynchronously(decimal amount)
+    {
+        var expected = CreateValue(0m);
+        expected.ConvertedAmount = amount;
+
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.ScalarRecords.Add(expected);
+            Assert.Equal(1, write.SaveChanges());
+        }
+
+        await using var read = ProviderTestRuntime.CreateContext();
+        var actual = read.ScalarRecords.AsNoTracking().Single(record => record.Id == expected.Id);
+        Assert.Equal(amount, actual.ConvertedAmount);
+        Assert.Equal(expected.Id, read.ScalarRecords.AsNoTracking()
+            .Where(record => record.Id == expected.Id && record.ConvertedAmount == amount)
+            .Select(record => record.Id)
+            .Single());
+    }
+
     private static ScalarRecord CreateValue(decimal amount) => new()
     {
         Id = Guid.NewGuid(),

@@ -16110,6 +16110,7 @@
         "EF10-TYPES-ADDITIONAL-SCALARS-SYNC",
         "EF10-TYPES-BOUNDARIES-SYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-SYNC",
+        "EF10-TYPES-DECIMAL-CONVERSION-SYNC",
         "EF10-TYPES-PRECISION-ATTRIBUTE-SYNC",
         "EF10-TYPES-ROUNDTRIP-SYNC"
       ],
@@ -16182,6 +16183,7 @@
         "EF10-TYPES-ADDITIONAL-SCALARS-SYNC",
         "EF10-TYPES-BOUNDARIES-SYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-SYNC",
+        "EF10-TYPES-DECIMAL-CONVERSION-SYNC",
         "EF10-TYPES-PRECISION-ATTRIBUTE-SYNC",
         "EF10-TYPES-ROUNDTRIP-SYNC"
       ],
@@ -16257,6 +16259,7 @@
         "EF10-TYPES-ADDITIONAL-SCALARS-ASYNC",
         "EF10-TYPES-BOUNDARIES-ASYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC",
+        "EF10-TYPES-DECIMAL-CONVERSION-ASYNC",
         "EF10-TYPES-PRECISION-ATTRIBUTE-ASYNC",
         "EF10-TYPES-ROUNDTRIP-ASYNC"
       ],
@@ -16332,6 +16335,7 @@
         "EF10-TYPES-ADDITIONAL-SCALARS-ASYNC",
         "EF10-TYPES-BOUNDARIES-ASYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC",
+        "EF10-TYPES-DECIMAL-CONVERSION-ASYNC",
         "EF10-TYPES-PRECISION-ATTRIBUTE-ASYNC",
         "EF10-TYPES-ROUNDTRIP-ASYNC"
       ],
@@ -52395,7 +52399,8 @@
         "EF10-RELATIONSHIPS-SPLIT-QUERY-ASYNC",
         "EF10-TYPES-ADDITIONAL-SCALARS-ASYNC",
         "EF10-TYPES-BOUNDARIES-ASYNC",
-        "EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC"
+        "EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC",
+        "EF10-TYPES-DECIMAL-CONVERSION-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -52436,7 +52441,8 @@
         "EF10-RELATIONSHIPS-SPLIT-QUERY-ASYNC",
         "EF10-TYPES-ADDITIONAL-SCALARS-ASYNC",
         "EF10-TYPES-BOUNDARIES-ASYNC",
-        "EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC"
+        "EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC",
+        "EF10-TYPES-DECIMAL-CONVERSION-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -84038,6 +84044,8 @@
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder\u003CTProperty\u003E HasConversion\u003CTConversion\u003E()",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-TYPES-DECIMAL-CONVERSION-ASYNC",
+        "EF10-TYPES-DECIMAL-CONVERSION-SYNC",
         "EF10-TYPES-ROUNDTRIP-ASYNC",
         "EF10-TYPES-ROUNDTRIP-SYNC"
       ],
@@ -84053,6 +84061,8 @@
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder\u003CTProperty\u003E HasConversion(System.Type providerClrType)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-TYPES-DECIMAL-CONVERSION-ASYNC",
+        "EF10-TYPES-DECIMAL-CONVERSION-SYNC",
         "EF10-TYPES-ROUNDTRIP-ASYNC",
         "EF10-TYPES-ROUNDTRIP-SYNC"
       ],
@@ -84068,6 +84078,8 @@
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder\u003CTProperty\u003E HasConversion\u003CTProvider\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTProperty, TProvider\u003E\u003E convertToProviderExpression, System.Linq.Expressions.Expression\u003CSystem.Func\u003CTProvider, TProperty\u003E\u003E convertFromProviderExpression)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-TYPES-DECIMAL-CONVERSION-ASYNC",
+        "EF10-TYPES-DECIMAL-CONVERSION-SYNC",
         "EF10-TYPES-ROUNDTRIP-ASYNC",
         "EF10-TYPES-ROUNDTRIP-SYNC"
       ],
@@ -84083,6 +84095,8 @@
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder\u003CTProperty\u003E HasConversion\u003CTProvider\u003E(Microsoft.EntityFrameworkCore.Storage.ValueConversion.ValueConverter\u003CTProperty, TProvider\u003E converter)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-TYPES-DECIMAL-CONVERSION-ASYNC",
+        "EF10-TYPES-DECIMAL-CONVERSION-SYNC",
         "EF10-TYPES-ROUNDTRIP-ASYNC",
         "EF10-TYPES-ROUNDTRIP-SYNC"
       ],
@@ -84098,6 +84112,8 @@
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder\u003CTProperty\u003E HasConversion(Microsoft.EntityFrameworkCore.Storage.ValueConversion.ValueConverter converter)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-TYPES-DECIMAL-CONVERSION-ASYNC",
+        "EF10-TYPES-DECIMAL-CONVERSION-SYNC",
         "EF10-TYPES-ROUNDTRIP-ASYNC",
         "EF10-TYPES-ROUNDTRIP-SYNC"
       ],
@@ -84113,6 +84129,8 @@
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder\u003CTProperty\u003E HasConversion\u003CTConversion\u003E(Microsoft.EntityFrameworkCore.ChangeTracking.ValueComparer valueComparer)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-TYPES-DECIMAL-CONVERSION-ASYNC",
+        "EF10-TYPES-DECIMAL-CONVERSION-SYNC",
         "EF10-TYPES-ROUNDTRIP-ASYNC",
         "EF10-TYPES-ROUNDTRIP-SYNC"
       ],
@@ -84128,6 +84146,8 @@
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder\u003CTProperty\u003E HasConversion\u003CTConversion\u003E(Microsoft.EntityFrameworkCore.ChangeTracking.ValueComparer valueComparer, Microsoft.EntityFrameworkCore.ChangeTracking.ValueComparer providerComparer)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-TYPES-DECIMAL-CONVERSION-ASYNC",
+        "EF10-TYPES-DECIMAL-CONVERSION-SYNC",
         "EF10-TYPES-ROUNDTRIP-ASYNC",
         "EF10-TYPES-ROUNDTRIP-SYNC"
       ],
@@ -84143,6 +84163,8 @@
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder\u003CTProperty\u003E HasConversion(System.Type conversionType, Microsoft.EntityFrameworkCore.ChangeTracking.ValueComparer valueComparer)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-TYPES-DECIMAL-CONVERSION-ASYNC",
+        "EF10-TYPES-DECIMAL-CONVERSION-SYNC",
         "EF10-TYPES-ROUNDTRIP-ASYNC",
         "EF10-TYPES-ROUNDTRIP-SYNC"
       ],
@@ -84158,6 +84180,8 @@
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder\u003CTProperty\u003E HasConversion(System.Type conversionType, Microsoft.EntityFrameworkCore.ChangeTracking.ValueComparer valueComparer, Microsoft.EntityFrameworkCore.ChangeTracking.ValueComparer providerComparer)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-TYPES-DECIMAL-CONVERSION-ASYNC",
+        "EF10-TYPES-DECIMAL-CONVERSION-SYNC",
         "EF10-TYPES-ROUNDTRIP-ASYNC",
         "EF10-TYPES-ROUNDTRIP-SYNC"
       ],
@@ -84173,6 +84197,8 @@
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder\u003CTProperty\u003E HasConversion\u003CTProvider\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTProperty, TProvider\u003E\u003E convertToProviderExpression, System.Linq.Expressions.Expression\u003CSystem.Func\u003CTProvider, TProperty\u003E\u003E convertFromProviderExpression, Microsoft.EntityFrameworkCore.ChangeTracking.ValueComparer valueComparer)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-TYPES-DECIMAL-CONVERSION-ASYNC",
+        "EF10-TYPES-DECIMAL-CONVERSION-SYNC",
         "EF10-TYPES-ROUNDTRIP-ASYNC",
         "EF10-TYPES-ROUNDTRIP-SYNC"
       ],
@@ -84188,6 +84214,8 @@
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder\u003CTProperty\u003E HasConversion\u003CTProvider\u003E(System.Linq.Expressions.Expression\u003CSystem.Func\u003CTProperty, TProvider\u003E\u003E convertToProviderExpression, System.Linq.Expressions.Expression\u003CSystem.Func\u003CTProvider, TProperty\u003E\u003E convertFromProviderExpression, Microsoft.EntityFrameworkCore.ChangeTracking.ValueComparer valueComparer, Microsoft.EntityFrameworkCore.ChangeTracking.ValueComparer providerComparer)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-TYPES-DECIMAL-CONVERSION-ASYNC",
+        "EF10-TYPES-DECIMAL-CONVERSION-SYNC",
         "EF10-TYPES-ROUNDTRIP-ASYNC",
         "EF10-TYPES-ROUNDTRIP-SYNC"
       ],
@@ -84203,6 +84231,8 @@
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder\u003CTProperty\u003E HasConversion\u003CTProvider\u003E(Microsoft.EntityFrameworkCore.Storage.ValueConversion.ValueConverter\u003CTProperty, TProvider\u003E converter, Microsoft.EntityFrameworkCore.ChangeTracking.ValueComparer valueComparer)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-TYPES-DECIMAL-CONVERSION-ASYNC",
+        "EF10-TYPES-DECIMAL-CONVERSION-SYNC",
         "EF10-TYPES-ROUNDTRIP-ASYNC",
         "EF10-TYPES-ROUNDTRIP-SYNC"
       ],
@@ -84218,6 +84248,8 @@
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder\u003CTProperty\u003E HasConversion\u003CTProvider\u003E(Microsoft.EntityFrameworkCore.Storage.ValueConversion.ValueConverter\u003CTProperty, TProvider\u003E converter, Microsoft.EntityFrameworkCore.ChangeTracking.ValueComparer valueComparer, Microsoft.EntityFrameworkCore.ChangeTracking.ValueComparer providerComparer)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-TYPES-DECIMAL-CONVERSION-ASYNC",
+        "EF10-TYPES-DECIMAL-CONVERSION-SYNC",
         "EF10-TYPES-ROUNDTRIP-ASYNC",
         "EF10-TYPES-ROUNDTRIP-SYNC"
       ],
@@ -84233,6 +84265,8 @@
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder\u003CTProperty\u003E HasConversion(Microsoft.EntityFrameworkCore.Storage.ValueConversion.ValueConverter converter, Microsoft.EntityFrameworkCore.ChangeTracking.ValueComparer valueComparer)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-TYPES-DECIMAL-CONVERSION-ASYNC",
+        "EF10-TYPES-DECIMAL-CONVERSION-SYNC",
         "EF10-TYPES-ROUNDTRIP-ASYNC",
         "EF10-TYPES-ROUNDTRIP-SYNC"
       ],
@@ -84248,6 +84282,8 @@
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder\u003CTProperty\u003E HasConversion(Microsoft.EntityFrameworkCore.Storage.ValueConversion.ValueConverter converter, Microsoft.EntityFrameworkCore.ChangeTracking.ValueComparer valueComparer, Microsoft.EntityFrameworkCore.ChangeTracking.ValueComparer providerComparer)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-TYPES-DECIMAL-CONVERSION-ASYNC",
+        "EF10-TYPES-DECIMAL-CONVERSION-SYNC",
         "EF10-TYPES-ROUNDTRIP-ASYNC",
         "EF10-TYPES-ROUNDTRIP-SYNC"
       ],
@@ -84263,6 +84299,8 @@
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder\u003CTProperty\u003E HasConversion\u003CTConversion, TComparer\u003E() where TComparer : Microsoft.EntityFrameworkCore.ChangeTracking.ValueComparer",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-TYPES-DECIMAL-CONVERSION-ASYNC",
+        "EF10-TYPES-DECIMAL-CONVERSION-SYNC",
         "EF10-TYPES-ROUNDTRIP-ASYNC",
         "EF10-TYPES-ROUNDTRIP-SYNC"
       ],
@@ -84278,6 +84316,8 @@
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder\u003CTProperty\u003E HasConversion\u003CTConversion, TComparer, TProviderComparer\u003E() where TComparer : Microsoft.EntityFrameworkCore.ChangeTracking.ValueComparer where TProviderComparer : Microsoft.EntityFrameworkCore.ChangeTracking.ValueComparer",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-TYPES-DECIMAL-CONVERSION-ASYNC",
+        "EF10-TYPES-DECIMAL-CONVERSION-SYNC",
         "EF10-TYPES-ROUNDTRIP-ASYNC",
         "EF10-TYPES-ROUNDTRIP-SYNC"
       ],
@@ -84293,6 +84333,8 @@
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder\u003CTProperty\u003E HasConversion(System.Type conversionType, System.Type comparerType)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-TYPES-DECIMAL-CONVERSION-ASYNC",
+        "EF10-TYPES-DECIMAL-CONVERSION-SYNC",
         "EF10-TYPES-ROUNDTRIP-ASYNC",
         "EF10-TYPES-ROUNDTRIP-SYNC"
       ],
@@ -84308,6 +84350,8 @@
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder\u003CTProperty\u003E HasConversion(System.Type conversionType, System.Type comparerType, System.Type providerComparerType)",
       "ProviderApplicable": true,
       "BehavioralContracts": [
+        "EF10-TYPES-DECIMAL-CONVERSION-ASYNC",
+        "EF10-TYPES-DECIMAL-CONVERSION-SYNC",
         "EF10-TYPES-ROUNDTRIP-ASYNC",
         "EF10-TYPES-ROUNDTRIP-SYNC"
       ],
