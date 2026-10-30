@@ -2643,7 +2643,9 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-TRACKING-PROPERTY-ENTRY-ASYNC",
-        "EF10-TRACKING-PROPERTY-ENTRY-SYNC"
+        "EF10-TRACKING-PROPERTY-ENTRY-SYNC",
+        "EF10-TYPES-NULLABLE-ROUNDTRIP-ASYNC",
+        "EF10-TYPES-NULLABLE-ROUNDTRIP-SYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -2706,7 +2708,9 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-TRACKING-PROPERTY-ENTRY-ASYNC",
-        "EF10-TRACKING-PROPERTY-ENTRY-SYNC"
+        "EF10-TRACKING-PROPERTY-ENTRY-SYNC",
+        "EF10-TYPES-NULLABLE-ROUNDTRIP-ASYNC",
+        "EF10-TYPES-NULLABLE-ROUNDTRIP-SYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -2793,7 +2797,9 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-TRACKING-PROPERTY-ENTRY-ASYNC",
-        "EF10-TRACKING-PROPERTY-ENTRY-SYNC"
+        "EF10-TRACKING-PROPERTY-ENTRY-SYNC",
+        "EF10-TYPES-NULLABLE-ROUNDTRIP-ASYNC",
+        "EF10-TYPES-NULLABLE-ROUNDTRIP-SYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -16124,6 +16130,7 @@
         "EF10-TYPES-BOUNDARIES-SYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-SYNC",
         "EF10-TYPES-DECIMAL-CONVERSION-SYNC",
+        "EF10-TYPES-NULLABLE-ROUNDTRIP-SYNC",
         "EF10-TYPES-PRECISION-ATTRIBUTE-SYNC",
         "EF10-TYPES-ROUNDTRIP-SYNC"
       ],
@@ -16201,6 +16208,7 @@
         "EF10-TYPES-BOUNDARIES-SYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-SYNC",
         "EF10-TYPES-DECIMAL-CONVERSION-SYNC",
+        "EF10-TYPES-NULLABLE-ROUNDTRIP-SYNC",
         "EF10-TYPES-PRECISION-ATTRIBUTE-SYNC",
         "EF10-TYPES-ROUNDTRIP-SYNC"
       ],
@@ -16281,6 +16289,7 @@
         "EF10-TYPES-BOUNDARIES-ASYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC",
         "EF10-TYPES-DECIMAL-CONVERSION-ASYNC",
+        "EF10-TYPES-NULLABLE-ROUNDTRIP-ASYNC",
         "EF10-TYPES-PRECISION-ATTRIBUTE-ASYNC",
         "EF10-TYPES-ROUNDTRIP-ASYNC"
       ],
@@ -16361,6 +16370,7 @@
         "EF10-TYPES-BOUNDARIES-ASYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC",
         "EF10-TYPES-DECIMAL-CONVERSION-ASYNC",
+        "EF10-TYPES-NULLABLE-ROUNDTRIP-ASYNC",
         "EF10-TYPES-PRECISION-ATTRIBUTE-ASYNC",
         "EF10-TYPES-ROUNDTRIP-ASYNC"
       ],
@@ -52450,7 +52460,8 @@
         "EF10-TYPES-ADDITIONAL-SCALARS-ASYNC",
         "EF10-TYPES-BOUNDARIES-ASYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC",
-        "EF10-TYPES-DECIMAL-CONVERSION-ASYNC"
+        "EF10-TYPES-DECIMAL-CONVERSION-ASYNC",
+        "EF10-TYPES-NULLABLE-ROUNDTRIP-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -52496,7 +52507,8 @@
         "EF10-TYPES-ADDITIONAL-SCALARS-ASYNC",
         "EF10-TYPES-BOUNDARIES-ASYNC",
         "EF10-TYPES-DECIMAL-BOUNDARIES-ASYNC",
-        "EF10-TYPES-DECIMAL-CONVERSION-ASYNC"
+        "EF10-TYPES-DECIMAL-CONVERSION-ASYNC",
+        "EF10-TYPES-NULLABLE-ROUNDTRIP-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
