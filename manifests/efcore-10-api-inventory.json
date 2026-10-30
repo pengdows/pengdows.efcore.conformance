@@ -21,8 +21,8 @@
     "PublicMembers": 16076,
     "AwaitingClassification": 0,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 666,
-    "UncoveredMemberFamilies": 9
+    "MemberEntriesInCoveredFamilies": 667,
+    "UncoveredMemberFamilies": 8
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -151661,9 +151661,11 @@
       "ApiMemberName": "AlterDatabase",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.AlterOperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.AlterDatabaseOperation\u003E AlterDatabase(System.String collation = null, System.String oldCollation = null)",
       "ProviderApplicable": true,
-      "BehavioralContracts": [],
-      "Disposition": "capability-gated",
-      "DispositionReason": "Database-wide collation and other database options vary by database engine. Test migration effects only for providers declaring database-collation-migration support.",
+      "BehavioralContracts": [
+        "EF10-MIGRATION-DATABASE-COLLATION"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AlterDatabase"
     },
     {

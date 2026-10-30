@@ -24,6 +24,7 @@ public sealed class PomeloMySqlAdapter : IAdoNetProviderAdapter, IParameterizedC
             "migration-add-constraint-operations",
             "case-insensitive-collation",
             "index-sort-metadata",
+            "database-collation-migration",
             "raw-sql",
             "execute-update",
             "execute-delete",
@@ -39,7 +40,6 @@ public sealed class PomeloMySqlAdapter : IAdoNetProviderAdapter, IParameterizedC
             "migration-set-default",
             "sequences",
             "schemas",
-            "database-collation-migration",
             "schema-qualified-functions"
         });
 

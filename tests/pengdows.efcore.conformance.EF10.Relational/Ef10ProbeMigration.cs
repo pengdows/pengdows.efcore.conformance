@@ -451,6 +451,17 @@ public sealed class Ef10MigrationAddConstraintsMigration : Migration
     }
 }
 
+[DbContext(typeof(ConformanceDbContext))]
+[Migration("20261030000103_EF10AlterDatabaseCollation")]
+public sealed class Ef10AlterDatabaseCollationMigration : Migration
+{
+    protected override void Up(MigrationBuilder migrationBuilder) =>
+        migrationBuilder.AlterDatabase(collation: "utf8mb4_bin");
+
+    protected override void Down(MigrationBuilder migrationBuilder) =>
+        migrationBuilder.AlterDatabase(collation: "utf8mb4_0900_ai_ci", oldCollation: "utf8mb4_bin");
+}
+
 public sealed class MigrationConstraintRow
 {
     public int Id { get; set; }

@@ -25,7 +25,7 @@ public sealed class MigrationsTests
             await using (var migrate = ProviderTestRuntime.CreateContext())
             {
                 await migrate.Database.EnsureDeletedAsync(cancellationToken);
-                var migrationIds = new[] { "20261029000101_EF10Probe", "20261029000102_EF10MigrationOperations", "20261029000103_EF10MigrationChanges", "20261029000104_EF10MigrationRenameTable", "20261029000105_EF10MigrationSqlOperation", "20261029000106_EF10MigrationIndexRename", "20261029000107_EF10MigrationCheckConstraint", "20261029000108_EF10MigrationAddConstraints" };
+                var migrationIds = new[] { "20261029000101_EF10Probe", "20261029000102_EF10MigrationOperations", "20261029000103_EF10MigrationChanges", "20261029000104_EF10MigrationRenameTable", "20261029000105_EF10MigrationSqlOperation", "20261029000106_EF10MigrationIndexRename", "20261029000107_EF10MigrationCheckConstraint", "20261029000108_EF10MigrationAddConstraints", "20261030000103_EF10AlterDatabaseCollation" };
                 Assert.Equal(migrationIds, migrate.Database.GetMigrations());
                 var portableMigrations = migrationIds.Take(5).ToArray();
                 await migrate.Database.MigrateAsync(portableMigrations[^1], cancellationToken);
@@ -125,7 +125,7 @@ public sealed class MigrationsTests
             await using (var migrate = ProviderTestRuntime.CreateContext())
             {
                 await migrate.Database.EnsureDeletedAsync(TestContext.Current.CancellationToken);
-                var migrationIds = new[] { "20261029000101_EF10Probe", "20261029000102_EF10MigrationOperations", "20261029000103_EF10MigrationChanges", "20261029000104_EF10MigrationRenameTable", "20261029000105_EF10MigrationSqlOperation", "20261029000106_EF10MigrationIndexRename", "20261029000107_EF10MigrationCheckConstraint", "20261029000108_EF10MigrationAddConstraints" };
+                var migrationIds = new[] { "20261029000101_EF10Probe", "20261029000102_EF10MigrationOperations", "20261029000103_EF10MigrationChanges", "20261029000104_EF10MigrationRenameTable", "20261029000105_EF10MigrationSqlOperation", "20261029000106_EF10MigrationIndexRename", "20261029000107_EF10MigrationCheckConstraint", "20261029000108_EF10MigrationAddConstraints", "20261030000103_EF10AlterDatabaseCollation" };
                 Assert.Equal(migrationIds, migrate.Database.GetMigrations());
                 var portableMigrations = migrationIds.Take(5).ToArray();
                 migrate.Database.Migrate(portableMigrations[^1]);
