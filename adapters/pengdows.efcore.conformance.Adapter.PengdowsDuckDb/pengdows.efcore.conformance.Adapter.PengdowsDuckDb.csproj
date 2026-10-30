@@ -5,7 +5,8 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="DuckDB.NET.Data.Full" />
+    <!-- Native libduckdb only: the managed driver comes from the adonet DuckDB project (Giorgi's develop build). -->
+    <PackageReference Include="DuckDB.NET.Bindings.Full" ExcludeAssets="compile" />
     <ProjectReference Include="../../src/pengdows.efcore.conformance.Contracts/pengdows.efcore.conformance.Contracts.csproj" />
     <ProjectReference Include="../../../pengdows.efcore.adonet/src/pengdows.efcore.adonet.duckdb/pengdows.efcore.adonet.duckdb.csproj" />
   </ItemGroup>
