@@ -311,6 +311,10 @@ public sealed class DiscoveredNativeTypeTests
         var equal = mapping.DatabaseTypeName.Equals("time with time zone", StringComparison.OrdinalIgnoreCase) ||
                     mapping.DatabaseTypeName.Equals("time with time zone[]", StringComparison.OrdinalIgnoreCase)
             ? TimeWithTimeZoneValuesEqual(expected, actual)
+            : expected is string[] expectedJsonValues && actual is string[] actualJsonValues &&
+              mapping.DatabaseTypeName.Contains("json", StringComparison.OrdinalIgnoreCase)
+                ? expectedJsonValues.Length == actualJsonValues.Length &&
+                  expectedJsonValues.Zip(actualJsonValues).All(pair => JsonNode.DeepEquals(JsonNode.Parse(pair.First), JsonNode.Parse(pair.Second)))
             : expected is string expectedText && actual is string actualText &&
               mapping.DatabaseTypeName.Contains("json", StringComparison.OrdinalIgnoreCase)
                 ? JsonNode.DeepEquals(JsonNode.Parse(expectedText), JsonNode.Parse(actualText))
@@ -502,7 +506,10 @@ internal static class NativeTypeSampleFactory
         else if (elementType == typeof(decimal)) values = alternate ? [-5.5m, 0m] : [1.25m, -1.5m];
         else if (elementType == typeof(string)) values = mapping.DatabaseTypeName.Contains("json", StringComparison.OrdinalIgnoreCase)
             ? alternate ? ["{\"value\":2}", "[]"] : ["{\"value\":1}", "[]"]
-            : alternate ? ["C", "D"] : ["A", "B"];
+            : mapping.DatabaseTypeName.Contains("xml", StringComparison.OrdinalIgnoreCase)
+                ? alternate ? ["<v>2</v>", "<v>3</v>"] : ["<v>1</v>", "<v>3</v>"]
+                : alternate ? ["C", "D"] : ["A", "B"];
+        else if (elementType == typeof(char)) values = alternate ? ['R', 'S'] : ['Q', 'T'];
         else if (elementType == typeof(Guid)) values = alternate
             ? [Guid.Parse("84c5903f-330f-42d1-92f4-94ab241b1b32"), Guid.Empty]
             : [Guid.Parse("5d37ddf5-fab9-4e5b-95fb-b5259a5e3d31"), Guid.Empty];
