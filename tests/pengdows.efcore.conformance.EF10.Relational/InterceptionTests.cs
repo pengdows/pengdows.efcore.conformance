@@ -242,8 +242,12 @@ public sealed class InterceptionTests
 
         Assert.Equal(1, interceptor.TransactionStartedCalls);
         Assert.Equal(1, interceptor.TransactionCommittedCalls);
+        Assert.Equal(1, interceptor.TransactionStartingCalls);
+        Assert.Equal(1, interceptor.TransactionCommittingCalls);
         Assert.Equal(0, interceptor.TransactionStartedAsyncCalls);
         Assert.Equal(0, interceptor.TransactionCommittedAsyncCalls);
+        Assert.Equal(0, interceptor.TransactionStartingAsyncCalls);
+        Assert.Equal(0, interceptor.TransactionCommittingAsyncCalls);
 
         await using var verify = ProviderTestRuntime.CreateContext();
         Assert.True(await verify.People.AsNoTracking()
@@ -274,8 +278,12 @@ public sealed class InterceptionTests
 
         Assert.Equal(0, interceptor.TransactionStartedCalls);
         Assert.Equal(0, interceptor.TransactionCommittedCalls);
+        Assert.Equal(0, interceptor.TransactionStartingCalls);
+        Assert.Equal(0, interceptor.TransactionCommittingCalls);
         Assert.Equal(1, interceptor.TransactionStartedAsyncCalls);
         Assert.Equal(1, interceptor.TransactionCommittedAsyncCalls);
+        Assert.Equal(1, interceptor.TransactionStartingAsyncCalls);
+        Assert.Equal(1, interceptor.TransactionCommittingAsyncCalls);
 
         await using var verify = ProviderTestRuntime.CreateContext();
         Assert.True(await verify.People.AsNoTracking()
@@ -311,8 +319,12 @@ public sealed class InterceptionTests
 
         Assert.True(interceptor.CreatedSavepointCalls >= 1);
         Assert.Equal(1, interceptor.RolledBackToSavepointCalls);
+        Assert.True(interceptor.CreatingSavepointCalls >= 1);
+        Assert.Equal(1, interceptor.RollingBackToSavepointCalls);
         Assert.Equal(0, interceptor.CreatedSavepointAsyncCalls);
         Assert.Equal(0, interceptor.RolledBackToSavepointAsyncCalls);
+        Assert.Equal(0, interceptor.CreatingSavepointAsyncCalls);
+        Assert.Equal(0, interceptor.RollingBackToSavepointAsyncCalls);
 
         await using var verify = ProviderTestRuntime.CreateContext();
         Assert.False(await verify.People.AsNoTracking().AnyAsync(item => item.Id == id, TestContext.Current.CancellationToken));
@@ -347,8 +359,12 @@ public sealed class InterceptionTests
 
         Assert.Equal(0, interceptor.CreatedSavepointCalls);
         Assert.Equal(0, interceptor.RolledBackToSavepointCalls);
+        Assert.Equal(0, interceptor.CreatingSavepointCalls);
+        Assert.Equal(0, interceptor.RollingBackToSavepointCalls);
         Assert.True(interceptor.CreatedSavepointAsyncCalls >= 1);
         Assert.Equal(1, interceptor.RolledBackToSavepointAsyncCalls);
+        Assert.True(interceptor.CreatingSavepointAsyncCalls >= 1);
+        Assert.Equal(1, interceptor.RollingBackToSavepointAsyncCalls);
 
         await using var verify = ProviderTestRuntime.CreateContext();
         Assert.False(await verify.People.AsNoTracking().AnyAsync(item => item.Id == id, TestContext.Current.CancellationToken));
@@ -377,7 +393,9 @@ public sealed class InterceptionTests
         }
 
         Assert.Equal(1, interceptor.TransactionRolledBackCalls);
+        Assert.Equal(1, interceptor.TransactionRollingBackCalls);
         Assert.Equal(0, interceptor.TransactionRolledBackAsyncCalls);
+        Assert.Equal(0, interceptor.TransactionRollingBackAsyncCalls);
         await using var verify = ProviderTestRuntime.CreateContext();
         Assert.False(await verify.People.AsNoTracking().AnyAsync(item => item.Id == person.Id, TestContext.Current.CancellationToken));
     }
@@ -405,7 +423,9 @@ public sealed class InterceptionTests
         }
 
         Assert.Equal(0, interceptor.TransactionRolledBackCalls);
+        Assert.Equal(0, interceptor.TransactionRollingBackCalls);
         Assert.Equal(1, interceptor.TransactionRolledBackAsyncCalls);
+        Assert.Equal(1, interceptor.TransactionRollingBackAsyncCalls);
         await using var verify = ProviderTestRuntime.CreateContext();
         Assert.False(await verify.People.AsNoTracking().AnyAsync(item => item.Id == person.Id, TestContext.Current.CancellationToken));
     }
@@ -437,7 +457,9 @@ public sealed class InterceptionTests
         }
 
         Assert.True(interceptor.ReleasedSavepointCalls >= 1);
+        Assert.True(interceptor.ReleasingSavepointCalls >= 1);
         Assert.Equal(0, interceptor.ReleasedSavepointAsyncCalls);
+        Assert.Equal(0, interceptor.ReleasingSavepointAsyncCalls);
         await using var verify = ProviderTestRuntime.CreateContext();
         Assert.True(await verify.People.AsNoTracking().AnyAsync(item => item.Id == person.Id, TestContext.Current.CancellationToken));
     }
@@ -469,7 +491,9 @@ public sealed class InterceptionTests
         }
 
         Assert.Equal(0, interceptor.ReleasedSavepointCalls);
+        Assert.Equal(0, interceptor.ReleasingSavepointCalls);
         Assert.True(interceptor.ReleasedSavepointAsyncCalls >= 1);
+        Assert.True(interceptor.ReleasingSavepointAsyncCalls >= 1);
         await using var verify = ProviderTestRuntime.CreateContext();
         Assert.True(await verify.People.AsNoTracking().AnyAsync(item => item.Id == person.Id, TestContext.Current.CancellationToken));
     }
@@ -682,6 +706,144 @@ public sealed class InterceptionTests
         public int ReleasedSavepointCalls { get; private set; }
 
         public int ReleasedSavepointAsyncCalls { get; private set; }
+
+        public int TransactionStartingCalls { get; private set; }
+
+        public int TransactionCommittingCalls { get; private set; }
+
+        public int TransactionRollingBackCalls { get; private set; }
+
+        public int CreatingSavepointCalls { get; private set; }
+
+        public int RollingBackToSavepointCalls { get; private set; }
+
+        public int ReleasingSavepointCalls { get; private set; }
+
+        public int TransactionStartingAsyncCalls { get; private set; }
+
+        public int TransactionCommittingAsyncCalls { get; private set; }
+
+        public int TransactionRollingBackAsyncCalls { get; private set; }
+
+        public int CreatingSavepointAsyncCalls { get; private set; }
+
+        public int RollingBackToSavepointAsyncCalls { get; private set; }
+
+        public int ReleasingSavepointAsyncCalls { get; private set; }
+
+        public override InterceptionResult<DbTransaction> TransactionStarting(
+            DbConnection connection,
+            TransactionStartingEventData eventData,
+            InterceptionResult<DbTransaction> result)
+        {
+            TransactionStartingCalls++;
+            return result;
+        }
+
+        public override ValueTask<InterceptionResult<DbTransaction>> TransactionStartingAsync(
+            DbConnection connection,
+            TransactionStartingEventData eventData,
+            InterceptionResult<DbTransaction> result,
+            CancellationToken cancellationToken = default)
+        {
+            TransactionStartingAsyncCalls++;
+            return ValueTask.FromResult(result);
+        }
+
+        public override InterceptionResult TransactionCommitting(
+            DbTransaction transaction,
+            TransactionEventData eventData,
+            InterceptionResult result)
+        {
+            TransactionCommittingCalls++;
+            return result;
+        }
+
+        public override ValueTask<InterceptionResult> TransactionCommittingAsync(
+            DbTransaction transaction,
+            TransactionEventData eventData,
+            InterceptionResult result,
+            CancellationToken cancellationToken = default)
+        {
+            TransactionCommittingAsyncCalls++;
+            return ValueTask.FromResult(result);
+        }
+
+        public override InterceptionResult TransactionRollingBack(
+            DbTransaction transaction,
+            TransactionEventData eventData,
+            InterceptionResult result)
+        {
+            TransactionRollingBackCalls++;
+            return result;
+        }
+
+        public override ValueTask<InterceptionResult> TransactionRollingBackAsync(
+            DbTransaction transaction,
+            TransactionEventData eventData,
+            InterceptionResult result,
+            CancellationToken cancellationToken = default)
+        {
+            TransactionRollingBackAsyncCalls++;
+            return ValueTask.FromResult(result);
+        }
+
+        public override InterceptionResult CreatingSavepoint(
+            DbTransaction transaction,
+            TransactionEventData eventData,
+            InterceptionResult result)
+        {
+            CreatingSavepointCalls++;
+            return result;
+        }
+
+        public override ValueTask<InterceptionResult> CreatingSavepointAsync(
+            DbTransaction transaction,
+            TransactionEventData eventData,
+            InterceptionResult result,
+            CancellationToken cancellationToken = default)
+        {
+            CreatingSavepointAsyncCalls++;
+            return ValueTask.FromResult(result);
+        }
+
+        public override InterceptionResult RollingBackToSavepoint(
+            DbTransaction transaction,
+            TransactionEventData eventData,
+            InterceptionResult result)
+        {
+            RollingBackToSavepointCalls++;
+            return result;
+        }
+
+        public override ValueTask<InterceptionResult> RollingBackToSavepointAsync(
+            DbTransaction transaction,
+            TransactionEventData eventData,
+            InterceptionResult result,
+            CancellationToken cancellationToken = default)
+        {
+            RollingBackToSavepointAsyncCalls++;
+            return ValueTask.FromResult(result);
+        }
+
+        public override InterceptionResult ReleasingSavepoint(
+            DbTransaction transaction,
+            TransactionEventData eventData,
+            InterceptionResult result)
+        {
+            ReleasingSavepointCalls++;
+            return result;
+        }
+
+        public override ValueTask<InterceptionResult> ReleasingSavepointAsync(
+            DbTransaction transaction,
+            TransactionEventData eventData,
+            InterceptionResult result,
+            CancellationToken cancellationToken = default)
+        {
+            ReleasingSavepointAsyncCalls++;
+            return ValueTask.FromResult(result);
+        }
 
         public override DbTransaction TransactionStarted(
             DbConnection connection,

@@ -25,7 +25,7 @@
     "PublicMembers": 16762,
     "AwaitingClassification": 0,
     "ExplicitlyExcluded": 5921,
-    "MemberEntriesInCoveredFamilies": 765,
+    "MemberEntriesInCoveredFamilies": 767,
     "UncoveredMemberFamilies": 0
   },
   "CoverageSelectors": {
@@ -35961,10 +35961,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "TransactionUsed",
       "Signature": "System.Data.Common.DbTransaction TransactionUsed(System.Data.Common.DbConnection connection, Microsoft.EntityFrameworkCore.Diagnostics.TransactionEventData eventData, System.Data.Common.DbTransaction result)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "ef-owned-no-provider-contract",
-      "DispositionReason": "Diagnostic identifiers, event payloads, and logging helpers are owned by EF Core. Provider-observable interception behavior is covered through public SaveChanges tests where applicable.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRANSACTION-EXTERNAL-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Diagnostics.DbTransactionInterceptor.TransactionUsed"
     },
     {
@@ -35973,10 +35975,12 @@
       "MemberKind": "Method",
       "ApiMemberName": "TransactionUsedAsync",
       "Signature": "System.Threading.Tasks.ValueTask\u003CSystem.Data.Common.DbTransaction\u003E TransactionUsedAsync(System.Data.Common.DbConnection connection, Microsoft.EntityFrameworkCore.Diagnostics.TransactionEventData eventData, System.Data.Common.DbTransaction result, System.Threading.CancellationToken cancellationToken = null)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "ef-owned-no-provider-contract",
-      "DispositionReason": "Diagnostic identifiers, event payloads, and logging helpers are owned by EF Core. Provider-observable interception behavior is covered through public SaveChanges tests where applicable.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-TRANSACTION-EXTERNAL-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Diagnostics.DbTransactionInterceptor.TransactionUsedAsync"
     },
     {

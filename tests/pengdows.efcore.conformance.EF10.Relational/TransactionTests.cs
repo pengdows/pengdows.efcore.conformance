@@ -1,4 +1,6 @@
+using System.Data.Common;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Storage;
 using pengdows.efcore.conformance;
 using Xunit;
@@ -133,16 +135,21 @@ public sealed class TransactionTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-TRANSACTION-EXTERNAL-SYNC", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.UseTransaction", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetDbConnection", "Microsoft.EntityFrameworkCore.Storage.DbContextTransactionExtensions.GetDbTransaction", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges")]
+    [BehavioralCoverage("EF10-TRANSACTION-EXTERNAL-SYNC", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.UseTransaction", "Microsoft.EntityFrameworkCore.Diagnostics.DbTransactionInterceptor.TransactionUsed", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetDbConnection", "Microsoft.EntityFrameworkCore.Storage.DbContextTransactionExtensions.GetDbTransaction", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges")]
     public async Task UseTransaction_EnlistsContextInExternalTransactionSynchronously()
     {
         ProviderTestRuntime.RequireCapability("transactions");
         var id = Guid.NewGuid();
         var cancellationToken = TestContext.Current.CancellationToken;
+        var interceptor = new RecordingExternalTransactionInterceptor();
 
-        await using (var context = ProviderTestRuntime.CreateContext())
+        await using (var initialize = ProviderTestRuntime.CreateContext())
         {
-            await ProviderTestRuntime.InitializeAsync(context, cancellationToken);
+            await ProviderTestRuntime.InitializeAsync(initialize, cancellationToken);
+        }
+
+        await using (var context = ProviderTestRuntime.CreateContext(options => options.AddInterceptors(interceptor)))
+        {
             await context.Database.OpenConnectionAsync(cancellationToken);
             var connection = context.Database.GetDbConnection();
             await using var externalTransaction = await connection.BeginTransactionAsync(cancellationToken);
@@ -156,21 +163,29 @@ public sealed class TransactionTests
             efTransaction.Rollback();
         }
 
+        Assert.Equal(1, interceptor.TransactionUsedCalls);
+        Assert.Equal(0, interceptor.TransactionUsedAsyncCalls);
+
         await using var verify = ProviderTestRuntime.CreateContext();
         Assert.False(await verify.People.AnyAsync(person => person.Id == id, cancellationToken));
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-TRANSACTION-EXTERNAL-ASYNC", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.UseTransactionAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetDbConnection", "Microsoft.EntityFrameworkCore.Storage.DbContextTransactionExtensions.GetDbTransaction", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync")]
+    [BehavioralCoverage("EF10-TRANSACTION-EXTERNAL-ASYNC", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.UseTransactionAsync", "Microsoft.EntityFrameworkCore.Diagnostics.DbTransactionInterceptor.TransactionUsedAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.GetDbConnection", "Microsoft.EntityFrameworkCore.Storage.DbContextTransactionExtensions.GetDbTransaction", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync")]
     public async Task UseTransactionAsync_EnlistsContextInExternalTransactionAsynchronously()
     {
         ProviderTestRuntime.RequireCapability("transactions");
         var id = Guid.NewGuid();
         var cancellationToken = TestContext.Current.CancellationToken;
+        var interceptor = new RecordingExternalTransactionInterceptor();
 
-        await using (var context = ProviderTestRuntime.CreateContext())
+        await using (var initialize = ProviderTestRuntime.CreateContext())
         {
-            await ProviderTestRuntime.InitializeAsync(context, cancellationToken);
+            await ProviderTestRuntime.InitializeAsync(initialize, cancellationToken);
+        }
+
+        await using (var context = ProviderTestRuntime.CreateContext(options => options.AddInterceptors(interceptor)))
+        {
             await context.Database.OpenConnectionAsync(cancellationToken);
             var connection = context.Database.GetDbConnection();
             await using var externalTransaction = await connection.BeginTransactionAsync(cancellationToken);
@@ -183,6 +198,9 @@ public sealed class TransactionTests
             Assert.Equal(1, await context.SaveChangesAsync(cancellationToken));
             await efTransaction.RollbackAsync(cancellationToken);
         }
+
+        Assert.Equal(0, interceptor.TransactionUsedCalls);
+        Assert.Equal(1, interceptor.TransactionUsedAsyncCalls);
 
         await using var verify = ProviderTestRuntime.CreateContext();
         Assert.False(await verify.People.AnyAsync(person => person.Id == id, cancellationToken));
@@ -247,5 +265,28 @@ public sealed class TransactionTests
         await using var verify = ProviderTestRuntime.CreateContext();
         Assert.True(await verify.People.AnyAsync(person => person.Id == committedId, cancellationToken));
         Assert.False(await verify.People.AnyAsync(person => person.Id == rolledBackId, cancellationToken));
+    }
+
+    private sealed class RecordingExternalTransactionInterceptor : DbTransactionInterceptor
+    {
+        public int TransactionUsedCalls { get; private set; }
+
+        public int TransactionUsedAsyncCalls { get; private set; }
+
+        public override DbTransaction TransactionUsed(DbConnection connection, TransactionEventData eventData, DbTransaction transaction)
+        {
+            TransactionUsedCalls++;
+            return transaction;
+        }
+
+        public override ValueTask<DbTransaction> TransactionUsedAsync(
+            DbConnection connection,
+            TransactionEventData eventData,
+            DbTransaction transaction,
+            CancellationToken cancellationToken = default)
+        {
+            TransactionUsedAsyncCalls++;
+            return ValueTask.FromResult(transaction);
+        }
     }
 }
