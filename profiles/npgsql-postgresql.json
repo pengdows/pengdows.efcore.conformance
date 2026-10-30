@@ -1,0 +1,6 @@
+{
+  "name": "Npgsql EF Core PostgreSQL 17",
+  "adapterAssembly": "../adapters/pengdows.efcore.conformance.Adapter.Npgsql/bin/Debug/net10.0/pengdows.efcore.conformance.Adapter.Npgsql.dll",
+  "adapterType": "pengdows.efcore.conformance.Adapter.Npgsql.NpgsqlAdapter",
+  "connectionString": "Host=${EFCORE_CONFORMANCE_POSTGRES_HOST};Port=${EFCORE_CONFORMANCE_POSTGRES_PORT};Database=${EFCORE_CONFORMANCE_POSTGRES_DATABASE};Username=${EFCORE_CONFORMANCE_POSTGRES_USER};Password=${EFCORE_CONFORMANCE_POSTGRES_PASSWORD};Include Error Detail=true"
+}

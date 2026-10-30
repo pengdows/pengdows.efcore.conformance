@@ -455,11 +455,43 @@ public sealed class Ef10MigrationAddConstraintsMigration : Migration
 [Migration("20261030000103_EF10AlterDatabaseCollation")]
 public sealed class Ef10AlterDatabaseCollationMigration : Migration
 {
-    protected override void Up(MigrationBuilder migrationBuilder) =>
-        migrationBuilder.AlterDatabase(collation: "utf8mb4_bin");
+    protected override void Up(MigrationBuilder migrationBuilder)
+    {
+        if (ActiveProvider?.Contains("MySql", StringComparison.OrdinalIgnoreCase) == true)
+        {
+            migrationBuilder.AlterDatabase(collation: "utf8mb4_bin");
+        }
+    }
 
-    protected override void Down(MigrationBuilder migrationBuilder) =>
-        migrationBuilder.AlterDatabase(collation: "utf8mb4_0900_ai_ci", oldCollation: "utf8mb4_bin");
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
+        if (ActiveProvider?.Contains("MySql", StringComparison.OrdinalIgnoreCase) == true)
+        {
+            migrationBuilder.AlterDatabase(collation: "utf8mb4_0900_ai_ci", oldCollation: "utf8mb4_bin");
+        }
+    }
+}
+
+[DbContext(typeof(ConformanceDbContext))]
+[Migration("20261030000104_EF10SequenceOperations")]
+public sealed class Ef10SequenceOperationsMigration : Migration
+{
+    public const string SchemaName = "ef10conformance_sequences";
+
+    protected override void Up(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.EnsureSchema(SchemaName);
+        migrationBuilder.CreateSequence<long>("ef10conformance_sequence", SchemaName, startValue: 10, incrementBy: 2);
+        migrationBuilder.AlterSequence("ef10conformance_sequence", SchemaName, incrementBy: 3, oldIncrementBy: 2);
+        migrationBuilder.RestartSequence("ef10conformance_sequence", startValue: 25, schema: SchemaName);
+        migrationBuilder.RenameSequence("ef10conformance_sequence", SchemaName, "ef10conformance_sequence_renamed");
+    }
+
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.DropSequence("ef10conformance_sequence_renamed", SchemaName);
+        migrationBuilder.DropSchema(SchemaName);
+    }
 }
 
 public sealed class MigrationConstraintRow

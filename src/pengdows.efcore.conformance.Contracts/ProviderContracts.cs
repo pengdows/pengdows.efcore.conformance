@@ -46,6 +46,14 @@ public interface IIndexMetadataAdapter : IProviderAdapter
     IReadOnlyList<IndexColumnMetadata> GetIndexColumns(DbConnection openConnection, string tableName, string indexName);
 }
 
+/// <summary>Reads persisted comments from public database catalog metadata.</summary>
+public interface ISchemaCommentMetadataAdapter : IProviderAdapter
+{
+    string? GetTableComment(DbConnection openConnection, string tableName);
+
+    string? GetColumnComment(DbConnection openConnection, string tableName, string columnName);
+}
+
 public sealed record IndexColumnMetadata(string ColumnName, int Ordinal, bool IsDescending);
 
 /// <summary>Optional database-catalog discovery for types omitted from ADO.NET schema metadata.</summary>

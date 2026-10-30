@@ -3,6 +3,10 @@
   <Project Path="src/pengdows.efcore.conformance.Inventory/pengdows.efcore.conformance.Inventory.csproj" />
   <Project Path="src/pengdows.efcore.conformance.Runner/pengdows.efcore.conformance.Runner.csproj" />
   <Project Path="tests/pengdows.efcore.conformance.EF10.Relational/pengdows.efcore.conformance.EF10.Relational.csproj" />
+  <Folder Name="/adapters/">
+    <Project Path="adapters/pengdows.efcore.conformance.Adapter.Npgsql/pengdows.efcore.conformance.Adapter.Npgsql.csproj" />
+  </Folder>
+  <Folder Name="/src/" />
   <Project Path="adapters/pengdows.efcore.conformance.Adapter.MicrosoftSqlite/pengdows.efcore.conformance.Adapter.MicrosoftSqlite.csproj" />
   <Project Path="adapters/pengdows.efcore.conformance.Adapter.PomeloMySql/pengdows.efcore.conformance.Adapter.PomeloMySql.csproj" />
 </Solution>

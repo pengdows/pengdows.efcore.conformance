@@ -9,6 +9,23 @@ namespace pengdows.efcore.conformance.EF10.Relational;
 public sealed class DbFunctionTests
 {
     [Fact]
+    [CapabilityRequirement("schema-qualified-functions")]
+    [BehavioralCoverage("EF10-DB-FUNCTION-SCHEMA-ASYNC", "Microsoft.EntityFrameworkCore.DbFunctionAttribute.Schema", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    public async Task SchemaQualifiedDbFunction_TranslatesThroughPublicQueryApi()
+    {
+        ProviderTestRuntime.RequireCapability("schema-qualified-functions");
+        var person = new Person { Id = Guid.NewGuid(), Name = "SCHEMA Qualified" };
+        await SeedAsync(person);
+
+        await using var context = ProviderTestRuntime.CreateContext();
+        var actual = await context.People.AsNoTracking()
+            .Where(item => ConformanceDbContext.LowerInSchema(item.Name) == "schema qualified")
+            .SingleAsync(item => item.Id == person.Id, TestContext.Current.CancellationToken);
+
+        Assert.Equal(person.Name, actual.Name);
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-DB-FUNCTION-NULLABLE-ASYNC", "Microsoft.EntityFrameworkCore.DbFunctionAttribute.IsNullable", "Microsoft.EntityFrameworkCore.DbFunctionAttribute.IsNullableHasValue", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
     public async Task NullableDbFunction_PreservesNullResultAsynchronously()
     {

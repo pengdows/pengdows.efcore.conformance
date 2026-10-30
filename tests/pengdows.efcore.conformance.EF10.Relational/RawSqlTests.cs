@@ -312,7 +312,7 @@ public sealed class RawSqlTests
         await using var context = ProviderTestRuntime.CreateContext();
 
         var actual = await context.Database
-            .SqlQueryRaw<int>("SELECT {0} AS Value", expected)
+            .SqlQueryRaw<int>("SELECT {0} AS \"Value\"", expected)
             .SingleAsync(TestContext.Current.CancellationToken);
 
         Assert.Equal(expected, actual);
@@ -327,7 +327,7 @@ public sealed class RawSqlTests
         await using var context = ProviderTestRuntime.CreateContext();
 
         var actual = context.Database
-            .SqlQueryRaw<int>("SELECT {0} AS Value", expected)
+            .SqlQueryRaw<int>("SELECT {0} AS \"Value\"", expected)
             .Single();
 
         Assert.Equal(expected, actual);

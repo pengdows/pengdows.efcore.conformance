@@ -106,13 +106,14 @@ internal sealed class SetDefaultMigrationContext(DbContextOptions<SetDefaultMigr
         {
             entity.ToTable("ef10conformance_setdefault_parent");
             entity.HasKey(row => row.Id);
-            entity.Property(row => row.Id).ValueGeneratedNever();
+            entity.Property(row => row.Id).HasColumnName("id").ValueGeneratedNever();
         });
         modelBuilder.Entity<SetDefaultChild>(entity =>
         {
             entity.ToTable("ef10conformance_setdefault_child");
             entity.HasKey(row => row.Id);
-            entity.Property(row => row.Id).ValueGeneratedNever();
+            entity.Property(row => row.Id).HasColumnName("id").ValueGeneratedNever();
+            entity.Property(row => row.ParentId).HasColumnName("parentid");
         });
     }
 }

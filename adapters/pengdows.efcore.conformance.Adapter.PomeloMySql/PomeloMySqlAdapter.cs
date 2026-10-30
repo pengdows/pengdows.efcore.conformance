@@ -7,7 +7,7 @@ using pengdows.efcore.conformance;
 namespace pengdows.efcore.conformance.Adapter.PomeloMySql;
 
 /// <summary>Optional EF Core 10 adapter for MySQL-compatible servers using Pomelo.</summary>
-public sealed class PomeloMySqlAdapter : IAdoNetProviderAdapter, IParameterizedCollectionModeAdapter, ICollationTestAdapter, IIndexMetadataAdapter
+public sealed class PomeloMySqlAdapter : IAdoNetProviderAdapter, IParameterizedCollectionModeAdapter, ICollationTestAdapter, IIndexMetadataAdapter, ISchemaCommentMetadataAdapter
 {
     private static readonly ProviderCapabilities DeclaredCapabilities = new(
         new HashSet<string>(StringComparer.Ordinal)
@@ -99,5 +99,32 @@ public sealed class PomeloMySqlAdapter : IAdoNetProviderAdapter, IParameterizedC
         }
 
         return columns;
+    }
+
+    public string? GetTableComment(DbConnection openConnection, string tableName) => ReadOptionalComment(
+        openConnection,
+        "SELECT TABLE_COMMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = @tableName",
+        ("tableName", tableName));
+
+    public string? GetColumnComment(DbConnection openConnection, string tableName, string columnName) => ReadOptionalComment(
+        openConnection,
+        "SELECT COLUMN_COMMENT FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = @tableName AND COLUMN_NAME = @columnName",
+        ("tableName", tableName),
+        ("columnName", columnName));
+
+    private static string? ReadOptionalComment(DbConnection openConnection, string sql, params (string Name, string Value)[] values)
+    {
+        using var command = openConnection.CreateCommand();
+        command.CommandText = sql;
+        foreach (var (name, value) in values)
+        {
+            var parameter = command.CreateParameter();
+            parameter.ParameterName = $"@{name}";
+            parameter.Value = value;
+            command.Parameters.Add(parameter);
+        }
+
+        var result = command.ExecuteScalar();
+        return result is null or DBNull ? null : Convert.ToString(result, System.Globalization.CultureInfo.InvariantCulture);
     }
 }

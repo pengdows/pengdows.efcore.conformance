@@ -25,7 +25,7 @@ public sealed class DatabaseCollationMigrationTests
             await context.Database.MigrateAsync("20261030000103_EF10AlterDatabaseCollation", cancellationToken);
 
             var actual = await context.Database.SqlQuery<string>(
-                    $"SELECT DEFAULT_COLLATION_NAME AS Value FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = DATABASE()")
+                    $"SELECT DEFAULT_COLLATION_NAME AS \"Value\" FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = DATABASE()")
                 .SingleAsync(cancellationToken);
 
             Assert.Equal("utf8mb4_bin", actual);

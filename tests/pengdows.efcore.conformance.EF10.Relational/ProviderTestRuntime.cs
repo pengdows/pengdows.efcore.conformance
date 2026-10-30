@@ -34,6 +34,11 @@ internal static class ProviderTestRuntime
             $"Provider '{Adapter.Name}' declares index-sort-metadata support without an index metadata reader.",
             new InvalidOperationException("The adapter does not implement IIndexMetadataAdapter."));
 
+    public static ISchemaCommentMetadataAdapter SchemaCommentMetadataAdapter => Adapter as ISchemaCommentMetadataAdapter
+        ?? throw new ConformanceInfrastructureException(
+            $"Provider '{Adapter.Name}' declares schema-comments support without a comment metadata reader.",
+            new InvalidOperationException("The adapter does not implement ISchemaCommentMetadataAdapter."));
+
     public static DbConnection CreateConnection() => Adapter is IAdoNetProviderAdapter adoNetAdapter
         ? adoNetAdapter.CreateConnection(ConnectionString)
         : throw new ConformanceInfrastructureException(
@@ -168,6 +173,9 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
 
     [DbFunction("lower", IsBuiltIn = true, IsNullable = true)]
     public static string? Lower(string? value) => throw new NotSupportedException("This method is intended for use in EF Core queries.");
+
+    [DbFunction("lower", Schema = "pg_catalog", IsBuiltIn = true, IsNullable = true)]
+    public static string? LowerInSchema(string? value) => throw new NotSupportedException("This method is intended for use in EF Core queries.");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

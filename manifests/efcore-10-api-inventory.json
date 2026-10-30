@@ -21,8 +21,8 @@
     "PublicMembers": 16076,
     "AwaitingClassification": 0,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 667,
-    "UncoveredMemberFamilies": 8
+    "MemberEntriesInCoveredFamilies": 676,
+    "UncoveredMemberFamilies": 0
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -18140,9 +18140,11 @@
       "ApiMemberName": "Schema",
       "Signature": "System.String Schema get; set;",
       "ProviderApplicable": true,
-      "BehavioralContracts": [],
-      "Disposition": "capability-gated",
-      "DispositionReason": "Schema-qualified function names depend on database namespace and function support. Exercise the configured function through LINQ only for providers declaring schema-qualified-functions support.",
+      "BehavioralContracts": [
+        "EF10-DB-FUNCTION-SCHEMA-ASYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.DbFunctionAttribute.Schema"
     },
     {
@@ -52421,6 +52423,7 @@
         "EF10-DB-FUNCTION-ATTRIBUTE-ASYNC",
         "EF10-DB-FUNCTION-LEAST-GREATEST-ASYNC",
         "EF10-DB-FUNCTION-NULLABLE-ASYNC",
+        "EF10-DB-FUNCTION-SCHEMA-ASYNC",
         "EF10-DBSET-LOCAL-QUERY-ASYNC",
         "EF10-JSON-MAPPING-ASYNC",
         "EF10-MIGRATIONS-SET-DEFAULT-ASYNC",
@@ -52466,6 +52469,7 @@
         "EF10-DB-FUNCTION-ATTRIBUTE-ASYNC",
         "EF10-DB-FUNCTION-LEAST-GREATEST-ASYNC",
         "EF10-DB-FUNCTION-NULLABLE-ASYNC",
+        "EF10-DB-FUNCTION-SCHEMA-ASYNC",
         "EF10-DBSET-LOCAL-QUERY-ASYNC",
         "EF10-JSON-MAPPING-ASYNC",
         "EF10-MIGRATIONS-SET-DEFAULT-ASYNC",
@@ -151675,9 +151679,11 @@
       "ApiMemberName": "AlterSequence",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.AlterOperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.AlterSequenceOperation\u003E AlterSequence(System.String name, System.String schema = null, System.Int32 incrementBy = 1, System.Nullable\u003CSystem.Int64\u003E minValue = null, System.Nullable\u003CSystem.Int64\u003E maxValue = null, System.Boolean cyclic = false, System.Int32 oldIncrementBy = 1, System.Nullable\u003CSystem.Int64\u003E oldMinValue = null, System.Nullable\u003CSystem.Int64\u003E oldMaxValue = null, System.Boolean oldCyclic = false)",
       "ProviderApplicable": true,
-      "BehavioralContracts": [],
-      "Disposition": "capability-gated",
-      "DispositionReason": "Sequence alteration applies only where the database supports sequences. Test its observable migration effect for providers declaring the sequences capability.",
+      "BehavioralContracts": [
+        "EF10-MIGRATION-SEQUENCE-OPERATIONS"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.AlterSequence"
     },
     {
@@ -151732,9 +151738,11 @@
       "ApiMemberName": "EnsureSchema",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.OperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.EnsureSchemaOperation\u003E EnsureSchema(System.String name)",
       "ProviderApplicable": true,
-      "BehavioralContracts": [],
-      "Disposition": "capability-gated",
-      "DispositionReason": "Schema creation is database-specific. Test it only where the provider declares schema support and verify the resulting namespace through public database behavior.",
+      "BehavioralContracts": [
+        "EF10-MIGRATION-SEQUENCE-OPERATIONS"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.EnsureSchema"
     },
     {
@@ -151744,9 +151752,11 @@
       "ApiMemberName": "CreateSequence",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.OperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.CreateSequenceOperation\u003E CreateSequence(System.String name, System.String schema = null, System.Int64 startValue = 1, System.Int32 incrementBy = 1, System.Nullable\u003CSystem.Int64\u003E minValue = null, System.Nullable\u003CSystem.Int64\u003E maxValue = null, System.Boolean cyclic = false)",
       "ProviderApplicable": true,
-      "BehavioralContracts": [],
-      "Disposition": "capability-gated",
-      "DispositionReason": "Database sequences are an optional native database feature. Test sequence creation and use only for providers declaring the sequences capability; current SQLite and MySQL profiles do not declare support.",
+      "BehavioralContracts": [
+        "EF10-MIGRATION-SEQUENCE-OPERATIONS"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.CreateSequence"
     },
     {
@@ -151756,9 +151766,11 @@
       "ApiMemberName": "CreateSequence",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.OperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.CreateSequenceOperation\u003E CreateSequence\u003CT\u003E(System.String name, System.String schema = null, System.Int64 startValue = 1, System.Int32 incrementBy = 1, System.Nullable\u003CSystem.Int64\u003E minValue = null, System.Nullable\u003CSystem.Int64\u003E maxValue = null, System.Boolean cyclic = false)",
       "ProviderApplicable": true,
-      "BehavioralContracts": [],
-      "Disposition": "capability-gated",
-      "DispositionReason": "Database sequences are an optional native database feature. Test sequence creation and use only for providers declaring the sequences capability; current SQLite and MySQL profiles do not declare support.",
+      "BehavioralContracts": [
+        "EF10-MIGRATION-SEQUENCE-OPERATIONS"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.CreateSequence"
     },
     {
@@ -151875,9 +151887,11 @@
       "ApiMemberName": "DropSchema",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.OperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.DropSchemaOperation\u003E DropSchema(System.String name)",
       "ProviderApplicable": true,
-      "BehavioralContracts": [],
-      "Disposition": "capability-gated",
-      "DispositionReason": "Schema removal is database-specific. Test it only where the provider declares schema support and verify resulting object availability through public database behavior.",
+      "BehavioralContracts": [
+        "EF10-MIGRATION-SEQUENCE-OPERATIONS"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropSchema"
     },
     {
@@ -151887,9 +151901,11 @@
       "ApiMemberName": "DropSequence",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.OperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.DropSequenceOperation\u003E DropSequence(System.String name, System.String schema = null)",
       "ProviderApplicable": true,
-      "BehavioralContracts": [],
-      "Disposition": "capability-gated",
-      "DispositionReason": "Sequence removal applies only where the database supports sequences. Test its observable migration effect for providers declaring the sequences capability.",
+      "BehavioralContracts": [
+        "EF10-MIGRATION-SEQUENCE-OPERATIONS"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.DropSequence"
     },
     {
@@ -151974,9 +151990,11 @@
       "ApiMemberName": "RenameSequence",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.OperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.RenameSequenceOperation\u003E RenameSequence(System.String name, System.String schema = null, System.String newName = null, System.String newSchema = null)",
       "ProviderApplicable": true,
-      "BehavioralContracts": [],
-      "Disposition": "capability-gated",
-      "DispositionReason": "Sequence rename applies only where the database supports sequences and sequence renames. Test resulting sequence behavior for providers declaring the relevant capability.",
+      "BehavioralContracts": [
+        "EF10-MIGRATION-SEQUENCE-OPERATIONS"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.RenameSequence"
     },
     {
@@ -152001,9 +152019,11 @@
       "ApiMemberName": "RestartSequence",
       "Signature": "Microsoft.EntityFrameworkCore.Migrations.Operations.Builders.OperationBuilder\u003CMicrosoft.EntityFrameworkCore.Migrations.Operations.RestartSequenceOperation\u003E RestartSequence(System.String name, System.Nullable\u003CSystem.Int64\u003E startValue = null, System.String schema = null)",
       "ProviderApplicable": true,
-      "BehavioralContracts": [],
-      "Disposition": "capability-gated",
-      "DispositionReason": "Sequence restart applies only where the database supports sequences. Test generated value behavior after restart for providers declaring the sequences capability.",
+      "BehavioralContracts": [
+        "EF10-MIGRATION-SEQUENCE-OPERATIONS"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder.RestartSequence"
     },
     {

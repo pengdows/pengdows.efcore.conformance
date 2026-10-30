@@ -1,4 +1,3 @@
-using System.Data;
 using Microsoft.EntityFrameworkCore;
 using pengdows.efcore.conformance;
 using Xunit;
@@ -26,21 +25,8 @@ public sealed class CommentAttributeTests
         await using var connection = ProviderTestRuntime.CreateConnection();
         await connection.OpenAsync(TestContext.Current.CancellationToken);
 
-        var table = connection.GetSchema("Tables");
-        Assert.Contains(table.Rows.Cast<DataRow>(), row =>
-            HasValue(row, "ef10conformance_commentedrecord")
-            && HasValue(row, "EF10 conformance table comment"));
-
-        var columns = connection.GetSchema("Columns");
-        Assert.Contains(columns.Rows.Cast<DataRow>(), row =>
-            HasValue(row, "ef10conformance_commentedrecord")
-            && HasValue(row, "value")
-            && HasValue(row, "EF10 conformance column comment"));
+        var adapter = ProviderTestRuntime.SchemaCommentMetadataAdapter;
+        Assert.Equal("EF10 conformance table comment", adapter.GetTableComment(connection, "ef10conformance_commentedrecord"));
+        Assert.Equal("EF10 conformance column comment", adapter.GetColumnComment(connection, "ef10conformance_commentedrecord", "value"));
     }
-
-    private static bool HasValue(DataRow row, string expected) => row.ItemArray.Any(value =>
-        string.Equals(
-            Convert.ToString(value, System.Globalization.CultureInfo.InvariantCulture),
-            expected,
-            StringComparison.OrdinalIgnoreCase));
 }
