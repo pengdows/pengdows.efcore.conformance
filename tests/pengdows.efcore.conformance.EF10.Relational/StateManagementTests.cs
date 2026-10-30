@@ -327,6 +327,34 @@ public sealed class StateManagementTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-TRACKING-DATABASE-VALUES-MISSING-SYNC", "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry.GetDatabaseValues")]
+    public async Task GetDatabaseValues_ReturnsNullWhenTheRowWasDeleted()
+    {
+        var id = Guid.NewGuid();
+        await SeedAsync(id);
+
+        await using var trackedContext = ProviderTestRuntime.CreateContext();
+        var person = await trackedContext.People.SingleAsync(item => item.Id == id, TestContext.Current.CancellationToken);
+        await DeleteAsync(id);
+
+        Assert.Null(trackedContext.Entry(person).GetDatabaseValues());
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-TRACKING-DATABASE-VALUES-MISSING-ASYNC", "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry.GetDatabaseValuesAsync")]
+    public async Task GetDatabaseValuesAsync_ReturnsNullWhenTheRowWasDeleted()
+    {
+        var id = Guid.NewGuid();
+        await SeedAsync(id);
+
+        await using var trackedContext = ProviderTestRuntime.CreateContext();
+        var person = await trackedContext.People.SingleAsync(item => item.Id == id, TestContext.Current.CancellationToken);
+        await DeleteAsync(id);
+
+        Assert.Null(await trackedContext.Entry(person).GetDatabaseValuesAsync(TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-TRACKING-HAS-CHANGES", "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.HasChanges", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges")]
     public async Task HasChanges_TracksPendingPersistenceWork()
     {
@@ -635,6 +663,14 @@ public sealed class StateManagementTests
         await using var context = ProviderTestRuntime.CreateContext();
         var person = await context.People.SingleAsync(item => item.Id == id, TestContext.Current.CancellationToken);
         person.Name = name;
+        await context.SaveChangesAsync(TestContext.Current.CancellationToken);
+    }
+
+    private static async Task DeleteAsync(Guid id)
+    {
+        await using var context = ProviderTestRuntime.CreateContext();
+        var person = await context.People.SingleAsync(item => item.Id == id, TestContext.Current.CancellationToken);
+        context.People.Remove(person);
         await context.SaveChangesAsync(TestContext.Current.CancellationToken);
     }
 

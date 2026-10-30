@@ -2164,6 +2164,7 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-CONCURRENCY-RESOLVE-SYNC",
+        "EF10-TRACKING-DATABASE-VALUES-MISSING-SYNC",
         "EF10-TRACKING-DATABASE-VALUES-SYNC"
       ],
       "Disposition": "behavior-tested-family",
@@ -2179,7 +2180,8 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-CONCURRENCY-RESOLVE-ASYNC",
-        "EF10-TRACKING-DATABASE-VALUES-ASYNC"
+        "EF10-TRACKING-DATABASE-VALUES-ASYNC",
+        "EF10-TRACKING-DATABASE-VALUES-MISSING-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
