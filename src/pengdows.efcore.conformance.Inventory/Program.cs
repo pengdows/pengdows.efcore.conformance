@@ -145,6 +145,11 @@ static string EntryDisposition(MemberInfo member, bool hasBehavioralCoverage, Ap
         return "behavior-tested-family";
     }
 
+    if (member is Type || IsObjectOverride(member))
+    {
+        return "not-applicable-with-rationale";
+    }
+
     return FindDispositionRule(member, rules)?.Disposition ?? disposition;
 }
 
@@ -177,11 +182,24 @@ static string? EntryDispositionReason(MemberInfo member, bool hasBehavioralCover
         return "The public value__ field is compiler-generated enum storage, not a documented provider behavior or independent API contract.";
     }
 
+    if (member is Type)
+    {
+        return "A public type declaration is an inventory node; provider applicability is assessed on its callable members and their observable behavior.";
+    }
+
+    if (IsObjectOverride(member))
+    {
+        return "This override implements inherited System.Object behavior and does not define an EF provider operation.";
+    }
+
     return FindDispositionRule(member, rules)?.Reason;
 }
 
 static bool IsEnumStorageField(MemberInfo member) =>
     member is FieldInfo { Name: "value__", DeclaringType.IsEnum: true };
+
+static bool IsObjectOverride(MemberInfo member) =>
+    member is MethodInfo method && method.GetBaseDefinition().DeclaringType == typeof(object);
 
 static string ResolveContractPath(string inventoryOutputPath)
 {
