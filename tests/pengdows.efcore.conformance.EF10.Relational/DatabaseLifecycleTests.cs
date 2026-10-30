@@ -21,8 +21,15 @@ public sealed class DatabaseLifecycleTests
             {
                 await create.Database.EnsureDeletedAsync(cancellationToken);
                 Assert.True(await create.Database.EnsureCreatedAsync(cancellationToken));
-                create.People.Add(new Person { Id = Guid.NewGuid(), Name = "Database lifecycle async", Age = 29 });
+                var person = new Person { Id = Guid.NewGuid(), Name = "Database lifecycle async", Age = 29 };
+                create.People.Add(person);
                 Assert.Equal(1, await create.SaveChangesAsync(cancellationToken));
+                Assert.False(await create.Database.EnsureCreatedAsync(cancellationToken));
+                Assert.True(await create.Database.CanConnectAsync(cancellationToken));
+                Assert.Equal(person.Name, await create.People.AsNoTracking()
+                    .Where(item => item.Id == person.Id)
+                    .Select(item => item.Name)
+                    .SingleAsync(cancellationToken));
                 Assert.True(await create.Database.EnsureDeletedAsync(cancellationToken));
                 Assert.False(await create.Database.EnsureDeletedAsync(cancellationToken));
             }
@@ -49,8 +56,15 @@ public sealed class DatabaseLifecycleTests
             {
                 create.Database.EnsureDeleted();
                 Assert.True(create.Database.EnsureCreated());
-                create.People.Add(new Person { Id = Guid.NewGuid(), Name = "Database lifecycle sync", Age = 31 });
+                var person = new Person { Id = Guid.NewGuid(), Name = "Database lifecycle sync", Age = 31 };
+                create.People.Add(person);
                 Assert.Equal(1, create.SaveChanges());
+                Assert.False(create.Database.EnsureCreated());
+                Assert.True(create.Database.CanConnect());
+                Assert.Equal(person.Name, create.People.AsNoTracking()
+                    .Where(item => item.Id == person.Id)
+                    .Select(item => item.Name)
+                    .Single());
                 Assert.True(create.Database.EnsureDeleted());
                 Assert.False(create.Database.EnsureDeleted());
             }
