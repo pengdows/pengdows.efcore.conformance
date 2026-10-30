@@ -50,6 +50,12 @@ public sealed record TypeDiscoveryReport(
 
     public int TypesWithoutDeclaredTestLinks => NativeTypeCoverage.Count(item => item.Outcome == "UNLINKED");
 
+    public int TypesWithExecutedRoundTripPass => NativeTypeCoverage.Count(item => item.Outcome == "PASS");
+
+    public int TypesWithExecutedRoundTripFailure => NativeTypeCoverage.Count(item => item.Outcome == "FAIL");
+
+    public int TypesWithoutMappingProfile => NativeTypeCoverage.Count(item => item.Outcome == "UNLINKED");
+
     [JsonIgnore]
     [Obsolete("Use TypesWithExactTestLinks; a declared link does not mean the native type was executed.")]
     public int TypesWithBehavioralCoverage => TypesWithExactTestLinks;

@@ -25,6 +25,19 @@ public interface IAdoNetProviderAdapter : IProviderAdapter
     DbConnection CreateConnection(string connectionString);
 }
 
+/// <summary>Declares native column types the provider claims to map from the specified CLR types.</summary>
+public interface INativeTypeMappingProfile : IProviderAdapter
+{
+    IReadOnlyList<NativeTypeMapping> NativeTypeMappings { get; }
+}
+
+/// <summary>A provider-claimed native store type and CLR mapping; it cannot customize samples or assertions.</summary>
+public sealed record NativeTypeMapping(
+    string DatabaseTypeName,
+    Type ClrType,
+    string? StoreTypeName = null,
+    string? ProviderTypeId = null);
+
 /// <summary>Optional provider configuration for relational query collection parameter modes.</summary>
 public interface IParameterizedCollectionModeAdapter : IProviderAdapter
 {
@@ -94,7 +107,8 @@ public sealed record ProviderCapabilities(
         "sequences",
         "schemas",
         "database-collation-migration",
-        "schema-qualified-functions"
+        "schema-qualified-functions",
+        "native-type-fidelity"
     };
 
     public IReadOnlyList<string> UndeclaredFeatures => KnownFeatures

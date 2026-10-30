@@ -6,8 +6,32 @@ using pengdows.efcore.conformance;
 namespace pengdows.efcore.conformance.Adapter.Npgsql;
 
 /// <summary>EF Core 10 adapter for PostgreSQL using Npgsql.</summary>
-public sealed class NpgsqlAdapter : IAdoNetProviderAdapter, IParameterizedCollectionModeAdapter, IIndexMetadataAdapter, ICollationTestAdapter, ISchemaCommentMetadataAdapter
+public sealed class NpgsqlAdapter : IAdoNetProviderAdapter, INativeTypeMappingProfile, IParameterizedCollectionModeAdapter, IIndexMetadataAdapter, ICollationTestAdapter, ISchemaCommentMetadataAdapter
 {
+    private static readonly IReadOnlyList<NativeTypeMapping> DeclaredNativeTypes =
+    [
+        new("boolean", typeof(bool)),
+        new("smallint", typeof(short)),
+        new("integer", typeof(int)),
+        new("bigint", typeof(long)),
+        new("numeric", typeof(decimal)),
+        new("real", typeof(float)),
+        new("double precision", typeof(double)),
+        new("character varying", typeof(string)),
+        new("character", typeof(string)),
+        new("text", typeof(string)),
+        new("bytea", typeof(byte[])),
+        new("date", typeof(DateOnly)),
+        new("time without time zone", typeof(TimeOnly)),
+        new("timestamp without time zone", typeof(DateTime)),
+        new("timestamp with time zone", typeof(DateTimeOffset)),
+        new("interval", typeof(TimeSpan)),
+        new("uuid", typeof(Guid)),
+        new("json", typeof(string)),
+        new("jsonb", typeof(string)),
+        new("integer[]", typeof(int[]))
+    ];
+
     private static readonly ProviderCapabilities DeclaredCapabilities = new(
         new HashSet<string>(StringComparer.Ordinal)
         {
@@ -16,7 +40,7 @@ public sealed class NpgsqlAdapter : IAdoNetProviderAdapter, IParameterizedCollec
             "primitive-collections", "external-connection", "parameterized-collection-modes",
             "least-greatest-functions", "migration-rename-index", "migration-check-constraint",
             "index-schema-metadata", "migration-add-constraint-operations", "migration-set-default",
-            "index-sort-metadata", "sequences", "schemas", "schema-qualified-functions", "case-insensitive-collation", "schema-comments"
+            "index-sort-metadata", "sequences", "schemas", "schema-qualified-functions", "case-insensitive-collation", "schema-comments", "native-type-fidelity"
         },
         new HashSet<string>(StringComparer.Ordinal)
         {
@@ -30,6 +54,8 @@ public sealed class NpgsqlAdapter : IAdoNetProviderAdapter, IParameterizedCollec
     public string Version => typeof(NpgsqlConnection).Assembly.GetName().Version?.ToString() ?? "unknown";
 
     public ProviderCapabilities Capabilities => DeclaredCapabilities;
+
+    public IReadOnlyList<NativeTypeMapping> NativeTypeMappings => DeclaredNativeTypes;
 
     public void Configure(DbContextOptionsBuilder options, string connectionString) => options.UseNpgsql(connectionString);
 

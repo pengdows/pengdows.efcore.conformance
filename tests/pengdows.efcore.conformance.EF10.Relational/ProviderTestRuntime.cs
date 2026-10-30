@@ -10,6 +10,7 @@ namespace pengdows.efcore.conformance.EF10.Relational;
 internal static class ProviderTestRuntime
 {
     private static readonly Lazy<IProviderAdapter> LoadedAdapter = new(LoadAdapter);
+    private static readonly Lazy<IReadOnlyList<NativeTypeProbeDefinition>> LoadedNativeTypeProbes = new(BuildNativeTypeProbes);
 
     public static IProviderAdapter Adapter
     {
@@ -22,6 +23,8 @@ internal static class ProviderTestRuntime
     }
 
     public static string ConnectionString => RequiredEnvironmentVariable("PENGDOWS_EFCORE_CONFORMANCE_CONNECTION_STRING");
+
+    public static IReadOnlyList<NativeTypeProbeDefinition> NativeTypeProbes => LoadedNativeTypeProbes.Value;
 
     public static string CaseInsensitiveCollation => Adapter is ICollationTestAdapter collationAdapter
         ? collationAdapter.CaseInsensitiveCollation
@@ -106,6 +109,32 @@ internal static class ProviderTestRuntime
         }
 
         throw new UndeclaredCapabilityException(feature);
+    }
+
+    private static IReadOnlyList<NativeTypeProbeDefinition> BuildNativeTypeProbes()
+    {
+        if (Adapter is not INativeTypeMappingProfile mappingProfile || Adapter is not IAdoNetProviderAdapter adoNetAdapter)
+        {
+            return Array.Empty<NativeTypeProbeDefinition>();
+        }
+
+        using var connection = adoNetAdapter.CreateConnection(ConnectionString);
+        var discovery = AdoNetTypeDiscovery.Discover(connection, Adapter as ISupplementalTypeDiscovery);
+        var discoveredTypes = discovery.Types
+            .Concat(discovery.SupplementalTypes.Where(type => type.IsIndependentDiscovery))
+            .ToArray();
+        var mappings = mappingProfile.NativeTypeMappings
+            .Where(mapping => discoveredTypes.Any(discovered =>
+                string.Equals(discovered.DatabaseTypeName, mapping.DatabaseTypeName, StringComparison.OrdinalIgnoreCase) &&
+                (mapping.ProviderTypeId is null || string.Equals(discovered.ProviderTypeId, mapping.ProviderTypeId, StringComparison.OrdinalIgnoreCase))))
+            .Distinct()
+            .ToArray();
+
+        return mappings.Select((mapping, index) => new NativeTypeProbeDefinition(
+            index,
+            mapping,
+            $"ef10_native_type_{index}",
+            $"ef10conformance_nativetype_{index}")).ToArray();
     }
 
     private static IProviderAdapter LoadAdapter()
@@ -563,6 +592,16 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
             entity.Property(record => record.Enabled).HasColumnName("enabled").HasDefaultValue(true).HasSentinel(false);
             entity.Property(record => record.Label).HasColumnName("label").HasMaxLength(160).HasDefaultValue("database default");
         });
+        foreach (var probe in ProviderTestRuntime.NativeTypeProbes)
+        {
+            var entity = modelBuilder.SharedTypeEntity<Dictionary<string, object>>(probe.EntityTypeName);
+            entity.ToTable(probe.TableName);
+            entity.IndexerProperty<Guid>("id").HasColumnName("id");
+            entity.HasKey("id");
+            entity.IndexerProperty(probe.Mapping.ClrType, "value")
+                .HasColumnName("value")
+                .HasColumnType(probe.Mapping.StoreTypeName ?? probe.Mapping.DatabaseTypeName);
+        }
         modelBuilder.Entity<AttributeConfiguredRecord>();
     }
 
@@ -1161,3 +1200,9 @@ internal sealed class DefaultValueRecord
 
     public string Label { get; set; } = null!;
 }
+
+internal sealed record NativeTypeProbeDefinition(
+    int Index,
+    NativeTypeMapping Mapping,
+    string EntityTypeName,
+    string TableName);

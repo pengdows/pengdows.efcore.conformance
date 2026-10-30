@@ -7,8 +7,43 @@ using pengdows.efcore.conformance;
 namespace pengdows.efcore.conformance.Adapter.PomeloMySql;
 
 /// <summary>Optional EF Core 10 adapter for MySQL-compatible servers using Pomelo.</summary>
-public sealed class PomeloMySqlAdapter : IAdoNetProviderAdapter, IParameterizedCollectionModeAdapter, ICollationTestAdapter, IIndexMetadataAdapter, ISchemaCommentMetadataAdapter
+public sealed class PomeloMySqlAdapter : IAdoNetProviderAdapter, INativeTypeMappingProfile, IParameterizedCollectionModeAdapter, ICollationTestAdapter, IIndexMetadataAdapter, ISchemaCommentMetadataAdapter
 {
+    private static readonly IReadOnlyList<NativeTypeMapping> DeclaredNativeTypes =
+    [
+        new("BOOL", typeof(bool), "tinyint"),
+        new("TINYINT", typeof(sbyte)),
+        new("TINYINT", typeof(byte), "tinyint unsigned"),
+        new("SMALLINT", typeof(short)),
+        new("SMALLINT", typeof(ushort), "smallint unsigned"),
+        new("INT", typeof(int)),
+        new("INT", typeof(uint), "int unsigned"),
+        new("MEDIUMINT", typeof(int)),
+        new("MEDIUMINT", typeof(uint), "mediumint unsigned"),
+        new("BIGINT", typeof(long)),
+        new("BIGINT", typeof(ulong), "bigint unsigned"),
+        new("DECIMAL", typeof(decimal)),
+        new("DOUBLE", typeof(double)),
+        new("FLOAT", typeof(float)),
+        new("VARCHAR", typeof(string), "varchar(255)"),
+        new("CHAR", typeof(string), "char(1)"),
+        new("TINYTEXT", typeof(string)),
+        new("TEXT", typeof(string)),
+        new("MEDIUMTEXT", typeof(string)),
+        new("LONGTEXT", typeof(string)),
+        new("BLOB", typeof(byte[])),
+        new("BINARY", typeof(byte[]), "binary(1)"),
+        new("VARBINARY", typeof(byte[]), "varbinary(255)"),
+        new("TINYBLOB", typeof(byte[])),
+        new("MEDIUMBLOB", typeof(byte[])),
+        new("LONGBLOB", typeof(byte[])),
+        new("DATETIME", typeof(DateTime)),
+        new("DATE", typeof(DateOnly)),
+        new("TIME", typeof(TimeSpan)),
+        new("TIMESTAMP", typeof(DateTime)),
+        new("YEAR", typeof(int))
+    ];
+
     private static readonly ProviderCapabilities DeclaredCapabilities = new(
         new HashSet<string>(StringComparer.Ordinal)
         {
@@ -29,7 +64,8 @@ public sealed class PomeloMySqlAdapter : IAdoNetProviderAdapter, IParameterizedC
             "execute-update",
             "execute-delete",
             "external-connection",
-            "parameterized-collection-modes"
+            "parameterized-collection-modes",
+            "native-type-fidelity"
         },
         new HashSet<string>(StringComparer.Ordinal)
         {
@@ -51,6 +87,8 @@ public sealed class PomeloMySqlAdapter : IAdoNetProviderAdapter, IParameterizedC
         .Assembly.GetName().Version?.ToString() ?? "unknown";
 
     public ProviderCapabilities Capabilities => DeclaredCapabilities;
+
+    public IReadOnlyList<NativeTypeMapping> NativeTypeMappings => DeclaredNativeTypes;
 
     public void Configure(DbContextOptionsBuilder options, string connectionString) =>
         options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 4, 0)));

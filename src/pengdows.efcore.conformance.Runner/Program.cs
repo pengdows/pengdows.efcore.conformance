@@ -261,6 +261,21 @@ async Task<int> RunTestsAsync(string[] arguments, string? configuredConnectionSt
         return 2;
     }
 
+    TypeDiscoveryReport? nativeDiscoveryReport = null;
+    Exception? nativeDiscoveryException = null;
+    if (runAdapter is IAdoNetProviderAdapter discoveryAdapter)
+    {
+        try
+        {
+            await using var discoveryConnection = discoveryAdapter.CreateConnection(cs);
+            nativeDiscoveryReport = AdoNetTypeDiscovery.Discover(discoveryConnection, runAdapter as ISupplementalTypeDiscovery);
+        }
+        catch (Exception exception)
+        {
+            nativeDiscoveryException = exception;
+        }
+    }
+
     var trxPath = Path.Combine(reportDirectory, "conformance.trx");
     var logPath = Path.Combine(reportDirectory, "dotnet-test.log");
     var startInfo = new ProcessStartInfo("dotnet")
@@ -306,6 +321,63 @@ async Task<int> RunTestsAsync(string[] arguments, string? configuredConnectionSt
     var capabilitiesByMethod = LoadCapabilityRequirements(testAssembly);
     var severityByMethod = LoadSeverityRequirements(testAssembly);
     var results = File.Exists(trxPath) ? ReadResults(trxPath, cs, coverageByMethod, capabilitiesByMethod, severityByMethod, runAdapter.Capabilities) : [];
+    var nativeTypeReportPath = Path.Combine(reportDirectory, "ado-net-types.json");
+    if (nativeDiscoveryException is not null)
+    {
+        results.Add(new ConformanceResult("RUNNER-TYPE-DISCOVERY", "Discover native type fidelity coverage", ConformanceOutcome.Error,
+            Sanitize(nativeDiscoveryException.ToString(), cs), nativeDiscoveryException.GetType().FullName));
+    }
+    if (nativeDiscoveryReport is not null)
+    {
+        try
+        {
+            var typeReport = nativeDiscoveryReport;
+            var testCases = runAdapter is INativeTypeMappingProfile nativeMappings
+                ? nativeMappings.NativeTypeMappings
+                    .SelectMany(mapping => new[]
+                    {
+                        (Mapping: mapping, Suffix: "SYNC"),
+                        (Mapping: mapping, Suffix: "ASYNC")
+                    })
+                    .ToArray()
+                : [];
+            var discoveredTypes = typeReport.Types
+                .Concat(typeReport.SupplementalTypes.Where(type => type.IsIndependentDiscovery))
+                .ToArray();
+            var nativeCoverage = discoveredTypes
+                .GroupBy(type => string.Join("\u001f", type.DatabaseTypeName, type.ProviderTypeId ?? "", type.ClrTypeAssemblyQualifiedName ?? type.ClrTypeName ?? ""), StringComparer.OrdinalIgnoreCase)
+                .Select(group =>
+                {
+                    var type = group.First();
+                    var mappings = testCases.Where(test => string.Equals(test.Mapping.DatabaseTypeName, type.DatabaseTypeName, StringComparison.OrdinalIgnoreCase) &&
+                        (test.Mapping.ProviderTypeId is null || string.Equals(test.Mapping.ProviderTypeId, type.ProviderTypeId, StringComparison.OrdinalIgnoreCase)) &&
+                        (test.Mapping.ClrType.FullName is null || type.ClrTypeName is null || string.Equals(test.Mapping.ClrType.FullName, type.ClrTypeName, StringComparison.Ordinal))).ToArray();
+                    var contracts = mappings.Select(test => $"EF10-NATIVE-TYPE-ROUNDTRIP-{test.Suffix}").Distinct(StringComparer.Ordinal).ToArray();
+                    var caseResults = results.Where(result => result.DisplayName.Contains("DiscoveredNativeType_RoundTripsSynchronously", StringComparison.Ordinal) ||
+                            result.DisplayName.Contains("DiscoveredNativeType_RoundTripsAsynchronously", StringComparison.Ordinal))
+                        .Where(result => result.DisplayName.Contains($"databaseTypeName: \"{type.DatabaseTypeName}\"", StringComparison.OrdinalIgnoreCase))
+                        .Where(result => mappings.Any(test => result.DisplayName.Contains(
+                            $"clrTypeName: \"{test.Mapping.ClrType.FullName ?? test.Mapping.ClrType.Name}\"", StringComparison.Ordinal)))
+                        .ToArray();
+                    var outcome = mappings.Length == 0 ? "UNLINKED" : caseResults.Length == 0 ? "NOT_EXECUTED" :
+                        caseResults.Any(result => result.Outcome is ConformanceOutcome.Fail or ConformanceOutcome.Error or ConformanceOutcome.Untranslatable) ? "FAIL" :
+                        caseResults.All(result => result.Outcome == ConformanceOutcome.Pass) ? "PASS" : "PARTIAL";
+                    return new NativeTypeCoverageResult(type.DatabaseTypeName, outcome,
+                        mappings.Select(item => item.Mapping.ClrType.FullName ?? item.Mapping.ClrType.Name).Distinct(StringComparer.Ordinal).ToArray(), contracts)
+                    {
+                        ClrTypeName = type.ClrTypeName,
+                        ProviderTypeId = type.ProviderTypeId,
+                        CreateFormat = GetMetadataString(type, "CreateFormat")
+                    };
+                }).ToArray();
+            await File.WriteAllTextAsync(nativeTypeReportPath, JsonSerializer.Serialize(typeReport with { NativeTypeCoverage = nativeCoverage }, new JsonSerializerOptions { WriteIndented = true }));
+        }
+        catch (Exception exception)
+        {
+            results.Add(new ConformanceResult("RUNNER-TYPE-DISCOVERY", "Discover native type fidelity coverage", ConformanceOutcome.Error,
+                Sanitize(exception.ToString(), cs), exception.GetType().FullName));
+        }
+    }
     if (File.Exists(trxPath))
     {
         var trxText = await File.ReadAllTextAsync(trxPath);
