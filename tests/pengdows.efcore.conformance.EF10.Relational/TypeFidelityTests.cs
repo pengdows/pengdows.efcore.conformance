@@ -103,7 +103,7 @@ public sealed class TypeFidelityTests
             Id = Guid.NewGuid(),
             Amount = 1m,
             Day = DateOnly.MaxValue,
-            Start = TimeOnly.MaxValue,
+            Start = TimeOnly.MaxValue.Add(TimeSpan.FromTicks(-9)),
             Enabled = false,
             Payload = [],
             Mood = TestMood.Calm

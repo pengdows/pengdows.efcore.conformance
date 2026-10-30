@@ -45,6 +45,8 @@ dotnet run --project src/pengdows.efcore.conformance.Runner -- --run-profile \
 
 `profiles/pengdows-sqlite.json` uses the same shape for the candidate adapter. Build that adapter separately when its sibling ADO.NET repository is available. Direct `--run` commands and `PENGDOWS_EFCORE_CONFORMANCE_CONNECTION_STRING` remain supported.
 
+The optional `profiles/pomelo-mysql.json` profile runs the same EF Core 10 test assembly against MySQL 8.4 through Pomelo. Set `EFCORE_CONFORMANCE_MYSQL_HOST`, `EFCORE_CONFORMANCE_MYSQL_PORT`, `EFCORE_CONFORMANCE_MYSQL_DATABASE`, `EFCORE_CONFORMANCE_MYSQL_USER`, and `EFCORE_CONFORMANCE_MYSQL_PASSWORD` before invoking `--run-profile`. Use a dedicated database: database-lifecycle tests delete and recreate it, and `--cleanup-database` deletes it after the run.
+
 Run the conformance tests through the runner to produce comparable reports:
 
 ```sh
@@ -63,25 +65,23 @@ Direct `dotnet test tests/pengdows.efcore.conformance.EF10.Relational` runs requ
 - `PENGDOWS_EFCORE_ADAPTER_ASSEMBLY`
 - `PENGDOWS_EFCORE_ADAPTER_TYPE`
 
-Use a dedicated disposable database. The migration and database lifecycle cases call `EnsureDeleted` and remove the configured database; other cases use unique rows. An adapter may implement `IAdoNetProviderAdapter` to enable public `DbConnection.GetSchema` type discovery. It may also implement `ISupplementalTypeDiscovery` to report types observed through database catalog metadata when the ADO.NET provider omits `DataTypes`. Supplemental discovery is marked `INDEPENDENT` only when it is independent of the EF model. Discovery from tables created by these tests is marked `SELF_DERIVED` and excluded from native-type coverage counts. SQLite does not advertise `DataTypes`; its current-schema type list is self-derived and cannot establish complete database-type coverage.
+Use a dedicated disposable database. Migration and database-lifecycle cases delete and recreate the configured database; the runner’s optional cleanup deletes it after the run. An adapter may implement `IAdoNetProviderAdapter` to enable public `DbConnection.GetSchema` type discovery. It may also implement `ISupplementalTypeDiscovery` to report types observed through database catalog metadata when the ADO.NET provider omits `DataTypes`. Supplemental discovery is marked `INDEPENDENT` only when it is independent of the EF model. Discovery from tables created by these tests is marked `SELF_DERIVED` and excluded from native-type coverage counts. SQLite does not advertise `DataTypes`; its current-schema type list is self-derived and cannot establish complete database-type coverage.
 
-The runner does not inspect EF provider services or generated SQL. Latest comparable full runs covered 303 cases per adapter:
+The runner does not inspect EF provider services or generated SQL. Latest full runs covered 303 cases per provider:
 
-| Result | pengdows ADO.NET SQLite | Microsoft EF Core SQLite |
-|---|---:|---:|
-| Passed | 293 | 298 |
-| Failed | 10 | 5 |
-| Passed on both | 293 | 293 |
-| Candidate-only failures | 5 | — |
-| Failures also on reference | 5 | 5 |
+| Result | pengdows SQLite | Microsoft SQLite | Pomelo MySQL 8.4 |
+|---|---:|---:|---:|
+| Passed | 293 | 298 | 292 |
+| Failed | 10 | 5 | 5 |
+| Unsupported capabilities | 0 | 0 | 6 |
 
-The five failures reproduced on both providers are async negative `ElementAt`, sync and async `RightJoin` unmatched-row results, and sync and async TPT `SaveChanges` affected-entry counts. The candidate-only failures are decimal precision and boundary fidelity cases. Both providers pass the sync and async `SaveChanges(false)` cases that verify state retention and subsequent `AcceptAllChanges`. Matching failures on the reference provider are evidence for triage, not automatic proof of an EF Core defect.
+Comparing Pomelo MySQL with Microsoft SQLite, 292 cases pass on both; the same five cases fail on both: async negative `ElementAt`, sync and async unmatched-row `RightJoin`, and sync and async TPT `SaveChanges` affected-entry counts. The six MySQL unsupported outcomes are the sync and async filtered-index, JSON-mapping, and primitive-collection cases. Comparing pengdows SQLite with Microsoft SQLite, five decimal precision and boundary fidelity cases fail only on the candidate. Both SQLite adapters pass the sync and async `SaveChanges(false)` cases that verify state retention and subsequent `AcceptAllChanges`. Matching failures on a reference provider are evidence for triage, not automatic proof of an EF Core defect.
 
 Four candidate-only failures are the positive and negative near-maximum decimal values on sync and async paths. A fifth is a negative decimal round-trip through `[Precision(18, 4)]`. The explicit decimal-to-string value-conversion cases preserve all declared boundary values and work in sync and async predicates on both SQLite adapters. With the shared model using `HasPrecision(18, 4)`, Microsoft SQLite preserves them; pengdows SQLite reads them back rounded to ±100000000000000. The five failures on both SQLite providers are async `ElementAt(-1)`, sync and async `RightJoin` unmatched rows, and sync and async TPT `SaveChanges` counts. Reproducing on the reference provider means these cases cannot be attributed to the candidate provider alone; it does not by itself prove an EF Core defect. The comparison JSON retains each case and both reasons. Both providers pass the sync and async migration cases, which discover and apply five public migrations, exercise create/add/rename/drop table and column, index, data, and raw SQL migration operations, roll back to an earlier migration, verify data through fresh contexts, and reapply the latest migration. Both also pass sync and async `UseTransaction` cases that enlist EF Core in an externally created ADO.NET transaction, roll it back, and verify that a fresh context cannot read the rolled back row.
 
-Both SQLite ADO.NET layers omit the `DataTypes` collection. The pengdows supplemental discovery listed 13 declared types from the test schema, but all 13 were marked `SELF_DERIVED`; independent native-type coverage remains unavailable. These counts describe only the two adapters and their local SQLite databases.
+Both SQLite ADO.NET layers omit the `DataTypes` collection. The pengdows supplemental discovery listed 13 declared types from the test schema, but all 13 were marked `SELF_DERIVED`; independent native-type coverage remains unavailable for SQLite. MySQL Connector advertises `DataTypes` and reported 51 metadata rows representing 41 distinct native names, with no unresolved CLR type names or discovery diagnostics. Against the current test declarations, the MySQL inventory reports 4 types covered, 1 partial, 36 uncovered, and 8 declared test names not observed. These uncovered results are real gaps in native-type round-trip coverage; the inventory discovery is independent, but the behavioral type cases are not generated from it yet.
 
-Two adapters are included. The Microsoft SQLite reference adapter is part of the standalone solution. The pengdows ADO.NET SQLite adapter is kept outside the solution because it references the separate `pengdows.efcore.adonet` source tree; building the conformance solution does not require that repository. It configures the SQLite dialect, initializes with `EnsureCreatedAsync`, exposes a public ADO.NET connection for type discovery, and implements cleanup with `EnsureDeletedAsync`. Only call cleanup for a dedicated disposable database.
+The standalone solution includes Microsoft SQLite and Pomelo MySQL adapters. The pengdows ADO.NET SQLite adapter is kept outside the solution because it references the separate `pengdows.efcore.adonet` source tree; building the conformance solution does not require that repository. The MySQL adapter configures Pomelo for MySQL 8.4 and uses MySqlConnector for public ADO.NET metadata discovery. Its declared unsupported capabilities are filtered indexes, JSON mapping, and primitive collections.
 
 ```sh
 dotnet build pengdows.efcore.conformance.slnx

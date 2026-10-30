@@ -1,0 +1,48 @@
+using System.Data.Common;
+using Microsoft.EntityFrameworkCore;
+using MySqlConnector;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using pengdows.efcore.conformance;
+
+namespace pengdows.efcore.conformance.Adapter.PomeloMySql;
+
+/// <summary>Optional EF Core 10 adapter for MySQL-compatible servers using Pomelo.</summary>
+public sealed class PomeloMySqlAdapter : IAdoNetProviderAdapter
+{
+    private static readonly ProviderCapabilities DeclaredCapabilities = new(
+        new HashSet<string>(StringComparer.Ordinal)
+        {
+            "relational",
+            "transactions",
+            "savepoints",
+            "migrations",
+            "raw-sql",
+            "execute-update",
+            "execute-delete",
+            "external-connection"
+        },
+        new HashSet<string>(StringComparer.Ordinal)
+        {
+            "filtered-indexes",
+            "json-mapping",
+            "primitive-collections"
+        });
+
+    public string Name => "Pomelo EF Core MySQL";
+
+    public string Version => typeof(Microsoft.EntityFrameworkCore.MySqlDbContextOptionsBuilderExtensions)
+        .Assembly.GetName().Version?.ToString() ?? "unknown";
+
+    public ProviderCapabilities Capabilities => DeclaredCapabilities;
+
+    public void Configure(DbContextOptionsBuilder options, string connectionString) =>
+        options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 4, 0)));
+
+    public Task InitializeDatabaseAsync(DbContext context, CancellationToken cancellationToken) =>
+        context.Database.EnsureCreatedAsync(cancellationToken);
+
+    public Task CleanupDatabaseAsync(DbContext context, CancellationToken cancellationToken) =>
+        context.Database.EnsureDeletedAsync(cancellationToken);
+
+    public DbConnection CreateConnection(string connectionString) => new MySqlConnection(connectionString);
+}

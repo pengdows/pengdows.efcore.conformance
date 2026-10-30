@@ -4,4 +4,5 @@
   <Project Path="src/pengdows.efcore.conformance.Runner/pengdows.efcore.conformance.Runner.csproj" />
   <Project Path="tests/pengdows.efcore.conformance.EF10.Relational/pengdows.efcore.conformance.EF10.Relational.csproj" />
   <Project Path="adapters/pengdows.efcore.conformance.Adapter.MicrosoftSqlite/pengdows.efcore.conformance.Adapter.MicrosoftSqlite.csproj" />
+  <Project Path="adapters/pengdows.efcore.conformance.Adapter.PomeloMySql/pengdows.efcore.conformance.Adapter.PomeloMySql.csproj" />
 </Solution>

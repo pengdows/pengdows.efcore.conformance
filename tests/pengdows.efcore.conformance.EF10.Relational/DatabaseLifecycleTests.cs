@@ -40,7 +40,7 @@ public sealed class DatabaseLifecycleTests
         finally
         {
             await using var cleanup = ProviderTestRuntime.CreateContext();
-            await cleanup.Database.EnsureDeletedAsync(CancellationToken.None);
+            await cleanup.Database.EnsureCreatedAsync(CancellationToken.None);
         }
     }
 
@@ -75,7 +75,7 @@ public sealed class DatabaseLifecycleTests
         finally
         {
             await using var cleanup = ProviderTestRuntime.CreateContext();
-            await cleanup.Database.EnsureDeletedAsync(CancellationToken.None);
+            await cleanup.Database.EnsureCreatedAsync(CancellationToken.None);
         }
     }
 }

@@ -327,7 +327,7 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
             entity.Property(record => record.Amount).HasColumnName("amount").HasPrecision(18, 4);
             entity.Property(record => record.ConvertedAmount).HasColumnName("convertedamount").HasConversion<string>();
             entity.Property(record => record.Day).HasColumnName("day");
-            entity.Property(record => record.Start).HasColumnName("start");
+            entity.Property(record => record.Start).HasColumnName("start").HasPrecision(6);
             entity.Property(record => record.Enabled).HasColumnName("enabled");
             entity.Property(record => record.Payload).HasColumnName("payload");
             entity.Property(record => record.Mood).HasColumnName("mood").HasConversion<string>();
@@ -443,17 +443,24 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
             entity.Property(record => record.Name).HasColumnName("name");
             entity.HasChangeTrackingStrategy(ChangeTrackingStrategy.ChangingAndChangedNotificationsWithOriginalValues);
         });
-        modelBuilder.Entity<JsonProfileRecord>(entity =>
+        if (ProviderTestRuntime.Adapter.Capabilities.Supports("json-mapping"))
         {
-            entity.ToTable("ef10conformance_jsonprofiles");
-            entity.HasKey(record => record.Id);
-            entity.Property(record => record.Id).HasColumnName("id");
-            entity.OwnsOne(record => record.Profile, profile =>
+            modelBuilder.Entity<JsonProfileRecord>(entity =>
             {
-                profile.ToJson("profile");
-                profile.OwnsOne(value => value.Preferences);
+                entity.ToTable("ef10conformance_jsonprofiles");
+                entity.HasKey(record => record.Id);
+                entity.Property(record => record.Id).HasColumnName("id");
+                entity.OwnsOne(record => record.Profile, profile =>
+                {
+                    profile.ToJson("profile");
+                    profile.OwnsOne(value => value.Preferences);
+                });
             });
-        });
+        }
+        else
+        {
+            modelBuilder.Ignore<JsonProfileRecord>();
+        }
         modelBuilder.Entity<PrimitiveCollectionRecord>(entity =>
         {
             entity.ToTable("ef10conformanceprimitivecollections");
