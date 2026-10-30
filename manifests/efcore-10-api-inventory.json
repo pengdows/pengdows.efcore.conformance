@@ -19,10 +19,10 @@
     "TotalEntries": 17988,
     "PublicTypes": 1912,
     "PublicMembers": 16076,
-    "AwaitingClassification": 38,
+    "AwaitingClassification": 37,
     "ExplicitlyExcluded": 5423,
-    "MemberEntriesInCoveredFamilies": 639,
-    "UncoveredMemberFamilies": 34
+    "MemberEntriesInCoveredFamilies": 640,
+    "UncoveredMemberFamilies": 33
   },
   "CoverageSelectors": {
     "UnmatchedEfCoreSelectors": [],
@@ -54235,10 +54235,12 @@
       "MemberKind": "Property",
       "ApiMemberName": "Name",
       "Signature": "System.String Name get; set;",
-      "ProviderApplicable": null,
-      "BehavioralContracts": [],
-      "Disposition": "unclassified",
-      "DispositionReason": null,
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-INDEX-ATTRIBUTE-NAME"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.IndexAttribute.Name"
     },
     {

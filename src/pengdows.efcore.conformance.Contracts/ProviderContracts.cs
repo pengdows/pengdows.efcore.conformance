@@ -62,7 +62,8 @@ public sealed record ProviderCapabilities(
         "parameterized-collection-modes",
         "least-greatest-functions",
         "migration-rename-index",
-        "migration-check-constraint"
+        "migration-check-constraint",
+        "index-schema-metadata"
     };
 
     public IReadOnlyList<string> UndeclaredFeatures => KnownFeatures

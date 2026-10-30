@@ -19,6 +19,7 @@ public sealed class PomeloMySqlAdapter : IAdoNetProviderAdapter, IParameterizedC
             "migrations",
             "migration-rename-index",
             "migration-check-constraint",
+            "index-schema-metadata",
             "raw-sql",
             "execute-update",
             "execute-delete",

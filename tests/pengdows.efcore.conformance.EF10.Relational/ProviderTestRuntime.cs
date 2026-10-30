@@ -603,7 +603,7 @@ internal sealed class Comment
     public Post? Post { get; set; }
 }
 
-[Index(nameof(Value), IsUnique = true)]
+[Index(nameof(Value), IsUnique = true, Name = "IX_EF10_UniqueValueRecord_Value")]
 internal sealed class UniqueValueRecord
 {
     public Guid Id { get; set; }

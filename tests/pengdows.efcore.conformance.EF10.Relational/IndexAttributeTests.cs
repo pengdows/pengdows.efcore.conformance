@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 using pengdows.efcore.conformance;
 using Xunit;
 
@@ -8,6 +9,30 @@ namespace pengdows.efcore.conformance.EF10.Relational;
 [CapabilityRequirement("relational")]
 public sealed class IndexAttributeTests
 {
+    [Fact]
+    [CapabilityRequirement("index-schema-metadata")]
+    [BehavioralCoverage("EF10-INDEX-ATTRIBUTE-NAME", "Microsoft.EntityFrameworkCore.IndexAttribute.Name")]
+    public async Task NamedIndexAttribute_CreatesIndexWithDeclaredName()
+    {
+        ProviderTestRuntime.RequireCapability("index-schema-metadata");
+        await using (var context = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
+        }
+
+        await using var connection = ProviderTestRuntime.CreateConnection();
+        await connection.OpenAsync(TestContext.Current.CancellationToken);
+        var indexes = connection.GetSchema("Indexes");
+        var indexRows = indexes.Rows.Cast<DataRow>().Where(row =>
+            row.ItemArray.Any(value => string.Equals(
+                Convert.ToString(value, System.Globalization.CultureInfo.InvariantCulture),
+                "IX_EF10_UniqueValueRecord_Value",
+                StringComparison.OrdinalIgnoreCase))).ToArray();
+
+        Assert.NotEmpty(indexRows);
+
+    }
+
     [Fact]
     [BehavioralCoverage("EF10-INDEX-ATTRIBUTE-UNIQUE-ASYNC", "Microsoft.EntityFrameworkCore.IndexAttribute", "Microsoft.EntityFrameworkCore.IndexAttribute..ctor", "Microsoft.EntityFrameworkCore.IndexAttribute.PropertyNames", "Microsoft.EntityFrameworkCore.IndexAttribute.IsUnique", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.DbUpdateException", "Microsoft.EntityFrameworkCore.DbUpdateException.Entries")]
     public async Task UniqueIndexAttribute_RejectsDuplicateValuesAsynchronously()
