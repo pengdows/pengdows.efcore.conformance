@@ -56,6 +56,65 @@ public sealed class JsonMappingTests
         Assert.False(actual.Profile.Preferences.EmailNotifications);
     }
 
+    [Fact]
+    [BehavioralCoverage("EF10-JSON-EXECUTE-UPDATE-ASYNC", "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder.ComplexProperty", "Microsoft.EntityFrameworkCore.RelationalComplexPropertyBuilderExtensions.ToJson", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteUpdateAsync")]
+    public async Task ExecuteUpdateAsync_UpdatesNestedJsonProperty()
+    {
+        ProviderTestRuntime.RequireCapability("json-mapping");
+        var expected = CreateExecuteUpdateRecord("JSON bulk update source", 10);
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.JsonExecuteUpdateRecords.Add(expected);
+            await write.SaveChangesAsync(TestContext.Current.CancellationToken);
+        }
+
+        await using (var update = ProviderTestRuntime.CreateContext())
+        {
+            var affected = await update.JsonExecuteUpdateRecords
+                .Where(record => record.Id == expected.Id)
+                .ExecuteUpdateAsync(
+                    setters => setters.SetProperty(record => record.Details.Views, record => record.Details.Views + 1),
+                    TestContext.Current.CancellationToken);
+            Assert.Equal(1, affected);
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        var actual = await verify.JsonExecuteUpdateRecords.AsNoTracking()
+            .SingleAsync(record => record.Id == expected.Id, TestContext.Current.CancellationToken);
+        Assert.Equal("JSON bulk update source", actual.Details.Title);
+        Assert.Equal(11, actual.Details.Views);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-JSON-EXECUTE-UPDATE-SYNC", "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder.ComplexProperty", "Microsoft.EntityFrameworkCore.RelationalComplexPropertyBuilderExtensions.ToJson", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteUpdate")]
+    public async Task ExecuteUpdate_UpdatesNestedJsonPropertySynchronously()
+    {
+        ProviderTestRuntime.RequireCapability("json-mapping");
+        var expected = CreateExecuteUpdateRecord("JSON bulk update sync source", 20);
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.JsonExecuteUpdateRecords.Add(expected);
+            await write.SaveChangesAsync(TestContext.Current.CancellationToken);
+        }
+
+        const int updatedViews = 27;
+        await using (var update = ProviderTestRuntime.CreateContext())
+        {
+            var affected = update.JsonExecuteUpdateRecords
+                .Where(record => record.Id == expected.Id)
+                .ExecuteUpdate(setters => setters.SetProperty(record => record.Details.Views, updatedViews));
+            Assert.Equal(1, affected);
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        var actual = await verify.JsonExecuteUpdateRecords.AsNoTracking()
+            .SingleAsync(record => record.Id == expected.Id, TestContext.Current.CancellationToken);
+        Assert.Equal("JSON bulk update sync source", actual.Details.Title);
+        Assert.Equal(updatedViews, actual.Details.Views);
+    }
+
     private static JsonProfileRecord CreateRecord(string biography, bool emailNotifications) => new()
     {
         Id = Guid.NewGuid(),
@@ -64,5 +123,11 @@ public sealed class JsonMappingTests
             Biography = biography,
             Preferences = new JsonPreferences { EmailNotifications = emailNotifications }
         }
+    };
+
+    private static JsonExecuteUpdateRecord CreateExecuteUpdateRecord(string title, int views) => new()
+    {
+        Id = Guid.NewGuid(),
+        Details = new JsonExecuteUpdateDetails { Title = title, Views = views }
     };
 }

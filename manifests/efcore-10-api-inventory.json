@@ -25,7 +25,7 @@
     "PublicMembers": 16762,
     "AwaitingClassification": 0,
     "ExplicitlyExcluded": 5921,
-    "MemberEntriesInCoveredFamilies": 797,
+    "MemberEntriesInCoveredFamilies": 799,
     "UncoveredMemberFamilies": 0
   },
   "CoverageSelectors": {
@@ -56633,7 +56633,8 @@
         "EF10-BULK-UPDATE-NO-MATCH-SYNC",
         "EF10-BULK-UPDATE-NULL-SYNC",
         "EF10-BULK-UPDATE-SYNC",
-        "EF10-INTERCEPTION-NONQUERY-UPDATE-SYNC"
+        "EF10-INTERCEPTION-NONQUERY-UPDATE-SYNC",
+        "EF10-JSON-EXECUTE-UPDATE-SYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -56651,7 +56652,8 @@
         "EF10-BULK-UPDATE-MULTIPLE-PROPERTIES-ASYNC",
         "EF10-BULK-UPDATE-NO-MATCH-ASYNC",
         "EF10-BULK-UPDATE-NULL-ASYNC",
-        "EF10-INTERCEPTION-NONQUERY-UPDATE-ASYNC"
+        "EF10-INTERCEPTION-NONQUERY-UPDATE-ASYNC",
+        "EF10-JSON-EXECUTE-UPDATE-ASYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -76703,7 +76705,9 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-COMPLEX-TYPE-ASYNC",
-        "EF10-COMPLEX-TYPE-SYNC"
+        "EF10-COMPLEX-TYPE-SYNC",
+        "EF10-JSON-EXECUTE-UPDATE-ASYNC",
+        "EF10-JSON-EXECUTE-UPDATE-SYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -76718,7 +76722,9 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-COMPLEX-TYPE-ASYNC",
-        "EF10-COMPLEX-TYPE-SYNC"
+        "EF10-COMPLEX-TYPE-SYNC",
+        "EF10-JSON-EXECUTE-UPDATE-ASYNC",
+        "EF10-JSON-EXECUTE-UPDATE-SYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -76733,7 +76739,9 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-COMPLEX-TYPE-ASYNC",
-        "EF10-COMPLEX-TYPE-SYNC"
+        "EF10-COMPLEX-TYPE-SYNC",
+        "EF10-JSON-EXECUTE-UPDATE-ASYNC",
+        "EF10-JSON-EXECUTE-UPDATE-SYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -76748,7 +76756,9 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-COMPLEX-TYPE-ASYNC",
-        "EF10-COMPLEX-TYPE-SYNC"
+        "EF10-COMPLEX-TYPE-SYNC",
+        "EF10-JSON-EXECUTE-UPDATE-ASYNC",
+        "EF10-JSON-EXECUTE-UPDATE-SYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -76763,7 +76773,9 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-COMPLEX-TYPE-ASYNC",
-        "EF10-COMPLEX-TYPE-SYNC"
+        "EF10-COMPLEX-TYPE-SYNC",
+        "EF10-JSON-EXECUTE-UPDATE-ASYNC",
+        "EF10-JSON-EXECUTE-UPDATE-SYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -76778,7 +76790,9 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-COMPLEX-TYPE-ASYNC",
-        "EF10-COMPLEX-TYPE-SYNC"
+        "EF10-COMPLEX-TYPE-SYNC",
+        "EF10-JSON-EXECUTE-UPDATE-ASYNC",
+        "EF10-JSON-EXECUTE-UPDATE-SYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -76793,7 +76807,9 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-COMPLEX-TYPE-ASYNC",
-        "EF10-COMPLEX-TYPE-SYNC"
+        "EF10-COMPLEX-TYPE-SYNC",
+        "EF10-JSON-EXECUTE-UPDATE-ASYNC",
+        "EF10-JSON-EXECUTE-UPDATE-SYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -76808,7 +76824,9 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-COMPLEX-TYPE-ASYNC",
-        "EF10-COMPLEX-TYPE-SYNC"
+        "EF10-COMPLEX-TYPE-SYNC",
+        "EF10-JSON-EXECUTE-UPDATE-ASYNC",
+        "EF10-JSON-EXECUTE-UPDATE-SYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -76823,7 +76841,9 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-COMPLEX-TYPE-ASYNC",
-        "EF10-COMPLEX-TYPE-SYNC"
+        "EF10-COMPLEX-TYPE-SYNC",
+        "EF10-JSON-EXECUTE-UPDATE-ASYNC",
+        "EF10-JSON-EXECUTE-UPDATE-SYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -76838,7 +76858,9 @@
       "ProviderApplicable": true,
       "BehavioralContracts": [
         "EF10-COMPLEX-TYPE-ASYNC",
-        "EF10-COMPLEX-TYPE-SYNC"
+        "EF10-COMPLEX-TYPE-SYNC",
+        "EF10-JSON-EXECUTE-UPDATE-ASYNC",
+        "EF10-JSON-EXECUTE-UPDATE-SYNC"
       ],
       "Disposition": "behavior-tested-family",
       "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
@@ -189769,10 +189791,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "ToJson",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexPropertyBuilder ToJson(Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexPropertyBuilder complexPropertyBuilder, System.String jsonColumnName = null)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-JSON-EXECUTE-UPDATE-ASYNC",
+        "EF10-JSON-EXECUTE-UPDATE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalComplexPropertyBuilderExtensions.ToJson"
     },
     {
@@ -189781,10 +189806,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "ToJson",
       "Signature": "Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexPropertyBuilder\u003CTComplex\u003E ToJson\u003CTComplex\u003E(Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexPropertyBuilder\u003CTComplex\u003E complexPropertyBuilder, System.String jsonColumnName = null) where TComplex : class",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "not-applicable-with-rationale",
-      "DispositionReason": "These public extension methods configure an application model during EF Core model building; they are not provider implementation entry points. The suite assesses provider obligations through operations against the resulting model, such as schema creation, queries, and persistence. Database-specific features remain separately capability-gated when exercised.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-JSON-EXECUTE-UPDATE-ASYNC",
+        "EF10-JSON-EXECUTE-UPDATE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.RelationalComplexPropertyBuilderExtensions.ToJson"
     },
     {

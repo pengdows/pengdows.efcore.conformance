@@ -277,6 +277,8 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
 
     public DbSet<JsonProfileRecord> JsonProfileRecords => Set<JsonProfileRecord>();
 
+    public DbSet<JsonExecuteUpdateRecord> JsonExecuteUpdateRecords => Set<JsonExecuteUpdateRecord>();
+
     public DbSet<PrimitiveCollectionRecord> PrimitiveCollectionRecords => Set<PrimitiveCollectionRecord>();
 
     public DbSet<GeneratedKeyRecord> GeneratedKeyRecords => Set<GeneratedKeyRecord>();
@@ -695,10 +697,18 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
                     profile.OwnsOne(value => value.Preferences);
                 });
             });
+            modelBuilder.Entity<JsonExecuteUpdateRecord>(entity =>
+            {
+                entity.ToTable("ef10conformance_jsonexecuteupdates");
+                entity.HasKey(record => record.Id);
+                entity.Property(record => record.Id).HasColumnName("id");
+                entity.ComplexProperty(record => record.Details, details => details.ToJson("details"));
+            });
         }
         else
         {
             modelBuilder.Ignore<JsonProfileRecord>();
+            modelBuilder.Ignore<JsonExecuteUpdateRecord>();
         }
         modelBuilder.Entity<PrimitiveCollectionRecord>(entity =>
         {
@@ -1256,6 +1266,20 @@ internal sealed class JsonProfile
 internal sealed class JsonPreferences
 {
     public bool EmailNotifications { get; set; }
+}
+
+internal sealed class JsonExecuteUpdateRecord
+{
+    public Guid Id { get; set; }
+
+    public JsonExecuteUpdateDetails Details { get; set; } = new();
+}
+
+internal sealed class JsonExecuteUpdateDetails
+{
+    public string Title { get; set; } = string.Empty;
+
+    public int Views { get; set; }
 }
 
 internal sealed class OwnedAttributeRecord
