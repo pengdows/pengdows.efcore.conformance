@@ -56133,7 +56133,9 @@
         "EF10-QUERY-DISTINCT-ASYNC",
         "EF10-QUERY-EXCEPT-ASYNC",
         "EF10-QUERY-INTERSECT-ASYNC",
+        "EF10-QUERY-JOIN-ASYNC",
         "EF10-QUERY-MULTIPLE-PARAMETERS-METHOD-ASYNC",
+        "EF10-QUERY-SELECT-MANY-ASYNC",
         "EF10-QUERY-UNION-ASYNC"
       ],
       "Disposition": "behavior-tested-family",

@@ -186,6 +186,98 @@ public sealed class QueryTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-QUERY-JOIN-SYNC", "System.Linq.Queryable.Join", "System.Linq.Queryable.ToArray")]
+    public async Task Join_ReturnsOnlyRowsWithMatchingKeysSynchronously()
+    {
+        var batch = Guid.NewGuid().ToString("N");
+        await SeedAsync(new[]
+        {
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-One", Age = 1 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-Two", Age = 2 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-Three", Age = 3 }
+        });
+
+        await using var query = ProviderTestRuntime.CreateContext();
+        var left = query.People.Where(person => person.Name.StartsWith(batch) && person.Age <= 2);
+        var right = query.People.Where(person => person.Name.StartsWith(batch) && person.Age >= 2);
+        var actual = left.Join(right, person => person.Age, person => person.Age,
+                (outer, inner) => new JoinedAges(outer.Age, inner.Age))
+            .ToArray();
+
+        Assert.Equal(new[] { new JoinedAges(2, 2) }, actual);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-JOIN-ASYNC", "System.Linq.Queryable.Join", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToArrayAsync")]
+    public async Task Join_ReturnsOnlyRowsWithMatchingKeysAsynchronously()
+    {
+        var batch = Guid.NewGuid().ToString("N");
+        await SeedAsync(new[]
+        {
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-One", Age = 1 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-Two", Age = 2 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-Three", Age = 3 }
+        });
+
+        await using var query = ProviderTestRuntime.CreateContext();
+        var left = query.People.Where(person => person.Name.StartsWith(batch) && person.Age <= 2);
+        var right = query.People.Where(person => person.Name.StartsWith(batch) && person.Age >= 2);
+        var actual = await left.Join(right, person => person.Age, person => person.Age,
+                (outer, inner) => new JoinedAges(outer.Age, inner.Age))
+            .ToArrayAsync(TestContext.Current.CancellationToken);
+
+        Assert.Equal(new[] { new JoinedAges(2, 2) }, actual);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-SELECT-MANY-SYNC", "System.Linq.Queryable.SelectMany", "System.Linq.Queryable.ToArray")]
+    public async Task SelectMany_ProjectsEveryPairFromTheComposedSequencesSynchronously()
+    {
+        var batch = Guid.NewGuid().ToString("N");
+        await SeedAsync(new[]
+        {
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-One", Age = 1 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-Two", Age = 2 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-Three", Age = 3 }
+        });
+
+        await using var query = ProviderTestRuntime.CreateContext();
+        var outer = query.People.Where(person => person.Name.StartsWith(batch) && person.Age <= 2);
+        var inner = query.People.Where(person => person.Name.StartsWith(batch) && person.Age >= 2);
+        var actual = outer.SelectMany(
+                _ => inner,
+                (left, right) => new JoinedAges(left.Age, right.Age))
+            .ToArray();
+
+        Assert.Equal(new[] { new JoinedAges(1, 2), new JoinedAges(1, 3), new JoinedAges(2, 2), new JoinedAges(2, 3) },
+            actual.OrderBy(result => result.LeftAge).ThenBy(result => result.RightAge).ToArray());
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-SELECT-MANY-ASYNC", "System.Linq.Queryable.SelectMany", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToArrayAsync")]
+    public async Task SelectMany_ProjectsEveryPairFromTheComposedSequencesAsynchronously()
+    {
+        var batch = Guid.NewGuid().ToString("N");
+        await SeedAsync(new[]
+        {
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-One", Age = 1 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-Two", Age = 2 },
+            new Person { Id = Guid.NewGuid(), Name = $"{batch}-Three", Age = 3 }
+        });
+
+        await using var query = ProviderTestRuntime.CreateContext();
+        var outer = query.People.Where(person => person.Name.StartsWith(batch) && person.Age <= 2);
+        var inner = query.People.Where(person => person.Name.StartsWith(batch) && person.Age >= 2);
+        var actual = await outer.SelectMany(
+                _ => inner,
+                (left, right) => new JoinedAges(left.Age, right.Age))
+            .ToArrayAsync(TestContext.Current.CancellationToken);
+
+        Assert.Equal(new[] { new JoinedAges(1, 2), new JoinedAges(1, 3), new JoinedAges(2, 2), new JoinedAges(2, 3) },
+            actual.OrderBy(result => result.LeftAge).ThenBy(result => result.RightAge).ToArray());
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-QUERY-GROUPBY-ASYNC", "System.Linq.Queryable.GroupBy", "System.Linq.Queryable.Count", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync")]
     public async Task GroupByAndAggregate_ReturnsExpectedGroupsAsynchronously()
     {
@@ -638,5 +730,7 @@ public sealed class QueryTests
     private sealed record LeftJoinResult(int Age, string? MatchName);
 
     private sealed record RightJoinResult(int? LeftAge, int RightAge);
+
+    private sealed record JoinedAges(int LeftAge, int RightAge);
 
 }
