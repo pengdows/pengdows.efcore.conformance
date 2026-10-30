@@ -220,7 +220,7 @@ public sealed class InterceptionTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-INTERCEPTION-CONNECTION-DISPOSE-SYNC", "Microsoft.EntityFrameworkCore.Diagnostics.DbConnectionInterceptor.ConnectionDisposing", "Microsoft.EntityFrameworkCore.Diagnostics.DbConnectionInterceptor.ConnectionDisposed", "Microsoft.EntityFrameworkCore.DbContext.Dispose")]
+    [BehavioralCoverage("EF10-INTERCEPTION-CONNECTION-DISPOSE-SYNC", "Microsoft.EntityFrameworkCore.Diagnostics.DbConnectionInterceptor.ConnectionCreating", "Microsoft.EntityFrameworkCore.Diagnostics.DbConnectionInterceptor.ConnectionCreated", "Microsoft.EntityFrameworkCore.Diagnostics.DbConnectionInterceptor.ConnectionDisposing", "Microsoft.EntityFrameworkCore.Diagnostics.DbConnectionInterceptor.ConnectionDisposed", "Microsoft.EntityFrameworkCore.DbContext.Dispose")]
     public async Task ContextDispose_InvokesSynchronousConnectionDisposalCallbacks()
     {
         await using (var initialize = ProviderTestRuntime.CreateContext())
@@ -236,12 +236,14 @@ public sealed class InterceptionTests
 
         Assert.Equal(1, interceptor.ConnectionDisposingCalls);
         Assert.Equal(1, interceptor.ConnectionDisposedCalls);
+        Assert.Equal(1, interceptor.ConnectionCreatingCalls);
+        Assert.Equal(1, interceptor.ConnectionCreatedCalls);
         Assert.Equal(0, interceptor.ConnectionDisposingAsyncCalls);
         Assert.Equal(0, interceptor.ConnectionDisposedAsyncCalls);
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-INTERCEPTION-CONNECTION-DISPOSE-ASYNC", "Microsoft.EntityFrameworkCore.Diagnostics.DbConnectionInterceptor.ConnectionDisposingAsync", "Microsoft.EntityFrameworkCore.Diagnostics.DbConnectionInterceptor.ConnectionDisposedAsync", "Microsoft.EntityFrameworkCore.DbContext.DisposeAsync")]
+    [BehavioralCoverage("EF10-INTERCEPTION-CONNECTION-DISPOSE-ASYNC", "Microsoft.EntityFrameworkCore.Diagnostics.DbConnectionInterceptor.ConnectionCreating", "Microsoft.EntityFrameworkCore.Diagnostics.DbConnectionInterceptor.ConnectionCreated", "Microsoft.EntityFrameworkCore.Diagnostics.DbConnectionInterceptor.ConnectionDisposingAsync", "Microsoft.EntityFrameworkCore.Diagnostics.DbConnectionInterceptor.ConnectionDisposedAsync", "Microsoft.EntityFrameworkCore.DbContext.DisposeAsync")]
     public async Task ContextDisposeAsync_InvokesAsynchronousConnectionDisposalCallbacks()
     {
         await using (var initialize = ProviderTestRuntime.CreateContext())
@@ -259,6 +261,8 @@ public sealed class InterceptionTests
         Assert.Equal(0, interceptor.ConnectionDisposedCalls);
         Assert.Equal(1, interceptor.ConnectionDisposingAsyncCalls);
         Assert.Equal(1, interceptor.ConnectionDisposedAsyncCalls);
+        Assert.Equal(1, interceptor.ConnectionCreatingCalls);
+        Assert.Equal(1, interceptor.ConnectionCreatedCalls);
     }
 
     [Fact]
@@ -919,6 +923,24 @@ public sealed class InterceptionTests
         public int ConnectionDisposingAsyncCalls { get; private set; }
 
         public int ConnectionDisposedAsyncCalls { get; private set; }
+
+        public int ConnectionCreatingCalls { get; private set; }
+
+        public int ConnectionCreatedCalls { get; private set; }
+
+        public override InterceptionResult<DbConnection> ConnectionCreating(
+            ConnectionCreatingEventData eventData,
+            InterceptionResult<DbConnection> result)
+        {
+            ConnectionCreatingCalls++;
+            return result;
+        }
+
+        public override DbConnection ConnectionCreated(ConnectionCreatedEventData eventData, DbConnection result)
+        {
+            ConnectionCreatedCalls++;
+            return result;
+        }
 
         public override InterceptionResult ConnectionOpening(
             DbConnection connection,

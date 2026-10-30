@@ -25,7 +25,7 @@
     "PublicMembers": 16762,
     "AwaitingClassification": 0,
     "ExplicitlyExcluded": 5921,
-    "MemberEntriesInCoveredFamilies": 776,
+    "MemberEntriesInCoveredFamilies": 778,
     "UncoveredMemberFamilies": 0
   },
   "CoverageSelectors": {
@@ -35410,10 +35410,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "ConnectionCreating",
       "Signature": "Microsoft.EntityFrameworkCore.Diagnostics.InterceptionResult\u003CSystem.Data.Common.DbConnection\u003E ConnectionCreating(Microsoft.EntityFrameworkCore.Diagnostics.ConnectionCreatingEventData eventData, Microsoft.EntityFrameworkCore.Diagnostics.InterceptionResult\u003CSystem.Data.Common.DbConnection\u003E result)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "ef-owned-no-provider-contract",
-      "DispositionReason": "Diagnostic identifiers, event payloads, and logging helpers are owned by EF Core. Provider-observable interception behavior is covered through public SaveChanges tests where applicable.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-INTERCEPTION-CONNECTION-DISPOSE-ASYNC",
+        "EF10-INTERCEPTION-CONNECTION-DISPOSE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Diagnostics.DbConnectionInterceptor.ConnectionCreating"
     },
     {
@@ -35422,10 +35425,13 @@
       "MemberKind": "Method",
       "ApiMemberName": "ConnectionCreated",
       "Signature": "System.Data.Common.DbConnection ConnectionCreated(Microsoft.EntityFrameworkCore.Diagnostics.ConnectionCreatedEventData eventData, System.Data.Common.DbConnection result)",
-      "ProviderApplicable": false,
-      "BehavioralContracts": [],
-      "Disposition": "ef-owned-no-provider-contract",
-      "DispositionReason": "Diagnostic identifiers, event payloads, and logging helpers are owned by EF Core. Provider-observable interception behavior is covered through public SaveChanges tests where applicable.",
+      "ProviderApplicable": true,
+      "BehavioralContracts": [
+        "EF10-INTERCEPTION-CONNECTION-DISPOSE-ASYNC",
+        "EF10-INTERCEPTION-CONNECTION-DISPOSE-SYNC"
+      ],
+      "Disposition": "behavior-tested-family",
+      "DispositionReason": "A behavioral test exercises this public API member family through EF Core public operations.",
       "ApiSelector": "Microsoft.EntityFrameworkCore.Diagnostics.DbConnectionInterceptor.ConnectionCreated"
     },
     {
