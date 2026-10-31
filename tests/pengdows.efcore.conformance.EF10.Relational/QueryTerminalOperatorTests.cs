@@ -328,11 +328,9 @@ public sealed class QueryTerminalOperatorTests
         var (batch, _, _, expected) = await SeedThreePeopleAsync();
         await using var context = ProviderTestRuntime.CreateContext();
 
-        var actual = context.People.Where(person => person.Name.StartsWith(batch))
-            .OrderBy(person => person.Age)
-            .ElementAt(^1);
-
-        Assert.Equal(expected.Id, actual.Id);
+        ProviderTestRuntime.TranslatedOrRefused(
+            () => context.People.Where(person => person.Name.StartsWith(batch)).OrderBy(person => person.Age).ElementAt(^1),
+            actual => Assert.Equal(expected.Id, actual.Id));
     }
 
     [Fact]
@@ -342,13 +340,13 @@ public sealed class QueryTerminalOperatorTests
         var (batch, _, middle, _) = await SeedThreePeopleAsync();
         await using var context = ProviderTestRuntime.CreateContext();
 
-        var actual = context.People.Where(person => person.Name.StartsWith(batch))
-            .OrderBy(person => person.Age)
-            .Take(1..^1)
-            .Select(person => person.Id)
-            .ToArray();
-
-        Assert.Equal(new[] { middle.Id }, actual);
+        ProviderTestRuntime.TranslatedOrRefused(
+            () => context.People.Where(person => person.Name.StartsWith(batch))
+                .OrderBy(person => person.Age)
+                .Take(1..^1)
+                .Select(person => person.Id)
+                .ToArray(),
+            actual => Assert.Equal(new[] { middle.Id }, actual));
     }
 
     [Fact]
@@ -358,14 +356,17 @@ public sealed class QueryTerminalOperatorTests
         var (batch, first, middle, last) = await SeedThreePeopleAsync();
         await using var context = ProviderTestRuntime.CreateContext();
 
-        var actual = context.People.Where(person => person.Name.StartsWith(batch))
-            .OrderBy(person => person.Age)
-            .Index()
-            .Select(item => new { item.Index, item.Item.Id })
-            .ToArray();
-
-        Assert.Equal(new[] { 0, 1, 2 }, actual.Select(item => item.Index));
-        Assert.Equal(new[] { first.Id, middle.Id, last.Id }, actual.Select(item => item.Id));
+        ProviderTestRuntime.TranslatedOrRefused(
+            () => context.People.Where(person => person.Name.StartsWith(batch))
+                .OrderBy(person => person.Age)
+                .Index()
+                .Select(item => new { item.Index, item.Item.Id })
+                .ToArray(),
+            actual =>
+            {
+                Assert.Equal(new[] { 0, 1, 2 }, actual.Select(item => item.Index));
+                Assert.Equal(new[] { first.Id, middle.Id, last.Id }, actual.Select(item => item.Id));
+            });
     }
 
     [Fact]

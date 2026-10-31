@@ -13,7 +13,7 @@ public sealed class PengdowsSqliteAdapter : IAdoNetProviderAdapter, ISupplementa
         new HashSet<string>(StringComparer.Ordinal)
         {
             "relational",
-            "transactions",
+            "transactions", "isolation-serializable",
             "savepoints",
             "migrations",
             "filtered-indexes",

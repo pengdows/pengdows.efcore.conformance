@@ -12,7 +12,7 @@ public sealed class MicrosoftSqliteAdapter : IAdoNetProviderAdapter, IParameteri
         new HashSet<string>(StringComparer.Ordinal)
         {
             "relational",
-            "transactions",
+            "transactions", "isolation-serializable",
             "savepoints",
             "migrations",
             "filtered-indexes",

@@ -36,7 +36,7 @@ public sealed class PengdowsDuckDbAdapter : IAdoNetProviderAdapter, INativeTypeM
         },
         new HashSet<string>(StringComparer.Ordinal)
         {
-            "ambient-transactions", "savepoints", "filtered-indexes", "json-mapping", "primitive-collections",
+            "isolation-serializable", "ambient-transactions", "savepoints", "filtered-indexes", "json-mapping", "primitive-collections",
             "least-greatest-functions", "migration-rename-index", "migration-check-constraint",
             "index-schema-metadata", "schema-comments", "migration-add-constraint-operations",
             "case-insensitive-collation", "migration-set-default", "index-sort-metadata", "sequences",

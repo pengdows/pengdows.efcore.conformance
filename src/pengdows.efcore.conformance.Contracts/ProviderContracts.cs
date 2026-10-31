@@ -99,6 +99,7 @@ public sealed record ProviderCapabilities(
     {
         "relational",
         "transactions",
+        "isolation-serializable",
         "ambient-transactions",
         "savepoints",
         "migrations",

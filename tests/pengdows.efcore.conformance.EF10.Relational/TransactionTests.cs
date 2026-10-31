@@ -154,6 +154,13 @@ public sealed class TransactionTests
         await using (var context = ProviderTestRuntime.CreateContext())
         {
             await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
+            if (!ProviderTestRuntime.SupportsIsolation(IsolationLevel.Serializable))
+            {
+                var refused = Assert.Throws<NotSupportedException>(() => context.Database.BeginTransaction(IsolationLevel.Serializable));
+                Assert.Contains("Serializable", refused.Message, StringComparison.Ordinal);
+                return;
+            }
+
             using var transaction = context.Database.BeginTransaction(IsolationLevel.Serializable);
             Assert.Equal(IsolationLevel.Serializable, transaction.GetDbTransaction().IsolationLevel);
             context.People.Add(new Person { Id = id, Name = "Serializable transaction", Age = 24 });
@@ -179,6 +186,14 @@ public sealed class TransactionTests
         await using (var context = ProviderTestRuntime.CreateContext())
         {
             await ProviderTestRuntime.InitializeAsync(context, cancellationToken);
+            if (!ProviderTestRuntime.SupportsIsolation(IsolationLevel.Serializable))
+            {
+                var refused = await Assert.ThrowsAsync<NotSupportedException>(() =>
+                    context.Database.BeginTransactionAsync(IsolationLevel.Serializable, cancellationToken));
+                Assert.Contains("Serializable", refused.Message, StringComparison.Ordinal);
+                return;
+            }
+
             await using var transaction = await context.Database.BeginTransactionAsync(IsolationLevel.Serializable, cancellationToken);
             Assert.Equal(IsolationLevel.Serializable, transaction.GetDbTransaction().IsolationLevel);
             context.People.Add(new Person { Id = id, Name = "Serializable async transaction", Age = 25 });

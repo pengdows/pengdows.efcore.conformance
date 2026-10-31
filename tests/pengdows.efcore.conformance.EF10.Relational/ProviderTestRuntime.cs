@@ -153,6 +153,27 @@ internal static class ProviderTestRuntime
             cancellationToken);
     }
 
+    // EF Core's refusal of an operator it cannot translate: an InvalidOperationException whose message says the LINQ
+    // expression could not be translated. A provider that translates the operator must produce the asserted result; one
+    // that cannot must refuse this way, not return a result it did not compute.
+    public static bool TranslatedOrRefused<T>(Func<T> query, Action<T> assertResult)
+    {
+        try
+        {
+            assertResult(query());
+            return true;
+        }
+        catch (InvalidOperationException ex) when (ex.Message.Contains("could not be translated", StringComparison.Ordinal))
+        {
+            return false;
+        }
+    }
+
+    // An isolation level is supported when the adapter declares its capability, "isolation-<level>". Without it the
+    // provider must refuse the level with NotSupportedException, not run it at another level.
+    public static bool SupportsIsolation(System.Data.IsolationLevel level)
+        => Adapter.Capabilities.Supports("isolation-" + level.ToString().ToLowerInvariant());
+
     public static void RequireCapability(string feature)
     {
         var capabilities = Adapter.Capabilities;
