@@ -32,7 +32,9 @@
         "EF10-DBCONTEXT-DI-ASYNC",
         "EF10-DBCONTEXT-DI-SYNC",
         "EF10-DBCONTEXT-FACTORY-ASYNC",
-        "EF10-DBCONTEXT-FACTORY-SYNC"
+        "EF10-DBCONTEXT-FACTORY-SYNC",
+        "EF10-DBCONTEXT-POOL-RESET-ASYNC",
+        "EF10-DBCONTEXT-POOL-RESET-SYNC"
       ],
       "tests": [
         "Synchronous and asynchronous AddDbContext and IDbContextFactory resolution with fresh-context persisted-data readback."
