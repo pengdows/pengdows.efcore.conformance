@@ -183,6 +183,40 @@ public sealed class QuerySetOperatorTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-QUERY-CONCAT-SYNC", "System.Linq.Queryable.Concat", "System.Linq.Queryable.OrderBy", "System.Linq.Queryable.ToArray")]
+    public async Task Concat_PreservesDuplicatesFromBothSequencesSynchronously()
+    {
+        var batch = Guid.NewGuid().ToString("N");
+        await SeedSetOperatorRowsAsync(batch);
+
+        await using var context = ProviderTestRuntime.CreateContext();
+        var ages = AgeQuery(context, batch);
+        var actual = ages.Where(age => age <= 20)
+            .Concat(ages.Where(age => age >= 20))
+            .OrderBy(age => age)
+            .ToArray();
+
+        Assert.Equal(new[] { 10, 10, 20, 20, 30 }, actual);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-CONCAT-ASYNC", "System.Linq.Queryable.Concat", "System.Linq.Queryable.OrderBy", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToArrayAsync")]
+    public async Task Concat_PreservesDuplicatesFromBothSequencesAsynchronously()
+    {
+        var batch = Guid.NewGuid().ToString("N");
+        await SeedSetOperatorRowsAsync(batch);
+
+        await using var context = ProviderTestRuntime.CreateContext();
+        var ages = AgeQuery(context, batch);
+        var actual = await ages.Where(age => age <= 20)
+            .Concat(ages.Where(age => age >= 20))
+            .OrderBy(age => age)
+            .ToArrayAsync(TestContext.Current.CancellationToken);
+
+        Assert.Equal(new[] { 10, 10, 20, 20, 30 }, actual);
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-QUERY-INTERSECT-SYNC", "System.Linq.Queryable.Intersect", "System.Linq.Queryable.OrderBy", "System.Linq.Queryable.ToArray")]
     public async Task Intersect_ReturnsValuesPresentInBothSequencesSynchronously()
     {
