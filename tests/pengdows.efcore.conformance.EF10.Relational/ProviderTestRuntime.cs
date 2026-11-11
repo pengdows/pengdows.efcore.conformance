@@ -258,6 +258,8 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
 
     public DbSet<Blog> Blogs => Set<Blog>();
 
+    public DbSet<HierarchyNode> HierarchyNodes => Set<HierarchyNode>();
+
     public DbSet<Account> Accounts => Set<Account>();
 
     public DbSet<AccountSettings> AccountSettings => Set<AccountSettings>();
@@ -517,6 +519,16 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
             entity.Property(blog => blog.Id).HasColumnName("id");
             entity.Property(blog => blog.Name).HasColumnName("name").IsRequired().HasMaxLength(160);
             entity.HasMany(blog => blog.Posts).WithOne(post => post.Blog).HasForeignKey(post => post.BlogId);
+        });
+        modelBuilder.Entity<HierarchyNode>(entity =>
+        {
+            entity.ToTable("ef10conformancehierarchynodes");
+            entity.HasKey(node => node.Id);
+            entity.Property(node => node.Id).HasColumnName("id");
+            entity.Property(node => node.Name).HasColumnName("name").IsRequired().HasMaxLength(160);
+            entity.Property(node => node.ParentId).HasColumnName("parentid");
+            entity.HasOne(node => node.Parent).WithMany(node => node.Children)
+                .HasForeignKey(node => node.ParentId).OnDelete(DeleteBehavior.Restrict);
         });
         modelBuilder.Entity<Account>(entity =>
         {
@@ -935,6 +947,19 @@ internal sealed class Blog
     public string Name { get; set; } = string.Empty;
 
     public ICollection<Post> Posts { get; set; } = new List<Post>();
+}
+
+internal sealed class HierarchyNode
+{
+    public Guid Id { get; set; }
+
+    public string Name { get; set; } = string.Empty;
+
+    public Guid? ParentId { get; set; }
+
+    public HierarchyNode? Parent { get; set; }
+
+    public List<HierarchyNode> Children { get; set; } = [];
 }
 
 internal sealed class Account

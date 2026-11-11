@@ -9,6 +9,62 @@ namespace pengdows.efcore.conformance.EF10.Relational;
 public sealed class ChangeTrackerGraphTests
 {
     [Fact]
+    [BehavioralCoverage("EF10-SAVE-CYCLIC-RELATIONSHIP-ASYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry.State")]
+    public async Task SaveChangesAsync_PersistsReciprocalOptionalRelationshipsInTwoPhases()
+    {
+        var first = new HierarchyNode { Id = Guid.NewGuid(), Name = $"Cycle first {Guid.NewGuid():N}" };
+        var second = new HierarchyNode { Id = Guid.NewGuid(), Name = $"Cycle second {Guid.NewGuid():N}" };
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.HierarchyNodes.AddRange(first, second);
+            Assert.Equal(2, await write.SaveChangesAsync(TestContext.Current.CancellationToken));
+            first.Parent = second;
+            second.Parent = first;
+            Assert.Equal(2, await write.SaveChangesAsync(TestContext.Current.CancellationToken));
+            Assert.All(write.ChangeTracker.Entries<HierarchyNode>(), entry => Assert.Equal(EntityState.Unchanged, entry.State));
+        }
+
+        await using var read = ProviderTestRuntime.CreateContext();
+        var actual = await read.HierarchyNodes.AsNoTracking()
+            .Where(node => node.Id == first.Id || node.Id == second.Id)
+            .OrderBy(node => node.Name)
+            .Select(node => new HierarchyLink(node.Id, node.ParentId))
+            .ToArrayAsync(TestContext.Current.CancellationToken);
+        Assert.Equal(2, actual.Length);
+        Assert.Equal(second.Id, actual.Single(link => link.Id == first.Id).ParentId);
+        Assert.Equal(first.Id, actual.Single(link => link.Id == second.Id).ParentId);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-SAVE-CYCLIC-RELATIONSHIP-SYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry.State")]
+    public async Task SaveChanges_PersistsReciprocalOptionalRelationshipsInTwoPhasesSynchronously()
+    {
+        var first = new HierarchyNode { Id = Guid.NewGuid(), Name = $"Sync cycle first {Guid.NewGuid():N}" };
+        var second = new HierarchyNode { Id = Guid.NewGuid(), Name = $"Sync cycle second {Guid.NewGuid():N}" };
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.HierarchyNodes.AddRange(first, second);
+            Assert.Equal(2, write.SaveChanges());
+            first.Parent = second;
+            second.Parent = first;
+            Assert.Equal(2, write.SaveChanges());
+            Assert.All(write.ChangeTracker.Entries<HierarchyNode>(), entry => Assert.Equal(EntityState.Unchanged, entry.State));
+        }
+
+        await using var read = ProviderTestRuntime.CreateContext();
+        var actual = read.HierarchyNodes.AsNoTracking()
+            .Where(node => node.Id == first.Id || node.Id == second.Id)
+            .OrderBy(node => node.Name)
+            .Select(node => new HierarchyLink(node.Id, node.ParentId))
+            .ToArray();
+        Assert.Equal(2, actual.Length);
+        Assert.Equal(second.Id, actual.Single(link => link.Id == first.Id).ParentId);
+        Assert.Equal(first.Id, actual.Single(link => link.Id == second.Id).ParentId);
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-TRACKING-TRACK-GRAPH", "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.TrackGraph", "System.Void TrackGraph(System.Object rootEntity, System.Action<Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntryGraphNode> callback)", "System.Void TrackGraph<TState>(System.Object rootEntity, TState state, System.Func<Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntryGraphNode<TState>, System.Boolean> callback)", "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.Entries", "System.Collections.Generic.IEnumerable<Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry> Entries()", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.Include", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ThenInclude")]
     public async Task TrackGraph_TracksAndPersistsDisconnectedGraph()
     {
@@ -128,3 +184,5 @@ public sealed class ChangeTrackerGraphTests
         Assert.False(await verify.Blogs.AnyAsync(item => item.Id == blog.Id, TestContext.Current.CancellationToken));
     }
 }
+
+internal sealed record HierarchyLink(Guid Id, Guid? ParentId);
