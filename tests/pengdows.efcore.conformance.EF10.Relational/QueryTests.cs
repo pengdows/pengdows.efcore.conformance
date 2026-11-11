@@ -156,7 +156,7 @@ public sealed class QueryTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-QUERY-DATEONLY-TRANSLATIONS-ASYNC", "System.DateOnly.ToDateTime", "System.DateOnly.DayNumber", "System.Linq.Queryable.Select", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToArrayAsync")]
+    [BehavioralCoverage("EF10-QUERY-DATEONLY-TRANSLATIONS-ASYNC", "System.DateOnly.ToDateTime", "System.DateOnly.DayNumber", "System.DateOnly.AddDays", "System.DateOnly.Month", "System.Linq.Queryable.Select", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToArrayAsync")]
     public async Task DateOnlyToDateTimeAndDayNumberTranslateAsynchronously()
     {
         var records = CreateDateOnlyRecords();
@@ -168,20 +168,20 @@ public sealed class QueryTests
         var actual = await query.ScalarRecords.AsNoTracking()
             .Where(record => ids.Contains(record.Id))
             .OrderBy(record => record.Day)
-            .Select(record => new DateOnlyQueryResult(record.Day.ToDateTime(TimeOnly.MinValue), record.Day.DayNumber - baseline))
+            .Select(record => new DateOnlyQueryResult(record.Day.ToDateTime(TimeOnly.MinValue), record.Day.DayNumber - baseline, record.Day.AddDays(1), record.Day.Month))
             .ToArrayAsync(TestContext.Current.CancellationToken);
 
         Assert.Equal(
             new[]
             {
-                new DateOnlyQueryResult(new DateTime(2024, 2, 29), 0),
-                new DateOnlyQueryResult(new DateTime(2025, 3, 1), 366)
+                new DateOnlyQueryResult(new DateTime(2024, 2, 29), 0, new DateOnly(2024, 3, 1), 2),
+                new DateOnlyQueryResult(new DateTime(2025, 3, 1), 366, new DateOnly(2025, 3, 2), 3)
             },
             actual);
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-QUERY-DATEONLY-TRANSLATIONS-SYNC", "System.DateOnly.ToDateTime", "System.DateOnly.DayNumber", "System.Linq.Queryable.Select", "System.Linq.Enumerable.ToArray")]
+    [BehavioralCoverage("EF10-QUERY-DATEONLY-TRANSLATIONS-SYNC", "System.DateOnly.ToDateTime", "System.DateOnly.DayNumber", "System.DateOnly.AddDays", "System.DateOnly.Month", "System.Linq.Queryable.Select", "System.Linq.Enumerable.ToArray")]
     public async Task DateOnlyToDateTimeAndDayNumberTranslateSynchronously()
     {
         var records = CreateDateOnlyRecords();
@@ -193,14 +193,14 @@ public sealed class QueryTests
         var actual = query.ScalarRecords.AsNoTracking()
             .Where(record => ids.Contains(record.Id))
             .OrderBy(record => record.Day)
-            .Select(record => new DateOnlyQueryResult(record.Day.ToDateTime(TimeOnly.MinValue), record.Day.DayNumber - baseline))
+            .Select(record => new DateOnlyQueryResult(record.Day.ToDateTime(TimeOnly.MinValue), record.Day.DayNumber - baseline, record.Day.AddDays(1), record.Day.Month))
             .ToArray();
 
         Assert.Equal(
             new[]
             {
-                new DateOnlyQueryResult(new DateTime(2024, 2, 29), 0),
-                new DateOnlyQueryResult(new DateTime(2025, 3, 1), 366)
+                new DateOnlyQueryResult(new DateTime(2024, 2, 29), 0, new DateOnly(2024, 3, 1), 2),
+                new DateOnlyQueryResult(new DateTime(2025, 3, 1), 366, new DateOnly(2025, 3, 2), 3)
             },
             actual);
     }
@@ -1363,7 +1363,7 @@ public sealed class QueryTests
 
 }
 
-internal sealed record DateOnlyQueryResult(DateTime DateTimeValue, int DaysFromBaseline);
+internal sealed record DateOnlyQueryResult(DateTime DateTimeValue, int DaysFromBaseline, DateOnly NextDay, int Month);
 
 internal sealed record DatePartResult(int Microsecond, int Nanosecond);
 
