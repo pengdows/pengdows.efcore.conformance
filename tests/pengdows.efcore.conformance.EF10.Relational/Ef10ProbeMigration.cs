@@ -498,6 +498,49 @@ public sealed class Ef10SequenceOperationsMigration : Migration
     }
 }
 
+[DbContext(typeof(MigrationFailureProbeContext))]
+[Migration("20261111000101_EF10MigrationTransactionPrior")]
+public sealed class Ef10MigrationTransactionPriorMigration : Migration
+{
+    protected override void Up(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.CreateTable(
+            name: "ef10conformance_migrationtransaction",
+            columns: table => new
+            {
+                id = table.Column<int>(nullable: false),
+                value = table.Column<int>(nullable: false)
+            },
+            constraints: table => table.PrimaryKey("PK_ef10conformance_migrationtransaction", row => row.id));
+        migrationBuilder.Sql("INSERT INTO ef10conformance_migrationtransaction (id, value) VALUES (1, 8675309)");
+    }
+
+    protected override void Down(MigrationBuilder migrationBuilder) =>
+        migrationBuilder.DropTable(name: "ef10conformance_migrationtransaction");
+
+    protected override void BuildTargetModel(ModelBuilder modelBuilder)
+    {
+        modelBuilder.HasAnnotation("ProductVersion", "10.0.14");
+    }
+}
+
+[DbContext(typeof(MigrationFailureProbeContext))]
+[Migration("20261111000102_EF10MigrationTransactionFailure")]
+public sealed class Ef10MigrationTransactionFailureMigration : Migration
+{
+    protected override void Up(MigrationBuilder migrationBuilder) =>
+        migrationBuilder.Sql("SELECT * FROM ef10conformance_missing_migration_table");
+
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
+    }
+
+    protected override void BuildTargetModel(ModelBuilder modelBuilder)
+    {
+        modelBuilder.HasAnnotation("ProductVersion", "10.0.14");
+    }
+}
+
 public sealed class MigrationConstraintRow
 {
     public int Id { get; set; }
