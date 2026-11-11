@@ -36,6 +36,47 @@ public sealed class QuerySetOperatorTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-QUERY-COLLECTION-CONTAINS-NULL-SYNC", "System.Linq.Queryable.Contains")]
+    public async Task ContainsWithNullCollectionElement_MatchesNullAndPresentValuesSynchronously()
+    {
+        var matching = new NullableScalarRecord { Id = Guid.NewGuid(), Integer = 42 };
+        var nullValue = new NullableScalarRecord { Id = Guid.NewGuid() };
+        var other = new NullableScalarRecord { Id = Guid.NewGuid(), Integer = 7 };
+        await SeedNullableValuesAsync(matching, nullValue, other);
+        int?[] values = [null, 42];
+        var ids = new[] { matching.Id, nullValue.Id, other.Id };
+
+        await using var context = ProviderTestRuntime.CreateContext();
+        var actual = context.NullableScalarRecords.AsNoTracking()
+            .Where(record => ids.Contains(record.Id) && values.Contains(record.Integer))
+            .Select(record => record.Id)
+            .ToHashSet();
+
+        Assert.Equal(new HashSet<Guid> { matching.Id, nullValue.Id }, actual);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-COLLECTION-CONTAINS-NULL-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToArrayAsync")]
+    public async Task ContainsWithNullCollectionElement_MatchesNullAndPresentValuesAsynchronously()
+    {
+        var matching = new NullableScalarRecord { Id = Guid.NewGuid(), Integer = 42 };
+        var nullValue = new NullableScalarRecord { Id = Guid.NewGuid() };
+        var other = new NullableScalarRecord { Id = Guid.NewGuid(), Integer = 7 };
+        await SeedNullableValuesAsync(matching, nullValue, other);
+        int?[] values = [null, 42];
+        var ids = new[] { matching.Id, nullValue.Id, other.Id };
+
+        await using var context = ProviderTestRuntime.CreateContext();
+        var actual = (await context.NullableScalarRecords.AsNoTracking()
+                .Where(record => ids.Contains(record.Id) && values.Contains(record.Integer))
+                .Select(record => record.Id)
+                .ToArrayAsync(TestContext.Current.CancellationToken))
+            .ToHashSet();
+
+        Assert.Equal(new HashSet<Guid> { matching.Id, nullValue.Id }, actual);
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-QUERY-ALL-SYNC", "System.Linq.Queryable.All")]
     public async Task All_EvaluatesPredicateAcrossAllRowsSynchronously()
     {
@@ -356,5 +397,13 @@ public sealed class QuerySetOperatorTests
             new Person { Id = Guid.NewGuid(), Name = $"{batch}-twenty", Age = 20 },
             new Person { Id = Guid.NewGuid(), Name = $"{batch}-thirty", Age = 30 });
         await context.SaveChangesAsync(TestContext.Current.CancellationToken);
+    }
+
+    private static async Task SeedNullableValuesAsync(params NullableScalarRecord[] records)
+    {
+        await using var context = ProviderTestRuntime.CreateContext();
+        await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
+        context.NullableScalarRecords.AddRange(records);
+        Assert.Equal(records.Length, await context.SaveChangesAsync(TestContext.Current.CancellationToken));
     }
 }
