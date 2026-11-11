@@ -896,6 +896,38 @@ public sealed class QueryTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-QUERY-EMPTY-AGGREGATES-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SumAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.AverageAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.MaxAsync")]
+    public async Task EmptySetAggregates_ReturnTheirDefinedValuesAsynchronously()
+    {
+        await using var context = ProviderTestRuntime.CreateContext();
+        await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
+        var missing = Guid.NewGuid();
+        var people = context.People.Where(person => person.Id == missing);
+        var nullableScalars = context.NullableScalarRecords.Where(record => record.Id == missing);
+
+        Assert.Equal(0, await people.SumAsync(person => person.Age, TestContext.Current.CancellationToken));
+        await Assert.ThrowsAsync<InvalidOperationException>(() => people.AverageAsync(
+            person => person.Age,
+            TestContext.Current.CancellationToken));
+        Assert.Null(await nullableScalars.MaxAsync(record => record.Amount, TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-EMPTY-AGGREGATES-SYNC", "System.Linq.Queryable.Sum", "System.Linq.Queryable.Average", "System.Linq.Queryable.Max")]
+    public async Task EmptySetAggregates_ReturnTheirDefinedValuesSynchronously()
+    {
+        await using var context = ProviderTestRuntime.CreateContext();
+        await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
+        var missing = Guid.NewGuid();
+        var people = context.People.Where(person => person.Id == missing);
+        var nullableScalars = context.NullableScalarRecords.Where(record => record.Id == missing);
+
+        Assert.Equal(0, people.Sum(person => person.Age));
+        Assert.Throws<InvalidOperationException>(() => people.Average(person => person.Age));
+        Assert.Null(nullableScalars.Max(record => record.Amount));
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-QUERY-ASYNC-MATERIALIZERS", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToArrayAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToHashSetAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToDictionaryAsync")]
     public async Task AsyncMaterializers_ReturnExpectedArraySetAndDictionary()
     {
