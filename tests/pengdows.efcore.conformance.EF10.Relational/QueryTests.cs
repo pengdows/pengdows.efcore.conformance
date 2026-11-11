@@ -8,6 +8,56 @@ namespace pengdows.efcore.conformance.EF10.Relational;
 public sealed class QueryTests
 {
     [Fact]
+    [BehavioralCoverage("EF10-QUERY-DATETIME-MICRO-NANOSECOND-ASYNC", "System.DateTime.Microsecond", "System.DateTime.Nanosecond", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    public async Task DateTimeMicrosecondAndNanosecondTranslateAsynchronously()
+    {
+        var id = Guid.NewGuid();
+        await SeedTemporalProbeAsync(id);
+        await using var query = ProviderTestRuntime.CreateContext();
+        var stored = await query.NullableScalarRecords.AsNoTracking()
+            .Where(record => record.Id == id)
+            .Select(record => record.DateTimeValue!.Value)
+            .SingleAsync(TestContext.Current.CancellationToken);
+        try
+        {
+            var actual = await query.NullableScalarRecords.AsNoTracking()
+                .Where(record => record.Id == id)
+                .Select(record => new DatePartResult(record.DateTimeValue!.Value.Microsecond, record.DateTimeValue.Value.Nanosecond))
+                .SingleAsync(TestContext.Current.CancellationToken);
+            Assert.Equal(new DatePartResult(stored.Microsecond, stored.Nanosecond), actual);
+        }
+        catch (InvalidOperationException)
+        {
+            Assert.Skip("Provider does not translate DateTime microsecond and nanosecond parts.");
+        }
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-DATETIME-MICRO-NANOSECOND-SYNC", "System.DateTime.Microsecond", "System.DateTime.Nanosecond", "System.Linq.Queryable.Single")]
+    public async Task DateTimeMicrosecondAndNanosecondTranslateSynchronously()
+    {
+        var id = Guid.NewGuid();
+        await SeedTemporalProbeAsync(id);
+        await using var query = ProviderTestRuntime.CreateContext();
+        var stored = query.NullableScalarRecords.AsNoTracking()
+            .Where(record => record.Id == id)
+            .Select(record => record.DateTimeValue!.Value)
+            .Single();
+        try
+        {
+            var actual = query.NullableScalarRecords.AsNoTracking()
+                .Where(record => record.Id == id)
+                .Select(record => new DatePartResult(record.DateTimeValue!.Value.Microsecond, record.DateTimeValue.Value.Nanosecond))
+                .Single();
+            Assert.Equal(new DatePartResult(stored.Microsecond, stored.Nanosecond), actual);
+        }
+        catch (InvalidOperationException)
+        {
+            Assert.Skip("Provider does not translate DateTime microsecond and nanosecond parts.");
+        }
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-QUERY-DATEONLY-TRANSLATIONS-ASYNC", "System.DateOnly.ToDateTime", "System.DateOnly.DayNumber", "System.Linq.Queryable.Select", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToArrayAsync")]
     public async Task DateOnlyToDateTimeAndDayNumberTranslateAsynchronously()
     {
@@ -1161,6 +1211,18 @@ public sealed class QueryTests
         await context.SaveChangesAsync(TestContext.Current.CancellationToken);
     }
 
+    private static async Task SeedTemporalProbeAsync(Guid id)
+    {
+        await using var context = ProviderTestRuntime.CreateContext();
+        await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
+        context.NullableScalarRecords.Add(new NullableScalarRecord
+        {
+            Id = id,
+            DateTimeValue = new DateTime(2025, 4, 3, 2, 1, 0, DateTimeKind.Unspecified).AddTicks(1_234_567)
+        });
+        await context.SaveChangesAsync(TestContext.Current.CancellationToken);
+    }
+
     private sealed record PersonResult(string Name, int Age);
 
     private sealed record LeftJoinResult(int Age, string? MatchName);
@@ -1172,3 +1234,5 @@ public sealed class QueryTests
 }
 
 internal sealed record DateOnlyQueryResult(DateTime DateTimeValue, int DaysFromBaseline);
+
+internal sealed record DatePartResult(int Microsecond, int Nanosecond);
