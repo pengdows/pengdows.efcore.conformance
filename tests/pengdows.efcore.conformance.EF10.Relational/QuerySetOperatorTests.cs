@@ -122,6 +122,36 @@ public sealed class QuerySetOperatorTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-QUERY-CORRELATED-CHILD-COUNT-ASYNC", "System.Linq.Queryable.Where", "System.Linq.Queryable.Count", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToArrayAsync")]
+    public async Task CorrelatedChildCount_FiltersParentsAsynchronously()
+    {
+        var (parentId, otherParentId) = await SeedHierarchyAsync();
+        await using var query = ProviderTestRuntime.CreateContext();
+        var actual = await query.HierarchyNodes.AsNoTracking()
+            .Where(node => node.Id == parentId || node.Id == otherParentId)
+            .Where(node => node.Children.Count >= 2)
+            .Select(node => node.Id)
+            .ToArrayAsync(TestContext.Current.CancellationToken);
+
+        Assert.Equal(new[] { parentId }, actual);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-CORRELATED-CHILD-COUNT-SYNC", "System.Linq.Queryable.Where", "System.Linq.Queryable.Count", "System.Linq.Queryable.ToArray")]
+    public async Task CorrelatedChildCount_FiltersParentsSynchronously()
+    {
+        var (parentId, otherParentId) = await SeedHierarchyAsync();
+        await using var query = ProviderTestRuntime.CreateContext();
+        var actual = query.HierarchyNodes.AsNoTracking()
+            .Where(node => node.Id == parentId || node.Id == otherParentId)
+            .Where(node => node.Children.Count >= 2)
+            .Select(node => node.Id)
+            .ToArray();
+
+        Assert.Equal(new[] { parentId }, actual);
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-QUERY-DISTINCT-SYNC", "System.Linq.Queryable.Distinct", "System.Linq.Queryable.OrderBy", "System.Linq.Queryable.ToArray")]
     public async Task Distinct_ReturnsUniqueValuesSynchronously()
     {
@@ -286,6 +316,24 @@ public sealed class QuerySetOperatorTests
 
     private static IQueryable<int> AgeQuery(ConformanceDbContext context, string batch) =>
         context.People.Where(person => person.Name.StartsWith(batch)).Select(person => person.Age);
+
+    private static async Task<(Guid ParentId, Guid OtherParentId)> SeedHierarchyAsync()
+    {
+        var parent = new HierarchyNode { Id = Guid.NewGuid(), Name = $"Counted parent {Guid.NewGuid():N}" };
+        var otherParent = new HierarchyNode { Id = Guid.NewGuid(), Name = $"Single child parent {Guid.NewGuid():N}" };
+        var children = new[]
+        {
+            new HierarchyNode { Id = Guid.NewGuid(), Name = $"First child {Guid.NewGuid():N}", Parent = parent },
+            new HierarchyNode { Id = Guid.NewGuid(), Name = $"Second child {Guid.NewGuid():N}", Parent = parent },
+            new HierarchyNode { Id = Guid.NewGuid(), Name = $"Only child {Guid.NewGuid():N}", Parent = otherParent }
+        };
+        await using var seed = ProviderTestRuntime.CreateContext();
+        await ProviderTestRuntime.InitializeAsync(seed, TestContext.Current.CancellationToken);
+        seed.HierarchyNodes.AddRange(parent, otherParent);
+        seed.HierarchyNodes.AddRange(children);
+        await seed.SaveChangesAsync(TestContext.Current.CancellationToken);
+        return (parent.Id, otherParent.Id);
+    }
 
     private static async Task SeedSetOperatorRowsAsync(string batch)
     {
