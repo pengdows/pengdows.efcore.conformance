@@ -144,6 +144,48 @@ public sealed class ComplexTypeTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-COMPLEX-TYPE-ASSIGNMENT-COPIES-ASYNC", "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder.ComplexProperty", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync")]
+    public async Task AssigningOneComplexPropertyToAnother_CopiesItsValuesAsynchronously()
+    {
+        var record = CreateRecord("Assignment Source", "Source City", new AddressInfo { Street = "Destination Before", City = "Destination City" });
+        await SeedRecordsAsync(record);
+
+        await using (var update = ProviderTestRuntime.CreateContext())
+        {
+            var tracked = await update.ComplexRecords.SingleAsync(item => item.Id == record.Id, TestContext.Current.CancellationToken);
+            tracked.ComparisonAddress = tracked.Address;
+            Assert.Equal("Source City", tracked.ComparisonAddress.City);
+            await update.SaveChangesAsync(TestContext.Current.CancellationToken);
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        var actual = await verify.ComplexRecords.AsNoTracking().SingleAsync(item => item.Id == record.Id, TestContext.Current.CancellationToken);
+        Assert.Equal("Source City", actual.Address.City);
+        Assert.Equal("Source City", actual.ComparisonAddress.City);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-COMPLEX-TYPE-ASSIGNMENT-COPIES-SYNC", "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder.ComplexProperty", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges")]
+    public async Task AssigningOneComplexPropertyToAnother_CopiesItsValuesSynchronously()
+    {
+        var record = CreateRecord("Sync Assignment Source", "Sync Source City", new AddressInfo { Street = "Sync Destination Before", City = "Sync Destination City" });
+        await SeedRecordsAsync(record);
+
+        await using (var update = ProviderTestRuntime.CreateContext())
+        {
+            var tracked = update.ComplexRecords.Single(item => item.Id == record.Id);
+            tracked.ComparisonAddress = tracked.Address;
+            Assert.Equal("Sync Source City", tracked.ComparisonAddress.City);
+            update.SaveChanges();
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        var actual = verify.ComplexRecords.AsNoTracking().Single(item => item.Id == record.Id);
+        Assert.Equal("Sync Source City", actual.Address.City);
+        Assert.Equal("Sync Source City", actual.ComparisonAddress.City);
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-COMPLEX-TYPE-OPTIONAL-ASYNC", "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder.ComplexProperty", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToArrayAsync")]
     public async Task OptionalComplexProperty_RoundTripsNullAndValueAsynchronously()
     {
