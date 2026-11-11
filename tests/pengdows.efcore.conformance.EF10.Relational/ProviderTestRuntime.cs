@@ -272,6 +272,8 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
 
     public DbSet<NullableScalarRecord> NullableScalarRecords => Set<NullableScalarRecord>();
 
+    public DbSet<TextFidelityRecord> TextFidelityRecords => Set<TextFidelityRecord>();
+
     public DbSet<AdditionalClrTypesRecord> AdditionalClrTypesRecords => Set<AdditionalClrTypesRecord>();
 
     public DbSet<TemporalTypesRecord> TemporalTypesRecords => Set<TemporalTypesRecord>();
@@ -611,6 +613,13 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
             entity.Property(record => record.Duration).HasColumnName("duration");
             entity.Property(record => record.DateTimeValue).HasColumnName("datetime_value").HasPrecision(6);
             entity.Property(record => record.OffsetDateTimeValue).HasColumnName("offset_datetime_value").HasPrecision(6);
+        });
+        modelBuilder.Entity<TextFidelityRecord>(entity =>
+        {
+            entity.ToTable("ef10conformancelargetext");
+            entity.HasKey(record => record.Id);
+            entity.Property(record => record.Id).HasColumnName("id");
+            entity.Property(record => record.Text).HasColumnName("large_text").IsRequired();
         });
         modelBuilder.Entity<AdditionalClrTypesRecord>(entity =>
         {
@@ -1243,6 +1252,13 @@ internal sealed class NullableScalarRecord
     public DateTime? DateTimeValue { get; set; }
 
     public DateTimeOffset? OffsetDateTimeValue { get; set; }
+}
+
+internal sealed class TextFidelityRecord
+{
+    public Guid Id { get; set; }
+
+    public string Text { get; set; } = string.Empty;
 }
 
 internal sealed class AdditionalClrTypesRecord

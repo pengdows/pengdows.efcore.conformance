@@ -11,6 +11,46 @@ public sealed class StringFidelityTests
     private const string AdversarialSuffix = "[%_]'\\ emoji 👩🏽‍💻 e\u0301 NUL:\0 trailing  ";
 
     [Fact]
+    [BehavioralCoverage("EF10-STRING-LOB-RAW-ASYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "System.Data.Common.DbCommand.ExecuteScalarAsync")]
+    public async Task LargeUnicodeText_RoundTripsThroughIndependentAdoNetChannelAsynchronously()
+    {
+        var prefix = Guid.NewGuid().ToString("N");
+        var expected = prefix + string.Concat(Enumerable.Repeat("🚀e\u0301/雪%", 20_000));
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.TextFidelityRecords.Add(new TextFidelityRecord { Id = Guid.NewGuid(), Text = expected });
+            Assert.Equal(1, await write.SaveChangesAsync(TestContext.Current.CancellationToken));
+        }
+
+        await using var connection = ProviderTestRuntime.CreateConnection();
+        await connection.OpenAsync(TestContext.Current.CancellationToken);
+        await using var command = connection.CreateCommand();
+        command.CommandText = $"SELECT large_text FROM ef10conformancelargetext WHERE large_text LIKE '{prefix}%'";
+        Assert.Equal(expected, Assert.IsType<string>(await command.ExecuteScalarAsync(TestContext.Current.CancellationToken)));
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-STRING-LOB-RAW-SYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "System.Data.Common.DbCommand.ExecuteScalar")]
+    public async Task LargeUnicodeText_RoundTripsThroughIndependentAdoNetChannelSynchronously()
+    {
+        var prefix = Guid.NewGuid().ToString("N");
+        var expected = prefix + string.Concat(Enumerable.Repeat("🚀e\u0301/雪%", 20_000));
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.TextFidelityRecords.Add(new TextFidelityRecord { Id = Guid.NewGuid(), Text = expected });
+            Assert.Equal(1, write.SaveChanges());
+        }
+
+        await using var connection = ProviderTestRuntime.CreateConnection();
+        await connection.OpenAsync(TestContext.Current.CancellationToken);
+        await using var command = connection.CreateCommand();
+        command.CommandText = $"SELECT large_text FROM ef10conformancelargetext WHERE large_text LIKE '{prefix}%'";
+        Assert.Equal(expected, Assert.IsType<string>(command.ExecuteScalar()));
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-STRING-ADVERSARIAL-RAW-ASYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "System.Data.Common.DbConnection.CreateCommand", "System.Data.Common.DbCommand.ExecuteScalarAsync")]
     public async Task AdversarialString_RoundTripsExactlyThroughIndependentAdoNetChannelAsynchronously()
     {
