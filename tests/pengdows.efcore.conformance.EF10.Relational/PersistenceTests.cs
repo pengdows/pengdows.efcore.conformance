@@ -808,6 +808,64 @@ public sealed class PersistenceTests
         }
     }
 
+    [Fact]
+    [BehavioralCoverage("EF10-PERSIST-LARGE-BATCH-ASYNC", "Microsoft.EntityFrameworkCore.DbSet`1.AddRange", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "System.Data.Common.DbCommand.ExecuteScalarAsync")]
+    public async Task SaveChangesAsync_PersistsLargeInsertBatch()
+    {
+        const int rowCount = 128;
+        var firstAge = Random.Shared.Next(10_000, 1_000_000);
+        var people = Enumerable.Range(0, rowCount)
+            .Select(index => new Person
+            {
+                Id = Guid.NewGuid(),
+                Name = $"Large async batch {Guid.NewGuid():N}",
+                Age = firstAge + index
+            })
+            .ToArray();
+
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.People.AddRange(people);
+            Assert.Equal(rowCount, await write.SaveChangesAsync(TestContext.Current.CancellationToken));
+        }
+
+        await using var connection = ProviderTestRuntime.CreateConnection();
+        await connection.OpenAsync(TestContext.Current.CancellationToken);
+        await using var command = connection.CreateCommand();
+        command.CommandText = $"SELECT COUNT(*) FROM ef10conformancepeople WHERE age BETWEEN {firstAge} AND {firstAge + rowCount - 1}";
+        Assert.Equal(rowCount, Convert.ToInt32(await command.ExecuteScalarAsync(TestContext.Current.CancellationToken), System.Globalization.CultureInfo.InvariantCulture));
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-PERSIST-LARGE-BATCH-SYNC", "Microsoft.EntityFrameworkCore.DbSet`1.AddRange", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "System.Data.Common.DbCommand.ExecuteScalar")]
+    public async Task SaveChanges_PersistsLargeInsertBatchSynchronously()
+    {
+        const int rowCount = 128;
+        var firstAge = Random.Shared.Next(10_000, 1_000_000);
+        var people = Enumerable.Range(0, rowCount)
+            .Select(index => new Person
+            {
+                Id = Guid.NewGuid(),
+                Name = $"Large sync batch {Guid.NewGuid():N}",
+                Age = firstAge + index
+            })
+            .ToArray();
+
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.People.AddRange(people);
+            Assert.Equal(rowCount, write.SaveChanges());
+        }
+
+        await using var connection = ProviderTestRuntime.CreateConnection();
+        await connection.OpenAsync(TestContext.Current.CancellationToken);
+        await using var command = connection.CreateCommand();
+        command.CommandText = $"SELECT COUNT(*) FROM ef10conformancepeople WHERE age BETWEEN {firstAge} AND {firstAge + rowCount - 1}";
+        Assert.Equal(rowCount, Convert.ToInt32(command.ExecuteScalar(), System.Globalization.CultureInfo.InvariantCulture));
+    }
+
     private static Person[] CreatePeople(string prefix) =>
     [
         new Person { Id = Guid.NewGuid(), Name = $"{prefix} first {Guid.NewGuid():N}", Age = 21 },
