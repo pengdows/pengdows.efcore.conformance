@@ -89,6 +89,52 @@ public sealed class ParameterizedCollectionModeTests
         }
     }
 
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-COLLECTION-LARGE-LIST-SYNC", "Microsoft.EntityFrameworkCore.Infrastructure.RelationalDbContextOptionsBuilder`2.UseParameterizedCollectionMode", "System.Linq.Enumerable.Contains", "System.Linq.Queryable.Where", "System.Linq.Queryable.Count")]
+    public async Task LargeParameterizedCollections_ReturnEquivalentCountsSynchronously()
+    {
+        ProviderTestRuntime.RequireCapability("parameterized-collection-modes");
+        var record = new Person { Id = Guid.NewGuid(), Name = $"Large collection {Guid.NewGuid():N}", Age = -17 };
+        await using (var seed = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(seed, TestContext.Current.CancellationToken);
+            seed.People.Add(record);
+            await seed.SaveChangesAsync(TestContext.Current.CancellationToken);
+        }
+
+        var values = Enumerable.Range(0, 2_100).Append(-17).ToArray();
+        foreach (var mode in CollectionModes)
+        {
+            await using var query = ProviderTestRuntime.CreateContext(mode);
+            var count = query.People.Where(person => values.Contains(person.Age)).Count(person => person.Id == record.Id);
+            Assert.Equal(1, count);
+        }
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-COLLECTION-LARGE-LIST-ASYNC", "Microsoft.EntityFrameworkCore.Infrastructure.RelationalDbContextOptionsBuilder`2.UseParameterizedCollectionMode", "System.Linq.Enumerable.Contains", "System.Linq.Queryable.Where", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.CountAsync")]
+    public async Task LargeParameterizedCollections_ReturnEquivalentCountsAsynchronously()
+    {
+        ProviderTestRuntime.RequireCapability("parameterized-collection-modes");
+        var record = new Person { Id = Guid.NewGuid(), Name = $"Large async collection {Guid.NewGuid():N}", Age = -17 };
+        await using (var seed = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(seed, TestContext.Current.CancellationToken);
+            seed.People.Add(record);
+            await seed.SaveChangesAsync(TestContext.Current.CancellationToken);
+        }
+
+        var values = Enumerable.Range(0, 2_100).Append(-17).ToArray();
+        foreach (var mode in CollectionModes)
+        {
+            await using var query = ProviderTestRuntime.CreateContext(mode);
+            var count = await query.People
+                .Where(person => values.Contains(person.Age))
+                .CountAsync(person => person.Id == record.Id, TestContext.Current.CancellationToken);
+            Assert.Equal(1, count);
+        }
+    }
+
     private static readonly ParameterTranslationMode[] CollectionModes =
     [
         ParameterTranslationMode.MultipleParameters,
