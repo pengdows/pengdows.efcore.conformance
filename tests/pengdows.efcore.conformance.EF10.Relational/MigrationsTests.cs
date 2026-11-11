@@ -28,8 +28,11 @@ public sealed class MigrationsTests
                 Assert.Equal(migrationIds, migrate.Database.GetMigrations());
                 var portableMigrations = migrationIds.Take(5).ToArray();
                 await migrate.Database.MigrateAsync(portableMigrations[^1], cancellationToken);
+                var appliedAfterFirstRun = await migrate.Database.GetAppliedMigrationsAsync(cancellationToken);
+                await migrate.Database.MigrateAsync(portableMigrations[^1], cancellationToken);
                 Assert.True(migrate.Database.HasPendingModelChanges());
-                Assert.Equal(portableMigrations, await migrate.Database.GetAppliedMigrationsAsync(cancellationToken));
+                Assert.Equal(portableMigrations, appliedAfterFirstRun);
+                Assert.Equal(appliedAfterFirstRun, await migrate.Database.GetAppliedMigrationsAsync(cancellationToken));
                 Assert.Equal(migrationIds.Skip(portableMigrations.Length), await migrate.Database.GetPendingMigrationsAsync(cancellationToken));
                 Assert.Equal(1, await migrate.Database.ExecuteSqlInterpolatedAsync(
                     $"INSERT INTO ef10conformance_migrationprobe_renamed (id, value, description) VALUES ({id}, {expected}, {"async row"})",
@@ -128,8 +131,11 @@ public sealed class MigrationsTests
                 Assert.Equal(migrationIds, migrate.Database.GetMigrations());
                 var portableMigrations = migrationIds.Take(5).ToArray();
                 migrate.Database.Migrate(portableMigrations[^1]);
+                var appliedAfterFirstRun = migrate.Database.GetAppliedMigrations();
+                migrate.Database.Migrate(portableMigrations[^1]);
                 Assert.True(migrate.Database.HasPendingModelChanges());
-                Assert.Equal(portableMigrations, migrate.Database.GetAppliedMigrations());
+                Assert.Equal(portableMigrations, appliedAfterFirstRun);
+                Assert.Equal(appliedAfterFirstRun, migrate.Database.GetAppliedMigrations());
                 Assert.Equal(migrationIds.Skip(portableMigrations.Length), migrate.Database.GetPendingMigrations());
                 Assert.Equal(1, migrate.Database.ExecuteSqlInterpolated(
                     $"INSERT INTO ef10conformance_migrationprobe_renamed (id, value, description) VALUES ({id}, {expected}, {"sync row"})"));
