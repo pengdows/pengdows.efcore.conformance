@@ -9,6 +9,68 @@ namespace pengdows.efcore.conformance.EF10.Relational;
 public sealed class RelationshipTests
 {
     [Fact]
+    [BehavioralCoverage("EF10-QUERY-NESTED-COLLECTION-PROJECTION-ASYNC", "System.Linq.Queryable.Select", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    public async Task NestedCollectionProjection_ReturnsOrderedBlogPostAndCommentShapeAsynchronously()
+    {
+        var blog = await CreateBlogAsync();
+        await using var query = ProviderTestRuntime.CreateContext();
+        var actual = await query.Blogs.AsNoTracking()
+            .Where(item => item.Id == blog.Id)
+            .Select(item => new BlogProjection(
+                item.Name,
+                item.Posts.OrderBy(post => post.Title)
+                    .Select(post => new PostProjection(
+                        post.Title,
+                        post.Comments.OrderBy(comment => comment.Text).Select(comment => comment.Text).ToArray()))
+                    .ToArray()))
+            .SingleAsync(TestContext.Current.CancellationToken);
+
+        Assert.Equal(blog.Name, actual.Name);
+        Assert.Collection(actual.Posts,
+            post =>
+            {
+                Assert.Equal("First", post.Title);
+                Assert.Equal(new[] { "First comment" }, post.Comments);
+            },
+            post =>
+            {
+                Assert.Equal("Second", post.Title);
+                Assert.Equal(new[] { "Second comment" }, post.Comments);
+            });
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-NESTED-COLLECTION-PROJECTION-SYNC", "System.Linq.Queryable.Select", "System.Linq.Queryable.Single")]
+    public async Task NestedCollectionProjection_ReturnsOrderedBlogPostAndCommentShapeSynchronously()
+    {
+        var blog = await CreateBlogAsync();
+        await using var query = ProviderTestRuntime.CreateContext();
+        var actual = query.Blogs.AsNoTracking()
+            .Where(item => item.Id == blog.Id)
+            .Select(item => new BlogProjection(
+                item.Name,
+                item.Posts.OrderBy(post => post.Title)
+                    .Select(post => new PostProjection(
+                        post.Title,
+                        post.Comments.OrderBy(comment => comment.Text).Select(comment => comment.Text).ToArray()))
+                    .ToArray()))
+            .Single();
+
+        Assert.Equal(blog.Name, actual.Name);
+        Assert.Collection(actual.Posts,
+            post =>
+            {
+                Assert.Equal("First", post.Title);
+                Assert.Equal(new[] { "First comment" }, post.Comments);
+            },
+            post =>
+            {
+                Assert.Equal("Second", post.Title);
+                Assert.Equal(new[] { "Second comment" }, post.Comments);
+            });
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-RELATIONSHIPS-INCLUDE-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.Include", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ThenInclude", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
     public async Task IncludeThenInclude_LoadsRelatedEntitiesAsynchronously()
     {
@@ -585,3 +647,7 @@ public sealed class RelationshipTests
 }
 
 internal sealed record ParentPostResult(Guid ParentId, string ParentName, string? ChildTitle);
+
+internal sealed record BlogProjection(string Name, IReadOnlyList<PostProjection> Posts);
+
+internal sealed record PostProjection(string Title, IReadOnlyList<string> Comments);
