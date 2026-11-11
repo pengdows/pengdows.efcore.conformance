@@ -326,6 +326,80 @@ public sealed class BulkOperationTests
         Assert.Equal(0, affected);
     }
 
+    [Fact]
+    [CapabilityRequirement("execute-update")]
+    [BehavioralCoverage("EF10-BULK-UPDATE-NAVIGATION-PREDICATE-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteUpdateAsync", "System.Linq.Queryable.Any")]
+    public async Task ExecuteUpdateAsync_FiltersThroughRelatedEntity()
+    {
+        ProviderTestRuntime.RequireCapability("execute-update");
+        var matchingBlog = new Blog { Id = Guid.NewGuid(), Name = "Bulk navigation target" };
+        var otherBlog = new Blog { Id = Guid.NewGuid(), Name = "Other bulk blog" };
+        var matchingPost = new Post { Id = Guid.NewGuid(), BlogId = matchingBlog.Id, Title = "Before matching update" };
+        var otherPost = new Post { Id = Guid.NewGuid(), BlogId = otherBlog.Id, Title = "Before other update" };
+
+        await using (var seed = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(seed, TestContext.Current.CancellationToken);
+            seed.Blogs.AddRange(matchingBlog, otherBlog);
+            seed.Set<Post>().AddRange(matchingPost, otherPost);
+            await seed.SaveChangesAsync(TestContext.Current.CancellationToken);
+        }
+
+        await using (var update = ProviderTestRuntime.CreateContext())
+        {
+            var affected = await update.Set<Post>()
+                .Where(post => post.Blog!.Name == "Bulk navigation target")
+                .ExecuteUpdateAsync(
+                    setters => setters.SetProperty(post => post.Title, "Updated by related entity"),
+                    TestContext.Current.CancellationToken);
+            Assert.Equal(1, affected);
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        var results = await verify.Set<Post>().AsNoTracking()
+            .Where(post => post.Id == matchingPost.Id || post.Id == otherPost.Id)
+            .Select(post => new { post.Id, post.Title })
+            .ToDictionaryAsync(post => post.Id, post => post.Title, TestContext.Current.CancellationToken);
+        Assert.Equal("Updated by related entity", results[matchingPost.Id]);
+        Assert.Equal("Before other update", results[otherPost.Id]);
+    }
+
+    [Fact]
+    [CapabilityRequirement("execute-update")]
+    [BehavioralCoverage("EF10-BULK-UPDATE-NAVIGATION-PREDICATE-SYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteUpdate", "System.Linq.Queryable.Any")]
+    public async Task ExecuteUpdate_FiltersThroughRelatedEntitySynchronously()
+    {
+        ProviderTestRuntime.RequireCapability("execute-update");
+        var matchingBlog = new Blog { Id = Guid.NewGuid(), Name = "Bulk sync navigation target" };
+        var otherBlog = new Blog { Id = Guid.NewGuid(), Name = "Other sync bulk blog" };
+        var matchingPost = new Post { Id = Guid.NewGuid(), BlogId = matchingBlog.Id, Title = "Before sync matching update" };
+        var otherPost = new Post { Id = Guid.NewGuid(), BlogId = otherBlog.Id, Title = "Before sync other update" };
+
+        await using (var seed = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(seed, TestContext.Current.CancellationToken);
+            seed.Blogs.AddRange(matchingBlog, otherBlog);
+            seed.Set<Post>().AddRange(matchingPost, otherPost);
+            await seed.SaveChangesAsync(TestContext.Current.CancellationToken);
+        }
+
+        await using (var update = ProviderTestRuntime.CreateContext())
+        {
+            var affected = update.Set<Post>()
+                .Where(post => post.Blog!.Name == "Bulk sync navigation target")
+                .ExecuteUpdate(setters => setters.SetProperty(post => post.Title, "Updated by sync related entity"));
+            Assert.Equal(1, affected);
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        var results = verify.Set<Post>().AsNoTracking()
+            .Where(post => post.Id == matchingPost.Id || post.Id == otherPost.Id)
+            .Select(post => new { post.Id, post.Title })
+            .ToDictionary(post => post.Id, post => post.Title);
+        Assert.Equal("Updated by sync related entity", results[matchingPost.Id]);
+        Assert.Equal("Before sync other update", results[otherPost.Id]);
+    }
+
     private static async Task<Guid> SeedAsync(int? optionalRank = null)
     {
         var id = Guid.NewGuid();
