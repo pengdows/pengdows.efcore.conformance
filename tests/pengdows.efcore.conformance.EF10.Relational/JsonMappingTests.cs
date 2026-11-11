@@ -116,6 +116,58 @@ public sealed class JsonMappingTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-JSON-OWNED-EXECUTE-UPDATE-REFUSES-ASYNC", "Microsoft.EntityFrameworkCore.Metadata.Builders.OwnedNavigationBuilder.ToJson", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteUpdateAsync")]
+    public async Task ExecuteUpdateAsync_OnOwnedJsonFailsTranslationAndPreservesData()
+    {
+        ProviderTestRuntime.RequireCapability("json-mapping");
+        var expected = CreateRecord("Owned JSON async", true);
+        await using (var seed = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(seed, TestContext.Current.CancellationToken);
+            seed.JsonProfileRecords.Add(expected);
+            await seed.SaveChangesAsync(TestContext.Current.CancellationToken);
+        }
+
+        await using (var update = ProviderTestRuntime.CreateContext())
+        {
+            await Assert.ThrowsAsync<InvalidOperationException>(() => update.JsonProfileRecords
+                .Where(record => record.Id == expected.Id)
+                .ExecuteUpdateAsync(setters => setters.SetProperty(record => record.Profile.Biography, "Must not persist"), TestContext.Current.CancellationToken));
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        var actual = await verify.JsonProfileRecords.AsNoTracking()
+            .SingleAsync(record => record.Id == expected.Id, TestContext.Current.CancellationToken);
+        Assert.Equal("Owned JSON async", actual.Profile.Biography);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-JSON-OWNED-EXECUTE-UPDATE-REFUSES-SYNC", "Microsoft.EntityFrameworkCore.Metadata.Builders.OwnedNavigationBuilder.ToJson", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteUpdate")]
+    public async Task ExecuteUpdate_OnOwnedJsonFailsTranslationAndPreservesDataSynchronously()
+    {
+        ProviderTestRuntime.RequireCapability("json-mapping");
+        var expected = CreateRecord("Owned JSON sync", false);
+        await using (var seed = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(seed, TestContext.Current.CancellationToken);
+            seed.JsonProfileRecords.Add(expected);
+            seed.SaveChanges();
+        }
+
+        await using (var update = ProviderTestRuntime.CreateContext())
+        {
+            Assert.Throws<InvalidOperationException>(() => update.JsonProfileRecords
+                .Where(record => record.Id == expected.Id)
+                .ExecuteUpdate(setters => setters.SetProperty(record => record.Profile.Biography, "Must not persist")));
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        var actual = verify.JsonProfileRecords.AsNoTracking()
+            .Single(record => record.Id == expected.Id);
+        Assert.Equal("Owned JSON sync", actual.Profile.Biography);
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-JSON-COMPLEX-QUERY-ASYNC", "Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder.ComplexProperty", "Microsoft.EntityFrameworkCore.RelationalComplexPropertyBuilderExtensions.ToJson", "System.Linq.Queryable.Where", "System.Linq.Queryable.Select", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
     public async Task ComplexJsonProperty_CanBeFilteredAndProjectedAsynchronously()
     {

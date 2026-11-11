@@ -8,6 +8,56 @@ namespace pengdows.efcore.conformance.EF10.Relational;
 public sealed class QueryTests
 {
     [Fact]
+    [BehavioralCoverage("EF10-QUERY-DATEONLY-TRANSLATIONS-ASYNC", "System.DateOnly.ToDateTime", "System.DateOnly.DayNumber", "System.Linq.Queryable.Select", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToArrayAsync")]
+    public async Task DateOnlyToDateTimeAndDayNumberTranslateAsynchronously()
+    {
+        var records = CreateDateOnlyRecords();
+        await SeedScalarRecordsAsync(records);
+        var baseline = records[0].Day.DayNumber;
+        var ids = records.Select(record => record.Id).ToArray();
+
+        await using var query = ProviderTestRuntime.CreateContext();
+        var actual = await query.ScalarRecords.AsNoTracking()
+            .Where(record => ids.Contains(record.Id))
+            .OrderBy(record => record.Day)
+            .Select(record => new DateOnlyQueryResult(record.Day.ToDateTime(TimeOnly.MinValue), record.Day.DayNumber - baseline))
+            .ToArrayAsync(TestContext.Current.CancellationToken);
+
+        Assert.Equal(
+            new[]
+            {
+                new DateOnlyQueryResult(new DateTime(2024, 2, 29), 0),
+                new DateOnlyQueryResult(new DateTime(2025, 3, 1), 366)
+            },
+            actual);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-DATEONLY-TRANSLATIONS-SYNC", "System.DateOnly.ToDateTime", "System.DateOnly.DayNumber", "System.Linq.Queryable.Select", "System.Linq.Enumerable.ToArray")]
+    public async Task DateOnlyToDateTimeAndDayNumberTranslateSynchronously()
+    {
+        var records = CreateDateOnlyRecords();
+        await SeedScalarRecordsAsync(records);
+        var baseline = records[0].Day.DayNumber;
+        var ids = records.Select(record => record.Id).ToArray();
+
+        await using var query = ProviderTestRuntime.CreateContext();
+        var actual = query.ScalarRecords.AsNoTracking()
+            .Where(record => ids.Contains(record.Id))
+            .OrderBy(record => record.Day)
+            .Select(record => new DateOnlyQueryResult(record.Day.ToDateTime(TimeOnly.MinValue), record.Day.DayNumber - baseline))
+            .ToArray();
+
+        Assert.Equal(
+            new[]
+            {
+                new DateOnlyQueryResult(new DateTime(2024, 2, 29), 0),
+                new DateOnlyQueryResult(new DateTime(2025, 3, 1), 366)
+            },
+            actual);
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-QUERY-COMPOSITION-ASYNC", "System.Linq.Queryable.Where", "System.Linq.Queryable.OrderBy", "System.Linq.Queryable.ThenBy", "System.Linq.Queryable.Skip", "System.Linq.Queryable.Take", "System.Linq.Queryable.Select", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync")]
     public async Task ComposedQuery_FiltersOrdersPaginatesAndProjects()
     {
@@ -774,7 +824,7 @@ public sealed class QueryTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-QUERY-LOAD-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.LoadAsync", "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.Entries")]
+    [BehavioralCoverage("EF10-QUERY-LOAD-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.LoadAsync", "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.Entries", "System.Collections.Generic.IEnumerable<Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<TEntity>> Entries<TEntity>() where TEntity : class")]
     public async Task LoadAsync_TracksEveryMatchingEntity()
     {
         var batch = Guid.NewGuid().ToString("N");
@@ -798,7 +848,7 @@ public sealed class QueryTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-QUERY-LOAD-SYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.Load", "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.Entries")]
+    [BehavioralCoverage("EF10-QUERY-LOAD-SYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.Load", "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.Entries", "System.Collections.Generic.IEnumerable<Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<TEntity>> Entries<TEntity>() where TEntity : class")]
     public async Task Load_TracksEveryMatchingEntitySynchronously()
     {
         var batch = Guid.NewGuid().ToString("N");
@@ -1097,6 +1147,20 @@ public sealed class QueryTests
         await context.SaveChangesAsync(TestContext.Current.CancellationToken);
     }
 
+    private static ScalarRecord[] CreateDateOnlyRecords() =>
+    [
+        new ScalarRecord { Id = Guid.NewGuid(), Day = new DateOnly(2024, 2, 29), Mood = TestMood.Calm },
+        new ScalarRecord { Id = Guid.NewGuid(), Day = new DateOnly(2025, 3, 1), Mood = TestMood.Curious }
+    ];
+
+    private static async Task SeedScalarRecordsAsync(IEnumerable<ScalarRecord> records)
+    {
+        await using var context = ProviderTestRuntime.CreateContext();
+        await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
+        context.ScalarRecords.AddRange(records);
+        await context.SaveChangesAsync(TestContext.Current.CancellationToken);
+    }
+
     private sealed record PersonResult(string Name, int Age);
 
     private sealed record LeftJoinResult(int Age, string? MatchName);
@@ -1106,3 +1170,5 @@ public sealed class QueryTests
     private sealed record JoinedAges(int LeftAge, int RightAge);
 
 }
+
+internal sealed record DateOnlyQueryResult(DateTime DateTimeValue, int DaysFromBaseline);

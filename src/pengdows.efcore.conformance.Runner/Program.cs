@@ -1,6 +1,8 @@
 using System.Diagnostics;
 using System.Data.Common;
 using System.Reflection;
+using System.Reflection.Emit;
+using System.Runtime.Loader;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Xml.Linq;
@@ -16,6 +18,26 @@ if (args.Length == 0 || args[0] is "--help" or "-h")
 if (args[0] == "--compare")
 {
     return await CompareReportsAsync(args);
+}
+
+if (args[0] == "--enumerate-cases")
+{
+    return await EnumerateCasesAsync(args);
+}
+
+if (args[0] == "--completeness")
+{
+    return await CompletenessAsync(args);
+}
+
+if (args[0] == "--contract-gate")
+{
+    return await ContractGateAsync(args);
+}
+
+if (args[0] == "--verify-defect-control")
+{
+    return await VerifyDefectControlAsync(args);
 }
 
 if (args[0] == "--run")
@@ -480,6 +502,541 @@ static async Task CleanupDatabaseOnceAsync(IProviderAdapter adapter, string conn
     await adapter.CleanupDatabaseAsync(context, CancellationToken.None);
 }
 
+// Usage: --enumerate-cases <manifest.json> <cases.json>
+// Phase 0 of the black-box harness: every public member in the manifest becomes a case with its driver and sync/async pair.
+static async Task<int> EnumerateCasesAsync(string[] arguments)
+{
+    if (arguments.Length != 3)
+    {
+        Console.Error.WriteLine("Usage: --enumerate-cases <manifest.json> <cases.json>");
+        return 2;
+    }
+
+    using var manifest = JsonDocument.Parse(await File.ReadAllTextAsync(arguments[1]));
+    var cases = new List<object>();
+    foreach (var entry in manifest.RootElement.GetProperty("Entries").EnumerateArray())
+    {
+        var disposition = entry.GetProperty("Disposition").GetString() ?? "";
+        var declaringType = entry.GetProperty("DeclaringType").GetString() ?? "";
+        var member = entry.GetProperty("ApiMemberName").ValueKind == JsonValueKind.String
+            ? entry.GetProperty("ApiMemberName").GetString()!
+            : entry.GetProperty("Signature").GetString()!;
+        var kind = entry.GetProperty("MemberKind").GetString() ?? "";
+        var signature = entry.GetProperty("Signature").GetString() ?? "";
+        cases.Add(new
+        {
+            Id = $"{declaringType}.{member}#{cases.Count}",
+            DeclaringType = declaringType,
+            Member = member,
+            MemberKind = kind,
+            Signature = signature,
+            Disposition = disposition,
+            Driver = CaseEnumeration.DriverFor(declaringType),
+            Exclusion = CaseEnumeration.ExclusionFor(declaringType)
+                ?? (disposition is "excluded-ef-internal" or "ef-owned-no-provider-contract"
+                    && !CaseEnumeration.IsExternalSurface(entry.GetProperty("DispositionReason").GetString() ?? "")
+                    ? entry.GetProperty("DispositionReason").GetString()
+                    : null)
+                ?? (CaseEnumeration.DriverFor(declaringType) == "unassigned" ? CaseEnumeration.UnassignedExclusionFor(declaringType) : null),
+            IsAsync = CaseEnumeration.IsAsync(member),
+            SyncPair = CaseEnumeration.SyncNameOf(member),
+        });
+    }
+
+    var summary = new
+    {
+        GeneratedAtUtc = DateTimeOffset.UtcNow,
+        Cases = cases.Count,
+        ByDriver = cases.GroupBy(c => ((dynamic)c).Driver as string ?? "").ToDictionary(g => g.Key, g => g.Count()),
+        Excluded = cases.Count(c => ((dynamic)c).Exclusion != null),
+        ByDisposition = cases.GroupBy(c => ((dynamic)c).Disposition as string ?? "").ToDictionary(g => g.Key, g => g.Count()),
+        Items = cases,
+    };
+    await File.WriteAllTextAsync(arguments[2], JsonSerializer.Serialize(summary, new JsonSerializerOptions { WriteIndented = true }));
+    Console.WriteLine($"Wrote {cases.Count} cases to {arguments[2]}");
+    return 0;
+}
+
+// Usage: --completeness <manifest.json> <output.json> <label>=<results.json> [...]
+// Each API in the manifest gets a status per engine from the scenarios linked to it; pairs of engines then split the shared surface.
+static async Task<int> CompletenessAsync(string[] arguments)
+{
+    if (arguments.Length < 4 || arguments[3..].Any(a => !a.Contains('=')))
+    {
+        Console.Error.WriteLine("Usage: --completeness <manifest.json> <output.json> <label>=<results.json> [...]");
+        return 2;
+    }
+
+    var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+    options.Converters.Add(new JsonStringEnumConverter());
+    using var manifest = JsonDocument.Parse(await File.ReadAllTextAsync(arguments[1]));
+    var entries = manifest.RootElement.GetProperty("Entries").EnumerateArray().ToList();
+
+    var engines = new List<(string Label, Dictionary<string, ConformanceOutcome> Outcomes)>();
+    foreach (var spec in arguments[3..])
+    {
+        var split = spec.IndexOf('=');
+        var label = spec[..split];
+        var report = JsonSerializer.Deserialize<ConformanceRunReport>(await File.ReadAllTextAsync(spec[(split + 1)..]), options);
+        if (report is null)
+        {
+            Console.Error.WriteLine($"Could not read the results for '{label}'.");
+            return 2;
+        }
+
+        engines.Add((label, AggregateOutcomes(report.Results)));
+    }
+
+    var rows = new List<object>();
+    var statuses = engines.ToDictionary(e => e.Label, _ => new Dictionary<ApiStatus, int>());
+    var engineStatuses = new List<Dictionary<string, ApiStatus>>();
+    var dispositions = entries.GroupBy(e => e.GetProperty("Disposition").GetString() ?? "").ToDictionary(g => g.Key, g => g.Count());
+    foreach (var entry in entries)
+    {
+        var contracts = entry.TryGetProperty("BehavioralContracts", out var list)
+            ? list.EnumerateArray().Select(c => c.GetString()!).ToList()
+            : new List<string>();
+        var perEngine = new Dictionary<string, ApiStatus>();
+        foreach (var (label, outcomes) in engines)
+        {
+            var status = CompletenessAnalysis.StatusOf(contracts, outcomes);
+            perEngine[label] = status;
+            statuses[label][status] = statuses[label].GetValueOrDefault(status) + 1;
+        }
+
+        if (contracts.Count > 0)
+        {
+            rows.Add(new
+            {
+                Signature = entry.GetProperty("Signature").GetString(),
+                Assembly = entry.GetProperty("AssemblyName").GetString(),
+                Statuses = perEngine.ToDictionary(kv => kv.Key, kv => kv.Value.ToString()),
+            });
+        }
+    }
+
+    var pairs = new List<object>();
+    for (var i = 0; i < engines.Count; i++)
+    {
+        for (var j = i + 1; j < engines.Count; j++)
+        {
+            var counts = CompletenessAnalysis.Pair(rows.Cast<dynamic>().Select(r =>
+                (ParseStatus(r.Statuses[engines[i].Label]), ParseStatus(r.Statuses[engines[j].Label]))));
+            pairs.Add(new { A = engines[i].Label, B = engines[j].Label, counts.Both, OnlyA = counts.OnlyA, OnlyB = counts.OnlyB, counts.Neither, counts.Excluded });
+        }
+    }
+
+    var summary = new
+    {
+        GeneratedAtUtc = DateTimeOffset.UtcNow,
+        Entries = entries.Count,
+        EntriesByDisposition = dispositions,
+        Engines = statuses.ToDictionary(kv => kv.Key, kv => kv.Value.ToDictionary(s => s.Key.ToString(), s => s.Value)),
+        Pairs = pairs,
+        Apis = rows,
+    };
+    await File.WriteAllTextAsync(arguments[2], JsonSerializer.Serialize(summary, new JsonSerializerOptions { WriteIndented = true }));
+    foreach (var pair in pairs)
+    {
+        Console.WriteLine(JsonSerializer.Serialize(pair));
+    }
+
+    return 0;
+}
+
+// Usage: --contract-gate <manifest.json> <test-assembly.dll> <ledger.json> <report.json> [provider-results.json ...]
+// Reconciles the independently authored behavior inventory and upstream API inventory with executable test attributes.
+static async Task<int> ContractGateAsync(string[] arguments)
+{
+    if (arguments.Length < 5)
+    {
+        Console.Error.WriteLine("Usage: --contract-gate <manifest.json> <test-assembly.dll> <ledger.json> <report.json> [provider-results.json ...]");
+        return 2;
+    }
+
+    using var manifest = JsonDocument.Parse(await File.ReadAllTextAsync(arguments[1]));
+    using var ledger = JsonDocument.Parse(await File.ReadAllTextAsync(arguments[3]));
+    var assemblyPath = Path.GetFullPath(arguments[2]);
+    if (!File.Exists(assemblyPath))
+    {
+        Console.Error.WriteLine($"Test assembly not found: {assemblyPath}");
+        return 2;
+    }
+
+    using var peReader = new System.Reflection.PortableExecutable.PEReader(File.OpenRead(assemblyPath));
+    var metadata = System.Reflection.Metadata.PEReaderExtensions.GetMetadataReader(peReader);
+    var testMethods = metadata.MethodDefinitions
+        .Select(handle => (Handle: handle, Definition: metadata.GetMethodDefinition(handle)))
+        .SelectMany(item => item.Definition.GetCustomAttributes()
+            .Select(attributeHandle => metadata.GetCustomAttribute(attributeHandle))
+            .Where(attribute => GetAttributeTypeName(metadata, attribute) is var name && (name == typeof(ConformanceContractAttribute).FullName || name == typeof(BehavioralCoverageAttribute).FullName))
+            .SelectMany(attribute => ReadContractConstructorArguments(metadata, attribute)
+                .Select(id => (Id: id,
+                    Name: $"{GetDeclaringTypeName(metadata, item.Definition.GetDeclaringType())}.{metadata.GetString(item.Definition.Name)}"))))
+        .Where(item => item.Id.Length > 0)
+        .ToLookup(item => item.Id, item => item.Name, StringComparer.Ordinal);
+    var testApiSelectors = metadata.MethodDefinitions
+        .SelectMany(handle => metadata.GetMethodDefinition(handle).GetCustomAttributes()
+            .Select(attributeHandle => metadata.GetCustomAttribute(attributeHandle))
+            .Where(attribute => GetAttributeTypeName(metadata, attribute) == typeof(BehavioralCoverageAttribute).FullName)
+            .SelectMany(attribute => ReadBehavioralApiSelectors(metadata, attribute)))
+        .ToHashSet(StringComparer.Ordinal);
+    foreach (var signature in CollectInvokedApiSignatures(assemblyPath, manifest.RootElement))
+    {
+        testApiSelectors.Add(signature);
+    }
+
+    var behaviorDefinitions = ledger.RootElement.GetProperty("behaviorContracts").EnumerateArray()
+        .Select(item => (Id: item.GetProperty("id").GetString()!, Status: item.GetProperty("status").GetString()!, LinkedContracts: item.TryGetProperty("testContractIds", out var linked) ? linked.EnumerateArray().Select(value => value.GetString() ?? "").ToArray() : []))
+        .ToList();
+    var resultOutcomes = new Dictionary<string, Dictionary<string, List<ConformanceOutcome>>>(StringComparer.Ordinal);
+    foreach (var resultPath in arguments[5..])
+    {
+        var resultReport = JsonSerializer.Deserialize<ConformanceRunReport>(await File.ReadAllTextAsync(resultPath), new JsonSerializerOptions { PropertyNameCaseInsensitive = true, Converters = { new JsonStringEnumConverter() } });
+        if (resultReport is null) continue;
+        if (!resultOutcomes.TryGetValue(resultReport.Provider, out var providerResults)) resultOutcomes.Add(resultReport.Provider, providerResults = new Dictionary<string, List<ConformanceOutcome>>(StringComparer.Ordinal));
+        foreach (var result in resultReport.Results)
+        {
+            if (!providerResults.TryGetValue(result.ContractId, out var values)) providerResults.Add(result.ContractId, values = []);
+            values.Add(result.Outcome);
+        }
+    }
+    var apiContractIds = manifest.RootElement.GetProperty("Entries").EnumerateArray()
+        .Where(entry => entry.TryGetProperty("BehavioralContracts", out _))
+        .SelectMany(entry => entry.GetProperty("BehavioralContracts").EnumerateArray().Select(value => value.GetString() ?? ""))
+        .Where(id => id.Length > 0)
+        .Distinct(StringComparer.Ordinal)
+        .ToHashSet(StringComparer.Ordinal);
+    var apiSelectorCounts = manifest.RootElement.GetProperty("Entries").EnumerateArray()
+        .Where(entry => entry.TryGetProperty("Disposition", out var disposition) && disposition.GetString() == "behavior-tested-family")
+        .Select(entry => entry.TryGetProperty("ApiSelector", out var selector) ? selector.GetString() : null)
+        .Where(selector => !string.IsNullOrWhiteSpace(selector))
+        .GroupBy(selector => selector!, StringComparer.Ordinal)
+        .ToDictionary(group => group.Key, group => group.Count(), StringComparer.Ordinal);
+    var behaviors = behaviorDefinitions.Select(item =>
+    {
+        var linked = item.LinkedContracts.Length > 0 && item.LinkedContracts.All(id => testMethods[id].Any());
+        var providerResults = resultOutcomes.ToDictionary(
+            provider => provider.Key,
+            provider =>
+            {
+                var outcomes = item.LinkedContracts.SelectMany(id => provider.Value.GetValueOrDefault(id) ?? []).ToArray();
+                return new { Outcomes = outcomes, ResultStatus = ResultStatusFor(outcomes) };
+            },
+            StringComparer.Ordinal);
+        var observed = linked && resultOutcomes.Count > 0 && resultOutcomes.Values.All(provider => item.LinkedContracts.All(provider.ContainsKey));
+        return new
+        {
+            item.Id,
+            InventoryStatus = item.Status,
+            TestContractIds = item.LinkedContracts,
+            Tests = item.LinkedContracts.SelectMany(id => testMethods[id]).Distinct(StringComparer.Ordinal).Order(StringComparer.Ordinal).ToArray(),
+            ProviderResults = providerResults,
+            // A few linked test methods do not complete an inventory row marked PARTIAL/NOT_TESTED.
+            // Report execution evidence separately from inventory completeness.
+            GateStatus = item.Status.Equals("COMPLETE", StringComparison.OrdinalIgnoreCase)
+                ? observed ? "COMPLETE" : "NOT_TESTED"
+                : observed ? "COVERAGE_PARTIAL" : "NOT_TESTED",
+        };
+    }).ToList();
+
+    var apiRows = new List<object>();
+    var unclassified = 0;
+    var uncovered = 0;
+    foreach (var entry in manifest.RootElement.GetProperty("Entries").EnumerateArray())
+    {
+        var signature = entry.TryGetProperty("Signature", out var signatureElement) ? signatureElement.GetString() ?? "" : "";
+        var disposition = entry.TryGetProperty("Disposition", out var dispositionElement) ? dispositionElement.GetString() ?? "unclassified" : "unclassified";
+        var rationale = entry.TryGetProperty("DispositionReason", out var reasonElement) ? reasonElement.GetString() : null;
+        var linkedContracts = entry.TryGetProperty("BehavioralContracts", out var contractList)
+            ? contractList.EnumerateArray().Select(value => value.GetString() ?? "").Where(value => value.Length > 0).ToArray()
+            : [];
+        var linkedTests = linkedContracts.SelectMany(id => testMethods[id]).Distinct(StringComparer.Ordinal).Order(StringComparer.Ordinal).ToArray();
+        var excluded = disposition is "not-applicable-with-rationale" or "ef-owned-no-provider-contract" or "excluded-ef-internal" or "excluded-obsolete-error"
+            || entry.TryGetProperty("ProviderApplicable", out var applicable) && applicable.ValueKind == JsonValueKind.False;
+        var apiSelector = entry.TryGetProperty("ApiSelector", out var apiSelectorElement) ? apiSelectorElement.GetString() : null;
+        var selectorCount = apiSelector is not null ? apiSelectorCounts.GetValueOrDefault(apiSelector) : 0;
+        var exactApiSelectorLinked = !excluded && (testApiSelectors.Contains(signature)
+            || apiSelector is not null && testApiSelectors.Contains(apiSelector) && selectorCount == 1);
+        var overloadSelectorLinked = !excluded && apiSelector is not null && testApiSelectors.Contains(apiSelector) && selectorCount > 1;
+        var isUnclassified = disposition is "unclassified" or "capability-gated" && string.IsNullOrWhiteSpace(rationale);
+        // BehavioralContracts are API-family references. A unique API selector on an
+        // executable attributed test links a singleton member; duplicate selectors still
+        // need overload-specific evidence.
+        var isUncovered = !excluded && !exactApiSelectorLinked;
+        if (isUnclassified) unclassified++;
+        if (isUncovered) uncovered++;
+        var resultStatusByProvider = resultOutcomes.ToDictionary(
+            provider => provider.Key,
+            provider => ResultStatusFor(linkedContracts.SelectMany(id => provider.Value.GetValueOrDefault(id) ?? [])),
+            StringComparer.Ordinal);
+        apiRows.Add(new { signature, disposition, rationale, linkedContracts, tests = linkedTests, resultStatusByProvider, status = isUnclassified ? "UNCLASSIFIED" : excluded ? "EXCLUDED_WITH_RATIONALE" : exactApiSelectorLinked ? "API_SPECIFIC_SELECTOR_LINKED" : overloadSelectorLinked ? "OVERLOADS_UNVERIFIED" : linkedTests.Length == 0 ? "NOT_TESTED" : "FAMILY_LINKED_API_UNVERIFIED" });
+    }
+
+    var providerSummaries = resultOutcomes.Keys.ToDictionary(
+        provider => provider,
+        provider => new
+        {
+            behaviorPass = behaviors.Count(row => row.ProviderResults[provider].ResultStatus == "PASS"),
+            behaviorFail = behaviors.Count(row => row.ProviderResults[provider].ResultStatus == "FAIL"),
+            behaviorUnsupported = behaviors.Count(row => row.ProviderResults[provider].ResultStatus == "UNSUPPORTED"),
+            behaviorBlocked = behaviors.Count(row => row.ProviderResults[provider].ResultStatus == "BLOCKED"),
+            apiPass = apiRows.Count(row => ((dynamic)row).resultStatusByProvider[provider] == "PASS"),
+            apiFail = apiRows.Count(row => ((dynamic)row).resultStatusByProvider[provider] == "FAIL"),
+            apiUnsupported = apiRows.Count(row => ((dynamic)row).resultStatusByProvider[provider] == "UNSUPPORTED"),
+            apiBlocked = apiRows.Count(row => ((dynamic)row).resultStatusByProvider[provider] == "BLOCKED"),
+            apiNotTestedApplicable = apiRows.Count(row => ((dynamic)row).resultStatusByProvider[provider] == "NOT_TESTED" && ((dynamic)row).status != "EXCLUDED_WITH_RATIONALE"),
+        },
+        StringComparer.Ordinal);
+
+    var defectDetectionControls = ledger.RootElement.GetProperty("defectDetectionControls").EnumerateArray()
+        .Select(control => new
+        {
+            Id = control.GetProperty("id").GetString() ?? "",
+            Result = control.TryGetProperty("result", out var result) ? result.GetString() ?? "NOT_TESTED" : "NOT_TESTED",
+        }).ToArray();
+    var completionGate = new
+    {
+        zeroUnclassifiedApis = unclassified == 0,
+        zeroUncoveredApplicableApis = uncovered == 0,
+        everyBehaviorContractComplete = behaviors.All(row => row.GateStatus == "COMPLETE"),
+        independentProviderMinimumMet = resultOutcomes.Count >= 2,
+        defectDetectionControlPassed = defectDetectionControls.Length > 0 && defectDetectionControls.All(control => control.Result == "PASS"),
+    };
+    var completion = completionGate.zeroUnclassifiedApis
+        && completionGate.zeroUncoveredApplicableApis
+        && completionGate.everyBehaviorContractComplete
+        && completionGate.independentProviderMinimumMet
+        && completionGate.defectDetectionControlPassed
+            ? "COMPLETE"
+            : "INCOMPLETE";
+
+    var report = new
+    {
+        generatedAtUtc = DateTimeOffset.UtcNow,
+        source = new { manifest = Path.GetFullPath(arguments[1]), testAssembly = assemblyPath, ledger = Path.GetFullPath(arguments[3]) },
+        summary = new { upstreamApiEntries = apiRows.Count, unclassifiedApis = unclassified, uncoveredApis = uncovered, apiSpecificSelectorLinked = apiRows.Count(row => ((dynamic)row).status == "API_SPECIFIC_SELECTOR_LINKED"), overloadsUnverified = apiRows.Count(row => ((dynamic)row).status == "OVERLOADS_UNVERIFIED"), apiFamilyLinkedUnverified = apiRows.Count(row => ((dynamic)row).status == "FAMILY_LINKED_API_UNVERIFIED"), apiBehaviorContracts = apiContractIds.Count, linkedApiBehaviorContracts = apiContractIds.Count(id => testMethods[id].Any()), behaviorContracts = behaviors.Count, untestedBehaviorContracts = behaviors.Count(row => row.GateStatus == "NOT_TESTED"), partialBehaviorContracts = behaviors.Count(row => row.GateStatus == "COVERAGE_PARTIAL"), completeBehaviorContracts = behaviors.Count(row => row.GateStatus == "COMPLETE"), apiExcluded = apiRows.Count(row => ((dynamic)row).status == "EXCLUDED_WITH_RATIONALE"), attributedTestMethods = testMethods.SelectMany(group => group).Distinct(StringComparer.Ordinal).Count(), providerReports = arguments.Length - 5, providers = providerSummaries },
+        completion,
+        completionGate,
+        behaviorContracts = behaviors,
+        apiContracts = apiRows,
+        providerValidation = ledger.RootElement.GetProperty("providerValidation").Clone(),
+        defectDetectionControls,
+    };
+    var output = JsonSerializer.Serialize(report, new JsonSerializerOptions { WriteIndented = true });
+    await File.WriteAllTextAsync(Path.GetFullPath(arguments[4]), output);
+    Console.WriteLine(JsonSerializer.Serialize(report.summary));
+    return 0;
+}
+
+static HashSet<string> CollectInvokedApiSignatures(string testAssemblyPath, JsonElement inventory)
+{
+    var tokenToSignature = inventory.GetProperty("Entries").EnumerateArray()
+        .Where(entry => entry.GetProperty("MemberKind").GetString() == "Method"
+            && entry.GetProperty("Disposition").GetString() == "behavior-tested-family"
+            && entry.TryGetProperty("ProviderApplicable", out var applicable)
+            && applicable.ValueKind == JsonValueKind.True
+            && entry.TryGetProperty("MetadataToken", out var methodToken)
+            && methodToken.GetInt32() != 0
+            && entry.TryGetProperty("ModuleVersionId", out _))
+        .ToDictionary(
+            entry => $"{entry.GetProperty("AssemblyName").GetString()}|{entry.GetProperty("ModuleVersionId").GetGuid():D}|{entry.GetProperty("MetadataToken").GetInt32()}",
+            entry => entry.GetProperty("Signature").GetString() ?? "",
+            StringComparer.Ordinal);
+    var signatures = new HashSet<string>(StringComparer.Ordinal);
+    var opcodes = typeof(OpCodes).GetFields(BindingFlags.Public | BindingFlags.Static)
+        .Where(field => field.FieldType == typeof(OpCode))
+        .Select(field => (OpCode)field.GetValue(null)!)
+        .ToDictionary(opcode => unchecked((ushort)opcode.Value));
+    var loadContext = new ApiTestAssemblyLoadContext(testAssemblyPath);
+    try
+    {
+        var assembly = loadContext.LoadFromAssemblyPath(testAssemblyPath);
+        foreach (var type in assembly.GetTypes())
+        {
+            foreach (var testMethod in type.GetMethods(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly))
+            {
+                if (!CustomAttributeData.GetCustomAttributes(testMethod).Any(attribute => attribute.AttributeType.FullName == typeof(BehavioralCoverageAttribute).FullName))
+                    continue;
+                var il = testMethod.GetMethodBody()?.GetILAsByteArray();
+                if (il is null) continue;
+                var position = 0;
+                while (position < il.Length)
+                {
+                    var opcodeByte = il[position++];
+                    var opcodeValue = opcodeByte == 0xFE ? (ushort)(0xFE00 | il[position++]) : opcodeByte;
+                    if (!opcodes.TryGetValue(opcodeValue, out var opcode))
+                        throw new BadImageFormatException($"Unknown IL opcode 0x{opcodeValue:X4} in {testMethod.DeclaringType?.FullName}.{testMethod.Name}.");
+                    if (opcode.OperandType == OperandType.InlineMethod)
+                    {
+                        var token = BitConverter.ToInt32(il, position);
+                        try
+                        {
+                            var target = testMethod.Module.ResolveMethod(token, testMethod.DeclaringType?.GetGenericArguments(), testMethod.IsGenericMethod ? testMethod.GetGenericArguments() : null);
+                            if (target is not null)
+                            {
+                                var definition = target is MethodInfo methodInfo && methodInfo.IsGenericMethod
+                                    ? methodInfo.GetGenericMethodDefinition()
+                                    : target;
+                                var key = $"{definition.Module.Assembly.GetName().Name}|{definition.Module.ModuleVersionId:D}|{definition.MetadataToken}";
+                                if (tokenToSignature.TryGetValue(key, out var signature)) signatures.Add(signature);
+                            }
+                        }
+                        catch (ArgumentException)
+                        {
+                            // Some method tokens reference generic contexts that cannot be resolved outside execution.
+                        }
+                    }
+                    position += OperandSize(opcode.OperandType, il, position);
+                }
+            }
+        }
+    }
+    finally
+    {
+        loadContext.Unload();
+    }
+    return signatures;
+}
+
+static int OperandSize(OperandType operandType, byte[] il, int position) => operandType switch
+{
+    OperandType.InlineNone => 0,
+    OperandType.ShortInlineBrTarget or OperandType.ShortInlineI or OperandType.ShortInlineVar => 1,
+    OperandType.InlineVar => 2,
+    OperandType.InlineI or OperandType.InlineBrTarget or OperandType.InlineField or OperandType.InlineMethod or OperandType.InlineSig or OperandType.InlineString or OperandType.InlineTok or OperandType.InlineType or OperandType.ShortInlineR => 4,
+    OperandType.InlineI8 or OperandType.InlineR => 8,
+    OperandType.InlineSwitch => checked(4 + BitConverter.ToInt32(il, position) * 4),
+    _ => throw new BadImageFormatException($"Unsupported IL operand type '{operandType}'."),
+};
+
+static string ResultStatusFor(IEnumerable<ConformanceOutcome> outcomes)
+{
+    var values = outcomes.ToArray();
+    if (values.Length == 0) return "NOT_TESTED";
+    if (values.Any(outcome => outcome is ConformanceOutcome.Fail or ConformanceOutcome.Error)) return "FAIL";
+    if (values.Any(outcome => outcome is ConformanceOutcome.UndeclaredCapability or ConformanceOutcome.Inconclusive)) return "BLOCKED";
+    if (values.Any(outcome => outcome is ConformanceOutcome.Unsupported or ConformanceOutcome.Skip or ConformanceOutcome.Untranslatable)) return "UNSUPPORTED";
+    return values.All(outcome => outcome == ConformanceOutcome.Pass) ? "PASS" : "NOT_TESTED";
+}
+
+static string GetAttributeTypeName(System.Reflection.Metadata.MetadataReader metadata, System.Reflection.Metadata.CustomAttribute attribute)
+{
+    var constructor = attribute.Constructor;
+    System.Reflection.Metadata.EntityHandle parent = constructor.Kind switch
+    {
+        System.Reflection.Metadata.HandleKind.MethodDefinition => metadata.GetMethodDefinition((System.Reflection.Metadata.MethodDefinitionHandle)constructor).GetDeclaringType(),
+        System.Reflection.Metadata.HandleKind.MemberReference => metadata.GetMemberReference((System.Reflection.Metadata.MemberReferenceHandle)constructor).Parent,
+        _ => default,
+    };
+    return GetTypeName(metadata, parent);
+}
+
+static string GetTypeName(System.Reflection.Metadata.MetadataReader metadata, System.Reflection.Metadata.EntityHandle handle)
+{
+    return handle.Kind switch
+    {
+        System.Reflection.Metadata.HandleKind.TypeDefinition => GetDefinitionName(metadata, (System.Reflection.Metadata.TypeDefinitionHandle)handle),
+        System.Reflection.Metadata.HandleKind.TypeReference => GetReferenceName(metadata, (System.Reflection.Metadata.TypeReferenceHandle)handle),
+        _ => "",
+    };
+}
+
+static string GetDefinitionName(System.Reflection.Metadata.MetadataReader metadata, System.Reflection.Metadata.TypeDefinitionHandle handle)
+{
+    var definition = metadata.GetTypeDefinition(handle);
+    var ns = metadata.GetString(definition.Namespace);
+    var name = metadata.GetString(definition.Name);
+    return ns.Length == 0 ? name : $"{ns}.{name}";
+}
+
+static string GetReferenceName(System.Reflection.Metadata.MetadataReader metadata, System.Reflection.Metadata.TypeReferenceHandle handle)
+{
+    var reference = metadata.GetTypeReference(handle);
+    var ns = metadata.GetString(reference.Namespace);
+    var name = metadata.GetString(reference.Name);
+    return ns.Length == 0 ? name : $"{ns}.{name}";
+}
+
+static string GetDeclaringTypeName(System.Reflection.Metadata.MetadataReader metadata, System.Reflection.Metadata.TypeDefinitionHandle handle)
+    => GetDefinitionName(metadata, handle);
+
+static IEnumerable<string> ReadBehavioralApiSelectors(System.Reflection.Metadata.MetadataReader metadata, System.Reflection.Metadata.CustomAttribute attribute)
+{
+    var reader = metadata.GetBlobReader(attribute.Value);
+    if (reader.ReadUInt16() != 1 || string.IsNullOrWhiteSpace(reader.ReadSerializedString())) return [];
+    var count = reader.ReadInt32();
+    if (count is < 0 or > 1000) return [];
+    var selectors = new List<string>(count);
+    for (var index = 0; index < count && reader.RemainingBytes > 0; index++)
+    {
+        var selector = reader.ReadSerializedString();
+        if (!string.IsNullOrWhiteSpace(selector)) selectors.Add(selector);
+    }
+
+    return selectors;
+}
+
+static IEnumerable<string> ReadContractConstructorArguments(System.Reflection.Metadata.MetadataReader metadata, System.Reflection.Metadata.CustomAttribute attribute)
+{
+    var name = GetAttributeTypeName(metadata, attribute);
+    var reader = metadata.GetBlobReader(attribute.Value);
+    if (reader.ReadUInt16() != 1)
+    {
+        return [];
+    }
+
+    var first = reader.ReadSerializedString();
+    if (string.IsNullOrWhiteSpace(first))
+    {
+        return [];
+    }
+
+    if (name == typeof(ConformanceContractAttribute).FullName)
+    {
+        return [first];
+    }
+
+    var count = reader.ReadInt32();
+    if (count is < 0 or > 1000)
+    {
+        return [first];
+    }
+
+    var contracts = new List<string> { first };
+    for (var index = 0; index < count; index++)
+    {
+        if (reader.RemainingBytes == 0) break;
+        var selector = reader.ReadSerializedString();
+        // BehavioralCoverage's API selectors follow its first contract ID; only the first constructor argument is a test ID.
+        _ = selector;
+    }
+
+    return contracts;
+}
+
+static ApiStatus ParseStatus(object? value)
+    => Enum.Parse<ApiStatus>(value?.ToString() ?? nameof(ApiStatus.Unknown));
+
+// One status per scenario: any unknown-type outcome makes it unknown, then any declared-unsupported or skipped one, then Untranslatable.
+static Dictionary<string, ConformanceOutcome> AggregateOutcomes(IEnumerable<ConformanceResult> results)
+{
+    var byId = new Dictionary<string, ConformanceOutcome>(StringComparer.Ordinal);
+    foreach (var group in results.GroupBy(r => r.ContractId, StringComparer.Ordinal))
+    {
+        var outcomes = group.Select(r => r.Outcome).ToList();
+        byId[group.Key] = outcomes.Any(o => o is ConformanceOutcome.Error or ConformanceOutcome.Inconclusive or ConformanceOutcome.UndeclaredCapability)
+            ? outcomes.First(o => o is ConformanceOutcome.Error or ConformanceOutcome.Inconclusive or ConformanceOutcome.UndeclaredCapability)
+            : outcomes.Any(o => o is ConformanceOutcome.Unsupported or ConformanceOutcome.Skip)
+                ? ConformanceOutcome.Unsupported
+                : outcomes.Any(o => o == ConformanceOutcome.Untranslatable)
+                    ? ConformanceOutcome.Untranslatable
+                    : ConformanceOutcome.Pass;
+    }
+
+    return byId;
+}
+
 static async Task<int> CompareReportsAsync(string[] arguments)
 {
     if (arguments.Length != 4)
@@ -554,6 +1111,52 @@ static string ClassifyComparison(ConformanceResult? candidate, ConformanceResult
     if (candidate.Outcome == ConformanceOutcome.Unsupported && reference.Outcome == ConformanceOutcome.Unsupported) return "UNSUPPORTED_ON_BOTH";
     if (candidate.Outcome == ConformanceOutcome.Unsupported || reference.Outcome == ConformanceOutcome.Unsupported) return "CAPABILITY_OUTCOME_DIFFERS";
     return "OUTCOME_DIFFERS";
+}
+
+// Usage: --verify-defect-control <correct-results.json> <defective-results.json> <output.json> <contract-id> [...]
+// A control passes only when all selected contracts pass on the correct adapter and fail on the mutant.
+static async Task<int> VerifyDefectControlAsync(string[] arguments)
+{
+    if (arguments.Length < 5)
+    {
+        Console.Error.WriteLine("Usage: --verify-defect-control <correct-results.json> <defective-results.json> <output.json> <contract-id> [...]");
+        return 2;
+    }
+
+    var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true, Converters = { new JsonStringEnumConverter() } };
+    var correct = JsonSerializer.Deserialize<ConformanceRunReport>(await File.ReadAllTextAsync(arguments[1]), options);
+    var defective = JsonSerializer.Deserialize<ConformanceRunReport>(await File.ReadAllTextAsync(arguments[2]), options);
+    if (correct is null || defective is null)
+    {
+        Console.Error.WriteLine("Could not read a complete provider result report.");
+        return 2;
+    }
+
+    var contracts = arguments[4..].Distinct(StringComparer.Ordinal).Select(id =>
+    {
+        var correctOutcomes = correct.Results.Where(result => result.ContractId == id).Select(result => result.Outcome).ToArray();
+        var defectiveOutcomes = defective.Results.Where(result => result.ContractId == id).Select(result => result.Outcome).ToArray();
+        var passed = correctOutcomes.Length > 0 && defectiveOutcomes.Length > 0
+            && correctOutcomes.All(outcome => outcome == ConformanceOutcome.Pass)
+            && defectiveOutcomes.All(outcome => outcome == ConformanceOutcome.Fail);
+        return new { contractId = id, correctOutcomes, defectiveOutcomes, result = passed ? "PASS" : "FAIL" };
+    }).ToArray();
+    var controlResult = contracts.Length > 0 && contracts.All(contract => contract.result == "PASS") ? "PASS" : "FAIL";
+    var report = new
+    {
+        controlId = "DEFECTIVE-PROVIDER-POSITIVE-CONTROL",
+        correctProvider = correct.Provider,
+        defectiveProvider = defective.Provider,
+        correctResults = Path.GetFullPath(arguments[1]),
+        defectiveResults = Path.GetFullPath(arguments[2]),
+        contracts,
+        result = controlResult,
+    };
+    var outputPath = Path.GetFullPath(arguments[3]);
+    Directory.CreateDirectory(Path.GetDirectoryName(outputPath)!);
+    await File.WriteAllTextAsync(outputPath, JsonSerializer.Serialize(report, new JsonSerializerOptions { WriteIndented = true }));
+    Console.WriteLine(JsonSerializer.Serialize(report));
+    return controlResult == "PASS" ? 0 : 1;
 }
 
 static string GetConnectionString() =>
@@ -765,6 +1368,7 @@ static void PrintUsage()
     Console.WriteLine("            append --cleanup-database to delete a dedicated disposable database after the run");
     Console.WriteLine("       --run-profile <provider-profile.json> <test-project> <report-directory> [--cleanup-database]");
     Console.WriteLine("       --compare <candidate-results.json> <reference-results.json> <comparison.json>");
+    Console.WriteLine("       --verify-defect-control <correct-results.json> <defective-results.json> <output.json> <contract-id> [...]");
     Console.WriteLine("Direct adapter runs use PENGDOWS_EFCORE_CONFORMANCE_CONNECTION_STRING; profiles expand ${ENVIRONMENT_VARIABLE} placeholders.");
 }
 
@@ -772,3 +1376,20 @@ internal sealed record AdapterLoadReport(string Provider, string ProviderVersion
 internal sealed record ConformanceRunReport(DateTimeOffset GeneratedAtUtc, string EfCoreVersion, string TestProject, string Provider, string ProviderVersion, int Total, int Passed, int Failed, int Untranslatable, int Unsupported, int UndeclaredCapabilities, int Errors, int Skipped, int Inconclusive, IReadOnlyList<ConformanceResult> Results);
 internal sealed record ConformanceComparisonResult(string ContractId, string DisplayName, ConformanceOutcome? CandidateOutcome, ConformanceOutcome? ReferenceOutcome, string Classification, string? CandidateReason, string? ReferenceReason);
 internal sealed record ConformanceComparisonReport(DateTimeOffset GeneratedAtUtc, string EfCoreVersion, string CandidateProvider, string ReferenceProvider, int Total, int PassedOnBoth, int CandidateOnlyFailures, int FailuresAlsoOnReference, IReadOnlyList<ConformanceComparisonResult> Results);
+
+internal sealed class ApiTestAssemblyLoadContext(string assemblyPath) : AssemblyLoadContext(isCollectible: true)
+{
+    private readonly AssemblyDependencyResolver _resolver = new(assemblyPath);
+
+    protected override Assembly? Load(AssemblyName assemblyName)
+    {
+        var path = _resolver.ResolveAssemblyToPath(assemblyName);
+        return path is null ? null : LoadFromAssemblyPath(path);
+    }
+
+    protected override IntPtr LoadUnmanagedDll(string unmanagedDllName)
+    {
+        var path = _resolver.ResolveUnmanagedDllToPath(unmanagedDllName);
+        return path is null ? IntPtr.Zero : LoadUnmanagedDllFromPath(path);
+    }
+}

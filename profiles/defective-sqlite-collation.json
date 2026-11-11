@@ -1,0 +1,6 @@
+{
+  "name": "Deliberately defective SQLite collation control",
+  "adapterAssembly": "../adapters/pengdows.efcore.conformance.Adapter.MicrosoftSqlite/bin/Debug/net10.0/pengdows.efcore.conformance.Adapter.MicrosoftSqlite.dll",
+  "adapterType": "pengdows.efcore.conformance.Adapter.MicrosoftSqlite.DefectiveCollationAdapter",
+  "connectionString": "Data Source=${EFCORE_CONFORMANCE_DEFECTIVE_COLLATION_DB_PATH}"
+}

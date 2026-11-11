@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using pengdows.efcore.conformance;
 using Xunit;
 
@@ -287,6 +288,58 @@ public sealed class RelationshipTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-SPLIT-QUERY-ORDERING-ASYNC", "Microsoft.EntityFrameworkCore.RelationalQueryableExtensions.AsSplitQuery", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.Include", "System.Linq.Queryable.OrderBy", "System.Linq.Queryable.Take", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync")]
+    public async Task AsSplitQuery_WithDuplicateSortKeysAndTakeMatchesSingleQueryAsynchronously()
+    {
+        var blogs = await CreateDuplicateSortBlogsAsync();
+
+        await using var context = ProviderTestRuntime.CreateContext();
+        var split = await context.Blogs.AsNoTracking()
+            .Where(blog => blog.Name == blogs[0].Name)
+            .OrderBy(blog => blog.Name)
+            .Take(2)
+            .AsSplitQuery()
+            .Include(blog => blog.Posts)
+            .ToListAsync(TestContext.Current.CancellationToken);
+
+        var single = await context.Blogs.AsNoTracking()
+            .Where(blog => blog.Name == blogs[0].Name)
+            .OrderBy(blog => blog.Name)
+            .Take(2)
+            .AsSingleQuery()
+            .Include(blog => blog.Posts)
+            .ToListAsync(TestContext.Current.CancellationToken);
+
+        AssertEquivalentBlogGraphs(blogs, split, single);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-SPLIT-QUERY-ORDERING-SYNC", "Microsoft.EntityFrameworkCore.RelationalQueryableExtensions.AsSplitQuery", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.Include", "System.Linq.Queryable.OrderBy", "System.Linq.Queryable.Take", "System.Linq.Enumerable.ToList")]
+    public async Task AsSplitQuery_WithDuplicateSortKeysAndTakeMatchesSingleQuerySynchronously()
+    {
+        var blogs = await CreateDuplicateSortBlogsAsync();
+
+        await using var context = ProviderTestRuntime.CreateContext();
+        var split = context.Blogs.AsNoTracking()
+            .Where(blog => blog.Name == blogs[0].Name)
+            .OrderBy(blog => blog.Name)
+            .Take(2)
+            .AsSplitQuery()
+            .Include(blog => blog.Posts)
+            .ToList();
+
+        var single = context.Blogs.AsNoTracking()
+            .Where(blog => blog.Name == blogs[0].Name)
+            .OrderBy(blog => blog.Name)
+            .Take(2)
+            .AsSingleQuery()
+            .Include(blog => blog.Posts)
+            .ToList();
+
+        AssertEquivalentBlogGraphs(blogs, split, single);
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-RELATIONSHIPS-SINGLE-QUERY-SYNC", "Microsoft.EntityFrameworkCore.RelationalQueryableExtensions.AsSingleQuery", "Microsoft.EntityFrameworkCore.QuerySplittingBehavior", "Microsoft.EntityFrameworkCore.QuerySplittingBehavior.SingleQuery", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.Include", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ThenInclude", "System.Linq.Queryable.Single")]
     public async Task AsSingleQuery_MaterializesCompleteNavigationGraphSynchronously()
     {
@@ -304,7 +357,49 @@ public sealed class RelationshipTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-RELATIONSHIPS-EXPLICIT-LOAD-ASYNC", "Microsoft.EntityFrameworkCore.ChangeTracking.CollectionEntry.LoadAsync", "Microsoft.EntityFrameworkCore.ChangeTracking.NavigationEntry.IsLoaded", "Microsoft.EntityFrameworkCore.ChangeTracking.ReferenceEntry.LoadAsync")]
+    [BehavioralCoverage("EF10-DEFAULT-IF-EMPTY-CHILD-PRESERVES-PARENT-ASYNC", "System.Linq.Queryable.SelectMany", "System.Linq.Enumerable.DefaultIfEmpty", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync")]
+    public async Task DefaultIfEmptyOnChildCollection_PreservesParentRowsAsynchronously()
+    {
+        var blogs = await CreateDefaultIfEmptyBlogsAsync();
+
+        await using var query = ProviderTestRuntime.CreateContext();
+        var actual = await query.Blogs.AsNoTracking()
+            .Where(blog => blogs.Select(seed => seed.Id).Contains(blog.Id))
+            .SelectMany(blog => blog.Posts.DefaultIfEmpty(), (blog, post) => new ParentPostResult(blog.Id, blog.Name, post == null ? null : post.Title))
+            .ToListAsync(TestContext.Current.CancellationToken);
+
+        Assert.Equal(
+            new[]
+            {
+                new ParentPostResult(blogs[0].Id, blogs[0].Name, null),
+                new ParentPostResult(blogs[1].Id, blogs[1].Name, "Child")
+            }.OrderBy(result => result.ParentId).ToArray(),
+            actual.OrderBy(result => result.ParentId).ToArray());
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-DEFAULT-IF-EMPTY-CHILD-PRESERVES-PARENT-SYNC", "System.Linq.Queryable.SelectMany", "System.Linq.Enumerable.DefaultIfEmpty", "System.Linq.Enumerable.ToArray")]
+    public async Task DefaultIfEmptyOnChildCollection_PreservesParentRowsSynchronously()
+    {
+        var blogs = await CreateDefaultIfEmptyBlogsAsync();
+
+        await using var query = ProviderTestRuntime.CreateContext();
+        var actual = query.Blogs.AsNoTracking()
+            .Where(blog => blogs.Select(seed => seed.Id).Contains(blog.Id))
+            .SelectMany(blog => blog.Posts.DefaultIfEmpty(), (blog, post) => new ParentPostResult(blog.Id, blog.Name, post == null ? null : post.Title))
+            .ToArray();
+
+        Assert.Equal(
+            new[]
+            {
+                new ParentPostResult(blogs[0].Id, blogs[0].Name, null),
+                new ParentPostResult(blogs[1].Id, blogs[1].Name, "Child")
+            }.OrderBy(result => result.ParentId).ToArray(),
+            actual.OrderBy(result => result.ParentId).ToArray());
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-RELATIONSHIPS-EXPLICIT-LOAD-ASYNC", "Microsoft.EntityFrameworkCore.ChangeTracking.CollectionEntry.LoadAsync", "System.Threading.Tasks.Task LoadAsync(Microsoft.EntityFrameworkCore.ChangeTracking.LoadOptions options, System.Threading.CancellationToken cancellationToken = null)", "Microsoft.EntityFrameworkCore.ChangeTracking.NavigationEntry.IsLoaded", "Microsoft.EntityFrameworkCore.ChangeTracking.ReferenceEntry.LoadAsync", "System.Threading.Tasks.Task LoadAsync(Microsoft.EntityFrameworkCore.ChangeTracking.LoadOptions options, System.Threading.CancellationToken cancellationToken = null)")]
     public async Task NavigationEntryLoadAsync_LoadsCollectionAndReference()
     {
         var blog = await CreateBlogAsync();
@@ -316,7 +411,7 @@ public sealed class RelationshipTests
             var posts = collectionContext.Entry(trackedBlog).Collection(item => item.Posts);
 
             Assert.False(posts.IsLoaded);
-            await posts.LoadAsync(TestContext.Current.CancellationToken);
+            await posts.LoadAsync(LoadOptions.ForceIdentityResolution, TestContext.Current.CancellationToken);
             Assert.True(posts.IsLoaded);
             Assert.Equal(new[] { "First", "Second" }, trackedBlog.Posts.Select(post => post.Title).Order().ToArray());
         }
@@ -327,13 +422,13 @@ public sealed class RelationshipTests
         var reference = referenceContext.Entry(trackedPost).Reference(item => item.Blog);
 
         Assert.False(reference.IsLoaded);
-        await reference.LoadAsync(TestContext.Current.CancellationToken);
+        await reference.LoadAsync(LoadOptions.ForceIdentityResolution, TestContext.Current.CancellationToken);
         Assert.True(reference.IsLoaded);
         Assert.Equal(blog.Id, trackedPost.Blog!.Id);
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-RELATIONSHIPS-EXPLICIT-LOAD-SYNC", "Microsoft.EntityFrameworkCore.ChangeTracking.CollectionEntry.Load", "Microsoft.EntityFrameworkCore.ChangeTracking.NavigationEntry.IsLoaded", "Microsoft.EntityFrameworkCore.ChangeTracking.ReferenceEntry.Load")]
+    [BehavioralCoverage("EF10-RELATIONSHIPS-EXPLICIT-LOAD-SYNC", "Microsoft.EntityFrameworkCore.ChangeTracking.CollectionEntry.Load", "System.Void Load(Microsoft.EntityFrameworkCore.ChangeTracking.LoadOptions options)", "Microsoft.EntityFrameworkCore.ChangeTracking.NavigationEntry.IsLoaded", "Microsoft.EntityFrameworkCore.ChangeTracking.ReferenceEntry.Load", "System.Void Load(Microsoft.EntityFrameworkCore.ChangeTracking.LoadOptions options)")]
     public async Task NavigationEntryLoad_LoadsCollectionAndReferenceSynchronously()
     {
         var blog = await CreateBlogAsync();
@@ -344,7 +439,7 @@ public sealed class RelationshipTests
             var posts = collectionContext.Entry(trackedBlog).Collection(item => item.Posts);
 
             Assert.False(posts.IsLoaded);
-            posts.Load();
+            posts.Load(LoadOptions.ForceIdentityResolution);
             Assert.True(posts.IsLoaded);
             Assert.Equal(new[] { "First", "Second" }, trackedBlog.Posts.Select(post => post.Title).Order().ToArray());
         }
@@ -354,7 +449,7 @@ public sealed class RelationshipTests
         var reference = referenceContext.Entry(trackedPost).Reference(item => item.Blog);
 
         Assert.False(reference.IsLoaded);
-        reference.Load();
+        reference.Load(LoadOptions.ForceIdentityResolution);
         Assert.True(reference.IsLoaded);
         Assert.Equal(blog.Id, trackedPost.Blog!.Id);
     }
@@ -436,4 +531,57 @@ public sealed class RelationshipTests
         await write.SaveChangesAsync(TestContext.Current.CancellationToken);
         return blog;
     }
+
+    private static async Task<Blog[]> CreateDuplicateSortBlogsAsync()
+    {
+        var sharedName = $"Duplicate sort {Guid.NewGuid():N}";
+        var blogs = Enumerable.Range(0, 3).Select(index => new Blog
+        {
+            Id = Guid.NewGuid(),
+            Name = sharedName,
+            Posts = [new Post { Id = Guid.NewGuid(), Title = $"Post {index} A" }, new Post { Id = Guid.NewGuid(), Title = $"Post {index} B" }]
+        }).ToArray();
+
+        await using var write = ProviderTestRuntime.CreateContext();
+        await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+        write.Blogs.AddRange(blogs);
+        await write.SaveChangesAsync(TestContext.Current.CancellationToken);
+        return blogs;
+    }
+
+    private static async Task<Blog[]> CreateDefaultIfEmptyBlogsAsync()
+    {
+        var batch = Guid.NewGuid().ToString("N");
+        var blogs = new[]
+        {
+            new Blog { Id = Guid.NewGuid(), Name = $"{batch}-empty" },
+            new Blog { Id = Guid.NewGuid(), Name = $"{batch}-with-child", Posts = [new Post { Id = Guid.NewGuid(), Title = "Child" }] }
+        };
+
+        await using var write = ProviderTestRuntime.CreateContext();
+        await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+        write.Blogs.AddRange(blogs);
+        await write.SaveChangesAsync(TestContext.Current.CancellationToken);
+        return blogs;
+    }
+
+    private static void AssertEquivalentBlogGraphs(IReadOnlyCollection<Blog> seeded, IReadOnlyCollection<Blog> split, IReadOnlyCollection<Blog> single)
+    {
+        Assert.Equal(2, split.Count);
+        Assert.Equal(2, single.Count);
+        Assert.Equal(single.Select(blog => blog.Id).Order().ToArray(), split.Select(blog => blog.Id).Order().ToArray());
+        foreach (var blog in split)
+        {
+            var expectedPosts = seeded.Single(seed => seed.Id == blog.Id).Posts.Select(post => post.Title).Order().ToArray();
+            Assert.Equal(expectedPosts, blog.Posts.Select(post => post.Title).Order().ToArray());
+        }
+
+        foreach (var blog in single)
+        {
+            var expectedPosts = seeded.Single(seed => seed.Id == blog.Id).Posts.Select(post => post.Title).Order().ToArray();
+            Assert.Equal(expectedPosts, blog.Posts.Select(post => post.Title).Order().ToArray());
+        }
+    }
 }
+
+internal sealed record ParentPostResult(Guid ParentId, string ParentName, string? ChildTitle);

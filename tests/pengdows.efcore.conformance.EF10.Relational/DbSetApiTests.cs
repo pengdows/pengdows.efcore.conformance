@@ -8,7 +8,7 @@ namespace pengdows.efcore.conformance.EF10.Relational;
 public sealed class DbSetApiTests
 {
     [Fact]
-    [BehavioralCoverage("EF10-DBSET-AS-QUERYABLE", "Microsoft.EntityFrameworkCore.DbContext.Set", "Microsoft.EntityFrameworkCore.DbSet`1.AsQueryable", "Microsoft.EntityFrameworkCore.DbSet`1.Entry")]
+    [BehavioralCoverage("EF10-DBSET-AS-QUERYABLE", "Microsoft.EntityFrameworkCore.DbContext.Set", "Microsoft.EntityFrameworkCore.DbSet<TEntity> Set<TEntity>() where TEntity : class", "Microsoft.EntityFrameworkCore.DbSet`1.AsQueryable", "Microsoft.EntityFrameworkCore.DbSet`1.Entry")]
     public async Task AsQueryable_ComposesAndDbSetEntryReturnsTrackedEntityEntry()
     {
         var id = Guid.NewGuid();
@@ -23,6 +23,28 @@ public sealed class DbSetApiTests
         Assert.Equal("DbSet queryable entry", person.Name);
         Assert.Equal(EntityState.Unchanged, entry.State);
         Assert.Same(person, entry.Entity);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-DBSET-NAMED-SHARED-TYPE", "Microsoft.EntityFrameworkCore.DbContext.Set", "Microsoft.EntityFrameworkCore.DbSet<TEntity> Set<TEntity>(System.String name) where TEntity : class")]
+    public async Task SetByName_UsesTheRequestedSharedEntityType()
+    {
+        var id = Guid.NewGuid();
+        var name = $"named-set-{Guid.NewGuid():N}";
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            var set = write.Set<Dictionary<string, object>>("EF10NamedPerson");
+            set.Add(new Dictionary<string, object> { ["Id"] = id, ["Name"] = name });
+            Assert.Equal(1, await write.SaveChangesAsync(TestContext.Current.CancellationToken));
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        var actual = await verify.Set<Dictionary<string, object>>("EF10NamedPerson")
+            .Where(row => EF.Property<Guid>(row, "Id") == id)
+            .Select(row => EF.Property<string>(row, "Name"))
+            .SingleAsync(TestContext.Current.CancellationToken);
+        Assert.Equal(name, actual);
     }
 
     [Fact]
@@ -124,7 +146,7 @@ public sealed class DbSetApiTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-DBSET-ATTACH-RANGE", "Microsoft.EntityFrameworkCore.DbSet`1.AttachRange", "Microsoft.EntityFrameworkCore.DbContext.Entry", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync")]
+    [BehavioralCoverage("EF10-DBSET-ATTACH-RANGE", "Microsoft.EntityFrameworkCore.DbSet`1.AttachRange", "System.Void AttachRange(TEntity[] entities)", "System.Void AttachRange(System.Collections.Generic.IEnumerable<TEntity> entities)", "Microsoft.EntityFrameworkCore.DbContext.Entry", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync")]
     public async Task AttachRange_TracksDetachedEntitiesAndPersistsChanges()
     {
         var existing = new[]
@@ -136,7 +158,7 @@ public sealed class DbSetApiTests
 
         await using (var update = ProviderTestRuntime.CreateContext())
         {
-            var detached = existing.Select(person => new Person
+            var detached = existing.Take(1).Select(person => new Person
             {
                 Id = person.Id,
                 Name = person.Name,
@@ -145,6 +167,9 @@ public sealed class DbSetApiTests
 
             update.People.AttachRange(detached);
             Assert.All(detached, person => Assert.Equal(EntityState.Unchanged, update.Entry(person).State));
+            var enumerableDetached = existing.Skip(1).Select(person => new Person { Id = person.Id, Name = person.Name, Age = person.Age }).ToList();
+            update.People.AttachRange(enumerableDetached.AsEnumerable());
+            Assert.All(enumerableDetached, person => Assert.Equal(EntityState.Unchanged, update.Entry(person).State));
             detached[0].Age++;
             Assert.Equal(1, await update.SaveChangesAsync(TestContext.Current.CancellationToken));
         }
@@ -157,7 +182,7 @@ public sealed class DbSetApiTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-DBSET-ADD-RANGE-SYNC", "Microsoft.EntityFrameworkCore.DbSet`1.AddRange", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "System.Linq.Queryable.Count")]
+    [BehavioralCoverage("EF10-DBSET-ADD-RANGE-SYNC", "Microsoft.EntityFrameworkCore.DbSet`1.AddRange", "System.Void AddRange(TEntity[] entities)", "System.Void AddRange(System.Collections.Generic.IEnumerable<TEntity> entities)", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "System.Linq.Queryable.Count")]
     public async Task AddRange_PersistsEveryEntitySynchronously()
     {
         var batch = Guid.NewGuid().ToString("N");
@@ -171,15 +196,16 @@ public sealed class DbSetApiTests
         {
             await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
             write.People.AddRange(people);
-            Assert.Equal(2, write.SaveChanges());
+            write.People.AddRange(people.Select(person => new Person { Id = Guid.NewGuid(), Name = person.Name + "-enumerable", Age = person.Age }).AsEnumerable());
+            Assert.Equal(4, write.SaveChanges());
         }
 
         await using var verify = ProviderTestRuntime.CreateContext();
-        Assert.Equal(2, verify.People.Count(person => person.Name.StartsWith(batch)));
+        Assert.Equal(4, verify.People.Count(person => person.Name.StartsWith(batch)));
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-DBSET-ADD-RANGE-ASYNC", "Microsoft.EntityFrameworkCore.DbSet`1.AddRangeAsync", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.CountAsync")]
+    [BehavioralCoverage("EF10-DBSET-ADD-RANGE-ASYNC", "Microsoft.EntityFrameworkCore.DbSet`1.AddRangeAsync", "System.Threading.Tasks.Task AddRangeAsync(TEntity[] entities)", "System.Threading.Tasks.Task AddRangeAsync(System.Collections.Generic.IEnumerable<TEntity> entities, System.Threading.CancellationToken cancellationToken = null)", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.CountAsync")]
     public async Task AddRangeAsync_PersistsEveryEntity()
     {
         var batch = Guid.NewGuid().ToString("N");
@@ -193,26 +219,30 @@ public sealed class DbSetApiTests
         {
             await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
             await write.People.AddRangeAsync(people, TestContext.Current.CancellationToken);
-            Assert.Equal(2, await write.SaveChangesAsync(TestContext.Current.CancellationToken));
+            var enumerablePeople = people.Select(person => new Person { Id = Guid.NewGuid(), Name = person.Name + "-enumerable", Age = person.Age }).ToList();
+            await write.People.AddRangeAsync(enumerablePeople.AsEnumerable(), TestContext.Current.CancellationToken);
+            Assert.Equal(4, await write.SaveChangesAsync(TestContext.Current.CancellationToken));
         }
 
         await using var verify = ProviderTestRuntime.CreateContext();
-        Assert.Equal(2, await verify.People.CountAsync(
+        Assert.Equal(4, await verify.People.CountAsync(
             person => person.Name.StartsWith(batch),
             TestContext.Current.CancellationToken));
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-DBSET-UPDATE-RANGE", "Microsoft.EntityFrameworkCore.DbSet`1.UpdateRange", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "System.Linq.Queryable.ToArray")]
+    [BehavioralCoverage("EF10-DBSET-UPDATE-RANGE", "Microsoft.EntityFrameworkCore.DbSet`1.UpdateRange", "System.Void UpdateRange(TEntity[] entities)", "System.Void UpdateRange(System.Collections.Generic.IEnumerable<TEntity> entities)", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "System.Linq.Queryable.ToArray")]
     public async Task UpdateRange_PersistsModifiedValuesForEveryEntity()
     {
         var existing = new[]
         {
             new Person { Id = Guid.NewGuid(), Name = "DbSet update range one", Age = 65 },
-            new Person { Id = Guid.NewGuid(), Name = "DbSet update range two", Age = 66 }
+            new Person { Id = Guid.NewGuid(), Name = "DbSet update range two", Age = 66 },
+            new Person { Id = Guid.NewGuid(), Name = "DbSet update range three", Age = 67 },
+            new Person { Id = Guid.NewGuid(), Name = "DbSet update range four", Age = 68 }
         };
         await SeedAsync(existing);
-        var detached = existing.Select(person => new Person
+        var detached = existing.Take(2).Select(person => new Person
         {
             Id = person.Id,
             Name = $"{person.Name} updated",
@@ -223,35 +253,46 @@ public sealed class DbSetApiTests
         {
             update.People.UpdateRange(detached);
             Assert.All(detached, person => Assert.Equal(EntityState.Modified, update.Entry(person).State));
-            Assert.Equal(2, update.SaveChanges());
+            var enumerableDetached = existing.Skip(2).Select(person => new Person { Id = person.Id, Name = person.Name + " updated enumerable", Age = person.Age + 11 }).ToList();
+            update.People.UpdateRange(enumerableDetached.AsEnumerable());
+            Assert.All(enumerableDetached, person => Assert.Equal(EntityState.Modified, update.Entry(person).State));
+            Assert.Equal(4, update.SaveChanges());
         }
 
         await using var verify = ProviderTestRuntime.CreateContext();
         var actual = verify.People.AsNoTracking()
-            .Where(person => detached.Select(item => item.Id).Contains(person.Id))
+            .Where(person => existing.Select(item => item.Id).Contains(person.Id))
             .OrderBy(person => person.Age)
             .ToArray();
-        Assert.Equal(detached.Select(person => person.Name).Order(StringComparer.Ordinal), actual.Select(person => person.Name));
-        Assert.Equal(new[] { 75, 76 }, actual.Select(person => person.Age));
+        var expectedNames = existing.Take(2).Select(person => person.Name + " updated")
+            .Concat(existing.Skip(2).Select(person => person.Name + " updated enumerable"))
+            .Order(StringComparer.Ordinal);
+        Assert.Equal(expectedNames, actual.Select(person => person.Name).Order(StringComparer.Ordinal));
+        Assert.Equal(new[] { 75, 76, 78, 79 }, actual.Select(person => person.Age));
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-DBSET-REMOVE-RANGE", "Microsoft.EntityFrameworkCore.DbSet`1.RemoveRange", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "System.Linq.Queryable.Count")]
+    [BehavioralCoverage("EF10-DBSET-REMOVE-RANGE", "Microsoft.EntityFrameworkCore.DbSet`1.RemoveRange", "System.Void RemoveRange(TEntity[] entities)", "System.Void RemoveRange(System.Collections.Generic.IEnumerable<TEntity> entities)", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "System.Linq.Queryable.Count")]
     public async Task RemoveRange_DeletesEveryEntity()
     {
         var existing = new[]
         {
             new Person { Id = Guid.NewGuid(), Name = "DbSet remove range one", Age = 67 },
-            new Person { Id = Guid.NewGuid(), Name = "DbSet remove range two", Age = 68 }
+            new Person { Id = Guid.NewGuid(), Name = "DbSet remove range two", Age = 68 },
+            new Person { Id = Guid.NewGuid(), Name = "DbSet remove range three", Age = 69 },
+            new Person { Id = Guid.NewGuid(), Name = "DbSet remove range four", Age = 70 }
         };
         await SeedAsync(existing);
 
         await using (var remove = ProviderTestRuntime.CreateContext())
         {
-            var tracked = existing.Select(person => new Person { Id = person.Id }).ToArray();
+            var tracked = existing.Take(2).Select(person => new Person { Id = person.Id }).ToArray();
             remove.People.AttachRange(tracked);
             remove.People.RemoveRange(tracked);
-            Assert.Equal(2, remove.SaveChanges());
+            var enumerableTracked = existing.Skip(2).Select(person => new Person { Id = person.Id }).ToList();
+            remove.People.AttachRange(enumerableTracked.AsEnumerable());
+            remove.People.RemoveRange(enumerableTracked.AsEnumerable());
+            Assert.Equal(4, remove.SaveChanges());
         }
 
         await using var verify = ProviderTestRuntime.CreateContext();

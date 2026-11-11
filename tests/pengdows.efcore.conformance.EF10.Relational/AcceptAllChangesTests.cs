@@ -9,7 +9,7 @@ namespace pengdows.efcore.conformance.EF10.Relational;
 public sealed class AcceptAllChangesTests
 {
     [Fact]
-    [BehavioralCoverage("EF10-PERSIST-SAVE-CHANGES-ACCEPT-ASYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.AcceptAllChanges", "Microsoft.EntityFrameworkCore.DbContext.Entry", "Microsoft.EntityFrameworkCore.EntityState.Modified", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    [BehavioralCoverage("EF10-PERSIST-SAVE-CHANGES-ACCEPT-ASYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "System.Threading.Tasks.Task<System.Int32> SaveChangesAsync(System.Boolean acceptAllChangesOnSuccess, System.Threading.CancellationToken cancellationToken = null)", "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.AcceptAllChanges", "Microsoft.EntityFrameworkCore.DbContext.Entry", "Microsoft.EntityFrameworkCore.EntityState.Modified", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
     public async Task SaveChangesAsyncFalse_PersistsButRetainsModifiedStateUntilAccepted()
     {
         ProviderTestRuntime.RequireCapability("relational");
@@ -38,7 +38,7 @@ public sealed class AcceptAllChangesTests
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-PERSIST-SAVE-CHANGES-ACCEPT-SYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.AcceptAllChanges", "Microsoft.EntityFrameworkCore.DbContext.Entry", "Microsoft.EntityFrameworkCore.EntityState.Modified", "System.Linq.Queryable.Single")]
+    [BehavioralCoverage("EF10-PERSIST-SAVE-CHANGES-ACCEPT-SYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "System.Int32 SaveChanges(System.Boolean acceptAllChangesOnSuccess)", "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.AcceptAllChanges", "Microsoft.EntityFrameworkCore.DbContext.Entry", "Microsoft.EntityFrameworkCore.EntityState.Modified", "System.Linq.Queryable.Single")]
     public async Task SaveChangesFalse_PersistsButRetainsModifiedStateUntilAccepted()
     {
         var id = Guid.NewGuid();

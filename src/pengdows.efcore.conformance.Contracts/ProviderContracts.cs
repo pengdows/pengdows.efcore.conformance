@@ -112,6 +112,7 @@ public sealed record ProviderCapabilities(
         "external-connection",
         "parameterized-collection-modes",
         "least-greatest-functions",
+        "foreign-key-cascade",
         "migration-rename-index",
         "migration-check-constraint",
         "index-schema-metadata",

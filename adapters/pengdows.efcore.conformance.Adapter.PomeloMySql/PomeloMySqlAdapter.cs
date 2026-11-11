@@ -50,7 +50,7 @@ public sealed class PomeloMySqlAdapter : IAdoNetProviderAdapter, INativeTypeMapp
     private static readonly ProviderCapabilities DeclaredCapabilities = new(
         new HashSet<string>(StringComparer.Ordinal)
         {
-            "relational",
+            "relational", "foreign-key-cascade",
             "transactions",
             "ambient-transactions",
             "savepoints",

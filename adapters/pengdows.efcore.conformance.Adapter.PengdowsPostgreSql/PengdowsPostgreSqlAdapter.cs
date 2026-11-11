@@ -136,7 +136,7 @@ public sealed class PengdowsPostgreSqlAdapter : IAdoNetProviderAdapter, INativeT
     private static readonly ProviderCapabilities DeclaredCapabilities = new(
         new HashSet<string>(StringComparer.Ordinal)
         {
-            "relational", "transactions", "ambient-transactions", "savepoints", "migrations",
+            "relational", "foreign-key-cascade", "transactions", "ambient-transactions", "savepoints", "migrations",
             "filtered-indexes", "json-mapping", "raw-sql", "execute-update", "execute-delete",
             "primitive-collections", "external-connection", "parameterized-collection-modes",
             "least-greatest-functions", "migration-rename-index", "migration-check-constraint",

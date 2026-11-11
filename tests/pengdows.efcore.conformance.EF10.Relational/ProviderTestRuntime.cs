@@ -282,6 +282,10 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
 
     public DbSet<ComplexRecord> ComplexRecords => Set<ComplexRecord>();
 
+    public DbSet<OptionalComplexRecord> OptionalComplexRecords => Set<OptionalComplexRecord>();
+
+    public DbSet<StructComplexRecord> StructComplexRecords => Set<StructComplexRecord>();
+
     public DbSet<OwnedAttributeRecord> OwnedAttributeRecords => Set<OwnedAttributeRecord>();
 
     public DbSet<BackingFieldRecord> BackingFieldRecords => Set<BackingFieldRecord>();
@@ -320,6 +324,14 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.SharedTypeEntity<Dictionary<string, object>>("EF10NamedPerson", entity =>
+        {
+            entity.ToTable("ef10conformance_namedpeople");
+            entity.IndexerProperty<Guid>("Id").HasColumnName("id");
+            entity.IndexerProperty<string>("Name").HasColumnName("name").HasMaxLength(160);
+            entity.HasKey("Id");
+        });
+
         modelBuilder.Entity<Person>(entity =>
         {
             entity.ToTable("ef10conformancepeople");
@@ -648,6 +660,33 @@ internal sealed class ConformanceDbContext(DbContextOptions<ConformanceDbContext
             {
                 address.Property(value => value.Street).HasColumnName("address_street").IsRequired();
                 address.Property(value => value.City).HasColumnName("address_city").IsRequired();
+            });
+            entity.ComplexProperty(record => record.ComparisonAddress, address =>
+            {
+                address.Property(value => value.Street).HasColumnName("comparison_address_street").IsRequired();
+                address.Property(value => value.City).HasColumnName("comparison_address_city").IsRequired();
+            });
+        });
+        modelBuilder.Entity<OptionalComplexRecord>(entity =>
+        {
+            entity.ToTable("ef10conformanceoptionalcomplex");
+            entity.HasKey(record => record.Id);
+            entity.Property(record => record.Id).HasColumnName("id");
+            entity.ComplexProperty(record => record.BillingAddress, address =>
+            {
+                address.Property(value => value.Street).HasColumnName("billing_street").IsRequired();
+                address.Property(value => value.City).HasColumnName("billing_city");
+            });
+        });
+        modelBuilder.Entity<StructComplexRecord>(entity =>
+        {
+            entity.ToTable("ef10conformancestructcomplex");
+            entity.HasKey(record => record.Id);
+            entity.Property(record => record.Id).HasColumnName("id");
+            entity.ComplexProperty(record => record.Address, address =>
+            {
+                address.Property(value => value.Street).HasColumnName("street").IsRequired();
+                address.Property(value => value.City).HasColumnName("city").IsRequired();
             });
         });
         modelBuilder.Entity<OwnedAttributeRecord>(entity =>
@@ -1273,6 +1312,29 @@ internal sealed class ComplexRecord
     public Guid Id { get; set; }
 
     public AddressInfo Address { get; set; } = new();
+
+    public AddressInfo ComparisonAddress { get; set; } = new();
+}
+
+internal sealed class OptionalComplexRecord
+{
+    public Guid Id { get; set; }
+
+    public AddressInfo? BillingAddress { get; set; }
+}
+
+internal sealed class StructComplexRecord
+{
+    public Guid Id { get; set; }
+
+    public AddressValue Address { get; set; }
+}
+
+internal struct AddressValue
+{
+    public required string Street { get; set; }
+
+    public required string City { get; set; }
 }
 
 internal sealed class JsonProfileRecord

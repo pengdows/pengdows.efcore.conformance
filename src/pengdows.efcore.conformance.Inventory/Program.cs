@@ -47,7 +47,9 @@ var entries = assemblies
                 ProviderApplicability(type, coverageByApiSelector.ContainsKey(type.FullName ?? type.Name), dispositionRules),
                 coverageByApiSelector.TryGetValue(type.FullName ?? type.Name, out var typeContracts) ? typeContracts.Order(StringComparer.Ordinal).ToArray() : Array.Empty<string>(),
                 EntryDisposition(type, coverageByApiSelector.ContainsKey(type.FullName ?? type.Name), dispositionRules),
-                EntryDispositionReason(type, coverageByApiSelector.ContainsKey(type.FullName ?? type.Name), dispositionRules))
+                EntryDispositionReason(type, coverageByApiSelector.ContainsKey(type.FullName ?? type.Name), dispositionRules),
+                type.MetadataToken,
+                type.Module.ModuleVersionId)
         }
         .Concat(GetPublicMembers(type).Select(member => new ApiInventoryEntry(
             type.Assembly.GetName().Name ?? "unknown",
@@ -58,7 +60,9 @@ var entries = assemblies
             ProviderApplicability(member, coverageByApiSelector.ContainsKey($"{type.FullName}.{member.Name}"), dispositionRules),
             coverageByApiSelector.TryGetValue($"{type.FullName}.{member.Name}", out var contracts) ? contracts.Order(StringComparer.Ordinal).ToArray() : Array.Empty<string>(),
             EntryDisposition(member, coverageByApiSelector.ContainsKey($"{type.FullName}.{member.Name}"), dispositionRules),
-            EntryDispositionReason(member, coverageByApiSelector.ContainsKey($"{type.FullName}.{member.Name}"), dispositionRules)))))
+            EntryDispositionReason(member, coverageByApiSelector.ContainsKey($"{type.FullName}.{member.Name}"), dispositionRules),
+            member is MethodInfo or ConstructorInfo ? member.MetadataToken : 0,
+            member.Module.ModuleVersionId))))
     .ToArray();
 
 var inventory = new ApiInventoryDocument(
@@ -357,7 +361,7 @@ internal sealed record ApiInventorySummary(int TotalEntries, int PublicTypes, in
 internal sealed record CoverageSelectorReport(string[] UnmatchedEfCoreSelectors, string[] ExternalApiSelectors);
 internal sealed record ApiDispositionRule(string SelectorPrefix, string Disposition, string Reason);
 internal sealed record ApiContractManifest(string? Contract, string? TargetFramework, string? EfCorePackageVersion, string? ProviderFamily, string[]? AllowedDispositionValues, ApiDispositionRule[]? DispositionRules);
-internal sealed record ApiInventoryEntry(string AssemblyName, string DeclaringType, string MemberKind, string? ApiMemberName, string Signature, bool? ProviderApplicable, string[] BehavioralContracts, string Disposition, string? DispositionReason)
+internal sealed record ApiInventoryEntry(string AssemblyName, string DeclaringType, string MemberKind, string? ApiMemberName, string Signature, bool? ProviderApplicable, string[] BehavioralContracts, string Disposition, string? DispositionReason, int MetadataToken, Guid ModuleVersionId)
 {
     public string? ApiSelector => MemberKind == "Type" ? DeclaringType : ApiMemberName is null ? null : $"{DeclaringType}.{ApiMemberName}";
 }

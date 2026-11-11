@@ -1,0 +1,270 @@
+{
+  "efCoreVersion": "10.0.14",
+  "date": "2026-11-04",
+  "suite": "tests/pengdows.efcore.conformance.EF10.Relational",
+  "providerRuns": [
+    {
+      "provider": "Microsoft EF Core SQLite",
+      "version": "10.0.14.0",
+      "total": 492,
+      "passed": 461,
+      "failed": 9,
+      "unsupported": 22,
+      "undeclaredCapabilities": 0,
+      "errors": 0,
+      "skipped": 0,
+      "inconclusive": 0,
+      "failedContractIds": [
+        "EF10-DB-FUNCTION-LEAST-GREATEST-ASYNC",
+        "EF10-DB-FUNCTION-LEAST-GREATEST-SYNC",
+        "EF10-INHERITANCE-TPT-ASYNC",
+        "EF10-INHERITANCE-TPT-SYNC",
+        "EF10-LINQ-RIGHTJOIN-ASYNC",
+        "EF10-LINQ-RIGHTJOIN-SYNC",
+        "EF10-QUERY-ELEMENTAT-NEGATIVE-ASYNC",
+        "EF10-QUERY-ELEMENTAT-OR-DEFAULT-NEGATIVE-ASYNC",
+        "EF10-QUERY-ELEMENTAT-OR-DEFAULT-NEGATIVE-SYNC"
+      ],
+      "unsupportedReasons": {
+        "Provider declares capability 'schema-qualified-functions' unsupported.": 1,
+        "Provider declares capability 'ambient-transactions' unsupported.": 2,
+        "Provider declares capability 'migration-add-constraint-operations' unsupported.": 2,
+        "Provider declares capability 'native-type-fidelity' unsupported.": 10,
+        "Provider declares capability 'database-collation-migration' unsupported.": 1,
+        "Provider declares capability 'schema-comments' unsupported.": 3,
+        "Provider declares capability 'migration-rename-index' unsupported.": 2,
+        "Provider declares capability 'sequences' unsupported.": 1
+      }
+    },
+    {
+      "provider": "pengdows.efcore.adonet SQLite",
+      "version": "1.0.0.0",
+      "total": 492,
+      "passed": 466,
+      "failed": 4,
+      "unsupported": 22,
+      "undeclaredCapabilities": 0,
+      "errors": 0,
+      "skipped": 0,
+      "inconclusive": 0,
+      "failedContractIds": [
+        "EF10-DB-FUNCTION-LEAST-GREATEST-ASYNC",
+        "EF10-DB-FUNCTION-LEAST-GREATEST-SYNC",
+        "EF10-INHERITANCE-TPT-ASYNC",
+        "EF10-INHERITANCE-TPT-SYNC"
+      ],
+      "unsupportedReasons": {
+        "Provider declares capability 'native-type-fidelity' unsupported.": 10,
+        "Provider declares capability 'migration-rename-index' unsupported.": 2,
+        "Provider declares capability 'schema-qualified-functions' unsupported.": 1,
+        "Provider declares capability 'ambient-transactions' unsupported.": 2,
+        "Provider declares capability 'schema-comments' unsupported.": 3,
+        "Provider declares capability 'migration-add-constraint-operations' unsupported.": 2,
+        "Provider declares capability 'database-collation-migration' unsupported.": 1,
+        "Provider declares capability 'sequences' unsupported.": 1
+      }
+    },
+    {
+      "provider": "DuckDB.EFCore reference",
+      "version": "1.0.7.0",
+      "total": 610,
+      "passed": 548,
+      "failed": 35,
+      "unsupported": 21,
+      "undeclaredCapabilities": 0,
+      "errors": 0,
+      "skipped": 6,
+      "inconclusive": 0,
+      "failedContractIds": [
+        "EF10-DB-FUNCTION-LEAST-GREATEST-ASYNC",
+        "EF10-DB-FUNCTION-LEAST-GREATEST-SYNC",
+        "EF10-DELETE-BEHAVIOR-CLIENT-ASYNC",
+        "EF10-DELETE-BEHAVIOR-CLIENT-SYNC",
+        "EF10-DELETE-BEHAVIOR-RESTRICT-ASYNC",
+        "EF10-DELETE-BEHAVIOR-RESTRICT-SYNC",
+        "EF10-ENTITY-TYPE-CONFIGURATION-GENERIC-ASYNC",
+        "EF10-ENTITY-TYPE-CONFIGURATION-GENERIC-SYNC",
+        "EF10-INHERITANCE-TPT-ASYNC",
+        "EF10-INHERITANCE-TPT-SYNC",
+        "EF10-JSON-EXECUTE-UPDATE-ASYNC",
+        "EF10-JSON-EXECUTE-UPDATE-SYNC",
+        "EF10-JSON-MAPPING-ASYNC",
+        "EF10-JSON-MAPPING-SYNC",
+        "EF10-LINQ-RIGHTJOIN-ASYNC",
+        "EF10-LINQ-RIGHTJOIN-SYNC",
+        "EF10-MIGRATION-SEQUENCE-OPERATIONS",
+        "EF10-MIGRATIONS-APPLY-ASYNC",
+        "EF10-MIGRATIONS-APPLY-SYNC",
+        "EF10-MIGRATIONS-SET-DEFAULT-ASYNC",
+        "EF10-MIGRATIONS-SET-DEFAULT-SYNC",
+        "EF10-NATIVE-TYPE-NULL-ASYNC",
+        "EF10-NATIVE-TYPE-NULL-SYNC",
+        "EF10-NATIVE-TYPE-PARAMETER-ASYNC",
+        "EF10-NATIVE-TYPE-PARAMETER-SYNC",
+        "EF10-NATIVE-TYPE-ROUNDTRIP-ASYNC",
+        "EF10-NATIVE-TYPE-ROUNDTRIP-SYNC",
+        "EF10-NATIVE-TYPE-UPDATE-ASYNC",
+        "EF10-NATIVE-TYPE-UPDATE-SYNC",
+        "EF10-OWNED-ATTRIBUTE-ASYNC",
+        "EF10-OWNED-ATTRIBUTE-SYNC",
+        "EF10-QUERY-ELEMENTAT-NEGATIVE-ASYNC",
+        "EF10-QUERY-ELEMENTAT-OR-DEFAULT-NEGATIVE-ASYNC",
+        "EF10-QUERY-ELEMENTAT-OR-DEFAULT-NEGATIVE-SYNC",
+        "EF10-TRACKING-CASCADE-CHANGES"
+      ],
+      "unsupportedReasons": {
+        "Provider declares capability 'migration-add-constraint-operations' unsupported.": 2,
+        "Provider declares capability 'savepoints' unsupported.": 9,
+        "Provider declares capability 'index-sort-metadata' unsupported.": 1,
+        "Provider declares capability 'migration-rename-index' unsupported.": 2,
+        "Provider declares capability 'filtered-indexes' unsupported.": 2,
+        "Provider declares capability 'foreign-key-cascade' unsupported.": 2,
+        "Provider declares capability 'database-collation-migration' unsupported.": 1,
+        "Provider declares capability 'ambient-transactions' unsupported.": 2
+      }
+    },
+    {
+      "provider": "pengdows.efcore.adonet DuckDB",
+      "version": "1.0.0.0",
+      "total": 610,
+      "passed": 547,
+      "failed": 14,
+      "unsupported": 49,
+      "undeclaredCapabilities": 0,
+      "errors": 0,
+      "skipped": 0,
+      "inconclusive": 0,
+      "failedContractIds": [
+        "EF10-COMMENT-ATTRIBUTE-SCHEMA",
+        "EF10-DELETE-BEHAVIOR-CLIENT-ASYNC",
+        "EF10-DELETE-BEHAVIOR-CLIENT-SYNC",
+        "EF10-ENTITY-TYPE-CONFIGURATION-GENERIC-ASYNC",
+        "EF10-ENTITY-TYPE-CONFIGURATION-GENERIC-SYNC",
+        "EF10-FLUENT-HAS-COMMENT-ASYNC",
+        "EF10-FLUENT-HAS-COMMENT-SYNC",
+        "EF10-INHERITANCE-TPT-ASYNC",
+        "EF10-INHERITANCE-TPT-SYNC",
+        "EF10-MIGRATIONS-APPLY-ASYNC",
+        "EF10-MIGRATIONS-APPLY-SYNC",
+        "EF10-QUERY-ELEMENTAT-OR-DEFAULT-NEGATIVE-ASYNC",
+        "EF10-QUERY-ELEMENTAT-OR-DEFAULT-NEGATIVE-SYNC",
+        "EF10-TRACKING-CASCADE-CHANGES"
+      ],
+      "unsupportedReasons": {
+        "Provider declares capability 'primitive-collections' unsupported.": 16,
+        "Provider declares capability 'foreign-key-cascade' unsupported.": 2,
+        "Provider declares capability 'savepoints' unsupported.": 9,
+        "Provider declares capability 'least-greatest-functions' unsupported.": 2,
+        "Provider declares capability 'schema-qualified-functions' unsupported.": 1,
+        "Provider declares capability 'json-mapping' unsupported.": 6,
+        "Provider declares capability 'database-collation-migration' unsupported.": 1,
+        "Provider declares capability 'filtered-indexes' unsupported.": 2,
+        "Provider declares capability 'ambient-transactions' unsupported.": 2,
+        "Provider declares capability 'migration-set-default' unsupported.": 2,
+        "Provider declares capability 'migration-rename-index' unsupported.": 2,
+        "Provider declares capability 'migration-add-constraint-operations' unsupported.": 2,
+        "Provider declares capability 'index-sort-metadata' unsupported.": 1,
+        "Provider declares capability 'sequences' unsupported.": 1
+      }
+    }
+  ],
+  "sqliteComparison": {
+    "total": 492,
+    "passedOnBoth": 461,
+    "candidateOnlyFailures": 0,
+    "failuresAlsoOnReference": 4
+  },
+  "independentTypeInventory": {
+    "provider": "DuckDB.EFCore reference",
+    "catalog": "duckdb_types()",
+    "supplementalTypes": 244,
+    "independentlyDiscoveredTypes": 244,
+    "nativeTypeCoverageCases": 121,
+    "coverageOutcomes": {
+      "UNLINKED": 100,
+      "PASS": 19,
+      "FAIL": 2
+    },
+    "limitation": "100 catalog types are currently unlinked from the declared native mapping profile; two of 21 generated cases fail."
+  },
+  "contractGate": {
+    "upstreamApiEntries": 18795,
+    "unclassifiedApis": 0,
+    "uncoveredApis": 417,
+    "apiSpecificSelectorLinked": 432,
+    "overloadsUnverified": 417,
+    "apiFamilyLinkedUnverified": 0,
+    "apiBehaviorContracts": 405,
+    "linkedApiBehaviorContracts": 405,
+    "behaviorContracts": 22,
+    "untestedBehaviorContracts": 0,
+    "partialBehaviorContracts": 20,
+    "completeBehaviorContracts": 2,
+    "apiExcluded": 17946,
+    "attributedTestMethods": 453,
+    "providerReports": 4,
+    "providers": {
+      "Microsoft EF Core SQLite": {
+        "behaviorPass": 13,
+        "behaviorFail": 2,
+        "behaviorUnsupported": 7,
+        "behaviorBlocked": 0,
+        "apiPass": 798,
+        "apiFail": 13,
+        "apiUnsupported": 40,
+        "apiBlocked": 0,
+        "apiNotTestedApplicable": 0
+      },
+      "pengdows.efcore.adonet SQLite": {
+        "behaviorPass": 14,
+        "behaviorFail": 1,
+        "behaviorUnsupported": 7,
+        "behaviorBlocked": 0,
+        "apiPass": 800,
+        "apiFail": 11,
+        "apiUnsupported": 40,
+        "apiBlocked": 0,
+        "apiNotTestedApplicable": 0
+      },
+      "DuckDB.EFCore reference": {
+        "behaviorPass": 11,
+        "behaviorFail": 9,
+        "behaviorUnsupported": 2,
+        "behaviorBlocked": 0,
+        "apiPass": 669,
+        "apiFail": 126,
+        "apiUnsupported": 56,
+        "apiBlocked": 0,
+        "apiNotTestedApplicable": 0
+      },
+      "pengdows.efcore.adonet DuckDB": {
+        "behaviorPass": 12,
+        "behaviorFail": 6,
+        "behaviorUnsupported": 4,
+        "behaviorBlocked": 0,
+        "apiPass": 674,
+        "apiFail": 87,
+        "apiUnsupported": 90,
+        "apiBlocked": 0,
+        "apiNotTestedApplicable": 0
+      }
+    }
+  },
+  "defectDetectionControls": [
+    {
+      "Id": "REPORT-CLASSIFIER-FAIL-CONTROL",
+      "Result": "PASS"
+    },
+    {
+      "Id": "DEFECTIVE-PROVIDER-POSITIVE-CONTROL",
+      "Result": "PASS"
+    }
+  ],
+  "completion": "INCOMPLETE",
+  "completionBlockers": [
+    "417 overloaded provider-applicable API entries lack signature-specific coverage; review the 432 API-specific selector links against their test bodies and assertions.",
+    "20 of the 22 broad behavior domains remain PARTIAL; only provider configuration and DI/factory domains currently meet their completion criteria.",
+    "Provider runs contain behavior failures and declared unsupported results (including expected engine limitations and candidate defects).",
+    "Independent native type catalog has 100 unlinked types; DuckDB has two failing native-type fidelity cases."
+  ]
+}

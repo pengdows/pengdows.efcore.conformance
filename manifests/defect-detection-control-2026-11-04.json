@@ -1,0 +1,30 @@
+{
+  "controlId": "DEFECTIVE-PROVIDER-POSITIVE-CONTROL",
+  "correctProvider": "Microsoft EF Core SQLite",
+  "defectiveProvider": "Deliberately defective SQLite collation adapter",
+  "correctResults": "/tmp/efcore-final-ms/conformance-results.json",
+  "defectiveResults": "/tmp/efcore-defective-control-2/conformance-results.json",
+  "contracts": [
+    {
+      "contractId": "EF10-COLLATE-SYNC",
+      "correctOutcomes": [
+        0
+      ],
+      "defectiveOutcomes": [
+        1
+      ],
+      "result": "PASS"
+    },
+    {
+      "contractId": "EF10-COLLATE-ASYNC",
+      "correctOutcomes": [
+        0
+      ],
+      "defectiveOutcomes": [
+        1
+      ],
+      "result": "PASS"
+    }
+  ],
+  "result": "PASS"
+}

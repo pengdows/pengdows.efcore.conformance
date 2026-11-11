@@ -7,6 +7,19 @@ namespace pengdows.efcore.conformance.EF10.Relational;
 [Collection(RelationalTestCollection.Name)]
 public sealed class TypeFidelityTests
 {
+    [Fact]
+    [BehavioralCoverage("EF10-TYPE-UNSUPPORTED-STORE-MAPPING", "Microsoft.EntityFrameworkCore.Metadata.Builders.PropertyBuilder.HasConversion")]
+    public void UnmappedClrValue_FailsModelValidationInsteadOfSilentlyLosingData()
+    {
+        var options = new DbContextOptionsBuilder<UnmappedStoreTypeContext>();
+        ProviderTestRuntime.Adapter.Configure(options, ProviderTestRuntime.ConnectionString);
+        using var context = new UnmappedStoreTypeContext(options.Options);
+
+        var exception = Assert.Throws<InvalidOperationException>(() => _ = context.Model);
+
+        Assert.Contains("OpaquePayload", exception.Message, StringComparison.Ordinal);
+    }
+
     public static TheoryData<decimal> DecimalBoundaryValues => new()
     {
         0m,
@@ -675,3 +688,24 @@ public sealed class TypeFidelityTests
         Assert.Equal(expected.Mood, actual.Mood);
     }
 }
+
+internal sealed class UnmappedStoreTypeContext(DbContextOptions<UnmappedStoreTypeContext> options) : DbContext(options)
+{
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<UnmappedStoreTypeEntity>(entity =>
+        {
+            entity.HasKey(value => value.Id);
+            entity.Property(value => value.Payload);
+        });
+    }
+}
+
+internal sealed class UnmappedStoreTypeEntity
+{
+    public int Id { get; set; }
+
+    public OpaquePayload Payload { get; set; } = new();
+}
+
+internal sealed class OpaquePayload;

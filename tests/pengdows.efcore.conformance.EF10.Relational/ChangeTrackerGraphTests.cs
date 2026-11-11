@@ -9,7 +9,7 @@ namespace pengdows.efcore.conformance.EF10.Relational;
 public sealed class ChangeTrackerGraphTests
 {
     [Fact]
-    [BehavioralCoverage("EF10-TRACKING-TRACK-GRAPH", "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.TrackGraph", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.Include", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ThenInclude")]
+    [BehavioralCoverage("EF10-TRACKING-TRACK-GRAPH", "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.TrackGraph", "System.Void TrackGraph(System.Object rootEntity, System.Action<Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntryGraphNode> callback)", "System.Void TrackGraph<TState>(System.Object rootEntity, TState state, System.Func<Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntryGraphNode<TState>, System.Boolean> callback)", "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker.Entries", "System.Collections.Generic.IEnumerable<Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry> Entries()", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.Include", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ThenInclude")]
     public async Task TrackGraph_TracksAndPersistsDisconnectedGraph()
     {
         var blog = new Blog
@@ -35,6 +35,40 @@ public sealed class ChangeTrackerGraphTests
             Assert.Equal(3, context.ChangeTracker.Entries().Count());
             Assert.Equal(3, await context.SaveChangesAsync(TestContext.Current.CancellationToken));
         }
+
+        var statefulBlog = new Blog
+        {
+            Id = Guid.NewGuid(),
+            Name = "Stateful tracked disconnected graph",
+            Posts =
+            [
+                new Post
+                {
+                    Id = Guid.NewGuid(),
+                    Title = "Stateful graph post"
+                }
+            ]
+        };
+
+        await using (var context = ProviderTestRuntime.CreateContext())
+        {
+            context.ChangeTracker.TrackGraph(statefulBlog, "added", node =>
+            {
+                Assert.Equal("added", node.NodeState);
+                node.Entry.State = EntityState.Added;
+                return node.Entry.Entity is Blog;
+            });
+
+            Assert.Equal(2, context.ChangeTracker.Entries().Count());
+            Assert.Equal(2, await context.SaveChangesAsync(TestContext.Current.CancellationToken));
+        }
+
+        await using var statefulVerify = ProviderTestRuntime.CreateContext();
+        var statefulActual = await statefulVerify.Blogs
+            .Include(item => item.Posts)
+            .ThenInclude(post => post.Comments)
+            .SingleAsync(item => item.Id == statefulBlog.Id, TestContext.Current.CancellationToken);
+        Assert.Equal("Stateful graph post", Assert.Single(statefulActual.Posts).Title);
 
         await using var verify = ProviderTestRuntime.CreateContext();
         var actual = await verify.Blogs

@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using System.Data;
 using pengdows.efcore.conformance;
 using Xunit;
 
@@ -10,11 +9,9 @@ namespace pengdows.efcore.conformance.EF10.Relational;
 public sealed class IndexAttributeTests
 {
     [Fact]
-    [CapabilityRequirement("index-schema-metadata")]
     [BehavioralCoverage("EF10-INDEX-ATTRIBUTE-NAME", "Microsoft.EntityFrameworkCore.IndexAttribute.Name")]
     public async Task NamedIndexAttribute_CreatesIndexWithDeclaredName()
     {
-        ProviderTestRuntime.RequireCapability("index-schema-metadata");
         await using (var context = ProviderTestRuntime.CreateContext())
         {
             await ProviderTestRuntime.InitializeAsync(context, TestContext.Current.CancellationToken);
@@ -22,14 +19,11 @@ public sealed class IndexAttributeTests
 
         await using var connection = ProviderTestRuntime.CreateConnection();
         await connection.OpenAsync(TestContext.Current.CancellationToken);
-        var indexes = connection.GetSchema("Indexes");
-        var indexRows = indexes.Rows.Cast<DataRow>().Where(row =>
-            row.ItemArray.Any(value => string.Equals(
-                Convert.ToString(value, System.Globalization.CultureInfo.InvariantCulture),
-                "IX_EF10_UniqueValueRecord_Value",
-                StringComparison.OrdinalIgnoreCase))).ToArray();
-
-        Assert.NotEmpty(indexRows);
+        var columns = ProviderTestRuntime.IndexMetadataAdapter.GetIndexColumns(
+            connection,
+            "ef10conformanceuniquevalues",
+            "IX_EF10_UniqueValueRecord_Value");
+        Assert.Equal(["value"], columns.OrderBy(column => column.Ordinal).Select(column => column.ColumnName));
 
     }
 

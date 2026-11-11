@@ -9,10 +9,11 @@ namespace pengdows.efcore.conformance.EF10.Relational;
 public sealed class DeleteBehaviorValueTests
 {
     [Fact]
+    [CapabilityRequirement("foreign-key-cascade")]
     [BehavioralCoverage("EF10-DELETE-BEHAVIOR-CASCADE-ASYNC", "Microsoft.EntityFrameworkCore.DeleteBehavior", "Microsoft.EntityFrameworkCore.DeleteBehavior.Cascade", "Microsoft.EntityFrameworkCore.DeleteBehavior.SetNull", "Microsoft.EntityFrameworkCore.DeleteBehaviorAttribute", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlInterpolatedAsync")]
     public async Task DeleteBehaviorCascade_RemovesDependentOnDatabaseDeleteAsynchronously()
     {
-        ProviderTestRuntime.RequireCapability("relational");
+        ProviderTestRuntime.RequireCapability("foreign-key-cascade");
         var (cascade, setNull) = await SeedAsync();
 
         await using (var delete = ProviderTestRuntime.CreateContext())
@@ -37,9 +38,11 @@ public sealed class DeleteBehaviorValueTests
     }
 
     [Fact]
+    [CapabilityRequirement("foreign-key-cascade")]
     [BehavioralCoverage("EF10-DELETE-BEHAVIOR-CASCADE-SYNC", "Microsoft.EntityFrameworkCore.DeleteBehavior", "Microsoft.EntityFrameworkCore.DeleteBehavior.Cascade", "Microsoft.EntityFrameworkCore.DeleteBehavior.SetNull", "Microsoft.EntityFrameworkCore.DeleteBehaviorAttribute", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlInterpolated")]
     public async Task DeleteBehaviorCascade_RemovesDependentOnDatabaseDeleteSynchronously()
     {
+        ProviderTestRuntime.RequireCapability("foreign-key-cascade");
         var (cascade, setNull) = await SeedAsync();
 
         await using (var delete = ProviderTestRuntime.CreateContext())

@@ -2,6 +2,17 @@
 
 Independent black-box conformance testing for relational EF Core 10 providers. Tests call documented EF Core APIs and assert observable behavior. They do not inspect generated SQL, provider internals, or provider service registrations.
 
+## Current conformance status (2026-11-04)
+
+This EF Core 10 suite remains incomplete. The upstream inventory contains 18,795 API entries; 17,959 have explicit exclusions, 432 applicable entries have API-specific test selectors, and 417 overloaded entries remain unverified by signature. Two configuration domains are complete; 20 of the 22 broad behavior domains remain partial. A deliberate SQLite collation mutant now proves that the harness detects a supported-feature defect. The latest four-provider validation is recorded in [`manifests/efcore-10-validation-2026-11-04.json`](manifests/efcore-10-validation-2026-11-04.json); the executable gate output is [`manifests/ef10-contract-audit-2026-11-04.json`](manifests/ef10-contract-audit-2026-11-04.json).
+
+| Provider | Cases | Pass | Fail | Unsupported | Skipped/inconclusive |
+|---|---:|---:|---:|---:|---:|
+| Microsoft EF Core SQLite 10.0.14 | 491 | 460 | 9 | 22 | 0 |
+| pengdows ADO.NET SQLite 1.0.0 | 491 | 465 | 4 | 22 | 0 |
+| DuckDB.EFCore reference 1.0.7 | 609 | 547 | 35 | 21 | 6 |
+| pengdows ADO.NET DuckDB 1.0.0 | 609 | 546 | 14 | 49 | 0 |
+
 ## Architecture and status
 
 - Establish EF Core 10/net10.0 project boundaries.

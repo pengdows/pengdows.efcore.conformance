@@ -52,7 +52,7 @@ public sealed class PengdowsMySqlAdapter : IAdoNetProviderAdapter, INativeTypeMa
     private static readonly ProviderCapabilities DeclaredCapabilities = new(
         new HashSet<string>(StringComparer.Ordinal)
         {
-            "relational", "transactions", "ambient-transactions", "savepoints", "migrations",
+            "relational", "foreign-key-cascade", "transactions", "ambient-transactions", "savepoints", "migrations",
             "migration-rename-index", "migration-check-constraint", "index-schema-metadata", "schema-comments",
             "migration-add-constraint-operations", "case-insensitive-collation", "index-sort-metadata",
             "database-collation-migration", "raw-sql", "execute-update", "execute-delete", "external-connection",

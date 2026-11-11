@@ -75,7 +75,7 @@ public sealed class StateManagementTests
 #pragma warning restore xUnit1051
 
     [Fact]
-    [BehavioralCoverage("EF10-TRACKING-DBCONTEXT-FIND", "Microsoft.EntityFrameworkCore.DbContext.Find", "Microsoft.EntityFrameworkCore.DbContext.Entry")]
+    [BehavioralCoverage("EF10-TRACKING-DBCONTEXT-FIND", "Microsoft.EntityFrameworkCore.DbContext.Find", "TEntity Find<TEntity>(System.Object[] keyValues) where TEntity : class", "System.Object Find(System.Type entityType, System.Object[] keyValues)", "Microsoft.EntityFrameworkCore.DbContext.Entry")]
     public async Task DbContextFind_LoadsEntityByKeySynchronously()
     {
         var id = Guid.NewGuid();
@@ -83,15 +83,17 @@ public sealed class StateManagementTests
 
         await using var context = ProviderTestRuntime.CreateContext();
         var person = context.Find<Person>(id);
+        var objectPerson = context.Find(typeof(Person), id);
 
         Assert.NotNull(person);
+        Assert.Same(person, objectPerson);
         Assert.Equal(id, person.Id);
         Assert.Equal($"Tracked {id:N}", person.Name);
         Assert.Equal(EntityState.Unchanged, context.Entry(person).State);
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-TRACKING-DBCONTEXT-FIND-ASYNC", "Microsoft.EntityFrameworkCore.DbContext.FindAsync", "Microsoft.EntityFrameworkCore.DbContext.Entry")]
+    [BehavioralCoverage("EF10-TRACKING-DBCONTEXT-FIND-ASYNC", "Microsoft.EntityFrameworkCore.DbContext.FindAsync", "System.Threading.Tasks.ValueTask<TEntity> FindAsync<TEntity>(System.Object[] keyValues, System.Threading.CancellationToken cancellationToken) where TEntity : class", "System.Threading.Tasks.ValueTask<System.Object> FindAsync(System.Type entityType, System.Object[] keyValues, System.Threading.CancellationToken cancellationToken)", "Microsoft.EntityFrameworkCore.DbContext.Entry")]
     public async Task DbContextFindAsync_LoadsEntityByKeyAsynchronously()
     {
         var id = Guid.NewGuid();
@@ -99,15 +101,17 @@ public sealed class StateManagementTests
 
         await using var context = ProviderTestRuntime.CreateContext();
         var person = await context.FindAsync<Person>([id], TestContext.Current.CancellationToken);
+        var objectPerson = await context.FindAsync(typeof(Person), [id], TestContext.Current.CancellationToken);
 
         Assert.NotNull(person);
+        Assert.Same(person, objectPerson);
         Assert.Equal(id, person.Id);
         Assert.Equal($"Tracked {id:N}", person.Name);
         Assert.Equal(EntityState.Unchanged, context.Entry(person).State);
     }
 
     [Fact]
-    [BehavioralCoverage("EF10-TRACKING-DBCONTEXT-FIND-ASYNC-NO-TOKEN", "Microsoft.EntityFrameworkCore.DbContext.FindAsync")]
+    [BehavioralCoverage("EF10-TRACKING-DBCONTEXT-FIND-ASYNC-NO-TOKEN", "Microsoft.EntityFrameworkCore.DbContext.FindAsync", "System.Threading.Tasks.ValueTask<TEntity> FindAsync<TEntity>(System.Object[] keyValues) where TEntity : class", "System.Threading.Tasks.ValueTask<System.Object> FindAsync(System.Type entityType, System.Object[] keyValues)")]
 #pragma warning disable xUnit1051 // Exercise the public overload that intentionally omits CancellationToken.
     public async Task DbContextFindAsync_WithoutCancellationTokenLoadsEntity()
     {
@@ -116,8 +120,10 @@ public sealed class StateManagementTests
 
         await using var context = ProviderTestRuntime.CreateContext();
         var person = await context.FindAsync<Person>(id);
+        var objectPerson = await context.FindAsync(typeof(Person), id);
 
         Assert.NotNull(person);
+        Assert.Same(person, objectPerson);
         Assert.Equal(id, person.Id);
         Assert.Equal(EntityState.Unchanged, context.Entry(person).State);
     }

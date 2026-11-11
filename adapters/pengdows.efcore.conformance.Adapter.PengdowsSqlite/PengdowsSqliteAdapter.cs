@@ -12,7 +12,7 @@ public sealed class PengdowsSqliteAdapter : IAdoNetProviderAdapter, ISupplementa
     private static readonly ProviderCapabilities SupportedCapabilities = new(
         new HashSet<string>(StringComparer.Ordinal)
         {
-            "relational",
+            "relational", "foreign-key-cascade",
             "transactions", "isolation-serializable",
             "savepoints",
             "migrations",
@@ -26,12 +26,12 @@ public sealed class PengdowsSqliteAdapter : IAdoNetProviderAdapter, ISupplementa
             "parameterized-collection-modes",
             "case-insensitive-collation",
             "migration-set-default",
-            "index-sort-metadata"
+            "index-sort-metadata",
+            "least-greatest-functions"
         },
         new HashSet<string>(StringComparer.Ordinal)
         {
             "ambient-transactions",
-            "least-greatest-functions",
             "migration-rename-index",
             "migration-check-constraint",
             "index-schema-metadata",

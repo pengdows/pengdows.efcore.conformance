@@ -8,3 +8,10 @@ public sealed class BehavioralCoverageAttribute(string contractId, params string
 
     public IReadOnlyList<string> ApiSelectors { get; } = apiSelectors;
 }
+
+/// <summary>Stable suite-level public behavior contract exercised by a concrete test method.</summary>
+[AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
+public sealed class ConformanceContractAttribute(string contractId) : Attribute
+{
+    public string ContractId { get; } = contractId;
+}
