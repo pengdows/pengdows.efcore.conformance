@@ -171,6 +171,44 @@ public sealed class ContextLifecycleTests
         }
     }
 
+    [Fact]
+    [CapabilityRequirement("external-connection")]
+    [BehavioralCoverage("EF10-EXTERNAL-CLOSED-CONNECTION-ASYNC", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.SetDbConnection", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    public async Task QueryWithCallerOwnedClosedConnection_ClosesItAfterAsynchronousExecution()
+    {
+        ProviderTestRuntime.RequireCapability("external-connection");
+        var id = await SeedPersonAsync("Caller-owned closed async connection");
+        await using var externalConnection = ProviderTestRuntime.CreateConnection();
+        await using var context = ProviderTestRuntime.CreateContext();
+        context.Database.SetDbConnection(externalConnection, contextOwnsConnection: false);
+
+        Assert.Equal(ConnectionState.Closed, externalConnection.State);
+        Assert.Equal(id, await context.People.AsNoTracking()
+            .Where(person => person.Id == id)
+            .Select(person => person.Id)
+            .SingleAsync(TestContext.Current.CancellationToken));
+        Assert.Equal(ConnectionState.Closed, externalConnection.State);
+    }
+
+    [Fact]
+    [CapabilityRequirement("external-connection")]
+    [BehavioralCoverage("EF10-EXTERNAL-CLOSED-CONNECTION-SYNC", "Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.SetDbConnection", "System.Linq.Queryable.Single")]
+    public async Task QueryWithCallerOwnedClosedConnection_ClosesItAfterSynchronousExecution()
+    {
+        ProviderTestRuntime.RequireCapability("external-connection");
+        var id = await SeedPersonAsync("Caller-owned closed sync connection");
+        await using var externalConnection = ProviderTestRuntime.CreateConnection();
+        await using var context = ProviderTestRuntime.CreateContext();
+        context.Database.SetDbConnection(externalConnection, contextOwnsConnection: false);
+
+        Assert.Equal(ConnectionState.Closed, externalConnection.State);
+        Assert.Equal(id, context.People.AsNoTracking()
+            .Where(person => person.Id == id)
+            .Select(person => person.Id)
+            .Single());
+        Assert.Equal(ConnectionState.Closed, externalConnection.State);
+    }
+
     private static async Task<Guid> SeedPersonAsync(string name)
     {
         var person = new Person { Id = Guid.NewGuid(), Name = name, Age = 36 };
