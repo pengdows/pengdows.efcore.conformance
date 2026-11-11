@@ -456,6 +456,59 @@ public sealed class PersistenceTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-PERSIST-RECOVER-AFTER-FAILURE-ASYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.DbUpdateException", "Microsoft.EntityFrameworkCore.DbContext.Remove", "Microsoft.EntityFrameworkCore.DbSet`1.Add", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    public async Task SaveChangesAsync_ContextRemainsUsableAfterConstraintFailure()
+    {
+        var duplicateId = Guid.NewGuid();
+        var recoveryId = Guid.NewGuid();
+        await SeedAsync(duplicateId, "Existing recovery row", 53);
+
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            var duplicate = new Person { Id = duplicateId, Name = "Duplicate recovery row", Age = 54 };
+            write.People.Add(duplicate);
+            await Assert.ThrowsAsync<DbUpdateException>(() =>
+                write.SaveChangesAsync(TestContext.Current.CancellationToken));
+
+            write.Entry(duplicate).State = EntityState.Detached;
+            write.People.Add(new Person { Id = recoveryId, Name = "Recovered async context", Age = 55 });
+            Assert.Equal(1, await write.SaveChangesAsync(TestContext.Current.CancellationToken));
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        var persisted = await verify.People.AsNoTracking().SingleAsync(
+            person => person.Id == recoveryId,
+            TestContext.Current.CancellationToken);
+        Assert.Equal("Recovered async context", persisted.Name);
+        Assert.Equal(55, persisted.Age);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-PERSIST-RECOVER-AFTER-FAILURE-SYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "Microsoft.EntityFrameworkCore.DbUpdateException", "Microsoft.EntityFrameworkCore.DbContext.Remove", "Microsoft.EntityFrameworkCore.DbSet`1.Add", "System.Linq.Queryable.Single")]
+    public async Task SaveChanges_ContextRemainsUsableAfterConstraintFailureSynchronously()
+    {
+        var duplicateId = Guid.NewGuid();
+        var recoveryId = Guid.NewGuid();
+        await SeedAsync(duplicateId, "Existing sync recovery row", 56);
+
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            var duplicate = new Person { Id = duplicateId, Name = "Duplicate sync recovery row", Age = 57 };
+            write.People.Add(duplicate);
+            Assert.Throws<DbUpdateException>(() => write.SaveChanges());
+
+            write.Entry(duplicate).State = EntityState.Detached;
+            write.People.Add(new Person { Id = recoveryId, Name = "Recovered sync context", Age = 58 });
+            Assert.Equal(1, write.SaveChanges());
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        var persisted = verify.People.AsNoTracking().Single(person => person.Id == recoveryId);
+        Assert.Equal("Recovered sync context", persisted.Name);
+        Assert.Equal(58, persisted.Age);
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-PERSIST-BATCH-FAILURE-ATOMIC-ASYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.DbUpdateException", "Microsoft.EntityFrameworkCore.ChangeTracking.ChangeTracker", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync")]
     public async Task SaveChangesAsync_FailedBatchDoesNotPersistOtherAddedEntities()
     {
