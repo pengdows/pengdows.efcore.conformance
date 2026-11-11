@@ -8,6 +8,53 @@ namespace pengdows.efcore.conformance.EF10.Relational;
 public sealed class StringFidelityTests
 {
     private const string UnicodeText = "Cafe\u0301 / Ångström / 雪 / 🛰️";
+    private const string AdversarialSuffix = "[%_]'\\ emoji 👩🏽‍💻 e\u0301 NUL:\0 trailing  ";
+
+    [Fact]
+    [BehavioralCoverage("EF10-STRING-ADVERSARIAL-RAW-ASYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "System.Data.Common.DbConnection.CreateCommand", "System.Data.Common.DbCommand.ExecuteScalarAsync")]
+    public async Task AdversarialString_RoundTripsExactlyThroughIndependentAdoNetChannelAsynchronously()
+    {
+        var id = Guid.NewGuid();
+        var batch = Guid.NewGuid().ToString("N");
+        var expected = batch + AdversarialSuffix;
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.NullableScalarRecords.Add(new NullableScalarRecord { Id = id, Text = expected });
+            Assert.Equal(1, await write.SaveChangesAsync(TestContext.Current.CancellationToken));
+        }
+
+        await using var connection = ProviderTestRuntime.CreateConnection();
+        await connection.OpenAsync(TestContext.Current.CancellationToken);
+        await using var command = connection.CreateCommand();
+        command.CommandText = $"SELECT text_value FROM ef10conformancenullablescalars WHERE text_value LIKE '{batch}%'";
+        var actual = Assert.IsType<string>(await command.ExecuteScalarAsync(TestContext.Current.CancellationToken));
+
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-STRING-ADVERSARIAL-RAW-SYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChanges", "System.Data.Common.DbConnection.CreateCommand", "System.Data.Common.DbCommand.ExecuteScalar")]
+    public async Task AdversarialString_RoundTripsExactlyThroughIndependentAdoNetChannelSynchronously()
+    {
+        var id = Guid.NewGuid();
+        var batch = Guid.NewGuid().ToString("N");
+        var expected = batch + AdversarialSuffix;
+        await using (var write = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
+            write.NullableScalarRecords.Add(new NullableScalarRecord { Id = id, Text = expected });
+            Assert.Equal(1, write.SaveChanges());
+        }
+
+        await using var connection = ProviderTestRuntime.CreateConnection();
+        await connection.OpenAsync(TestContext.Current.CancellationToken);
+        await using var command = connection.CreateCommand();
+        command.CommandText = $"SELECT text_value FROM ef10conformancenullablescalars WHERE text_value LIKE '{batch}%'";
+        var actual = Assert.IsType<string>(command.ExecuteScalar());
+
+        Assert.Equal(expected, actual);
+    }
 
     [Fact]
     [BehavioralCoverage("EF10-STRING-FIDELITY-ASYNC", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "System.Linq.Queryable.Where", "System.Linq.Queryable.Select", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
