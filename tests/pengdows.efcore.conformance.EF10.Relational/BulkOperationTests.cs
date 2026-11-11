@@ -400,6 +400,70 @@ public sealed class BulkOperationTests
         Assert.Equal("Before sync other update", results[otherPost.Id]);
     }
 
+    [Fact]
+    [CapabilityRequirement("execute-delete")]
+    [BehavioralCoverage("EF10-BULK-DELETE-NAVIGATION-PREDICATE-ASYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteDeleteAsync", "System.Linq.Queryable.Any")]
+    public async Task ExecuteDeleteAsync_FiltersThroughRelatedEntity()
+    {
+        ProviderTestRuntime.RequireCapability("execute-delete");
+        var matchingBlog = new Blog { Id = Guid.NewGuid(), Name = "Bulk navigation delete target" };
+        var otherBlog = new Blog { Id = Guid.NewGuid(), Name = "Other bulk delete blog" };
+        var matchingPost = new Post { Id = Guid.NewGuid(), BlogId = matchingBlog.Id, Title = "Delete matching post" };
+        var otherPost = new Post { Id = Guid.NewGuid(), BlogId = otherBlog.Id, Title = "Keep other post" };
+
+        await using (var seed = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(seed, TestContext.Current.CancellationToken);
+            seed.Blogs.AddRange(matchingBlog, otherBlog);
+            seed.Set<Post>().AddRange(matchingPost, otherPost);
+            await seed.SaveChangesAsync(TestContext.Current.CancellationToken);
+        }
+
+        await using (var delete = ProviderTestRuntime.CreateContext())
+        {
+            var affected = await delete.Set<Post>()
+                .Where(post => post.Blog!.Name == "Bulk navigation delete target")
+                .ExecuteDeleteAsync(TestContext.Current.CancellationToken);
+            Assert.Equal(1, affected);
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.False(await verify.Set<Post>().AnyAsync(post => post.Id == matchingPost.Id, TestContext.Current.CancellationToken));
+        Assert.True(await verify.Set<Post>().AnyAsync(post => post.Id == otherPost.Id, TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
+    [CapabilityRequirement("execute-delete")]
+    [BehavioralCoverage("EF10-BULK-DELETE-NAVIGATION-PREDICATE-SYNC", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteDelete", "System.Linq.Queryable.Any")]
+    public async Task ExecuteDelete_FiltersThroughRelatedEntitySynchronously()
+    {
+        ProviderTestRuntime.RequireCapability("execute-delete");
+        var matchingBlog = new Blog { Id = Guid.NewGuid(), Name = "Bulk sync navigation delete target" };
+        var otherBlog = new Blog { Id = Guid.NewGuid(), Name = "Other sync bulk delete blog" };
+        var matchingPost = new Post { Id = Guid.NewGuid(), BlogId = matchingBlog.Id, Title = "Delete sync matching post" };
+        var otherPost = new Post { Id = Guid.NewGuid(), BlogId = otherBlog.Id, Title = "Keep sync other post" };
+
+        await using (var seed = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(seed, TestContext.Current.CancellationToken);
+            seed.Blogs.AddRange(matchingBlog, otherBlog);
+            seed.Set<Post>().AddRange(matchingPost, otherPost);
+            await seed.SaveChangesAsync(TestContext.Current.CancellationToken);
+        }
+
+        await using (var delete = ProviderTestRuntime.CreateContext())
+        {
+            var affected = delete.Set<Post>()
+                .Where(post => post.Blog!.Name == "Bulk sync navigation delete target")
+                .ExecuteDelete();
+            Assert.Equal(1, affected);
+        }
+
+        await using var verify = ProviderTestRuntime.CreateContext();
+        Assert.False(verify.Set<Post>().Any(post => post.Id == matchingPost.Id));
+        Assert.True(verify.Set<Post>().Any(post => post.Id == otherPost.Id));
+    }
+
     private static async Task<Guid> SeedAsync(int? optionalRank = null)
     {
         var id = Guid.NewGuid();
