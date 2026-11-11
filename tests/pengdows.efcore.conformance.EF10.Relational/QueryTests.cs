@@ -8,6 +8,104 @@ namespace pengdows.efcore.conformance.EF10.Relational;
 public sealed class QueryTests
 {
     [Fact]
+    [BehavioralCoverage("EF10-QUERY-STRING-FUNCTION-EDGE-ASYNC", "System.String.IndexOf", "System.String.Substring", "System.String.Trim", "System.String.Replace", "System.String.Length", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    public async Task StringFunctions_PreserveZeroBasedAndTrailingSpaceSemanticsAsynchronously()
+    {
+        var id = Guid.NewGuid();
+        await SeedAsync([new Person { Id = id, Name = "  alpha beta  ", Age = 1 }]);
+        await using var query = ProviderTestRuntime.CreateContext();
+        try
+        {
+            var actual = await query.People.AsNoTracking()
+                .Where(person => person.Id == id)
+                .Select(person => new StringFunctionResult(
+                    person.Name.IndexOf("alpha"),
+                    person.Name.Substring(2, 5),
+                    person.Name.Trim(),
+                    person.Name.Replace("beta", "gamma"),
+                    person.Name.Length))
+                .SingleAsync(TestContext.Current.CancellationToken);
+
+            Assert.Equal(new StringFunctionResult(2, "alpha", "alpha beta", "  alpha gamma  ", 14), actual);
+        }
+        catch (InvalidOperationException)
+        {
+            Assert.Skip("Provider does not translate the complete string-function edge-case projection.");
+        }
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-STRING-FUNCTION-EDGE-SYNC", "System.String.IndexOf", "System.String.Substring", "System.String.Trim", "System.String.Replace", "System.String.Length", "System.Linq.Queryable.Single")]
+    public async Task StringFunctions_PreserveZeroBasedAndTrailingSpaceSemanticsSynchronously()
+    {
+        var id = Guid.NewGuid();
+        await SeedAsync([new Person { Id = id, Name = "  alpha beta  ", Age = 1 }]);
+        await using var query = ProviderTestRuntime.CreateContext();
+        try
+        {
+            var actual = query.People.AsNoTracking()
+                .Where(person => person.Id == id)
+                .Select(person => new StringFunctionResult(
+                    person.Name.IndexOf("alpha"),
+                    person.Name.Substring(2, 5),
+                    person.Name.Trim(),
+                    person.Name.Replace("beta", "gamma"),
+                    person.Name.Length))
+                .Single();
+
+            Assert.Equal(new StringFunctionResult(2, "alpha", "alpha beta", "  alpha gamma  ", 14), actual);
+        }
+        catch (InvalidOperationException)
+        {
+            Assert.Skip("Provider does not translate the complete string-function edge-case projection.");
+        }
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-INTEGER-DIVISION-MODULO-ASYNC", "System.Linq.Queryable.Select", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToArrayAsync")]
+    public async Task IntegerDivisionAndModulo_TruncateTowardZeroAsynchronously()
+    {
+        var records = new[]
+        {
+            new Person { Id = Guid.NewGuid(), Name = $"math-negative-{Guid.NewGuid():N}", Age = -7 },
+            new Person { Id = Guid.NewGuid(), Name = $"math-positive-{Guid.NewGuid():N}", Age = 7 }
+        };
+        await SeedAsync(records);
+        var ids = records.Select(record => record.Id).ToArray();
+
+        await using var query = ProviderTestRuntime.CreateContext();
+        var actual = await query.People.AsNoTracking()
+            .Where(person => ids.Contains(person.Id))
+            .OrderBy(person => person.Age)
+            .Select(person => new IntegerMathResult(person.Age / 2, person.Age % 3))
+            .ToArrayAsync(TestContext.Current.CancellationToken);
+
+        Assert.Equal(new[] { new IntegerMathResult(-3, -1), new IntegerMathResult(3, 1) }, actual);
+    }
+
+    [Fact]
+    [BehavioralCoverage("EF10-QUERY-INTEGER-DIVISION-MODULO-SYNC", "System.Linq.Queryable.Select", "System.Linq.Queryable.ToArray")]
+    public async Task IntegerDivisionAndModulo_TruncateTowardZeroSynchronously()
+    {
+        var records = new[]
+        {
+            new Person { Id = Guid.NewGuid(), Name = $"math-negative-{Guid.NewGuid():N}", Age = -7 },
+            new Person { Id = Guid.NewGuid(), Name = $"math-positive-{Guid.NewGuid():N}", Age = 7 }
+        };
+        await SeedAsync(records);
+        var ids = records.Select(record => record.Id).ToArray();
+
+        await using var query = ProviderTestRuntime.CreateContext();
+        var actual = query.People.AsNoTracking()
+            .Where(person => ids.Contains(person.Id))
+            .OrderBy(person => person.Age)
+            .Select(person => new IntegerMathResult(person.Age / 2, person.Age % 3))
+            .ToArray();
+
+        Assert.Equal(new[] { new IntegerMathResult(-3, -1), new IntegerMathResult(3, 1) }, actual);
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-QUERY-DATETIME-MICRO-NANOSECOND-ASYNC", "System.DateTime.Microsecond", "System.DateTime.Nanosecond", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
     public async Task DateTimeMicrosecondAndNanosecondTranslateAsynchronously()
     {
@@ -1236,3 +1334,7 @@ public sealed class QueryTests
 internal sealed record DateOnlyQueryResult(DateTime DateTimeValue, int DaysFromBaseline);
 
 internal sealed record DatePartResult(int Microsecond, int Nanosecond);
+
+internal sealed record StringFunctionResult(int Index, string Substring, string Trimmed, string Replaced, int Length);
+
+internal sealed record IntegerMathResult(int Quotient, int Remainder);
