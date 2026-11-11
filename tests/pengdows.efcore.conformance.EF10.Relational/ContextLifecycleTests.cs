@@ -209,6 +209,29 @@ public sealed class ContextLifecycleTests
         Assert.Equal(ConnectionState.Closed, externalConnection.State);
     }
 
+    [Fact]
+    [BehavioralCoverage("EF10-CONTEXT-CONCURRENT-INDEPENDENT-ASYNC", "Microsoft.EntityFrameworkCore.DbContext.ContextId", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.SingleAsync")]
+    public async Task IndependentContexts_ExecuteConcurrentQueriesSuccessfully()
+    {
+        var firstId = await SeedPersonAsync("Concurrent context first");
+        var secondId = await SeedPersonAsync("Concurrent context second");
+        await using var first = ProviderTestRuntime.CreateContext();
+        await using var second = ProviderTestRuntime.CreateContext();
+        Assert.NotEqual(first.ContextId.InstanceId, second.ContextId.InstanceId);
+
+        var firstRead = first.People.AsNoTracking()
+            .Where(person => person.Id == firstId)
+            .Select(person => person.Name)
+            .SingleAsync(TestContext.Current.CancellationToken);
+        var secondRead = second.People.AsNoTracking()
+            .Where(person => person.Id == secondId)
+            .Select(person => person.Name)
+            .SingleAsync(TestContext.Current.CancellationToken);
+
+        Assert.Equal("Concurrent context first", await firstRead);
+        Assert.Equal("Concurrent context second", await secondRead);
+    }
+
     private static async Task<Guid> SeedPersonAsync(string name)
     {
         var person = new Person { Id = Guid.NewGuid(), Name = name, Age = 36 };

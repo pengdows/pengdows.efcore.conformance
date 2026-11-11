@@ -23,6 +23,40 @@ public sealed class AsyncCancellationTests
     }
 
     [Fact]
+    [BehavioralCoverage("EF10-ASYNC-QUERY-CANCELLATION-DURING-ENUMERATION", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.AsAsyncEnumerable", "System.Collections.Generic.IAsyncEnumerator`1.MoveNextAsync")]
+    public async Task AsyncEnumeration_ObservesCancellationAfterReturningAnItemAndContextRemainsUsable()
+    {
+        var batch = $"cancel during enumeration {Guid.NewGuid():N}";
+        await using (var seed = ProviderTestRuntime.CreateContext())
+        {
+            await ProviderTestRuntime.InitializeAsync(seed, TestContext.Current.CancellationToken);
+            seed.People.AddRange(Enumerable.Range(0, 128).Select(index => new Person
+            {
+                Id = Guid.NewGuid(),
+                Name = $"{batch}-{index:D3}",
+                Age = index
+            }));
+            await seed.SaveChangesAsync(TestContext.Current.CancellationToken);
+        }
+
+        await using var context = ProviderTestRuntime.CreateContext();
+        using var cancellation = new CancellationTokenSource();
+        await using (var enumerator = context.People.AsNoTracking()
+            .Where(person => person.Name.StartsWith(batch))
+            .OrderBy(person => person.Name)
+            .AsAsyncEnumerable()
+            .GetAsyncEnumerator(cancellation.Token))
+        {
+            Assert.True(await enumerator.MoveNextAsync());
+            cancellation.Cancel();
+            await Assert.ThrowsAnyAsync<OperationCanceledException>(() => enumerator.MoveNextAsync().AsTask());
+        }
+
+        Assert.Equal(128, await context.People.AsNoTracking()
+            .CountAsync(person => person.Name.StartsWith(batch), TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
     [BehavioralCoverage("EF10-ASYNC-SAVE-CANCELLATION", "Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync", "Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.AnyAsync")]
     public async Task SaveChangesAsync_ObservesCancellationWithoutPersistingThePendingEntity()
     {
