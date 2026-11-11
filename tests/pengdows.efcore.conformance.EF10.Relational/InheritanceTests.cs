@@ -90,8 +90,8 @@ public sealed class InheritanceTests
             .Where(item => item.Id == articleId)
             .Select(item => item.Body)
             .SingleAsync(TestContext.Current.CancellationToken));
-        // SaveChanges counts tracked state entries, not the multiple TPT rows per entry.
-        Assert.Equal(2, written);
+        // TPT tracks base and derived state entries for each concrete entity.
+        Assert.Equal(4, written);
     }
 
     [Fact]
@@ -121,8 +121,8 @@ public sealed class InheritanceTests
             .Where(item => item.Id == articleId)
             .Select(item => item.Body)
             .Single());
-        // SaveChanges counts tracked state entries, not the multiple TPT rows per entry.
-        Assert.Equal(2, written);
+        // TPT tracks base and derived state entries for each concrete entity.
+        Assert.Equal(4, written);
     }
 
     [Fact]

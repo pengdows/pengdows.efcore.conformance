@@ -264,21 +264,26 @@ public sealed class ComplexTypeTests
         ProviderTestRuntime.Adapter.Configure(options, ProviderTestRuntime.ConnectionString);
         using var context = new StructCollectionProbeContext(options.Options);
 
-        context.Database.EnsureDeleted();
-        context.Database.EnsureCreated();
-        var record = new StructCollectionProbeRecord
+        try
         {
-            Id = Guid.NewGuid(),
-            Addresses = [new AddressValue { Street = "Struct collection", City = "Negative contract" }]
-        };
-        context.StructCollectionProbeRecords.Add(record);
-        Assert.Equal(1, context.SaveChanges());
-        context.ChangeTracker.Clear();
-
-        var actual = context.StructCollectionProbeRecords.AsNoTracking().Single(item => item.Id == record.Id);
-        var address = Assert.Single(actual.Addresses);
-        Assert.Equal("Struct collection", address.Street);
-        Assert.Equal("Negative contract", address.City);
+            RecreateStructCollectionTable(context);
+            var record = new StructCollectionProbeRecord
+            {
+                Id = Guid.NewGuid(),
+                Addresses = [new AddressValue { Street = "Struct collection", City = "Negative contract" }]
+            };
+            context.StructCollectionProbeRecords.Add(record);
+            Assert.Equal(1, context.SaveChanges());
+            context.ChangeTracker.Clear();
+            var actual = context.StructCollectionProbeRecords.AsNoTracking().Single(item => item.Id == record.Id);
+            var address = Assert.Single(actual.Addresses);
+            Assert.Equal("Struct collection", address.Street);
+            Assert.Equal("Negative contract", address.City);
+        }
+        finally
+        {
+            context.Database.ExecuteSqlRaw("DROP TABLE IF EXISTS ef10conformance_structcollectionprobe");
+        }
     }
 
     [Fact]
@@ -290,22 +295,27 @@ public sealed class ComplexTypeTests
         ProviderTestRuntime.Adapter.Configure(options, ProviderTestRuntime.ConnectionString);
         await using var context = new StructCollectionProbeContext(options.Options);
 
-        await context.Database.EnsureDeletedAsync(TestContext.Current.CancellationToken);
-        await context.Database.EnsureCreatedAsync(TestContext.Current.CancellationToken);
-        var record = new StructCollectionProbeRecord
+        try
         {
-            Id = Guid.NewGuid(),
-            Addresses = [new AddressValue { Street = "Async struct collection", City = "Async negative contract" }]
-        };
-        context.StructCollectionProbeRecords.Add(record);
-        Assert.Equal(1, await context.SaveChangesAsync(TestContext.Current.CancellationToken));
-        context.ChangeTracker.Clear();
-
-        var actual = await context.StructCollectionProbeRecords.AsNoTracking()
-            .SingleAsync(item => item.Id == record.Id, TestContext.Current.CancellationToken);
-        var address = Assert.Single(actual.Addresses);
-        Assert.Equal("Async struct collection", address.Street);
-        Assert.Equal("Async negative contract", address.City);
+            await RecreateStructCollectionTableAsync(context, TestContext.Current.CancellationToken);
+            var record = new StructCollectionProbeRecord
+            {
+                Id = Guid.NewGuid(),
+                Addresses = [new AddressValue { Street = "Async struct collection", City = "Async negative contract" }]
+            };
+            context.StructCollectionProbeRecords.Add(record);
+            Assert.Equal(1, await context.SaveChangesAsync(TestContext.Current.CancellationToken));
+            context.ChangeTracker.Clear();
+            var actual = await context.StructCollectionProbeRecords.AsNoTracking()
+                .SingleAsync(item => item.Id == record.Id, TestContext.Current.CancellationToken);
+            var address = Assert.Single(actual.Addresses);
+            Assert.Equal("Async struct collection", address.Street);
+            Assert.Equal("Async negative contract", address.City);
+        }
+        finally
+        {
+            await context.Database.ExecuteSqlRawAsync("DROP TABLE IF EXISTS ef10conformance_structcollectionprobe", CancellationToken.None);
+        }
     }
 
     private static ComplexRecord CreateRecord(string street, string city, AddressInfo? comparisonAddress = null) => new()
@@ -349,6 +359,18 @@ public sealed class ComplexTypeTests
         await ProviderTestRuntime.InitializeAsync(write, TestContext.Current.CancellationToken);
         write.StructComplexRecords.Add(record);
         await write.SaveChangesAsync(TestContext.Current.CancellationToken);
+    }
+
+    private static void RecreateStructCollectionTable(StructCollectionProbeContext context)
+    {
+        context.Database.ExecuteSqlRaw("DROP TABLE IF EXISTS ef10conformance_structcollectionprobe");
+        context.Database.ExecuteSqlRaw(context.Database.GenerateCreateScript());
+    }
+
+    private static async Task RecreateStructCollectionTableAsync(StructCollectionProbeContext context, CancellationToken cancellationToken)
+    {
+        await context.Database.ExecuteSqlRawAsync("DROP TABLE IF EXISTS ef10conformance_structcollectionprobe", cancellationToken);
+        await context.Database.ExecuteSqlRawAsync(context.Database.GenerateCreateScript(), cancellationToken);
     }
 
     private sealed record AddressResult(string Street, string City);
