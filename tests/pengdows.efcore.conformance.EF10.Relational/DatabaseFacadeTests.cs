@@ -90,11 +90,9 @@ public sealed class DatabaseFacadeTests
     }
 
     [Fact]
-    [CapabilityRequirement("savepoints")]
     [BehavioralCoverage("EF10-DATABASE-FACADE-AUTO-SAVEPOINTS", "Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.AutoSavepointsEnabled")]
     public async Task AutoSavepointsEnabled_CanBeChangedAndRestored()
     {
-        ProviderTestRuntime.RequireCapability("savepoints");
         await using var context = ProviderTestRuntime.CreateContext();
         var original = context.Database.AutoSavepointsEnabled;
 
